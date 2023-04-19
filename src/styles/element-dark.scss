@@ -1,0 +1,20 @@
+//暗黑模式
+html.dark {
+  background: #232323;
+  --layout-bg-color: rgba(0, 0, 0, 0);
+  --layout-left-bg-color: #171717;
+  --layout-header-bg-color: #171717;
+
+  //--el-color-primary-light-3: #c46502;
+  //--el-color-primary-light-5: #a95800;
+  //--el-color-primary-light-7: #733e00;
+  //--el-color-primary-light-8: #4b2500;
+  //--el-color-primary-light-9: #2a1700;
+  //--el-color-primary-dark-2: #f67300;
+
+  --el-menu-bg-color: balck;
+
+  .el-table .el-table__cell {
+    //--el-table-header-bg-color: var(--el-color-primary-light-9);
+  }
+}

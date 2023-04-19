@@ -1,0 +1,41 @@
+{
+  "name": "vite-project",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite --mode development",
+    "build": "vite build --mode production",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@vueuse/core": "^9.13.0",
+    "animate.css": "^4.1.1",
+    "axios": "^1.3.5",
+    "countup.js": "^2.6.0",
+    "dayjs": "^1.11.7",
+    "element-plus": "^2.3.3",
+    "exceljs": "^4.3.0",
+    "file-saver": "^2.0.5",
+    "lodash": "^4.17.21",
+    "nprogress": "^0.2.0",
+    "pinia": "^2.0.34",
+    "sortablejs": "^1.15.0",
+    "vue": "^3.2.47",
+    "vue-cropper": "^1.0.8",
+    "vue-router": "^4.1.6"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^4.1.0",
+    "@vitejs/plugin-vue-jsx": "^3.0.1",
+    "eslint": "^8.37.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-n": "^15.7.0",
+    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-vue": "^9.10.0",
+    "sass": "^1.62.0",
+    "vite": "^4.2.1",
+    "vite-plugin-eslint": "^1.8.1",
+    "vite-plugin-vue-setup-extend": "^0.4.0"
+  }
+}
