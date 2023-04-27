@@ -19,7 +19,7 @@
 </template>
 <script setup>
 import { useSystemStore } from '@/store/system'
-import { userLogout } from '@/api/system/login'
+import { userLogout } from '@/api/system/user'
 import defaultAvatar from '@/assets/image/avatar-default.png'
 
 const systemStore = useSystemStore()

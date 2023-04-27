@@ -10,6 +10,7 @@
  * sxh 2023-4-14
  */
 import { computed, ref, useAttrs, watchEffect } from 'vue'
+import { uploadFile } from '@/api/file/fileOperation'
 
 const emit = defineEmits(['update:fileList', 'update:modelValue'])
 
@@ -37,7 +38,8 @@ const uploadParam = computed(() => {
     ...props,
     fileList: fileList.value,
     autoUpload: false,
-    'onUpdate:fileList': onUpdateFileList,
+    onChange: onUpdateFileList,
+    onRemove: onUpdateFileList,
   }
   // 需要裁剪的图片一次只能选择一张
   if (props.cropper) param.multiple = false
@@ -53,17 +55,39 @@ watchEffect(() => {
   fileList.value = props.modelValue
 })
 
-function onUpdateFileList (files) {
+function onUpdateFileList (file, files) {
   fileList.value = files
   emit('update:fileList', files)
   console.info(files)
 }
 
-function upload () {
-  emit('update:modelValue', fileList.value)
-  fileList.value[0].status = 'uploading'
+async function upload () {
   // 'ready' | 'uploading' | 'success' | 'fail'
+  const uploadFiles = fileList.value.filter(i => ['ready', 'fail'].includes(i.status))
+  while (uploadFiles.length) {
+    const item = uploadFiles.shift()
+    item.status = 'uploading'
+    const res = await uploadFile(item.raw, progressEvent => {
+      item.percentage = progressEvent.progress * 100
+    })
+    item.status = 'success'
+    item.id = res.data.id
+    item.name = res.data.name
+    item.object = res.data.object
+    item.contentType = res.data.contentType
+    item.suffix = res.data.suffix
+    item.size = res.data.size
+    item.imgWidth = res.data.imgWidth
+    item.imgHeight = res.data.imgHeight
+    item.imgRatio = res.data.imgRatio
+  }
+  emit('update:modelValue', fileList.value)
+  console.info(fileList.value)
 }
+
+defineExpose({
+  upload,
+})
 </script>
 <style scoped lang="scss">
 </style>

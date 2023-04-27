@@ -62,7 +62,7 @@
 </template>
 <script setup>
 import { reactive, ref } from 'vue'
-import { userLogin } from '@/api/system/login'
+import { userLogin } from '@/api/system/user'
 import { useSystemStore } from '@/store/system'
 import { useRouter } from 'vue-router'
 import SwitchStyle from '@/layout/default/action/switchStyle.vue'

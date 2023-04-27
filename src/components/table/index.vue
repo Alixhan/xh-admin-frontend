@@ -397,7 +397,7 @@ export default {
                     <ExportExcel class="action-btn" pageQuery={pageQuery.value}
                       exportFileName={props.exportFileName}
                       fetchData={props.fetchData} data={data.value} columns={columns.value}/>
-                  )
+                    )
                   : undefined}
                 <el-button icon="Operation" type="primary" text class="action-btn">高级筛选</el-button>
                 <el-popover
@@ -609,9 +609,9 @@ export default {
   }
 }
 
-.dark {
-  .top-filter, .table-view-filter {
-    border-color: var(--el-border-color);
-  }
-}
+//.dark {
+//  .top-filter, .table-view-filter {
+//    border-color: var(--el-border-color);
+//  }
+//}
 </style>

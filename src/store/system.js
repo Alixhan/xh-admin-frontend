@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { computed, nextTick, reactive, ref, watch } from 'vue'
-import { userLogin } from '@/api/system/login'
+import { userLogin } from '@/api/system/user'
 import { useRouter } from 'vue-router'
 import { useDark, useLocalStorage, useTitle } from '@vueuse/core'
 import _ from 'lodash'

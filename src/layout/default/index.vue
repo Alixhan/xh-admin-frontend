@@ -50,7 +50,8 @@ $transition: width 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
     display: flex;
     flex-direction: column;
     flex-shrink: 0;
-    width: 66px;;
+    width: 66px;
+    border-right: 1px solid var(--el-border-color-extra-light);
     background-color: var(--layout-left-bg-color);
 
     .menu {
