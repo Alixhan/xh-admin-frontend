@@ -17,7 +17,7 @@
         </el-button>
       </template>
       <template #right-action>
-        <el-button type="primary" icon="plus" @click="openForm('add')">新增</el-button>
+        <el-button v-auth="'add'" type="primary" icon="plus" @click="openForm('add')">新增</el-button>
       </template>
     </m-table>
     <el-dialog :title="formTitle[handleType]" v-model="formVisible" align-center draggable
@@ -35,6 +35,7 @@ import { auth } from '@/directive'
 import { join } from '@/utils/arrays'
 
 const formTitle = {
+  copy: '菜单复制',
   add: '菜单新增',
   edit: '菜单编辑',
   detail: '菜单明细',
@@ -57,18 +58,8 @@ const columns = ref([
   { prop: 'name', label: 'name' },
   { prop: 'type', label: '菜单类型', type: 'select', itemList: menuTypeList },
   { prop: 'icon', label: '菜单图标', showOverflowTooltip: false, slots: { default: generateMenuIcon } },
-  {
-    prop: 'cache',
-    label: '缓存',
-    itemList: sfList,
-    slots: { default: switchSlot },
-  },
-  {
-    prop: 'enabled',
-    label: '启用',
-    itemList: sfList,
-    slots: { default: switchSlot },
-  },
+  { prop: 'cache', label: '缓存', itemList: sfList, slots: { default: switchSlot }, },
+  { prop: 'enabled', label: '启用', itemList: sfList, slots: { default: switchSlot }, },
   {
     prop: 'order',
     label: '排序号',
@@ -83,18 +74,26 @@ const columns = ref([
   { prop: 'updateTime', label: '修改时间', type: 'datetime', width: 155 },
 ])
 
+const addAuth = auth('add')
 const editAuth = auth('edit')
 const detailAuth = auth('detail')
 // 添加操作栏
-if (editAuth || detailAuth) {
+if (addAuth || editAuth || detailAuth) {
+  let width = 44 * ((addAuth ? 1 : 0) + (editAuth ? 1 : 0) + (detailAuth ? 1 : 0))
+  if (width < 50) width = 50
   columns.value.unshift({
     label: '操作',
     fixed: 'right',
-    width: 91,
+    width,
     notExport: true,
     slots: {
       default (scope) {
         const arr = []
+        if (addAuth) {
+          arr.push(
+            <el-link type="primary" underline={false} onClick={() => openForm('copy', scope.row)}>复制</el-link>
+          )
+        }
         if (editAuth) {
           arr.push(
             <el-link type="primary" underline={false} onClick={() => openForm('edit', scope.row)}>编辑</el-link>
@@ -158,9 +157,9 @@ function toggleExpand () {
 }
 
 function openForm (type, r) {
+  row.value = r
   formVisible.value = true
   handleType.value = type
-  row.value = r
 }
 
 // 生成菜单的图标

@@ -6,7 +6,7 @@
           :colspan="24"
           :columns="columns"
           :model="formData"
-          :handleType="props.handleType"
+          :handleType="handleType"
       />
     </el-scrollbar>
     <div class="m-footer">
@@ -44,10 +44,15 @@ const formData = ref({
   enabled: true,
 })
 
-if (props.handleType !== 'add') {
+const handleType = ref(props.handleType)
+if (handleType.value !== 'add') {
   // 查询明细
   getMenuById(props.modelValue.id).then(res => {
     formData.value = res.data
+    if (handleType.value === 'copy') {
+      handleType.value = 'add'
+      formData.value.id = ''
+    }
   })
 }
 // 上级菜单下拉框数据

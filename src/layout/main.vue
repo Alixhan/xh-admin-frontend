@@ -28,8 +28,4 @@ watch(
 </script>
 
 <style scoped lang="scss">
-
-:deep(.el-scrollbar__bar.is-vertical) {
-  top: 12px;
-}
 </style>

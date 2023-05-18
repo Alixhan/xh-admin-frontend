@@ -1,5 +1,5 @@
 <script lang="jsx">
-import { createVNode, onUnmounted, ref, shallowRef, watchEffect } from 'vue'
+import { createVNode, onUnmounted, provide, ref, shallowRef, watchEffect } from 'vue'
 import { ElForm } from 'element-plus'
 import { generateDynamicColumn, generateFormRules, generatePlaceholder, vModelValue } from '@/components/mutils'
 import { useSystemStore } from '@/store/system'
@@ -68,6 +68,17 @@ export default {
     const formItemParams = shallowRef([])
     watchEffect(initFormItemParams)
 
+    const uploadInstances = ref([])
+
+    provide('uploadInstances', uploadInstances.value)
+
+    // 表单提交，表单验证，通过后统一上传文件
+    async function submit () {
+      await formRef.value.validate()
+      await Promise.all(uploadInstances.value.map(i => i.upload()))
+      return props.model
+    }
+
     expose({
       clearValidate: function () {
         return formRef.value.clearValidate(...arguments)
@@ -84,6 +95,7 @@ export default {
       validate: function () {
         return formRef.value.validate(...arguments)
       },
+      submit
     })
 
     function initFormItemParams () {

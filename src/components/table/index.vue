@@ -41,6 +41,12 @@ export default {
     selection: {
       type: String,
     },
+    /**
+     * 最多可选择行数
+     */
+    selectionLimit: {
+      type: Number,
+    },
     // 导出的文件名
     exportFileName: {
       type: String,
@@ -163,15 +169,22 @@ export default {
         selectionRows.value = [row]
         emit('selection-change', selectionRows.value)
       } else if (props.selection === 'multiple') {
+        if (selectionRows.value.length >= props.selectionLimit && !selectionRows.value.some(i => i === row)) return
         tableRef.value.toggleRowSelection(row)
       }
       emit('row-click', row, column, event)
     }
 
     function selectionChange (rows) {
-      console.info('selectionChange', rows)
       selectionRows.value = rows
       emit('selection-change', selectionRows.value)
+    }
+
+    function selectable (row) {
+      if (selectionRows.value.length >= props.selectionLimit) {
+        return selectionRows.value.some(i => i === row)
+      }
+      return true
     }
 
     // 初始化表格列参数
@@ -345,7 +358,12 @@ export default {
           <span>总共 <span class="total-text">{pagination.value.total}</span> 条数据</span>
         ]
         if (props.selection) {
-          content.push(<span>，已选中<span class="total-text">{selectionRows.value.length}</span>条</span>)
+          const arr = []
+          content.push(<span>，已选中 <span class="total-text">{selectionRows.value.length}</span>
+            {props.selectionLimit
+              ? (
+                <span> / <span class="total-text">{props.selectionLimit}</span></span>)
+              : ''} 条</span>)
         }
         return <div class="total-view">{content}</div>
       }
@@ -354,12 +372,12 @@ export default {
     // 生成表格选择列
     function generateSelectionColumn () {
       if (props.selection === 'multiple') {
-        return <el-table-column type="selection"/>
+        return <el-table-column type="selection" selectable={selectable}/>
       } else if (props.selection === 'single') {
         const slots = {
           default (scope) {
             return <el-radio onClick={e => e.preventDefault()} label={true}
-              modelValue={selectionRows.value.includes(scope.row)}><span/></el-radio>
+                             modelValue={selectionRows.value.includes(scope.row)}><span/></el-radio>
           }
         }
         return <el-table-column type="selection" fixed width="50" key="--" v-slots={slots}/>
@@ -395,8 +413,8 @@ export default {
                 {props.isExportExcel
                   ? (
                     <ExportExcel class="action-btn" pageQuery={pageQuery.value}
-                      exportFileName={props.exportFileName}
-                      fetchData={props.fetchData} data={data.value} columns={columns.value}/>
+                                 exportFileName={props.exportFileName}
+                                 fetchData={props.fetchData} data={data.value} columns={columns.value}/>
                     )
                   : undefined}
                 <el-button icon="Operation" type="primary" text class="action-btn">高级筛选</el-button>
@@ -407,7 +425,7 @@ export default {
                   v-slots={{
                     reference () {
                       return <el-button type="primary" text icon="operation" class="action-btn">
-                            列排序
+                        列排序
                       </el-button>
                     }
                   }}
@@ -419,7 +437,7 @@ export default {
           </div>
           <el-form ref={formRef} class="table-form" model={props.data} scroll-to-error>
             <el-table {...tableParam} v-slots={slots} v-loading={loadingRef.value}
-              class={{ 'radio-selection': props.selection === 'single' }}>
+                      class={{ 'radio-selection': props.selection === 'single' }}>
               {generateSelectionColumn()}
               {tableColumnsParams.value.map(i => generateTableColumn(i))}
             </el-table>
@@ -513,7 +531,6 @@ export default {
         }
 
         .total-text {
-          padding: 0 5px;
           color: var(--el-color-primary);
           font-weight: bold;
         }

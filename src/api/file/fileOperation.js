@@ -15,3 +15,23 @@ export function uploadFile (file = {}, onUploadProgress = () => {}) {
     onUploadProgress
   })
 }
+
+// 文件列表查询
+export function queryFileList (params = {}, option) {
+  return createAxios(option).post(`${fileBaseUrl}/api/file/operation/query`, params)
+}
+
+// 保存系统文件
+export function postSaveFile (params = {}, option) {
+  return createAxios(option).post(`${fileBaseUrl}/api/file/operation/save`, params)
+}
+
+// 获取文件详情
+export function getFileById (id) {
+  return createAxios().get(`${fileBaseUrl}/api/file/operation/get/${id}`)
+}
+
+// 获取文件详情
+export function delFileByIds (ids, option) {
+  return createAxios(option).delete(`${fileBaseUrl}/api/file/operation/del/${ids}`)
+}
