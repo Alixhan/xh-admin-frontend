@@ -86,12 +86,12 @@ const columns = ref([
 function previewImage (scope) {
   const file = scope.row
   if (file.contentType.startsWith('image')) {
-    const src = getDownloadFileUrl(file.object, true)
+    const src = getDownloadFileUrl({ object: file.object, isScale: true }, true)
     return <el-image {...{
       src,
       style: 'width: 30px; height: 30px;',
       fit: 'cover',
-      previewSrcList: [getDownloadFileUrl(file.object)],
+      previewSrcList: [getDownloadFileUrl({ objdect: file.object })],
       hideOnClickModal: true,
       previewTeleported: true,
     }} />

@@ -25,11 +25,15 @@
     <!--      </div>-->
     <!--    </template>-->
     <template #trigger>
-      <div class="el-upload--picture-card">
+      <div v-if="type==='upload-img'" class="el-upload--picture-card">
         <div class="file-lib-btn" @click.stop="visible = true">
           文件库
         </div>
         <Plus class="icon"/>
+      </div>
+      <div v-else>
+        <el-button icon="plus" @click.stop="visible = true"/>
+        <el-button type="primary" icon="upload">选择文件</el-button>
       </div>
     </template>
     <el-image-viewer
@@ -94,7 +98,7 @@ const uploadParam = computed(() => {
   }
 
   // 上传图片默认参数
-  if (props.type === 'uploadImg') {
+  if (props.type === 'upload-img') {
     defaultParam.listType = 'picture-card'
     defaultParam.accept = 'image/*'
   }
@@ -147,10 +151,11 @@ function onChange (file, files) {
           name: fileName,
           raw: file,
           size: file.size,
-          url: (window.createObjectURL || window.URL.createObjectURL)(file)
+          url: (window.createObjectURL || window.URL.createObjectURL)(file),
         })
         visible2.value = false
-      }
+      },
+      ...props.cropper
     }
     cropperFile.value = file
     files.pop()
@@ -170,9 +175,15 @@ function onUpdateFileList (file, files) {
 }
 
 function onPreview (file) {
-  previewImageUrlList.value = fileList.value.map(i => i.url)
-  initialIndex.value = fileList.value.findIndex(i => i === file)
-  previewImageVisible.value = true
+  if (props.type === 'upload-img') {
+    previewImageUrlList.value = fileList.value.map(i => i.url)
+    initialIndex.value = fileList.value.findIndex(i => i === file)
+    previewImageVisible.value = true
+  } else {
+    if (file.object) {
+      window.open(getDownloadFileUrl({ object: file.object, fileName: file.name }))
+    }
+  }
 }
 
 function onDownload (file) {
@@ -185,7 +196,7 @@ function onDownload (file) {
 function select (rows) {
   onUpdateFileList(null, [...fileList.value, ...rows.map(i => {
     return {
-      url: getDownloadFileUrl(i.object),
+      url: getDownloadFileUrl({ object: i.object }),
       status: 'success',
       id: i.id,
       name: i.name,
@@ -275,7 +286,7 @@ if (uploadInstances) {
   }
 }
 
-:deep(.is-disabled>.el-upload) {
+:deep(.is-disabled .el-upload) {
   display: none;
 }
 </style>

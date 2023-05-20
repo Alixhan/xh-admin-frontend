@@ -4,6 +4,7 @@ import { userLogin } from '@/api/system/user'
 import { useRouter } from 'vue-router'
 import { useDark, useLocalStorage, useTitle } from '@vueuse/core'
 import _ from 'lodash'
+import { devMenus } from '@/router/static'
 
 /**
  * 系统全局store,主要定义项目布局信息，系统登录， 路由管理，权限管理，浏览器标题管理，注销等
@@ -139,6 +140,10 @@ export const useSystemStore = defineStore('system', () => {
 
   // 设置登录用户信息
   function setLoginUserInfo (loginUserInfo) {
+    // 开发环境把开发文档置顶
+    if (import.meta.env.DEV) {
+      loginUserInfo.menus.unshift(...devMenus)
+    }
     loginStatus.value = 'success' // 登录成功
     setToken(loginUserInfo.token)
     user.value = loginUserInfo.user

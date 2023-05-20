@@ -55,7 +55,7 @@ watchEffect(() => {
     {
       prop: 'file',
       label: '文件上传',
-      type: 'uploadImg',
+      type: 'upload-img',
       rules: [{ required: true, trigger: 'change' }],
       multiple: true,
       limit: 5,
@@ -63,12 +63,15 @@ watchEffect(() => {
     {
       prop: 'file2',
       label: '文件裁剪',
-      type: 'uploadImg',
-      rules: [{ required: true, trigger: 'change' }],
+      type: 'upload-img',
       limit: 5,
-      cropper: {
-
-      }
+      cropper: {}
+    },
+    {
+      prop: 'file3',
+      label: '文件上传',
+      type: 'upload-file',
+      limit: 5,
     },
     // {
     //   prop: 'platform',

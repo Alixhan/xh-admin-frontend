@@ -1,7 +1,7 @@
 <template>
   <div class="m-single-date-picker" :style="{ lineHeight: inputHeight }">
     <el-date-picker v-bind="startParam" :model-value="$props.start"/>
-    <el-text>{{ $props.rangeSeparator ?? '-' }}</el-text>
+    <el-text style="font-weight: bold;">{{ $props.rangeSeparator ?? '-' }}</el-text>
     <el-date-picker v-bind="endParam" :model-value="$props.end"/>
   </div>
 </template>
@@ -144,6 +144,7 @@ export default defineComponent({
 </script>
 <style scoped lang="scss">
 .m-single-date-picker {
+  width: 100%;
   display: inline-flex;
   justify-content: space-between;
   align-items: stretch;

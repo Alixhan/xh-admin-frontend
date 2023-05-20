@@ -49,7 +49,7 @@ if (handleType.value !== 'add') {
     formData.value = res.data
     if ((formData.value.contentType ?? '').startsWith('image')) {
       formData.value.image = [{
-        url: getDownloadFileUrl(formData.value.object),
+        url: getDownloadFileUrl({ object: formData.value.object }),
         name: formData.value.name
       }]
     }
@@ -63,7 +63,7 @@ watchEffect(() => {
     {
       prop: 'image',
       label: '图片预览',
-      type: 'uploadImg',
+      type: 'upload-img',
       cols: 2,
       hidden: !(formData.value.contentType ?? '').startsWith('image'),
       disabled: true,

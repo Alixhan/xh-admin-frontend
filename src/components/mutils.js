@@ -103,7 +103,7 @@ export function generateDynamicColumn (column) {
     type = 'el-date-picker'
   } else if (type === 'icon') {
     type = 'm-icon-select'
-  } else if (['uploadImg', 'uploadFile'].includes(type)) {
+  } else if (['upload-img', 'upload-file'].includes(type)) {
     type = 'm-upload'
   } else {
     type = 'el-' + type

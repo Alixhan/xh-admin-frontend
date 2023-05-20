@@ -5,17 +5,14 @@ import { useSystemStore } from '@/store/system'
  * @param object
  * @returns {string}
  */
-export function getDownloadFileUrl (object, isScale = false) {
-  if (!object) return ''
+export function getDownloadFileUrl (param) {
+  if (!param) return ''
   let fileBaseUrl = import.meta.env.VITE_FILE_BASE_URL
   if (!fileBaseUrl.startsWith('http')) fileBaseUrl = import.meta.env.VITE_BASE_URL + fileBaseUrl
   const systemStore = useSystemStore()
-  let url = `${fileBaseUrl}/api/file/operation/download?object=${object}&${import.meta.env.VITE_SYS_TOKEN_KEY}=${systemStore.token}`
-  if (isScale) {
-    url += '&isScale=true'
-  }
-  // 添加token
-  return url
+  return Object.keys(param).reduce((url, key) => {
+    return `${url}&${key}=${encodeURIComponent(param[key])}`
+  }, `${fileBaseUrl}/api/file/operation/download?${import.meta.env.VITE_SYS_TOKEN_KEY}=${systemStore.token}`)
 }
 
 /**

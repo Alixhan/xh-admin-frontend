@@ -76,7 +76,7 @@ const editAuth = auth('edit')
 const detailAuth = auth('detail')
 // 添加操作栏
 if (delAuth || editAuth || detailAuth) {
-  let width = 46 * ((delAuth ? 1 : 0) + (editAuth ? 1 : 0) + (detailAuth ? 1 : 0))
+  let width = 45 * (1 + (delAuth ? 1 : 0) + (editAuth ? 1 : 0) + (detailAuth ? 1 : 0))
   if (width < 50) width = 50
   columns.value.unshift({
     label: '操作',
@@ -85,7 +85,9 @@ if (delAuth || editAuth || detailAuth) {
     notExport: true,
     slots: {
       default (scope) {
-        const arr = []
+        const arr = [
+          <el-link type="success" underline={false} onClick={() => download(scope.row)}>下载</el-link>
+        ]
         if (editAuth) {
           arr.push(
             <el-link type="primary" underline={false} onClick={() => openForm('edit', scope.row)}>编辑</el-link>
@@ -128,16 +130,21 @@ function del (rows) {
   })
 }
 
+// 文件下载
+function download (file) {
+  window.open(getDownloadFileUrl({ object: file.object, fileName: file.name }))
+}
+
 // 图片文件预览
 function previewImage (scope) {
   const file = scope.row
   if (file.contentType.startsWith('image')) {
-    const src = getDownloadFileUrl(file.object, true)
+    const src = getDownloadFileUrl({ object: file.object, isScale: true })
     return <el-image {...{
       src,
       style: 'width: 30px; height: 30px;',
       fit: 'cover',
-      previewSrcList: [getDownloadFileUrl(file.object)],
+      previewSrcList: [getDownloadFileUrl({ object: file.object })],
       hideOnClickModal: true,
       previewTeleported: true,
     }} />
