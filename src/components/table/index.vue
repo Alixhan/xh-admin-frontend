@@ -11,7 +11,7 @@ import TopFilter from '@/components/TopFilter.vue'
 import { useThrottleFn } from '@vueuse/core'
 import TableColumnSort from './TableColumnSort.vue'
 import ExportExcel from './ExportExcel.vue'
-import { useSystemStore } from '@/store/system'
+import { useSystemStore } from '@/stores/system'
 import { ElTable } from 'element-plus'
 
 /**
@@ -28,7 +28,7 @@ export default {
     },
     // 是否是筛选过滤的表格，是：表格包含搜索框，同时布局有间距调整
     isFilterTable: {
-      type: Boolean,
+      type: Boolean
     },
     // 是否导出excel
     isExportExcel: {
@@ -39,13 +39,13 @@ export default {
      * 可选择行的表格 <multiple|single>
      */
     selection: {
-      type: String,
+      type: String
     },
     /**
      * 最多可选择行数
      */
     selectionLimit: {
-      type: Number,
+      type: Number
     },
     // 导出的文件名
     exportFileName: {
@@ -54,15 +54,15 @@ export default {
     },
     // 过滤column
     filterColumns: {
-      type: Array,
+      type: Array
     },
     // 过滤param
     filterParam: {
-      type: Object,
+      type: Object
     },
     // 表格列定义
     columns: {
-      type: Array,
+      type: Array
     },
     // 请求后台数据的方法
     fetchData: {
@@ -75,7 +75,12 @@ export default {
     },
     // 表格数据
     data: {
-      type: Array,
+      type: Array
+    },
+    // 分页对象
+    isPage: {
+      type: Boolean,
+      default: true
     },
     // 分页对象
     pagination: {
@@ -87,25 +92,26 @@ export default {
     }
   },
   emits: [...ElTable.emits, 'update:data'],
-  setup (props, {
-    attrs,
-    emit,
-    slots,
-    expose
-  }) {
+  setup (props, { attrs, emit, slots, expose }) {
     const systemStore = useSystemStore()
     const pageQuery = ref({
-      isPage: true, // 是否分页
+      isPage: props.isPage, // 是否分页
       currentPage: 1, // 页码
       pageSize: 20, // 分页大小
       param: props.filterParam ?? {}, // 查询参数
       filters: [] // 高级查询
     })
-    watch(() => props.filterParam, val => (pageQuery.value.param = val ?? {}))
+    watch(
+      () => props.filterParam,
+      (val) => (pageQuery.value.param = val ?? {})
+    )
 
     // 表格数据
     const data = ref(props.data || [])
-    watch(() => props.data, val => (data.value = val ?? []))
+    watch(
+      () => props.data,
+      (val) => (data.value = val ?? [])
+    )
     // watch(() => data, val => props.data && emit('update:data', val))
 
     // 分页信息对象
@@ -114,10 +120,13 @@ export default {
       currentPage: 1,
       pageSize: 20,
       background: true,
-      layout: 'total,sizes,prev,pager,next,jumper',
+      layout: 'total,sizes,prev,pager,next,jumper'
     })
     if (props.pagination) {
-      pagination.value = Object.assign(props.pagination, { ...pagination.value, ...props.pagination })
+      pagination.value = Object.assign(props.pagination, {
+        ...pagination.value,
+        ...props.pagination
+      })
     }
 
     watch(
@@ -133,7 +142,7 @@ export default {
     // 向后端请求表格数据, 函数节流
     const fetchQuery = useThrottleFn(() => {
       if (props.fetchData) {
-        props.fetchData(pageQuery.value, { loadingRef }).then(res => {
+        props.fetchData(pageQuery.value, { loadingRef }).then((res) => {
           const resData = res.data
           if (props.data) {
             emit('update:data', resData.list)
@@ -161,7 +170,7 @@ export default {
     expose({
       tableRef,
       formRef,
-      fetchQuery,
+      fetchQuery
     })
 
     function rowClick (row, column, event) {
@@ -169,7 +178,10 @@ export default {
         selectionRows.value = [row]
         emit('selection-change', selectionRows.value)
       } else if (props.selection === 'multiple') {
-        if (selectionRows.value.length >= props.selectionLimit && !selectionRows.value.some(i => i === row)) return
+        if (
+          selectionRows.value.length >= props.selectionLimit &&
+          !selectionRows.value.some((i) => i === row)
+        ) { return }
         tableRef.value.toggleRowSelection(row)
       }
       emit('row-click', row, column, event)
@@ -182,23 +194,23 @@ export default {
 
     function selectable (row) {
       if (selectionRows.value.length >= props.selectionLimit) {
-        return selectionRows.value.some(i => i === row)
+        return selectionRows.value.some((i) => i === row)
       }
       return true
     }
 
     // 初始化表格列参数
     function initTableColumnsParams () {
-      columns.value = props.columns.map(column => initCommonColumns(column))
-      tableColumnsParams.value = columns.value.map(column => initTableColumnParam(column))
+      columns.value = props.columns.map((column) => initCommonColumns(column))
+      tableColumnsParams.value = columns.value.map((column) => initTableColumnParam(column))
     }
 
     function initCommonColumns (column) {
-      const r = { ...column, }
+      const r = { ...column }
       if (r.itemList) r.itemList = getItemListRef(r)
       // 递归生成多层级table
       if (column.children?.length) {
-        column.children = column.children.map(i => initCommonColumns(i))
+        column.children = column.children.map((i) => initCommonColumns(i))
       }
       return r
     }
@@ -215,26 +227,31 @@ export default {
 
       // 递归生成多层级table
       if (tableColumParams.children?.length) {
-        tableColumParams.children = tableColumParams.children.map(i => initTableColumnParam(i))
+        tableColumParams.children = tableColumParams.children.map((i) => initTableColumnParam(i))
       }
 
       tableColumParams.required ??= (() => {
         if (column.editParam?.rules) {
           if (column.editParam.rules instanceof Array) {
-            return column.editParam.rules.some(i => i.required)
+            return column.editParam.rules.some((i) => i.required)
           }
           return column.editParam.rules.required
         }
       })()
       // 优先使用自定义header插槽
-      if ((tableColumParams.required || tableColumParams.comment) && !tableColumParams.slots.header) {
+      if (
+        (tableColumParams.required || tableColumParams.comment) &&
+        !tableColumParams.slots.header
+      ) {
         tableColumParams.slots.header ??= () => {
           return (
             <div style="display: flex; align-items: center;">
               {tableColumParams.required ? <span style="color: red">*</span> : null}
               {tableColumParams.label}
               {tableColumParams.comment
-                ? <m-comment label={tableColumParams.label} comment={tableColumParams.comment}/>
+                ? (
+                <m-comment label={tableColumParams.label} comment={tableColumParams.comment} />
+                  )
                 : null}
             </div>
           )
@@ -244,7 +261,8 @@ export default {
       if (tableColumParams.type === 'index') {
         // 默认实现后端分页页码
         if (props.fetchData) {
-          tableColumParams.index ??= i => pagination.value.pageSize * (pagination.value.currentPage - 1) + i + 1
+          tableColumParams.index ??= (i) =>
+            pagination.value.pageSize * (pagination.value.currentPage - 1) + i + 1
         }
       }
       // 默认表格格式化函数
@@ -269,16 +287,16 @@ export default {
         label: column.label,
         itemList: column.itemList,
         valueKey: column.valueKey,
-        labelKey: column.labelKey,
+        labelKey: column.labelKey
       }
       let renderArgsC
       if (!(column.editParam instanceof Function)) {
         renderArgsC = generateDynamicColumn({
           ...columnParam,
-          ...column.editParam,
+          ...column.editParam
         })
       }
-      column.slots.default = scope => {
+      column.slots.default = (scope) => {
         const prop = `[${scope.$index}].${column.prop}`
         let renderArgs
         let editParam = column.editParam
@@ -286,7 +304,7 @@ export default {
           editParam = editParam(scope.row, column)
           renderArgs = generateDynamicColumn({
             ...columnParam,
-            ...editParam,
+            ...editParam
           })
         } else {
           renderArgs = renderArgsC
@@ -308,13 +326,11 @@ export default {
           inlineMessage: true,
           rules: generateFormRules({ label: column.label, rules: editParam?.rules }, scope.row)
         }
-        return <el-form-item {...formItemParam}>
-          {createVNode(
-            renderArgs.component,
-            renderArgs.param,
-            renderArgs.slots
-          )}
-        </el-form-item>
+        return (
+          <el-form-item {...formItemParam}>
+            {createVNode(renderArgs.component, renderArgs.param, renderArgs.slots)}
+          </el-form-item>
+        )
       }
     }
 
@@ -322,18 +338,18 @@ export default {
     function generateTableColumn (column) {
       if (column.hidden) return null
       if (column.children?.length) {
-        column.slots.default = () => column.children.map(i => generateTableColumn(i))
+        column.slots.default = () => column.children.map((i) => generateTableColumn(i))
       }
       // 允许用户按照自己的slotName定制
       if (column.slotName && slots[column.slotName]) return slots[column.slotName]()
       const param = {
-        ...column,
+        ...column
       }
       delete param.slots
       delete param.children
 
       const columnSlots = column.slots
-      return <el-table-column {...param} v-slots={columnSlots}/>
+      return <el-table-column {...param} v-slots={columnSlots} />
     }
 
     // 生成搜索框
@@ -354,8 +370,12 @@ export default {
     function generateTotalView () {
       if (pagination.value.layout.includes('total')) {
         const content = [
-          <el-icon class="total-icon" size="15"><InfoFilled/></el-icon>,
-          <span>总共 <span class="total-text">{pagination.value.total}</span> 条数据</span>
+          <el-icon class="total-icon" size="15">
+            <InfoFilled />
+          </el-icon>,
+          <span>
+            总共 <span class="total-text">{pagination.value.total}</span> 条数据
+          </span>
         ]
         if (props.selection) {
           const arr = []
@@ -372,15 +392,22 @@ export default {
     // 生成表格选择列
     function generateSelectionColumn () {
       if (props.selection === 'multiple') {
-        return <el-table-column type="selection" selectable={selectable}/>
+        return <el-table-column type="selection" selectable={selectable} />
       } else if (props.selection === 'single') {
         const slots = {
           default (scope) {
-            return <el-radio onClick={e => e.preventDefault()} label={true}
-                             modelValue={selectionRows.value.includes(scope.row)}><span/></el-radio>
+            return (
+              <el-radio
+                onClick={(e) => e.preventDefault()}
+                label={true}
+                modelValue={selectionRows.value.includes(scope.row)}
+              >
+                <span />
+              </el-radio>
+            )
           }
         }
-        return <el-table-column type="selection" fixed width="50" key="--" v-slots={slots}/>
+        return <el-table-column type="selection" fixed width="50" key="--" v-slots={slots} />
       }
     }
 
@@ -395,15 +422,28 @@ export default {
         onSelectionChange: selectionChange
       }
       // 删除无效属性
-      const invalidProps = ['formType', 'isFilterTable', 'isExportExcel', 'selection', 'filterColumns',
-        'filterParam', 'columns', 'fetchData', 'defaultQuery', 'pagination']
-      invalidProps.forEach(property => {
+      const invalidProps = [
+        'formType',
+        'isFilterTable',
+        'isExportExcel',
+        'selection',
+        'filterColumns',
+        'filterParam',
+        'columns',
+        'fetchData',
+        'defaultQuery',
+        'pagination'
+      ]
+      invalidProps.forEach((property) => {
         delete tableParam[property]
       })
       return (
         <div class={`table-view ${props.isFilterTable ? 'table-view-filter' : ''}`}>
           <div class="table-top">
-            <el-scrollbar class="table-scrollbar" view-style="display: flex; justify-content: space-between;">
+            <el-scrollbar
+              class="table-scrollbar"
+              view-style="display: flex; justify-content: space-between;"
+            >
               <div class="left-action">
                 {generateTotalView()}
                 {slots['left-action']?.()}
@@ -412,34 +452,47 @@ export default {
                 {slots['right-action']?.()}
                 {props.isExportExcel
                   ? (
-                    <ExportExcel class="action-btn" pageQuery={pageQuery.value}
-                                 exportFileName={props.exportFileName}
-                                 fetchData={props.fetchData} data={data.value} columns={columns.value}/>
+                  <ExportExcel
+                    class="action-btn"
+                    pageQuery={pageQuery.value}
+                    exportFileName={props.exportFileName}
+                    fetchData={props.fetchData}
+                    data={data.value}
+                    columns={columns.value}
+                  />
                     )
                   : undefined}
-                <el-button icon="Operation" type="primary" text class="action-btn">高级筛选</el-button>
+                <el-button icon="Operation" type="primary" text class="action-btn">
+                  高级筛选
+                </el-button>
                 <el-popover
                   trigger="click"
                   hideAfter={0}
                   popper-style="min-width: 100px; width: auto;"
                   v-slots={{
                     reference () {
-                      return <el-button type="primary" text icon="operation" class="action-btn">
-                        列排序
-                      </el-button>
+                      return (
+                        <el-button type="primary" text icon="operation" class="action-btn">
+                          列排序
+                        </el-button>
+                      )
                     }
                   }}
                 >
-                  <TableColumnSort columns={props.columns}/>
+                  <TableColumnSort columns={props.columns} />
                 </el-popover>
               </div>
             </el-scrollbar>
           </div>
           <el-form ref={formRef} class="table-form" model={props.data} scroll-to-error>
-            <el-table {...tableParam} v-slots={slots} v-loading={loadingRef.value}
-                      class={{ 'radio-selection': props.selection === 'single' }}>
+            <el-table
+              {...tableParam}
+              v-slots={slots}
+              v-loading={loadingRef.value}
+              class={{ 'radio-selection': props.selection === 'single' }}
+            >
               {generateSelectionColumn()}
-              {tableColumnsParams.value.map(i => generateTableColumn(i))}
+              {tableColumnsParams.value.map((i) => generateTableColumn(i))}
             </el-table>
           </el-form>
           {generatePaginationView()}
@@ -487,7 +540,7 @@ export default {
     border: var(--el-border);
     border-color: rgba(0, 0, 0, 0);
     margin-bottom: 10px;
-    border-radius: 5px;
+    border-radius: var(--el-border-radius-base);
     flex-shrink: 0;
   }
 
@@ -496,7 +549,7 @@ export default {
     display: flex;
     flex-direction: column;
     height: 0;
-    background-color: var(--el-bg-color-overlay);
+    background-color: var(--el-bg-color);
 
     .radio-selection {
       :deep(.el-table-column--selection .el-checkbox) {
@@ -576,14 +629,13 @@ export default {
         padding: 0;
       }
     }
-
   }
 
   .table-view-filter {
     border: var(--el-border);
     border-color: rgba(0, 0, 0, 0);
     padding: 15px;
-    border-radius: 5px;
+    border-radius: var(--el-border-radius-base);
   }
 
   .action-btn {
@@ -604,8 +656,6 @@ export default {
 
 .height-shrink {
   .top-filter {
-    position: sticky;
-    top: 0;
     z-index: 3;
   }
 

@@ -1,32 +1,39 @@
 <template>
   <div class="root">
     <m-table
-        class="m-table"
-        ref="tableRef"
-        form-type="add"
-        is-filter-table
-        :columns="columns"
-        :data="data"
-        selection="multiple"
-        @row-click="rowClick"
+      class="m-table"
+      ref="tableRef"
+      form-type="add"
+      is-filter-table
+      :columns="columns"
+      :data="data"
+      selection="multiple"
+      @row-click="rowClick"
     >
       <template #right-action>
-        <el-input v-model="num" style="width: 100px"/>
+        <el-input v-model="num" style="width: 100px" />
         <el-button type="primary" @click="formVisible = true">弹窗</el-button>
         <el-button type="primary" @click="add">添加数据</el-button>
         <el-button type="primary" @click="validTable">表单验证</el-button>
         <el-button type="primary" @click="tableRef.fetchQuery()">查询</el-button>
       </template>
     </m-table>
-    <el-dialog title="ffff" v-model="formVisible" align-center draggable
-               destroy-on-close :close-on-click-modal="false" width="70%">
-      <FormDetail handle-type="add" style="height: 75vh;" @close="formVisible = false"/>
+    <el-dialog
+      title="ffff"
+      v-model="formVisible"
+      align-center
+      draggable
+      destroy-on-close
+      :close-on-click-modal="false"
+      width="70%"
+    >
+      <FormDetail handle-type="add" style="height: 75vh" @close="formVisible = false" />
     </el-dialog>
   </div>
 </template>
 <script lang="jsx" setup>
 import { reactive, ref, shallowRef } from 'vue'
-import { useSystemStore } from '@/store/system'
+import { useSystemStore } from '@/stores/system'
 import FormDetail from './formDetail.vue'
 
 const num = ref(2)
@@ -50,13 +57,13 @@ const columns = ref([
   {
     fixed: true,
     label: '序',
-    type: 'index',
+    type: 'index'
   },
   {
     label: 'id',
     children: [
       { prop: 'ff', label: 'hg', notExport: true },
-      { prop: 'ff', label: '鬼地方个' },
+      { prop: 'ff', label: '鬼地方个' }
     ]
   },
   {
@@ -66,17 +73,15 @@ const columns = ref([
       {
         prop: 'ff',
         label: '发发撒啊发发发',
-        children: [
-          { prop: 'ff', label: '开会' },
-        ]
-      },
+        children: [{ prop: 'ff', label: '开会' }]
+      }
     ]
   },
   {
     prop: 'a',
     label: '胸衣',
     width: 100,
-    editable: true,
+    editable: true
     // editParam: {
     //   rules: { required: true },
     // }
@@ -84,13 +89,13 @@ const columns = ref([
   {
     prop: 'a',
     label: '女不女',
-    width: 100,
+    width: 100
   },
   {
     prop: 'a',
     label: '存不存v',
-    width: 100,
-  },
+    width: 100
+  }
 ])
 const data = ref([])
 
@@ -103,7 +108,7 @@ function rowClick (row, a, b) {
 }
 
 function validTable () {
-  tableRef.value.validate().then(r => {
+  tableRef.value.validate().then((r) => {
     console.info(r)
   })
 }

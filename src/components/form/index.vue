@@ -1,8 +1,13 @@
 <script lang="jsx">
 import { createVNode, onUnmounted, provide, ref, shallowRef, watchEffect } from 'vue'
 import { ElForm } from 'element-plus'
-import { generateDynamicColumn, generateFormRules, generatePlaceholder, vModelValue } from '@/components/mutils'
-import { useSystemStore } from '@/store/system'
+import {
+  generateDynamicColumn,
+  generateFormRules,
+  generatePlaceholder,
+  vModelValue
+} from '@/components/mutils'
+import { useSystemStore } from '@/stores/system'
 import { useElementSize } from '@vueuse/core'
 
 /**
@@ -17,11 +22,11 @@ export default {
     // 表单处理类型， add,edit,detail
     handleType: {
       type: String,
-      default: 'add',
+      default: 'add'
     },
     // 跨列数，对应el-col
     colspan: {
-      type: Number,
+      type: Number
     },
     // 表单对象
     model: {
@@ -45,12 +50,15 @@ export default {
     }
   },
   emits: [],
-  setup (props, {
-    attrs,
-    slots,
-    expose,
-    // emit,
-  }) {
+  setup (
+    props,
+    {
+      attrs,
+      slots,
+      expose
+      // emit,
+    }
+  ) {
     const systemStore = useSystemStore()
     onUnmounted(() => {
       formItemParams.value = null
@@ -75,7 +83,7 @@ export default {
     // 表单提交，表单验证，通过后统一上传文件
     async function submit () {
       await formRef.value.validate()
-      await Promise.all(uploadInstances.value.map(i => i.upload()))
+      await Promise.all(uploadInstances.value.map((i) => i.upload()))
       return props.model
     }
 
@@ -99,7 +107,7 @@ export default {
     })
 
     function initFormItemParams () {
-      formItemParams.value = props.columns.map(i => {
+      formItemParams.value = props.columns.map((i) => {
         // 隐藏的直接返回
         if (i.hidden) return i
         const formItemObj = {
@@ -110,7 +118,7 @@ export default {
             label: i.label,
             labelWidth: i.labelWidth,
             required: i.required,
-            rules: generateFormRules(i),
+            rules: generateFormRules(i)
           },
           renderArgs: generateDynamicColumn(i)
         }
@@ -120,7 +128,7 @@ export default {
     }
 
     function generateFormColumns () {
-      return formItemParams.value.map(i => {
+      return formItemParams.value.map((i) => {
         // 隐藏的不显示
         if (i.hidden) return null
         const column = i.columnParam
@@ -129,22 +137,25 @@ export default {
         const param = {
           class: 'form-input',
           ...i.renderArgs.param,
-          ...vModelValue({
-            type: column.type,
-            prop: column.prop,
-            prop2: column.prop2,
-            single: column.single,
-          }, props.model),
+          ...vModelValue(
+            {
+              type: column.type,
+              prop: column.prop,
+              prop2: column.prop2,
+              single: column.single
+            },
+            props.model
+          )
         }
         const formItemSlots = {
-          default: () => createVNode(i.renderArgs.component, param, i.renderArgs.slots),
+          default: () => createVNode(i.renderArgs.component, param, i.renderArgs.slots)
         }
         if (column.comment) {
           formItemSlots.label = () => {
             return (
               <div class="form-item-label">
                 <div>{column.label}</div>
-                <m-comment label={column.label} comment={column.comment}/>
+                <m-comment label={column.label} comment={column.comment} />
               </div>
             )
           }
@@ -153,9 +164,11 @@ export default {
         if (systemStore.layout.widthShrink && span < colspan.value) span = colspan.value
         if (column.cols) span = parseInt(column.cols) * span
         if (span > 24) span = 24
-        return <el-col span={span}>
-          <el-form-item {...i.formItemParams} v-slots={formItemSlots}/>
-        </el-col>
+        return (
+          <el-col span={span}>
+            <el-form-item {...i.formItemParams} v-slots={formItemSlots} />
+          </el-col>
+        )
       })
     }
 
@@ -164,7 +177,7 @@ export default {
         ref: formRef,
         disabled: props.handleType === 'detail',
         ...attrs,
-        ...props,
+        ...props
       }
       // 明细类型需要禁用表单
       if (props.handleType === 'detail') {
@@ -177,12 +190,11 @@ export default {
       }
       return (
         <el-form
-          {...formParam} v-slots={slots}
+          {...formParam}
+          v-slots={slots}
           class={{ 'detail-form': props.handleType === 'detail' }}
         >
-          <el-row>
-            {generateFormColumns()}
-          </el-row>
+          <el-row>{generateFormColumns()}</el-row>
         </el-form>
       )
     }

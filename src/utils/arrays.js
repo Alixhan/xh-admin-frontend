@@ -7,7 +7,7 @@
 
 export function join (arr, item) {
   const arr2 = []
-  arr.forEach(i => arr2.push(i, item))
+  arr.forEach((i) => arr2.push(i, item))
   arr2.pop()
   return arr2
 }

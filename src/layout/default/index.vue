@@ -1,36 +1,43 @@
 <template>
-    <div
-            class="default-root-view"
-            :class="{
-        'menu-expand':!systemStore.layout.menuCollapse,
-        'width-shrink-layout':systemStore.layout.widthShrink,
-      }"
-    >
-        <div class="left-view">
-            <Logo class="logo"/>
-            <Menu class="menu"/>
-        </div>
-        <div class="right-view">
-            <Header class="header"/>
-            <Main class="main"/>
-            <transition name="el-fade-in" mode="out-in">
-                <div v-if="!systemStore.layout.menuCollapse" class="mock-view"
-                     @click.stop="systemStore.layout.menuCollapse = true"/>
-            </transition>
-        </div>
+  <div
+    class="default-root-view"
+    :class="{
+      'menu-expand': !systemStore.layout.menuCollapse,
+    }"
+  >
+    <div class="left-view">
+      <Logo class="logo" />
+      <Menu class="menu" />
     </div>
+    <div class="right-view">
+      <Header class="header" />
+      <Main class="main" />
+      <transition name="el-fade-in" mode="out-in">
+        <div
+          v-if="!systemStore.layout.menuCollapse"
+          class="mock-view"
+          @click.stop="systemStore.layout.menuCollapse = true"
+        />
+      </transition>
+    </div>
+  </div>
 </template>
-<script setup name="defaultLayout">
+<script setup>
 import Logo from './logo'
 import Menu from './menu'
 import Main from '@/layout/main'
 import Header from './header'
 import { computed } from 'vue'
-import { useSystemStore } from '@/store/system'
+import { useSystemStore } from '@/stores/system'
 
 /**
  * 默认布局
  */
+
+defineOptions({
+  name: 'defaultLayout'
+})
+
 const systemStore = useSystemStore()
 const menuWidth = computed(() => systemStore.layout.menuWidth + 'px')
 </script>
@@ -76,7 +83,6 @@ $transition: width 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
       flex-grow: 1;
       height: 0;
     }
-
   }
 }
 
@@ -103,5 +109,4 @@ $transition: width 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
     width: v-bind(menuWidth);
   }
 }
-
 </style>

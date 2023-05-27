@@ -1,9 +1,13 @@
 <template>
-  <el-scrollbar ref="scrollbar" class="main" :view-style="systemStore.layout.heightShrink?null:'height: 100%;'">
+  <el-scrollbar
+    ref="scrollbar"
+    class="main"
+    :view-style="systemStore.layout.heightShrink ? null : 'height: 100%;'"
+  >
     <router-view v-slot="{ Component, route }">
       <transition :name="systemStore.layout.mainAnimation" mode="out-in">
         <keep-alive :include="systemStore.keepAliveComponentNameList">
-          <component v-if="!systemStore.refresh" :is="Component" :key="route.meta.menuId"/>
+          <component v-if="!systemStore.refresh" :is="Component" :key="route.meta.menuId" />
         </keep-alive>
       </transition>
     </router-view>
@@ -11,7 +15,7 @@
 </template>
 
 <script setup>
-import { useSystemStore } from '@/store/system'
+import { useSystemStore } from '@/stores/system'
 import { nextTick, ref, watch } from 'vue'
 
 const systemStore = useSystemStore()
@@ -24,7 +28,8 @@ watch(
     nextTick(() => {
       systemStore.setRefresh(false)
     })
-  })
+  }
+)
 </script>
 
 <style scoped lang="scss">

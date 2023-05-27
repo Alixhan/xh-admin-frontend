@@ -1,39 +1,42 @@
 <template>
-  <el-scrollbar style="padding-bottom: 10px; margin-bottom: -10px;--el-popover-padding: 0px;">
+  <el-scrollbar style="padding-bottom: 10px; margin-bottom: -10px; --el-popover-padding: 0px">
     <div class="nav-tabs">
-      <div v-for="(tab, index) in navTabs" :key="index"
-           @contextmenu.prevent="onContextmenu(index)"
-           @click="systemStore.activeMenuId = tab.id"
-           :class="{
-             'active-tab': systemStore.activeMenuId === tab.id,
-             'disable-tab': navTabs.length < 2
-           }"
-           class="tab-item"
+      <div
+        v-for="(tab, index) in navTabs"
+        :key="index"
+        @contextmenu.prevent="onContextmenu(index)"
+        @click="systemStore.activeMenuId = tab.id"
+        :class="{
+          'active-tab': systemStore.activeMenuId === tab.id,
+          'disable-tab': navTabs.length < 2
+        }"
+        class="tab-item"
       >
-        <div class="trigger-view" :ref="e => tabRefs[index] = e" @click.stop/>
+        <div class="trigger-view" :ref="(e) => (tabRefs[index] = e)" @click.stop />
         <div class="tab-title">{{ tab.title }}</div>
         <el-icon class="tab-icon" size="12">
-          <Close @click.stop="removeTab(tab.id)"/>
+          <Close @click.stop="removeTab(tab.id)" />
         </el-icon>
       </div>
     </div>
     <el-popover
-        style="padding: 0;"
-        :virtual-ref="virtualRef"
-        trigger="click"
-        virtual-triggering
-        :hide-after="0"
-        popper-style="padding: 0; width: auto; min-width: auto;"
-        v-model:visible="visible"
+      style="padding: 0"
+      :virtual-ref="virtualRef"
+      trigger="click"
+      virtual-triggering
+      :hide-after="0"
+      popper-style="padding: 0; width: auto; min-width: auto;"
+      v-model:visible="visible"
     >
       <div class="menu-view">
         <el-link
-            v-for="(menu, i) in menuItems"
-            class="menu-item"
-            :class="{'disable-menu': menu.disabled}"
-            :key="i" v-bind="menu"
-            @click="clickMenu(menu)"
-            :underline="false"
+          v-for="(menu, i) in menuItems"
+          class="menu-item"
+          :class="{ 'disable-menu': menu.disabled }"
+          :key="i"
+          v-bind="menu"
+          @click="clickMenu(menu)"
+          :underline="false"
         >
           {{ menu.label }}
         </el-link>
@@ -42,7 +45,7 @@
   </el-scrollbar>
 </template>
 <script setup>
-import { useSystemStore } from '@/store/system'
+import { useSystemStore } from '@/stores/system'
 import { nextTick, ref, watch, watchEffect } from 'vue'
 
 const systemStore = useSystemStore()
@@ -56,11 +59,19 @@ watchEffect(initMenuItems)
 
 function initMenuItems () {
   menuItems.value = [
-    { label: '重新加载', icon: 'Refresh', disabled: navTabs[currentIndex.value]?.id !== systemStore.activeMenuId },
+    {
+      label: '重新加载',
+      icon: 'Refresh',
+      disabled: navTabs[currentIndex.value]?.id !== systemStore.activeMenuId
+    },
     { label: '关闭此页签', icon: 'close', disabled: navTabs.length < 2, type: 'default' },
     { label: '关闭其他页签', icon: 'Minus', disabled: navTabs.length < 2 },
     { label: '关闭左侧页签', icon: 'ArrowLeft', disabled: currentIndex.value === 0 },
-    { label: '关闭右侧页签', icon: 'ArrowRight', disabled: currentIndex.value === navTabs.length - 1 },
+    {
+      label: '关闭右侧页签',
+      icon: 'ArrowRight',
+      disabled: currentIndex.value === navTabs.length - 1
+    }
   ]
 }
 
@@ -76,7 +87,7 @@ watch(
         behavior: 'smooth'
       })
     })
-  },
+  }
 )
 
 /**
@@ -106,15 +117,17 @@ function clickMenu (menu) {
   } else if (menu.label === '关闭此页签') {
     removeTab(navTabs[currentIndex.value].id)
   } else {
-    navTabs.filter((i, index) => {
-      if (menu.label === '关闭其他页签') return index !== currentIndex.value
-      if (menu.label === '关闭左侧页签') return index < currentIndex.value
-      if (menu.label === '关闭右侧页签') return index > currentIndex.value
-      return false
-    }).map(i => i.id).forEach(removeTab)
+    navTabs
+      .filter((i, index) => {
+        if (menu.label === '关闭其他页签') return index !== currentIndex.value
+        if (menu.label === '关闭左侧页签') return index < currentIndex.value
+        if (menu.label === '关闭右侧页签') return index > currentIndex.value
+        return false
+      })
+      .map((i) => i.id)
+      .forEach(removeTab)
   }
 }
-
 </script>
 <style scoped lang="scss">
 $transition-time: all 0.3s linear;
@@ -168,7 +181,8 @@ $transition-time: all 0.3s linear;
     }
   }
 
-  .tab-item:hover, .active-tab {
+  .tab-item:hover,
+  .active-tab {
     color: var(--el-color-primary);
     //box-shadow: var(--el-box-shadow);
     border-color: var(--el-color-primary);

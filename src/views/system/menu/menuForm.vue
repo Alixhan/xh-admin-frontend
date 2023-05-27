@@ -2,22 +2,23 @@
   <div class="form-view">
     <el-scrollbar class="m-form-scroll">
       <m-form
-          ref="formRef"
-          :colspan="24"
-          :columns="columns"
-          :model="formData"
-          :handleType="handleType"
+        ref="formRef"
+        :colspan="24"
+        :columns="columns"
+        :model="formData"
+        :handleType="handleType2"
       />
     </el-scrollbar>
     <div class="m-footer">
       <el-button icon="close" @click="close()">取消</el-button>
       <el-button
-          v-if="['add', 'edit'].includes(handleType)"
-          v-auth="['add', 'edit']"
-          icon="check"
-          type="primary"
-          :loading="saveLoading"
-          @click="save">
+        v-if="['add', 'edit'].includes(handleType2)"
+        v-auth="['add', 'edit']"
+        icon="check"
+        type="primary"
+        :loading="saveLoading"
+        @click="save"
+      >
         保存
       </el-button>
     </div>
@@ -41,23 +42,23 @@ const formRef = ref()
 const saveLoading = ref(false)
 const formData = ref({
   cache: true,
-  enabled: true,
+  enabled: true
 })
 
-const handleType = ref(props.handleType)
-if (handleType.value !== 'add') {
+const handleType2 = ref(props.handleType)
+if (handleType2.value !== 'add') {
   // 查询明细
-  getMenuById(props.modelValue.id).then(res => {
+  getMenuById(props.modelValue.id).then((res) => {
     formData.value = res.data
-    if (handleType.value === 'copy') {
-      handleType.value = 'add'
+    if (handleType2.value === 'copy') {
+      handleType2.value = 'add'
       formData.value.id = ''
     }
   })
 }
 // 上级菜单下拉框数据
 const parentMenuList = ref([])
-queryMenuList({ isPage: false, param: { flag: 'selectParentMenu' } }).then(res => {
+queryMenuList({ isPage: false, param: { flag: 'selectParentMenu' } }).then((res) => {
   let list = res.data.list.reverse()
   const menus = []
   let currentMenu
@@ -65,7 +66,7 @@ queryMenuList({ isPage: false, param: { flag: 'selectParentMenu' } }).then(res =
     // 排列，符合的排到末尾等待取出
     const leftArr = []
     const rightArr = []
-    list.forEach(a => {
+    list.forEach((a) => {
       if (currentMenu) {
         if (a.parentId === currentMenu.id) rightArr.push(a)
         else leftArr.push(a)
@@ -77,7 +78,7 @@ queryMenuList({ isPage: false, param: { flag: 'selectParentMenu' } }).then(res =
     // 匹配数据第一个的标记当前子项最后一个
     if (rightArr.length) rightArr[0].isLastChid = true
     // 标记匹配项的层级
-    rightArr.forEach(i => {
+    rightArr.forEach((i) => {
       i.level = currentMenu ? currentMenu.level + 1 : 0
     })
     list = [...leftArr, ...rightArr]
@@ -92,7 +93,7 @@ queryMenuList({ isPage: false, param: { flag: 'selectParentMenu' } }).then(res =
     menus.push({
       platform: currentMenu.platform,
       value: currentMenu.id,
-      label: prefix + currentMenu.title,
+      label: prefix + currentMenu.title
     })
   }
   parentMenuList.value = menus
@@ -109,7 +110,7 @@ watchEffect(() => {
       itemList: platFormList,
       // 有上级菜单时，直接继承上级的平台值，不可手动更改
       disabled: !!formData.value.parentId,
-      rules: { required: true, trigger: 'blur' },
+      rules: { required: true, trigger: 'blur' }
     },
     {
       prop: 'parentId',
@@ -119,7 +120,7 @@ watchEffect(() => {
       filterable: true,
       itemList: parentMenuList.value,
       onChange (val) {
-        formData.value.platform = parentMenuList.value.find(i => i.value === val)?.platform
+        formData.value.platform = parentMenuList.value.find((i) => i.value === val)?.platform
       }
     },
     {
@@ -140,7 +141,16 @@ watchEffect(() => {
       onChange (val) {
         if (val === 'iframe') formData.value.component = '/src/views/iframe/index.vue'
       },
-      comment: <span>点击菜单时的处理方式<br/> route：打开组件页面。<br/>iframe：内嵌一个外链地址的iframe。<br/>outer：直接打开跳转外链地址窗口。</span>
+      comment: (
+        <span>
+          点击菜单时的处理方式
+          <br /> route：打开组件页面。
+          <br />
+          iframe：内嵌一个外链地址的iframe。
+          <br />
+          outer：直接打开跳转外链地址窗口。
+        </span>
+      )
     },
     {
       prop: 'name',
@@ -148,7 +158,8 @@ watchEffect(() => {
       // 处理类型是外链，隐藏此项
       hidden: formData.value.handleType === 'outer',
       rules: { required: true, trigger: 'blur' },
-      comment: '作为后端鉴权使用，建议使用实际意义的英文单词，web平台同时对应vue-router的name属性，鉴权时需要拼接上级name。'
+      comment:
+        '作为后端鉴权使用，建议使用实际意义的英文单词，web平台同时对应vue-router的name属性，鉴权时需要拼接上级name。'
     },
     {
       prop: 'path',
@@ -156,10 +167,13 @@ watchEffect(() => {
       // 菜单类型为按钮,或者处理类型是外链，隐藏此项
       hidden: ['btn'].includes(formData.value.type) || formData.value.handleType === 'outer',
       rules: { required: true, trigger: 'blur' },
-      comment: <span>
-      web平台对应vue-router的path, 实际访问的路由路径会在浏览器地址栏显示，系统会自动拼接父级路径变成一个完整路径，
-        <span style="color: red;">所以不用手动拼接父路由路径。</span>
-      </span>
+      comment: (
+        <span>
+          web平台对应vue-router的path,
+          实际访问的路由路径会在浏览器地址栏显示，系统会自动拼接父级路径变成一个完整路径，
+          <span style="color: red;">所以不用手动拼接父路由路径。</span>
+        </span>
+      )
     },
     {
       prop: 'component',
@@ -168,7 +182,8 @@ watchEffect(() => {
       disabled: formData.value.handleType === 'iframe',
       // 菜单类型为目录或按钮,或者处理类型是外链，隐藏此项
       hidden: ['dir', 'btn'].includes(formData.value.type) || formData.value.handleType === 'outer',
-      comment: 'web平台对应vue-router的component路径，请填写组件的完整路径，例：/views/system/menu/index.vue',
+      comment:
+        'web平台对应vue-router的component路径，请填写组件的完整路径，例：/views/system/menu/index.vue',
       rules: { required: true, trigger: 'blur' }
     },
     // iframe和外链需要填写URL
@@ -192,8 +207,13 @@ watchEffect(() => {
       hidden: formData.value.type === 'btn',
       comment: '菜单的排列顺序，小号排在前，大号排在后。'
     },
-    { prop: 'cache', label: '是否缓存', type: 'switch', comment: '开启后，切换菜单时，导航页签的页面内容将会缓存起来。' },
-    { prop: 'enabled', label: '是否启用', type: 'switch' },
+    {
+      prop: 'cache',
+      label: '是否缓存',
+      type: 'switch',
+      comment: '开启后，切换菜单时，导航页签的页面内容将会缓存起来。'
+    },
+    { prop: 'enabled', label: '是否启用', type: 'switch' }
   ]
 })
 

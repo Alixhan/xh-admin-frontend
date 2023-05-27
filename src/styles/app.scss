@@ -1,4 +1,5 @@
-html, body {
+html,
+body {
   width: 100%;
   height: 100%;
   margin: 0;
@@ -6,13 +7,15 @@ html, body {
   background-size: cover; //或者background-size:100%;
 }
 
-#app,.root {
+#app,
+.root {
   height: 100%;
 }
 
 //表单为明细查看时的样式
 .detail-form {
-  .el-input__wrapper,.el-radio{
+  .el-input__wrapper,
+  .el-radio {
     box-shadow: none;
     border-style: dashed;
     border-width: 1px;
@@ -23,21 +26,30 @@ html, body {
     box-shadow: none;
   }
 
-  .el-form-item__label::before{
+  .el-form-item__label::before {
     display: none;
   }
 
   //隐藏placeholder
   /* WebKit浏览器 */
-  input::-webkit-input-placeholder { opacity:0;color:transparent!important; }
+  input::-webkit-input-placeholder {
+    opacity: 0;
+    color: transparent !important;
+  }
   /* Firefox 4 至 18 */
-  input:-moz-placeholder { opacity:0;color:transparent!important;; }
+  input:-moz-placeholder {
+    opacity: 0;
+    color: transparent !important;
+  }
   /* Firefox 19+ */
-  input::-moz-placeholder { opacity:0;color:transparent!important;; }
+  input::-moz-placeholder {
+    opacity: 0;
+    color: transparent !important;
+  }
 }
 
 //表单的底部按钮栏样式
-.m-footer{
+.m-footer {
   text-align: right;
   margin-top: 10px;
 }

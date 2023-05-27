@@ -1,7 +1,7 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import { loading } from '@/utils/loading'
 import NProgress from 'nprogress'
-import { useSystemStore } from '@/store/system'
+import { useSystemStore } from '@/stores/system'
 // 静态路由
 export const staticRouters = [
   {
@@ -15,12 +15,12 @@ export const staticRouters = [
   {
     path: '/',
     redirect: '/login'
-  },
+  }
 ]
 
 const router = createRouter({
   history: createWebHashHistory(),
-  routes: staticRouters,
+  routes: staticRouters
 })
 
 router.beforeEach(async (to, from, next) => {
@@ -31,7 +31,7 @@ router.beforeEach(async (to, from, next) => {
   next(path)
 })
 
-router.afterEach(guard => {
+router.afterEach((guard) => {
   if (window.existLoading) {
     loading.hide()
   }

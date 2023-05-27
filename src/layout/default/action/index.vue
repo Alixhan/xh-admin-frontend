@@ -1,8 +1,8 @@
 <template>
   <div class="action-view">
-    <FullScreenControl class="action-item"/>
-    <SwitchStyle class="action-item"/>
-    <UserAvatar class="action-item"/>
+    <FullScreenControl class="action-item" />
+    <SwitchStyle class="action-item" />
+    <UserAvatar class="action-item" />
   </div>
 </template>
 <script setup>
@@ -16,7 +16,7 @@ import SwitchStyle from '@/layout/default/action/switchStyle.vue'
   align-items: stretch;
   height: 45px;
 
-  border-radius: 5px;
+  border-radius: var(--el-border-radius-base);
 
   .action-item {
     height: 45px;
@@ -32,7 +32,7 @@ import SwitchStyle from '@/layout/default/action/switchStyle.vue'
 
   .action-item:hover {
     background-color: var(--el-color-primary-light-9);
-    :deep(>svg){
+    :deep(> svg) {
       animation: bounceIn 0.5s linear forwards;
     }
   }

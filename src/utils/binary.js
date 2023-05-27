@@ -13,13 +13,15 @@ function readFileBinary (src) {
     if (fileBinary.fetch) return fileBinary.fetch
   }
   fileBinary = {
-    fetch: axios(src).then(res => {
-      const binary = res.data
-      fileBinary.binary = binary
-      return binary
-    }).catch(() => {
-      delete fileBinary.fetch
-    })
+    fetch: axios(src)
+      .then((res) => {
+        const binary = res.data
+        fileBinary.binary = binary
+        return binary
+      })
+      .catch(() => {
+        delete fileBinary.fetch
+      })
   }
   fileBinaryMap.set(src, fileBinary)
   return fileBinary.fetch
@@ -27,7 +29,4 @@ function readFileBinary (src) {
 
 export default readFileBinary
 
-export {
-  fileBinaryMap,
-  readFileBinary
-}
+export { fileBinaryMap, readFileBinary }

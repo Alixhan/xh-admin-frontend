@@ -6,7 +6,7 @@ export default {
     const num = ref(1)
     const formData = reactive({
       a: 'fsdfsdf',
-      b: '所经历的副科级塑料袋封口吉林科技',
+      b: '所经历的副科级塑料袋封口吉林科技'
     })
 
     function add () {
@@ -23,9 +23,7 @@ export default {
             return <el-input v-model={scope.row.b} />
           }
         }
-        s.push(
-          <el-table-column label="测试列" prop="b" v-slots={slos} />
-        )
+        s.push(<el-table-column label="测试列" prop="b" v-slots={slos} />)
       }
       return s
     }
@@ -47,14 +45,12 @@ export default {
         <el-input v-model={num.value} />
         <el-table data={data.value}>
           <el-table-column label="测试列" prop="b" v-slots={sdfs} />
-          <el-table-column type="index" label="序"/>
+          <el-table-column type="index" label="序" />
           {getColumns()}
         </el-table>
       </div>
     )
   }
 }
-
 </script>
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

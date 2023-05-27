@@ -6,7 +6,7 @@
   </el-breadcrumb>
 </template>
 <script setup>
-import { useSystemStore } from '@/store/system'
+import { useSystemStore } from '@/stores/system'
 
 const systemStore = useSystemStore()
 </script>

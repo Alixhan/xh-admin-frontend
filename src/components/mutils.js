@@ -42,7 +42,7 @@ export function generateDynamicColumn (column) {
     param.style = 'width: 100%;' + param.style ?? ''
   }
   const slots = {
-    ...column.slots,
+    ...column.slots
   }
 
   // 没有默认插槽，给select，radio-group，checkbox-group初始化子选项
@@ -56,7 +56,7 @@ export function generateDynamicColumn (column) {
       const itemArr = getItemListRef(param)
       // 构造select-option
       slots.default = () => {
-        return itemArr.value.map(i => createVNode(ElOption, { ...itemParam, ...i }))
+        return itemArr.value.map((i) => createVNode(ElOption, { ...itemParam, ...i }))
       }
     }
     if (param.type === 'radio-group') {
@@ -66,7 +66,7 @@ export function generateDynamicColumn (column) {
       const itemArr = getItemListRef(param)
       // 构造单选框选项
       slots.default = () => {
-        return itemArr.value.map(i => {
+        return itemArr.value.map((i) => {
           const optionParam = { ...itemParam, label: i.value }
           return createVNode(ElRadio, optionParam, () => i.label)
         })
@@ -79,7 +79,7 @@ export function generateDynamicColumn (column) {
       const itemArr = getItemListRef(param)
       // 构造多选框子选项
       slots.default = () => {
-        return itemArr.value.map(i => {
+        return itemArr.value.map((i) => {
           const optionParam = { ...itemParam, label: i.value }
           return createVNode(ElCheckbox, optionParam, () => i.label)
         })
@@ -90,7 +90,19 @@ export function generateDynamicColumn (column) {
   let type = column.type ?? 'input'
   if (['text', 'textarea'].includes(type)) {
     type = 'el-input'
-  } else if (['year', 'month', 'date', 'dates', 'datetime', 'week', 'datetimerange', 'daterange', 'monthrange'].includes(type)) {
+  } else if (
+    [
+      'year',
+      'month',
+      'date',
+      'dates',
+      'datetime',
+      'week',
+      'datetimerange',
+      'daterange',
+      'monthrange'
+    ].includes(type)
+  ) {
     // 设置默认的格式化
     if (!param.valueFormat) {
       if (['year'].includes(type)) param.valueFormat = 'YYYY'
@@ -110,7 +122,7 @@ export function generateDynamicColumn (column) {
   }
 
   // 日期区间需要单独处理
-  if (['daterange', 'datetimerange', 'monthrange',].includes(param.type)) {
+  if (['daterange', 'datetimerange', 'monthrange'].includes(param.type)) {
     if (!param.prop2) throw Error('prop2属性缺失')
     // 日期区间拆分独立选择
     if (param.single) {
@@ -121,7 +133,7 @@ export function generateDynamicColumn (column) {
   return {
     component,
     param,
-    slots,
+    slots
   }
 }
 
@@ -131,16 +143,16 @@ export function vModelValue (param, form) {
   // 需要双向绑定
   if (form && param.prop) {
     // 日期区间需要单独处理
-    if (['daterange', 'datetimerange', 'monthrange',].includes(param.type)) {
+    if (['daterange', 'datetimerange', 'monthrange'].includes(param.type)) {
       if (!param.prop2) throw Error('prop2属性缺失')
       // 日期区间拆分独立选择
       if (param.single) {
         returnParam.start = form[param.prop]
         returnParam.end = form[param.prop2]
-        returnParam['onUpdate:start'] = val => {
+        returnParam['onUpdate:start'] = (val) => {
           form[param.prop] = val
         }
-        returnParam['onUpdate:end'] = val => {
+        returnParam['onUpdate:end'] = (val) => {
           form[param.prop2] = val
         }
       } else {
@@ -149,7 +161,7 @@ export function vModelValue (param, form) {
         } else {
           returnParam.modelValue = null
         }
-        returnParam['onUpdate:modelValue'] = val => {
+        returnParam['onUpdate:modelValue'] = (val) => {
           if (val) {
             const [value, value2] = val
             form[param.prop] = value
@@ -162,7 +174,7 @@ export function vModelValue (param, form) {
       }
     } else {
       returnParam.modelValue = form[param.prop]
-      returnParam['onUpdate:modelValue'] = val => {
+      returnParam['onUpdate:modelValue'] = (val) => {
         form[param.prop] = val
       }
     }
@@ -177,11 +189,15 @@ export function generatePlaceholder (column) {
   const type = column.type ?? 'input'
   if (!Object.prototype.hasOwnProperty.call(column, 'placeholder')) {
     const label = column.label ?? ''
-    if (['select', 'cascader', 'year', 'month', 'date', 'dates', 'datetime', 'week', 'icon'].includes(type)) {
+    if (
+      ['select', 'cascader', 'year', 'month', 'date', 'dates', 'datetime', 'week', 'icon'].includes(
+        type
+      )
+    ) {
       column.placeholder = '请选择' + label
     } else if (['datetimerange', 'daterange', 'monthrange'].includes(type)) {
-      column.startPlaceholder = column.startPlaceholder ?? (label + '起')
-      column.endPlaceholder = column.endPlaceholder ?? (label + '止')
+      column.startPlaceholder = column.startPlaceholder ?? label + '起'
+      column.endPlaceholder = column.endPlaceholder ?? label + '止'
     } else if (['input', 'textarea'].includes(type)) {
       column.placeholder = '请输入' + label
     }
@@ -194,12 +210,12 @@ export function generatePlaceholder (column) {
  */
 export function getItemListRef (column) {
   // 生成方法
-  const generateItemList = data => {
-    return data.map(i => {
+  const generateItemList = (data) => {
+    return data.map((i) => {
       let label = i.label
       let value = i.value
-      if (column.labelKey) label = column.labelKey instanceof Function ? column.labelKey(i) : i[column.labelKey]
-      if (column.valueKey) value = column.valueKey instanceof Function ? column.valueKey(i) : i[column.valueKey]
+      if (column.labelKey) { label = column.labelKey instanceof Function ? column.labelKey(i) : i[column.labelKey] }
+      if (column.valueKey) { value = column.valueKey instanceof Function ? column.valueKey(i) : i[column.valueKey] }
       return {
         label,
         value
@@ -213,7 +229,7 @@ export function getItemListRef (column) {
     itemList = itemList()
   }
   if (itemList instanceof Promise) {
-    itemList.then(res => (itemArr.value = generateItemList(res)))
+    itemList.then((res) => (itemArr.value = generateItemList(res)))
   } else {
     itemArr.value = generateItemList(itemList)
   }
@@ -230,7 +246,7 @@ export function generateFormRules (column, formData) {
     if (!(rules instanceof Array)) {
       rules = [rules]
     }
-    rules = rules.map(i => {
+    rules = rules.map((i) => {
       i.label ??= column.label
       return {
         required: i.required,
@@ -251,8 +267,10 @@ export function generateFormatter (tableColumParams) {
   // itemList需要转化一下显示
   if (tableColumParams.itemList) {
     tableColumParams.formatter ??= (row, column, cellValue) => {
-      const itemList = isRef(tableColumParams.itemList) ? tableColumParams.itemList.value : tableColumParams.itemList
-      return itemList.find(i => i.value === cellValue)?.label ?? cellValue
+      const itemList = isRef(tableColumParams.itemList)
+        ? tableColumParams.itemList.value
+        : tableColumParams.itemList
+      return itemList.find((i) => i.value === cellValue)?.label ?? cellValue
     }
   }
 }

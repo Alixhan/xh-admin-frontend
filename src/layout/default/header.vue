@@ -1,31 +1,42 @@
 <template>
-  <div class="header-view" :class="{
-    'width-shrink-layout':systemStore.layout.widthShrink,
-    'height-shrink-layout':systemStore.layout.heightShrink,
-  }">
+  <div
+    class="header-view"
+    :class="{
+      'width-shrink-layout': systemStore.layout.widthShrink,
+      'height-shrink-layout': systemStore.layout.heightShrink
+    }"
+  >
     <div class="header-top">
       <div class="header-left">
         <div class="nav-view">
           <el-icon class="collapse-icon" color="var(--el-color-primary)" size="28">
-            <Fold @click="toggleMenuCollapse" :class="{rotate180 :systemStore.layout.menuCollapse}"/>
+            <Fold
+              @click="toggleMenuCollapse"
+              :class="{ rotate180: systemStore.layout.menuCollapse }"
+            />
           </el-icon>
-          <NavTabs v-if="systemStore.layout.heightShrink" key="nav-tabs" class="nav-tabs"/>
-          <Breadcrumb v-else-if="!systemStore.layout.widthShrink" class="breadcrumb"/>
+          <NavTabs v-if="systemStore.layout.heightShrink" key="nav-tabs" class="nav-tabs" />
+          <Breadcrumb v-else-if="!systemStore.layout.widthShrink" class="breadcrumb" />
         </div>
       </div>
-      <el-link v-if="isDev" style="margin-right: 10px;" @click="cp">
+      <el-link v-if="isDev" style="margin-right: 10px" @click="cp">
         {{ route.meta.component }}
       </el-link>
-      <Action class="action"/>
+      <Action class="action" />
     </div>
-    <NavTabs v-if="!systemStore.layout.heightShrink" key="nav-tabs" class="nav-tabs" style="margin-top: 5px"/>
+    <NavTabs
+      v-if="!systemStore.layout.heightShrink"
+      key="nav-tabs"
+      class="nav-tabs"
+      style="margin-top: 5px"
+    />
   </div>
 </template>
 <script setup>
 import Action from '@/layout/default/action'
 import NavTabs from './navTabs'
 import Breadcrumb from './breadcrumb'
-import { useSystemStore } from '@/store/system'
+import { useSystemStore } from '@/stores/system'
 import { toRef } from 'vue'
 import { useRoute } from 'vue-router'
 import { useClipboard, usePermission } from '@vueuse/core'
@@ -38,7 +49,7 @@ function cp () {
     console.info('恭喜你！你发现了这个贴心的小功能~👻🏀🐔')
     ElMessage({
       type: 'success',
-      message: '已复制到剪切板',
+      message: '已复制到剪切板'
     })
   })
 }
@@ -85,7 +96,8 @@ function toggleMenuCollapse () {
   }
 }
 
-.width-shrink-layout, .height-shrink-layout {
+.width-shrink-layout,
+.height-shrink-layout {
   padding-top: 0;
 
   .header-top {

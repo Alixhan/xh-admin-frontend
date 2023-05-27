@@ -8,7 +8,7 @@
       :filter-param="param"
       :filter-columns="topFilterColumns"
       :columns="columns"
-      :fetch-data="queryFileList"
+      :fetch-data="queryDictTypeList"
       :selection="selection"
       :selection-limit="selectionLimit"
       @selection-change="(rows) => (selectRows = rows)"
@@ -26,7 +26,7 @@
 </template>
 <script setup lang="jsx">
 import { ref, shallowRef } from 'vue'
-import { queryFileList } from '@/api/file/fileOperation'
+import { queryDictTypeList } from '@/api/system/dict'
 import { statusList } from '@/views/system/file/constant'
 import { getDownloadFileUrl } from '@/utils'
 import { filesize } from 'filesize'
@@ -51,37 +51,14 @@ const emit = defineEmits(['close', 'select'])
 
 const selectRows = ref([])
 
-const topFilterColumns = shallowRef([
-  { prop: 'object', label: '对象存储key' },
-  { prop: 'name', label: '文件名称' },
-  { prop: 'contentType', label: '文件类型' },
-  { prop: 'suffix', label: '文件扩展名' },
-  { prop: 'sha1', label: 'sha1' }
-])
+const topFilterColumns = shallowRef([{ prop: 'name', label: '字典类型名称' }])
 
-// 表格列定义
+// 表单字段根据表单数据变化，有所不同
 const columns = ref([
-  { prop: 'object', label: '对象存储key', width: 120 },
-  { prop: 'name', label: '文件名' },
-  { prop: 'contentType', label: '文件类型', comment: '文件的MIME类型', width: 100 },
-  { prop: 'suffix', label: '文件后缀扩展名', width: 120 },
-  {
-    prop: 'size',
-    label: '文件大小',
-    formatter: (row, col, val) => filesize(val, { base: 2, standard: 'jedec' })
-  },
-  { prop: 'preview', label: '图片预览', slots: { default: previewImage } },
-  { prop: 'imgWidth', label: '图片宽度' },
-  { prop: 'imgHeight', label: '图片高度' },
-  { prop: 'imgRatio', label: '图片宽高比', width: 100 },
-  { prop: 'status', label: '文件状态', type: 'select', itemList: statusList },
-  {
-    prop: 'sha1',
-    label: '文件摘要sha1',
-    width: 130,
-    comment: '同一个文件的sha1相同，相同sha1不会重复上传文件'
-  },
-  { prop: 'createTime', label: '上传时间', width: 160 }
+  { type: 'index', label: '序', width: 50 },
+  { prop: 'id', label: 'id' },
+  { prop: 'name', label: '数据字典类型名称' },
+  { prop: 'createTime', label: '创建时间', disabled: true }
 ])
 
 // 图片文件预览

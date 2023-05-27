@@ -1,16 +1,10 @@
 <template>
-  <el-switch
-      class="switch"
-      v-model="isDark"
-      active-icon="Moon"
-      inactive-icon="Sunny"
-      inline-prompt
-  >
+  <el-switch class="switch" v-model="isDark" active-icon="Moon" inactive-icon="Sunny" inline-prompt>
   </el-switch>
 </template>
 <script setup>
 import { toRef } from 'vue'
-import { useSystemStore } from '@/store/system'
+import { useSystemStore } from '@/stores/system'
 
 const isDark = toRef(useSystemStore().layout, 'isDark')
 </script>

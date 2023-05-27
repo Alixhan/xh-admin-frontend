@@ -11,7 +11,7 @@ export default defineComponent({
   props: {
     src: [String, Promise], // 图标路径
     property: Object, // 修改svg属性值
-    inherited: Boolean, // 是否继承当前字体颜色
+    inherited: Boolean // 是否继承当前字体颜色
   },
   setup (props) {
     const svg = ref()
@@ -46,12 +46,12 @@ export default defineComponent({
       }
       let str = ''
       for (let i = 0; i < strArr.length; i++) {
-        str += (strArr[i] + (oldColorArr && oldColorArr[i] ? oldColorArr[i] : ''))
+        str += strArr[i] + (oldColorArr && oldColorArr[i] ? oldColorArr[i] : '')
       }
       return str
     }
 
-    return () => <div v-html={svg.value}/>
+    return () => <div v-html={svg.value} />
   }
 })
 </script>

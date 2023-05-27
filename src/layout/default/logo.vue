@@ -1,6 +1,6 @@
 <template>
   <div class="logo-view">
-    <img class="logo-img" src="/favicon.ico">
+    <img class="logo-img" src="/favicon.ico" />
     <transition :name="systemStore.layout.mainAnimation" mode="out-in">
       <div v-show="!systemStore.layout.menuCollapse" class="logo-text">
         {{ projectTitle }}
@@ -9,7 +9,7 @@
   </div>
 </template>
 <script setup>
-import { useSystemStore } from '@/store/system'
+import { useSystemStore } from '@/stores/system'
 
 const systemStore = useSystemStore()
 

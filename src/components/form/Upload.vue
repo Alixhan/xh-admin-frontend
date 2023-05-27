@@ -1,7 +1,7 @@
 <template>
   <el-upload :="uploadParam" ref="uploadRef">
     <template v-for="name in Object.keys($slots)" #[name]="ctx">
-      <slot :name="name" v-bind="ctx"/>
+      <slot :name="name" v-bind="ctx" />
     </template>
     <template v-if="!$slots.tip" #tip>
       <div>
@@ -25,36 +25,55 @@
     <!--      </div>-->
     <!--    </template>-->
     <template #trigger>
-      <div v-if="type==='upload-img'" class="el-upload--picture-card">
-        <div class="file-lib-btn" @click.stop="visible = true">
-          文件库
-        </div>
-        <Plus class="icon"/>
+      <div v-if="type === 'upload-img'" class="el-upload--picture-card">
+        <div class="file-lib-btn" @click.stop="visible = true">文件库</div>
+        <Plus class="icon" />
       </div>
       <div v-else>
-        <el-button icon="plus" @click.stop="visible = true"/>
+        <el-button icon="plus" @click.stop="visible = true" />
         <el-button type="primary" icon="upload">选择文件</el-button>
       </div>
     </template>
     <el-image-viewer
-        v-if="previewImageVisible"
-        :url-list="previewImageUrlList"
-        hide-on-click-modal
-        :initial-index="initialIndex"
-        @close="previewImageVisible = false"
+      v-if="previewImageVisible"
+      :url-list="previewImageUrlList"
+      hide-on-click-modal
+      :initial-index="initialIndex"
+      @close="previewImageVisible = false"
     />
-    <el-dialog title="选择文件" v-model="visible" align-center draggable append-to-body
-               destroy-on-close :close-on-click-modal="false" width="80%">
-      <selectSysFile :selection="selection" :selection-limit="selectLimit" style="height: calc(90vh - 80px);" @select="select" @close="visible = false"/>
+    <el-dialog
+      title="选择文件"
+      v-model="visible"
+      align-center
+      draggable
+      append-to-body
+      destroy-on-close
+      :close-on-click-modal="false"
+      width="90%"
+    >
+      <selectSysFile
+        :selection="selection"
+        :selection-limit="selectLimit"
+        style="height: calc(90vh - 80px)"
+        @select="select"
+        @close="visible = false"
+      />
     </el-dialog>
-    <el-dialog title="图片裁剪" v-model="visible2" align-center draggable append-to-body
-               destroy-on-close :close-on-click-modal="false" width="70%">
-
-      <cropper :="cropperOption" @close="visible2 = false"/>
+    <el-dialog
+      title="图片裁剪"
+      v-model="visible2"
+      align-center
+      draggable
+      append-to-body
+      destroy-on-close
+      :close-on-click-modal="false"
+      width="70%"
+    >
+      <cropper :="cropperOption" @close="visible2 = false" />
     </el-dialog>
   </el-upload>
 </template>
-<script setup name="MUpload">
+<script setup>
 /**
  * 增强el-upload上传功能，增加裁剪，直接粘贴图片文件等。
  * sxh 2023-4-14
@@ -65,11 +84,15 @@ import selectSysFile from '@/views/system/file/selectSysFile.vue'
 import { getDownloadFileUrl } from '@/utils'
 import Cropper from './Cropper.vue'
 
+defineOptions({
+  name: 'MUpload'
+})
+
 const emit = defineEmits(['update:fileList', 'update:modelValue'])
 
 const props = defineProps({
   type: {
-    type: String,
+    type: String
   },
   disabled: {
     type: Boolean,
@@ -81,7 +104,7 @@ const props = defineProps({
     default: () => []
   },
   cropper: {
-    type: Object,
+    type: Object
   },
   tip: {
     type: String
@@ -94,7 +117,7 @@ const uploadRef = ref()
 
 const uploadParam = computed(() => {
   const defaultParam = {
-    autoUpload: false,
+    autoUpload: false
   }
 
   // 上传图片默认参数
@@ -151,7 +174,7 @@ function onChange (file, files) {
           name: fileName,
           raw: file,
           size: file.size,
-          url: (window.createObjectURL || window.URL.createObjectURL)(file),
+          url: (window.createObjectURL || window.URL.createObjectURL)(file)
         })
         visible2.value = false
       },
@@ -176,8 +199,8 @@ function onUpdateFileList (file, files) {
 
 function onPreview (file) {
   if (props.type === 'upload-img') {
-    previewImageUrlList.value = fileList.value.map(i => i.url)
-    initialIndex.value = fileList.value.findIndex(i => i === file)
+    previewImageUrlList.value = fileList.value.map((i) => i.url)
+    initialIndex.value = fileList.value.findIndex((i) => i === file)
     previewImageVisible.value = true
   } else {
     if (file.object) {
@@ -187,41 +210,44 @@ function onPreview (file) {
 }
 
 function onDownload (file) {
-  previewImageUrlList.value = fileList.value.map(i => i.url)
-  initialIndex.value = fileList.value.findIndex(i => i === file)
+  previewImageUrlList.value = fileList.value.map((i) => i.url)
+  initialIndex.value = fileList.value.findIndex((i) => i === file)
   previewImageVisible.value = true
 }
 
 // 图片库选择后事件
 function select (rows) {
-  onUpdateFileList(null, [...fileList.value, ...rows.map(i => {
-    return {
-      url: getDownloadFileUrl({ object: i.object }),
-      status: 'success',
-      id: i.id,
-      name: i.name,
-      object: i.object,
-      contentType: i.contentType,
-      suffix: i.suffix,
-      size: i.size,
-      imgWidth: i.imgWidth,
-      imgHeight: i.imgHeight,
-      imgRatio: i.imgRatio,
-    }
-  })])
+  onUpdateFileList(null, [
+    ...fileList.value,
+    ...rows.map((i) => {
+      return {
+        url: getDownloadFileUrl({ object: i.object }),
+        status: 'success',
+        id: i.id,
+        name: i.name,
+        object: i.object,
+        contentType: i.contentType,
+        suffix: i.suffix,
+        size: i.size,
+        imgWidth: i.imgWidth,
+        imgHeight: i.imgHeight,
+        imgRatio: i.imgRatio
+      }
+    })
+  ])
   visible.value = false
 }
 
 // 文件手动上传
 async function upload () {
   // 'ready' | 'uploading' | 'success' | 'fail'
-  const uploadFiles = fileList.value.filter(i => ['ready', 'fail'].includes(i.status))
+  const uploadFiles = fileList.value.filter((i) => ['ready', 'fail'].includes(i.status))
   while (uploadFiles.length) {
     const item = uploadFiles.shift()
     item.status = 'uploading'
     try {
-      const res = await uploadFile(item.raw, progressEvent => {
-        item.percentage = progressEvent.loaded / progressEvent.total * 100
+      const res = await uploadFile(item.raw, (progressEvent) => {
+        item.percentage = (progressEvent.loaded / progressEvent.total) * 100
       })
       item.status = 'success'
       item.id = res.data.id
@@ -248,7 +274,7 @@ const uploadInstances = inject('uploadInstances', null)
 if (uploadInstances) {
   uploadInstances.push(ctx)
   onUnmounted(() => {
-    const index = uploadInstances.findIndex(i => i === ctx)
+    const index = uploadInstances.findIndex((i) => i === ctx)
     uploadInstances.splice(index, 1)
   })
 }

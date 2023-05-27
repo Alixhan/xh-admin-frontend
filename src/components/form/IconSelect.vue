@@ -1,20 +1,26 @@
 <template>
   <el-popover
-      ref="popover"
-      placement="bottom"
-      trigger="focus"
-      :hide-after="0"
-      :visible="visible"
-      :width="width"
-      @update:visible="updateVisible"
+    ref="popover"
+    placement="bottom"
+    trigger="focus"
+    :hide-after="0"
+    :visible="visible"
+    :width="width"
+    @update:visible="updateVisible"
   >
     <template #reference>
-      <el-input :ref="inputRef" :model-value="$props.modelValue" @update:model-value="onModelValue"
-                v-bind="{...$attrs,...$props}" @focus="(isFocus = true)&( visible = true)" @blur="inputBlur">
+      <el-input
+        :ref="inputRef"
+        :model-value="$props.modelValue"
+        @update:model-value="onModelValue"
+        v-bind="{ ...$attrs, ...$props }"
+        @focus=";(isFocus = true) & (visible = true)"
+        @blur="inputBlur"
+      >
         <template #prepend>
           <el-icon size="20">
-            <component v-if="iconType === 'el' && iconComp" :is="iconComp"/>
-            <m-svg-icon v-if="iconType === 'local' && src" :src="src" inherited/>
+            <component v-if="iconType === 'el' && iconComp" :is="iconComp" />
+            <m-svg-icon v-if="iconType === 'local' && src" :src="src" inherited />
           </el-icon>
         </template>
       </el-input>
@@ -24,23 +30,28 @@
         <div style="display: flex; justify-content: space-between; margin-bottom: 10px">
           <div style="display: flex; gap: 10px">
             <el-link
-                v-for="(item, index) in icons"
-                :key="index"
-                :type="currentTab===item.title?'primary':null"
-                @click="currentTab = item.title"
+              v-for="(item, index) in icons"
+              :key="index"
+              :type="currentTab === item.title ? 'primary' : null"
+              @click="currentTab = item.title"
             >
               {{ item.title }}
             </el-link>
           </div>
-          <div style="margin-left: 20px;">
-            <el-input size="small" placeholder="输入内容搜索图标" v-model="searchValue"/>
+          <div style="margin-left: 20px">
+            <el-input size="small" placeholder="输入内容搜索图标" v-model="searchValue" />
           </div>
         </div>
         <el-scrollbar class="icon-scroll" height="250px">
           <div class="icon-views">
-            <div v-for="(icon, index) in currentIcons" :title="icon" :key="index" class="icon-item-view"
-                 @click="selectIcon(icon)">
-              <m-icon :size="20" :model-value="`${currentTab}|${icon}`"/>
+            <div
+              v-for="(icon, index) in currentIcons"
+              :title="icon"
+              :key="index"
+              class="icon-item-view"
+              @click="selectIcon(icon)"
+            >
+              <m-icon :size="20" :model-value="`${currentTab}|${icon}`" />
             </div>
           </div>
         </el-scrollbar>
@@ -64,14 +75,14 @@ export default {
   components: { MIcon },
   props: {
     modelValue: {
-      type: String,
+      type: String
     },
     readonly: {
-      type: Boolean,
+      type: Boolean
     },
     disabled: {
-      type: Boolean,
-    },
+      type: Boolean
+    }
   },
   emits: ['update:modelValue'],
   setup (props, { emit }) {
@@ -88,7 +99,7 @@ export default {
     // 初始化一下选择icon
     const icons = ref([
       { title: 'el', items: Object.keys(ElementPlusIconsVue) },
-      { title: 'local', items: Object.keys(localSvg) },
+      { title: 'local', items: Object.keys(localSvg) }
     ])
     currentTab.value = icons.value[0].title
 
@@ -100,7 +111,7 @@ export default {
       const [type, icon] = (props.modelValue ?? '').split('|')
       iconType.value = type
       if (type === 'local') {
-        src.value = localSvg[icon]?.().then(r => r.default)
+        src.value = localSvg[icon]?.().then((r) => r.default)
       }
 
       if (type === 'el') {
@@ -127,9 +138,9 @@ export default {
     }
 
     const currentIcons = computed(() => {
-      let result = icons.value.find(i => i.title === currentTab.value)?.items ?? []
+      let result = icons.value.find((i) => i.title === currentTab.value)?.items ?? []
       if (searchValue.value) {
-        result = result.filter(i => {
+        result = result.filter((i) => {
           const indexOf = String(i).toLowerCase().indexOf(searchValue.value.toLowerCase())
           return indexOf !== -1
         })
@@ -167,7 +178,7 @@ export default {
       currentTab,
       currentIcons,
       selectIcon,
-      inputBlur,
+      inputBlur
     }
   }
 }

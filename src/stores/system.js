@@ -24,7 +24,7 @@ export const useSystemStore = defineStore('system', () => {
     // 布局方式，可选值<Default|Classic|Streamline>
     layoutMode: 'Default',
     // 主页面切换动画，可选值<slide-right|slide-left|el-fade-in-linear|el-fade-in|el-zoom-in-center|el-zoom-in-top|el-zoom-in-bottom>
-    mainAnimation: 'el-fade-in-linear',
+    mainAnimation: 'slide-left',
     // 侧边菜单宽度(展开时)，单位px
     menuWidth: 200,
     // 是否水平折叠收起菜单
@@ -40,7 +40,7 @@ export const useSystemStore = defineStore('system', () => {
     // 宽度是否收缩(小宽度设备)
     widthShrink: false,
     // 高度是否收缩(矮高度设备)
-    heightShrink: false,
+    heightShrink: false
   })
 
   // 监听窗口变化
@@ -49,7 +49,7 @@ export const useSystemStore = defineStore('system', () => {
   function onResize () {
     layout.windowWidth = window.innerWidth
     layout.windowHeight = window.innerHeight
-    layout.widthShrink = window.innerWidth < 1000
+    layout.widthShrink = window.innerWidth < 800
     layout.heightShrink = window.innerHeight < 600
     if (layout.widthShrink) layout.menuCollapse = true
   }
@@ -81,10 +81,12 @@ export const useSystemStore = defineStore('system', () => {
   const refresh = ref()
   // 缓存的组件名称
   const keepAliveComponentNameList = computed(() => {
-    return navTabs.value.filter(i => {
-      if (refresh.value && i.id === activeMenuId.value) return false
-      return i.cache
-    }).map(i => i.componentName)
+    return navTabs.value
+      .filter((i) => {
+        if (refresh.value && i.id === activeMenuId.value) return false
+        return i.cache
+      })
+      .map((i) => i.componentName)
   })
 
   function setRefresh (val) {
@@ -105,19 +107,21 @@ export const useSystemStore = defineStore('system', () => {
     }
     let path
     if (token.value && loginStatus.value === null) {
-      path = await userLogin().then(res => {
-        // 用户已登录
-        if (res.status + '' === 'success' && res.data) {
-          // 初始化登录逻辑
-          setLoginUserInfo(res.data)
-        } else {
-          return Promise.reject()
-        }
-      }).catch(() => {
-        loginStatus.value = 'failed' // 登录已失效
-        // 跳转到登录页
-        return '/login'
-      })
+      path = await userLogin()
+        .then((res) => {
+          // 用户已登录
+          if (res.status + '' === 'success' && res.data) {
+            // 初始化登录逻辑
+            setLoginUserInfo(res.data)
+          } else {
+            return Promise.reject()
+          }
+        })
+        .catch(() => {
+          loginStatus.value = 'failed' // 登录已失效
+          // 跳转到登录页
+          return '/login'
+        })
     }
     // 如果是登录失败的，直接跳转到登录页
     if (loginStatus.value !== 'success') {
@@ -154,12 +158,12 @@ export const useSystemStore = defineStore('system', () => {
   // 初始化动态菜单
   function initMenu () {
     menusObj.value = {}
-    menus.value.forEach(i => {
+    menus.value.forEach((i) => {
       i.children = []
       menusObj.value[i.id] = i
     })
     // 转为树形结构
-    treeMenus.value = menus.value.filter(i => {
+    treeMenus.value = menus.value.filter((i) => {
       const parent = menusObj.value[i.parentId]
       if (parent) {
         parent.children.push(i)
@@ -189,14 +193,20 @@ export const useSystemStore = defineStore('system', () => {
       path: `/${layoutRouteName}`,
       component: () => import('@/layout')
     })
-    menus.value.forEach(i => {
+    menus.value.forEach((i) => {
       // 权限name,用冒号拼接上父级name
-      i.auth = getMenuLevelArr(i.id).map(i => i.name).join(':')
+      i.auth = getMenuLevelArr(i.id)
+        .map((i) => i.name)
+        .join(':')
       if (i.type === 'menu' && ['route', 'iframe'].includes(i.handleType)) {
         // 路由名称
-        const name = getMenuLevelArr(i.id).map(i => i.name).join('/')
+        const name = getMenuLevelArr(i.id)
+          .map((i) => i.name)
+          .join('/')
         // 路由路径
-        const path = getMenuLevelArr(i.id).map(i => i.path).join('/')
+        const path = getMenuLevelArr(i.id)
+          .map((i) => i.path)
+          .join('/')
         // 路由全路径
         const fullPath = `/${layoutRouteName}/${path}`
         // 组件name
@@ -205,10 +215,14 @@ export const useSystemStore = defineStore('system', () => {
           name,
           path,
           fullPath,
-          component: () => viewsComponent[i.component]().then(comp => ({
-            ...comp.default,
-            name: componentName
-          })),
+          component: () => {
+            const component = viewsComponent[i.component]
+            if (!component) throw new Error(`${i.component} 文件不存在！`)
+            return component().then((comp) => ({
+              ...comp.default,
+              name: componentName
+            }))
+          },
           meta: {
             menuId: i.id,
             title: i.title,
@@ -236,16 +250,19 @@ export const useSystemStore = defineStore('system', () => {
   }
 
   // 监听activeMenuId变化，设置路由等
-  watch(() => activeMenuId.value, menuId => {
-    const menu = menusObj.value[menuId]
-    menu && router.push(menu.fullPath)
-  })
+  watch(
+    () => activeMenuId.value,
+    (menuId) => {
+      const menu = menusObj.value[menuId]
+      menu && router.push(menu.fullPath)
+    }
+  )
 
   // 路由跳转成功后钩子，设置当前路由信息，navTabs等，浏览器标题等
   function afterEach (guard) {
     const fullPath = guard.fullPath
-    const tab = navTabs.value.find(i => i.fullPath === fullPath)
-    const menu = menus.value.find(i => i.fullPath === fullPath)
+    const tab = navTabs.value.find((i) => i.fullPath === fullPath)
+    const menu = menus.value.find((i) => i.fullPath === fullPath)
     // 如果不存在，则添加tab
     if (!tab && menu) nextTick().then(() => navTabs.value.push(menu))
     // 如果是跳转到动态菜单，设置activeId
@@ -264,7 +281,7 @@ export const useSystemStore = defineStore('system', () => {
 
   // 通过menuId移除navTab
   function removeNavTabByMenuId (menuId) {
-    let index = navTabs.value.findIndex(i => i.id === menuId)
+    let index = navTabs.value.findIndex((i) => i.id === menuId)
     const currentMenu = navTabs.value[index]
     navTabs.value.splice(index, 1)
     // 如果删除了当前激活的路由，则需要自动跳转到右边的tab
@@ -312,6 +329,6 @@ export const useSystemStore = defineStore('system', () => {
     removeNavTabByMenuId,
     logout,
     refresh,
-    setRefresh,
+    setRefresh
   }
 })

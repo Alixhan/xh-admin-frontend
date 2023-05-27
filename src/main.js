@@ -11,10 +11,9 @@ import { loading } from '@/utils/loading'
 // import 'default-passive-events'
 
 loading.show()
-const pinia = createPinia()
 const app = createApp(App)
 
-app.use(pinia)
+app.use(createPinia())
 app.use(ElementPlus)
 app.use(router)
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {

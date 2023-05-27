@@ -17,9 +17,8 @@
   --el-font-size-base: 13px;
 }
 
-
 html {
-  background: url("@/assets/bg.jpg") no-repeat;
+  background: url('@/assets/bg.jpg') no-repeat;
 
   .el-menu {
     border-right: none;
@@ -42,8 +41,8 @@ html {
   }
 
   .el-dialog {
-    min-width: 300px;
-    max-width: 95vw;
+    min-width: min(350px, 100vw);
+    max-width: 100vw;
 
     .el-dialog__header {
       padding-bottom: 0;
@@ -54,17 +53,20 @@ html {
     }
   }
 
-  .el-checkbox-group, .el-radio-group {
+  .el-checkbox-group,
+  .el-radio-group {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
   }
 
-  .el-checkbox, .el-radio {
+  .el-checkbox,
+  .el-radio {
     margin-right: 0;
   }
 
-  .el-checkbox__label, .el-radio__label {
+  .el-checkbox__label,
+  .el-radio__label {
     padding-left: 5px;
   }
 
@@ -77,10 +79,8 @@ html {
   }
 
   .el-input {
-
-    .el-input__wrapper{
+    .el-input__wrapper {
       background-color: var(--);
     }
-
   }
 }

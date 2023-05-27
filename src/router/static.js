@@ -8,7 +8,7 @@ export const devMenus = [
     name: 'demo',
     path: 'demo',
     type: 'dir',
-    icon: 'el|menu',
+    icon: 'el|menu'
   },
   {
     id: -2,
@@ -21,7 +21,7 @@ export const devMenus = [
     handleType: 'route',
     icon: 'el|menu',
     cache: true,
-    enabled: true,
+    enabled: true
   },
   {
     id: -3,
@@ -34,6 +34,6 @@ export const devMenus = [
     handleType: 'route',
     icon: 'el|menu',
     cache: true,
-    enabled: true,
+    enabled: true
   }
 ]

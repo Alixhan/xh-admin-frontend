@@ -8,7 +8,7 @@
       :filter-param="param"
       :filter-columns="topFilterColumns"
       :columns="columns"
-      :fetch-data="queryFileList"
+      :fetch-data="queryDictDetailList"
       :selection="selection"
       :selection-limit="selectionLimit"
       @selection-change="(rows) => (selectRows = rows)"
@@ -26,10 +26,9 @@
 </template>
 <script setup lang="jsx">
 import { ref, shallowRef } from 'vue'
-import { queryFileList } from '@/api/file/fileOperation'
-import { statusList } from '@/views/system/file/constant'
+import { queryDictDetailList } from '@/api/system/dict'
 import { getDownloadFileUrl } from '@/utils'
-import { filesize } from 'filesize'
+import { sfList } from '@/views/system/menu/constant'
 
 const props = defineProps({
   selection: {
@@ -52,36 +51,30 @@ const emit = defineEmits(['close', 'select'])
 const selectRows = ref([])
 
 const topFilterColumns = shallowRef([
-  { prop: 'object', label: '对象存储key' },
-  { prop: 'name', label: '文件名称' },
-  { prop: 'contentType', label: '文件类型' },
-  { prop: 'suffix', label: '文件扩展名' },
-  { prop: 'sha1', label: 'sha1' }
+  { prop: 'dictTypeId', label: '字典类型ID', hidden: true },
+  { prop: 'dictTypeName', label: '字典类型', readonly: true },
+  { prop: 'value', label: '字典值key' },
+  { prop: 'label', label: '字典名称' },
+  { prop: 'enabled', label: '是否启用', type: 'select', itemList: sfList }
 ])
 
-// 表格列定义
+// 表单字段根据表单数据变化，有所不同
 const columns = ref([
-  { prop: 'object', label: '对象存储key', width: 120 },
-  { prop: 'name', label: '文件名' },
-  { prop: 'contentType', label: '文件类型', comment: '文件的MIME类型', width: 100 },
-  { prop: 'suffix', label: '文件后缀扩展名', width: 120 },
+  { type: 'index', label: '序', width: 50 },
+  { prop: 'id', label: 'ID', width: 50 },
+  { prop: 'dictTypeName', label: '字典类型' },
+  { prop: 'parentId', label: '上级id' },
+  { prop: 'value', label: '字典key' },
+  { prop: 'label', label: '字典名称' },
   {
-    prop: 'size',
-    label: '文件大小',
-    formatter: (row, col, val) => filesize(val, { base: 2, standard: 'jedec' })
+    prop: 'order',
+    label: '排序号',
+    width: 85,
+    comment: '数据字典的排列顺序，小号排在前，大号排在后。'
   },
-  { prop: 'preview', label: '图片预览', slots: { default: previewImage } },
-  { prop: 'imgWidth', label: '图片宽度' },
-  { prop: 'imgHeight', label: '图片高度' },
-  { prop: 'imgRatio', label: '图片宽高比', width: 100 },
-  { prop: 'status', label: '文件状态', type: 'select', itemList: statusList },
-  {
-    prop: 'sha1',
-    label: '文件摘要sha1',
-    width: 130,
-    comment: '同一个文件的sha1相同，相同sha1不会重复上传文件'
-  },
-  { prop: 'createTime', label: '上传时间', width: 160 }
+  { prop: 'enabled', label: '是否启用', type: 'select', itemList: sfList },
+  { prop: 'createTime', label: '创建时间', type: 'datetime', width: 155 },
+  { prop: 'updateTime', label: '修改时间', type: 'datetime', width: 155 }
 ])
 
 // 图片文件预览

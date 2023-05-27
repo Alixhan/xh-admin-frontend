@@ -1,14 +1,16 @@
-import { useSystemStore } from '@/store/system'
+import { useSystemStore } from '@/stores/system'
 
 export default {
   install (app) {
     // 鉴权指令
-    app.directive('auth', (el, binding) => {
-      const logicAnd = binding.modifiers.and // 权限逻辑运算符 or 或者 and， 默认的是or
-      const full = binding.modifiers.full
-      const value = binding.value // 权限name
-      const bool = auth(value, logicAnd ? 'and' : 'or', full)
-      if (!bool) el.parentNode?.removeChild(el)
+    app.directive('auth', {
+      mounted: (el, binding) => {
+        const logicAnd = binding.modifiers.and // 权限逻辑运算符 or 或者 and， 默认的是or
+        const full = binding.modifiers.full
+        const value = binding.value // 权限name
+        const bool = auth(value, logicAnd ? 'and' : 'or', full)
+        if (!bool) el.parentNode?.removeChild(el)
+      }
     })
   }
 }
@@ -30,17 +32,17 @@ export function auth (value, logic = 'or', full = false) {
   let auth // 是否有权操作， 默认无
   if (full) {
     if (logic === 'and') {
-      auth = value.every(i => systemStore.menus.some(j => j.auth === i))
+      auth = value.every((i) => systemStore.menus.some((j) => j.auth === i))
     } else {
-      auth = systemStore.menus.some(i => value.some(j => j === i.auth))
+      auth = systemStore.menus.some((i) => value.some((j) => j === i.auth))
     }
   } else {
     // 当前菜单
-    const currentMenu = systemStore.menus.find(i => i.id === systemStore.activeMenuId)
+    const currentMenu = systemStore.menus.find((i) => i.id === systemStore.activeMenuId)
     if (logic === 'and') {
-      auth = value.every(i => currentMenu.children?.some(j => j.name === i))
+      auth = value.every((i) => currentMenu.children?.some((j) => j.name === i))
     } else {
-      auth = currentMenu.children?.some(i => value.some(j => j === i.name))
+      auth = currentMenu.children?.some((i) => value.some((j) => j === i.name))
     }
   }
   return auth

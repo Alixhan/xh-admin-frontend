@@ -1,8 +1,8 @@
 <template>
-    <el-icon class="icon">
-        <component v-if="iconType === 'el' && src" :is="src"/>
-        <m-svg-icon v-if="iconType === 'local' && src" :src="src" inherited/>
-    </el-icon>
+  <el-icon class="icon">
+    <component v-if="iconType === 'el' && src" :is="src" />
+    <m-svg-icon v-if="iconType === 'local' && src" :src="src" inherited />
+  </el-icon>
 </template>
 <script>
 import { ref, shallowRef, watchEffect } from 'vue'
@@ -16,7 +16,7 @@ export default {
   name: 'MIcon',
   props: {
     modelValue: {
-      type: String,
+      type: String
     }
   },
   emits: ['update:modelValue'],
@@ -31,7 +31,7 @@ export default {
       const [type, icon] = (props.modelValue ?? '').split('|')
       iconType.value = type
       if (type === 'local') {
-        src.value = localSvg[icon]?.().then(r => r.default)
+        src.value = localSvg[icon]?.().then((r) => r.default)
       }
 
       if (type === 'el') {
@@ -41,7 +41,7 @@ export default {
 
     return {
       iconType,
-      src,
+      src
     }
   }
 }
@@ -49,6 +49,6 @@ export default {
 <style scoped lang="scss">
 .icon {
   display: flex;
-  align-items: center
+  align-items: center;
 }
 </style>

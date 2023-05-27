@@ -2,22 +2,23 @@
   <div class="form-view">
     <el-scrollbar class="m-form-scroll">
       <m-form
-          ref="formRef"
-          :colspan="12"
-          :columns="columns"
-          :model="formData"
-          :handleType="handleType"
+        ref="formRef"
+        :colspan="12"
+        :columns="columns"
+        :model="formData"
+        :handleType="handleType"
       />
     </el-scrollbar>
     <div class="m-footer">
       <el-button icon="close" @click="close()">取消</el-button>
       <el-button
-          v-if="['add', 'edit'].includes(handleType)"
-          v-auth="['add', 'edit']"
-          icon="check"
-          type="primary"
-          :loading="saveLoading"
-          @click="save">
+        v-if="['add', 'edit'].includes(handleType)"
+        v-auth="['add', 'edit']"
+        icon="check"
+        type="primary"
+        :loading="saveLoading"
+        @click="save"
+      >
         保存
       </el-button>
     </div>
@@ -41,17 +42,18 @@ const emit = defineEmits(['close'])
 const formRef = ref()
 const saveLoading = ref(false)
 const formData = ref({})
-const handleType = ref(props.handleType)
 
-if (handleType.value !== 'add') {
+if (props.handleType !== 'add') {
   // 查询明细
-  getFileById(props.modelValue.id).then(res => {
+  getFileById(props.modelValue.id).then((res) => {
     formData.value = res.data
     if ((formData.value.contentType ?? '').startsWith('image')) {
-      formData.value.image = [{
-        url: getDownloadFileUrl({ object: formData.value.object }),
-        name: formData.value.name
-      }]
+      formData.value.image = [
+        {
+          url: getDownloadFileUrl({ object: formData.value.object }),
+          name: formData.value.name
+        }
+      ]
     }
   })
 }
@@ -66,19 +68,24 @@ watchEffect(() => {
       type: 'upload-img',
       cols: 2,
       hidden: !(formData.value.contentType ?? '').startsWith('image'),
-      disabled: true,
+      disabled: true
     },
     { prop: 'object', label: '对象存储key', disabled: true },
     { prop: 'name', label: '文件名', rules: { required: true } },
     { prop: 'contentType', label: '文件类型', disabled: true, comment: '文件的MIME类型' },
-    { prop: 'suffix', label: '文件后缀扩展名', disabled: true, },
-    { prop: 'size', label: '文件大小', disabled: true, },
-    { prop: 'imgWidth', label: '图片宽度', disabled: true, },
-    { prop: 'imgHeight', label: '图片高度', disabled: true, },
-    { prop: 'imgRatio', label: '图片宽高比', disabled: true, },
+    { prop: 'suffix', label: '文件后缀扩展名', disabled: true },
+    { prop: 'size', label: '文件大小', disabled: true },
+    { prop: 'imgWidth', label: '图片宽度', disabled: true },
+    { prop: 'imgHeight', label: '图片高度', disabled: true },
+    { prop: 'imgRatio', label: '图片宽高比', disabled: true },
     { prop: 'status', label: '文件状态', type: 'select', itemList: statusList, disabled: true },
-    { prop: 'sha1', label: '文件摘要sha1', disabled: true, comment: '同一个文件的sha1相同，相同sha1不会重复上传文件' },
-    { prop: 'createTime', label: '上传时间', disabled: true, },
+    {
+      prop: 'sha1',
+      label: '文件摘要sha1',
+      disabled: true,
+      comment: '同一个文件的sha1相同，相同sha1不会重复上传文件'
+    },
+    { prop: 'createTime', label: '上传时间', disabled: true }
   ]
 })
 

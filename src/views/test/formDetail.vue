@@ -2,23 +2,17 @@
   <div class="form-view">
     <el-scrollbar class="m-form-scroll">
       <m-form
-          ref="formRef"
-          :colspan="24"
-          :columns="columns"
-          :model="formData"
-          :handleType="props.handleType"
-          v-model:loading="saveLoading"
+        ref="formRef"
+        :colspan="24"
+        :columns="columns"
+        :model="formData"
+        :handleType="props.handleType"
+        v-model:loading="saveLoading"
       />
     </el-scrollbar>
     <div class="m-footer">
       <el-button icon="close" @click="close()">取消</el-button>
-      <el-button
-          icon="check"
-          type="primary"
-          :loading="saveLoading"
-          @click="save">
-        保存
-      </el-button>
+      <el-button icon="check" type="primary" :loading="saveLoading" @click="save"> 保存 </el-button>
     </div>
   </div>
 </template>
@@ -41,11 +35,11 @@ const formData = ref({
   file: [
     {
       name: 'food.jpeg',
-      url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
-    },
+      url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
+    }
   ],
   cache: true,
-  enabled: true,
+  enabled: true
 })
 
 // 表单字段根据表单数据变化，有所不同
@@ -58,7 +52,7 @@ watchEffect(() => {
       type: 'upload-img',
       rules: [{ required: true, trigger: 'change' }],
       multiple: true,
-      limit: 5,
+      limit: 5
     },
     {
       prop: 'file2',
@@ -71,7 +65,7 @@ watchEffect(() => {
       prop: 'file3',
       label: '文件上传',
       type: 'upload-file',
-      limit: 5,
+      limit: 5
     },
     // {
     //   prop: 'platform',
@@ -129,11 +123,14 @@ watchEffect(() => {
       prop: 'path',
       label: '路由路径',
       rules: { required: true, trigger: 'blur' },
-      comment: <span>
-      web平台对应vue-router的path, 实际访问的路由路径会在浏览器地址栏显示，系统会自动拼接父级路径变成一个完整路径，
-        <span style="color: red;">所以不用手动拼接父路由路径。</span>
-      </span>
-    },
+      comment: (
+        <span>
+          web平台对应vue-router的path,
+          实际访问的路由路径会在浏览器地址栏显示，系统会自动拼接父级路径变成一个完整路径，
+          <span style="color: red;">所以不用手动拼接父路由路径。</span>
+        </span>
+      )
+    }
     // {
     //   prop: 'component',
     //   label: '组件全路径',
@@ -168,7 +165,7 @@ function feff (a, b) {
 
 // 保存方法
 function save () {
-  formRef.value.submit().then(res => {
+  formRef.value.submit().then((res) => {
     console.info(res)
   })
 }

@@ -1,18 +1,23 @@
 <template>
-    <el-icon class="comment-icon" title="点击查看详细说明" @click.stop="openComment">
-        <QuestionFilled/>
-    </el-icon>
+  <el-icon class="comment-icon" title="点击查看详细说明" @click.stop="openComment">
+    <QuestionFilled />
+  </el-icon>
 </template>
-<script setup name="MComment">
+<script setup>
 import { ElMessageBox } from 'element-plus'
 
 /**
  * 疑问说明组件
  * sxh 2023-4-10
  */
+
+defineOptions({
+  name: 'MComment'
+})
+
 const props = defineProps({
   label: {
-    type: String,
+    type: String
   },
   comment: {
     required: true
@@ -23,14 +28,14 @@ const props = defineProps({
 function openComment () {
   ElMessageBox({
     title: (props.label ?? '') + '❔',
-    message: props.comment,
-  }).catch(e => e)
+    message: props.comment
+  }).catch((e) => e)
 }
 </script>
 
 <style scoped>
 .comment-icon {
-    margin-left: 5px;
-    cursor: pointer;
+  margin-left: 5px;
+  cursor: pointer;
 }
 </style>

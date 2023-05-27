@@ -1,4 +1,4 @@
-import { useSystemStore } from '@/store/system'
+import { useSystemStore } from '@/stores/system'
 
 /**
  * 获取文件下载url

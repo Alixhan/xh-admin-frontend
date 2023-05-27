@@ -2,8 +2,8 @@
   <div>
     <el-button @click="add">添加数据</el-button>
     <el-input v-model="num" />
-    <el-table :data="data" @row-click="alert(1);">
-      <el-table-column type="index" label="序"/>
+    <el-table :data="data" @row-click="alert(1)">
+      <el-table-column type="index" label="序" />
       <el-table-column label="序">
         <template v-slot="scope">
           <el-select v-model="scope.row.b">
@@ -21,15 +21,14 @@
     </el-table>
   </div>
 </template>
-<script setup name="ffff" lang="jsx">
-
+<script setup lang="jsx">
 import { reactive, ref } from 'vue'
 
 const data = ref([])
 const num = ref(1)
 const formData = reactive({
   a: 'fsdfsdf',
-  b: '所经历的副科级塑料袋封口吉林科技',
+  b: '所经历的副科级塑料袋封口吉林科技'
 })
 
 function add () {
@@ -37,7 +36,5 @@ function add () {
     data.value.push({ ...formData })
   }
 }
-
 </script>
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

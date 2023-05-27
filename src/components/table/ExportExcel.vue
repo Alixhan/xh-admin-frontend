@@ -1,5 +1,7 @@
 <template>
-  <el-button icon="Download" type="primary" text :loading="loading" @click="exportExcel">导出</el-button>
+  <el-button icon="Download" type="primary" text :loading="loading" @click="exportExcel">
+    导出
+  </el-button>
 </template>
 
 <script setup>
@@ -48,14 +50,14 @@ async function exportExcel () {
       const r = await ElMessageBox.confirm('确认导出?', '提示', {
         distinguishCancelAndClose: true,
         confirmButtonText: '导出当页',
-        cancelButtonText: '导出全部',
-      }).catch(e => {
+        cancelButtonText: '导出全部'
+      }).catch((e) => {
         pageQuery.isPage = false
         return e
       })
       if (r === 'close') return
     }
-    data = await props.fetchData(pageQuery, { loadingRef: loading }).then(res => {
+    data = await props.fetchData(pageQuery, { loadingRef: loading }).then((res) => {
       return res.data.list
     })
   }
@@ -70,9 +72,9 @@ async function exportExcel () {
     }
   } else {
     ElNotification({
-      title: '失败',
-      message: '暂无数据',
-      type: 'error',
+      title: '导出失败',
+      message: '无数据可以导出！',
+      type: 'error'
     })
   }
 }
@@ -82,7 +84,7 @@ async function exportExcel () {
  */
 class ExcelTree {
   constructor (columns) {
-    this.children = cloneDeep(columns)
+    this.children = [...columns]
     this.nodes = [] // 所有可用节点集合，前序排列
     const stackArray = [this]
     const leafNodes = [] // 叶子节点集合
@@ -94,11 +96,13 @@ class ExcelTree {
         continue
       }
       if (!node.$flag && node !== this) this.nodes.push(node)
-      if (node.children?.length) node.children = node.children.filter(c => !(c.notExport || c.hidden))
+      if (node.children?.length) {
+        node.children = node.children.filter((c) => !(c.notExport || c.hidden))
+      }
       if (node.children?.length && !node.$flag) {
         node.$flag = true // 标识已遍历
         const $parentIndex = stackArray.length - 1
-        node.children.forEach(item => {
+        node.children.forEach((item) => {
           item.$parentIndex = $parentIndex
           stackArray.push(item)
         })
@@ -110,8 +114,8 @@ class ExcelTree {
           parentNode.$leafSize = (parentNode.$leafSize || 0) + $leafSize // 节点的叶子节点总数
           // 父节点最大层数
           parentNode.$maxPlies = Math.max(parentNode.$maxPlies || 0, (node.$maxPlies || 1) + 1)
-          if (!(node.children?.length)) {
-            node.rules = (node.rules instanceof Array) ? node.rules : [node.rules || {}]
+          if (!node.children?.length) {
+            node.rules = node.rules instanceof Array ? node.rules : [node.rules || {}]
             leafNodes.unshift(node)
           }
         }
@@ -132,7 +136,7 @@ class ExcelTree {
       column.$colSpan = column.$leafSize || 1
       if (children?.length) {
         let $col = column.$col
-        children.forEach(i => {
+        children.forEach((i) => {
           i.$plies = $plies + 1
           i.$col = $col
           $col += i.$leafSize || 1
@@ -145,11 +149,11 @@ class ExcelTree {
     // 所有叶子节点
     this.leafNodes = leafNodes
     // excel列
-    this.excelColumns = leafNodes.map(i => {
+    this.excelColumns = leafNodes.map((i) => {
       generateFormatter(i)
       return {
         key: i.prop,
-        width: Math.max(10, ~~(i.label.length * 1.65) + 4)
+        width: Math.max(10, ~~((i.label ?? '').length * 1.65) + 4)
       }
     })
   }
@@ -165,12 +169,17 @@ class ExcelTree {
   exportExcel (fileName, data) {
     const workbook = new ExcelJS.Workbook()
     const worksheet = workbook.addWorksheet('sheet')
-    this.eachNode(node => {
+    this.eachNode((node) => {
       const cell = worksheet.getCell(node.$row, node.$col)
       cell.value = node.label
       if ((node.$colSpan > 1 || node.$rowSpan > 1) && node.$plies > 0) {
         // 按开始行，开始列，结束行，结束列合并
-        worksheet.mergeCells(node.$row, node.$col, node.$row + (node.$rowSpan || 1) - 1, node.$col + (node.$colSpan || 1) - 1)
+        worksheet.mergeCells(
+          node.$row,
+          node.$col,
+          node.$row + (node.$rowSpan || 1) - 1,
+          node.$col + (node.$colSpan || 1) - 1
+        )
       }
       // 标题单元格背景色
       cell.fill = {
@@ -188,8 +197,8 @@ class ExcelTree {
       }
       // 标题单元格字体
       cell.font = { bold: true, size: 9 }
-      const rules = (node.rules instanceof Array) ? node.rules : [node.rules || {}]
-      rules.forEach(i => {
+      const rules = node.rules instanceof Array ? node.rules : [node.rules || {}]
+      rules.forEach((i) => {
         // 必填字段标题红色
         if (i.required) {
           cell.font.color = { argb: 'FFFF0000' }
@@ -197,7 +206,7 @@ class ExcelTree {
         // 下拉框标题单元格添加提示批注
         let itemList = i.itemList
         if (Array.isArray(itemList)) {
-          itemList = itemList.map(j => j.text)
+          itemList = itemList.map((j) => j.text)
         }
         if (itemList) {
           cell.note = `${node.label}值只能为（${Object.values(itemList)}）。`
@@ -218,22 +227,22 @@ class ExcelTree {
       while (arr.length) {
         const item = arr.shift()
         if (item.children?.length) arr.unshift(...item.children)
-        rows.push(this.leafNodes.map(j => {
-          let val = item[j.prop]
-          if (j.formatter) {
-            val = j.formatter(item, j, val)
-          }
-          return val
-        }))
+        rows.push(
+          this.leafNodes.map((j) => {
+            let val = item[j.prop]
+            if (j.formatter) {
+              val = j.formatter(item, j, val)
+            }
+            return val
+          })
+        )
       }
       worksheet.addRows(rows)
     }
-    return workbook.xlsx.writeBuffer().then(buffer => {
+    return workbook.xlsx.writeBuffer().then((buffer) => {
       FileSaver.saveAs(new Blob([buffer], { type: 'application/octet-stream' }), fileName)
     })
   }
 }
-
 </script>
-<style scoped lang="scss">
-</style>
+<style scoped lang="scss"></style>

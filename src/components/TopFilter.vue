@@ -1,7 +1,7 @@
 <script lang="jsx">
 import { defineComponent, createVNode, ref, shallowRef, watchEffect } from 'vue'
 import { generateDynamicColumn, generatePlaceholder, vModelValue } from '@/components/mutils'
-import { useSystemStore } from '@/store/system'
+import { useSystemStore } from '@/stores/system'
 import { useElementSize } from '@vueuse/core'
 
 /**
@@ -28,10 +28,7 @@ export default defineComponent({
     }
   },
   emits: ['search'],
-  setup (props, {
-    emit,
-    expose
-  }) {
+  setup (props, { emit, expose }) {
     const systemStore = useSystemStore()
     const topFilterRef = ref()
     // 搜索框是否展开
@@ -62,22 +59,25 @@ export default defineComponent({
     expose({ reset })
 
     function initColumnsParams () {
-      columnsParams.value = props.columns.map(column => {
+      columnsParams.value = props.columns.filter(i => !i.hidden).map((column) => {
         const { component, param, slots } = generateDynamicColumn(column)
         generatePlaceholder(param)
         const formItemParam = {
           slots: {},
           prop: column.prop,
           label: column.label,
-          labelWidth: props.labelWidth,
+          labelWidth: props.labelWidth
         }
         formItemParam.slots.default = () => {
-          const vModelParam = vModelValue({
-            type: column.type,
-            prop2: column.prop2,
-            prop: column.prop,
-            single: column.single,
-          }, props.param)
+          const vModelParam = vModelValue(
+            {
+              type: column.type,
+              prop2: column.prop2,
+              prop: column.prop,
+              single: column.single
+            },
+            props.param
+          )
           return createVNode(component, { ...param, ...vModelParam }, slots)
         }
         return formItemParam
@@ -86,22 +86,20 @@ export default defineComponent({
 
     // 生成column
     function generateFilterColumn () {
-      return columnsParams.value.map(i => {
+      return columnsParams.value.map((i) => {
         let span = i.colspan || colspan.value
         if (systemStore.layout.widthShrink) {
           span = colspan.value
         }
         if (i.cols) span = parseInt(i.cols) * span
         if (span > 24) span = 24
-        return <el-col span={span}>
-          <el-form-item
-            prop={i.prop}
-            label={i.label}
-            labelWidth={i.labelWidth}
-          >
-            {i.slots.default()}
-          </el-form-item>
-        </el-col>
+        return (
+          <el-col span={span}>
+            <el-form-item prop={i.prop} label={i.label} labelWidth={i.labelWidth}>
+              {i.slots.default()}
+            </el-form-item>
+          </el-col>
+        )
       })
     }
 
@@ -110,24 +108,29 @@ export default defineComponent({
         <div class="filter-tabs">
           <div class="filter-title">
             <div class="title-logo"></div>
-            <el-text class="title-text" size="large">查询</el-text>
+            <el-text class="title-text" size="large">
+              查询
+            </el-text>
             <div style="flex-grow: 1; width: 0; text-align: right;">
               <el-button
-                icon={expand.value ? 'ArrowUp' : 'ArrowDown'} text
+                icon={expand.value ? 'ArrowUp' : 'ArrowDown'}
+                text
                 onClick={() => (expand.value = !expand.value)}
-                type="primary" style="padding: 0 5px;">
+                type="primary"
+                style="padding: 0 5px;"
+              >
                 {expand.value ? '收起' : '展开'}
               </el-button>
-              <el-button type="primary" onClick={search}>搜索</el-button>
+              <el-button type="primary" onClick={search}>
+                搜索
+              </el-button>
               <el-button onClick={reset}>重置</el-button>
             </div>
           </div>
-          <div class="filter-view" style={`height: ${expand.value ? filterSize.value.height : 0}px;`}>
+          <div class="filter-view" style={`height: ${expand.value ? filterSize.value.height : 0}px;`} >
             <el-form ref={topFilterRef} model={props.param}>
-              <el-scrollbar max-height="50vh">
-                <el-row>
-                  {generateFilterColumn()}
-                </el-row>
+              <el-scrollbar max-height="45vh">
+                <el-row>{generateFilterColumn()}</el-row>
               </el-scrollbar>
             </el-form>
           </div>
@@ -148,7 +151,7 @@ export default defineComponent({
 }
 
 .filter-tabs {
-  background-color: var(--el-bg-color-overlay);
+  background-color: var(--el-bg-color);
   padding: 10px 15px;
 
   .filter-title {

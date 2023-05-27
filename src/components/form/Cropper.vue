@@ -4,7 +4,7 @@
       <div class="cropperView">
         <div class="item-class">
           <div>
-            <vue-cropper ref="cropper" :style="itemStyle" :="ctx"/>
+            <vue-cropper ref="cropper" :style="itemStyle" :="ctx" />
             <div class="btn-view">
               <el-button type="primary" @click="cropper.refresh()">刷新</el-button>
               <el-button type="primary" @click="changeScale(1)">放大</el-button>
@@ -15,15 +15,21 @@
           </div>
         </div>
         <div>
-          <div class="item-class" :style="itemStyle" style="background-color: var(--el-border-color);">
-            <div style="overflow: hidden;margin: 5px"
-                 :style="{'width': previews.w + 'px', 'height': previews.h + 'px'}">
+          <div
+            class="item-class"
+            :style="itemStyle"
+            style="background-color: var(--el-border-color)"
+          >
+            <div
+              style="overflow: hidden; margin: 5px"
+              :style="{ width: previews.w + 'px', height: previews.h + 'px' }"
+            >
               <div :style="previews.div" class="preview-view">
-                <img :src="previews.url" :style="previews.img" alt="">
+                <img :src="previews.url" :style="previews.img" alt="" />
               </div>
             </div>
           </div>
-          <div class="btn-view" style="justify-content: flex-end;">
+          <div class="btn-view" style="justify-content: flex-end">
             <el-button type="primary" @click="sure">确定裁剪</el-button>
           </div>
         </div>
@@ -45,12 +51,12 @@ const emit = defineEmits(['cropper'])
 
 const props = defineProps({
   img: {
-    type: String,
+    type: String
   },
   disabled: {
     type: Boolean,
     default: false
-  },
+  }
 })
 
 const cropper = ref()
@@ -78,7 +84,7 @@ watchEffect(() => {
   }
   itemStyle.value = {
     width: width - 10 + 'px',
-    height: width - 10 + 'px',
+    height: width - 10 + 'px'
   }
 })
 

@@ -1,7 +1,7 @@
 <script>
 import { defineComponent, createVNode } from 'vue'
 import Default from './default'
-import { useSystemStore } from '@/store/system'
+import { useSystemStore } from '@/stores/system'
 
 /**
  * 默认布局方式，可调整页面总体布局方式，待实现

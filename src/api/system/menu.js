@@ -9,7 +9,7 @@ export function queryMenuList (params = {}, option) {
 
 // 切换菜单字段值
 export function postSwitchMenuProp (params = {}, option) {
-  return createAxios(option).post(`${systemBaseUrl}/api/system/menu/switch-menu-prop`, params)
+  return createAxios(option).post(`${systemBaseUrl}/api/system/menu/switch_menu_prop`, params)
 }
 
 // 保存系统菜单

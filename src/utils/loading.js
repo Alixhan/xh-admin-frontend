@@ -30,5 +30,5 @@ export const loading = {
       const el = document.querySelector('.block-loading')
       el && el.parentNode?.removeChild(el)
     })
-  },
+  }
 }

@@ -1,8 +1,8 @@
 <template>
   <div class="m-single-date-picker" :style="{ lineHeight: inputHeight }">
-    <el-date-picker v-bind="startParam" :model-value="$props.start"/>
-    <el-text style="font-weight: bold;">{{ $props.rangeSeparator ?? '-' }}</el-text>
-    <el-date-picker v-bind="endParam" :model-value="$props.end"/>
+    <el-date-picker v-bind="startParam" :model-value="$props.start" />
+    <el-text style="font-weight: bold">{{ $props.rangeSeparator ?? '-' }}</el-text>
+    <el-date-picker v-bind="endParam" :model-value="$props.end" />
   </div>
 </template>
 <script>
@@ -16,12 +16,17 @@ import dayjs from 'dayjs'
 export default defineComponent({
   inheritAttrs: false,
   name: 'MSingleDatePicker',
-  props: ['start', 'end', 'valueFormat', 'type', 'startPlaceholder', 'endPlaceholder', 'rangeSeparator',],
-  emits: ['update:start', 'update:end',],
-  setup (props, {
-    attrs,
-    emit,
-  }) {
+  props: [
+    'start',
+    'end',
+    'valueFormat',
+    'type',
+    'startPlaceholder',
+    'endPlaceholder',
+    'rangeSeparator'
+  ],
+  emits: ['update:start', 'update:end'],
+  setup (props, { attrs, emit }) {
     const type = props.type.replace('range', '')
 
     const shortcuts = [
@@ -106,7 +111,7 @@ export default defineComponent({
       emit('update:end', val)
     }
 
-    const inputHeight = `var(--el-component-size${attrs.size ? ('-' + attrs.size) : ''})`
+    const inputHeight = `var(--el-component-size${attrs.size ? '-' + attrs.size : ''})`
 
     const startParam = {
       ...attrs,

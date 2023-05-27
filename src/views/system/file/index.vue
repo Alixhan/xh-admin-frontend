@@ -1,27 +1,40 @@
 <template>
   <div class="root">
     <m-table
-        class="m-table"
-        ref="tableRef"
-        is-filter-table
-        row-key="id"
-        :filter-param="filterParam"
-        :filter-columns="topFilterColumns"
-        :columns="columns"
-        :fetch-data="queryFileList"
-        @selection-change="rows => selectRows = rows"
-        v-model:data="data"
-        :cell-style="cellStyle"
+      class="m-table"
+      ref="tableRef"
+      is-filter-table
+      row-key="id"
+      :filter-param="filterParam"
+      :filter-columns="topFilterColumns"
+      :columns="columns"
+      :fetch-data="queryFileList"
+      @selection-change="(rows) => (selectRows = rows)"
+      v-model:data="data"
+      :cell-style="cellStyle"
     >
-      <template #left-action>
-      </template>
+      <template #left-action> </template>
       <template #right-action>
-        <el-button v-auth="'del'" type="danger" icon="delete" :disabled="selectRows.length === 0" @click="del(selectRows)">删除</el-button>
+        <el-button
+          v-auth="'del'"
+          type="danger"
+          icon="delete"
+          :disabled="selectRows.length === 0"
+          @click="del(selectRows)"
+          >删除</el-button
+        >
       </template>
     </m-table>
-    <el-dialog :title="formTitle[handleType]" v-model="formVisible" align-center draggable
-               destroy-on-close :close-on-click-modal="false" width="70%">
-      <file-form :handle-type="handleType" :model-value="row" style="height: 75vh;" @close="close"/>
+    <el-dialog
+      :title="formTitle[handleType]"
+      v-model="formVisible"
+      align-center
+      draggable
+      destroy-on-close
+      :close-on-click-modal="false"
+      width="70%"
+    >
+      <file-form :handle-type="handleType" :model-value="row" style="height: 75vh" @close="close" />
     </el-dialog>
   </div>
 </template>
@@ -37,7 +50,7 @@ import { getDownloadFileUrl } from '@/utils'
 
 const formTitle = {
   edit: '文件编辑',
-  detail: '文件明细',
+  detail: '文件明细'
 }
 
 const tableRef = ref()
@@ -51,7 +64,7 @@ const topFilterColumns = shallowRef([
   { prop: 'name', label: '文件名称' },
   { prop: 'contentType', label: '文件类型' },
   { prop: 'suffix', label: '文件扩展名' },
-  { prop: 'sha1', label: '文件摘要sha1' },
+  { prop: 'sha1', label: 'sha1' }
 ])
 
 const columns = ref([
@@ -62,13 +75,17 @@ const columns = ref([
   { prop: 'object', label: '对象存储key', width: 150 },
   { prop: 'contentType', label: '文件类型', comment: '文件的MIME类型', width: 100 },
   { prop: 'suffix', label: '文件后缀扩展名', width: 120 },
-  { prop: 'size', label: '文件大小', formatter: (row, col, val) => filesize(val, { base: 2, standard: 'jedec' }), },
+  {
+    prop: 'size',
+    label: '文件大小',
+    formatter: (row, col, val) => filesize(val, { base: 2, standard: 'jedec' })
+  },
   { prop: 'url', label: '图片预览', slots: { default: previewImage } },
   { prop: 'imgWidth', label: '图片宽度' },
   { prop: 'imgHeight', label: '图片高度' },
   { prop: 'imgRatio', label: '图片宽高比', width: 100 },
   { prop: 'status', label: '文件状态', type: 'select', itemList: statusList },
-  { prop: 'createTime', label: '上传时间', type: 'datetime', width: 155 },
+  { prop: 'createTime', label: '上传时间', type: 'datetime', width: 155 }
 ])
 
 const delAuth = auth('del')
@@ -86,25 +103,33 @@ if (delAuth || editAuth || detailAuth) {
     slots: {
       default (scope) {
         const arr = [
-          <el-link type="success" underline={false} onClick={() => download(scope.row)}>下载</el-link>
+          <el-link type="success" underline={false} onClick={() => download(scope.row)}>
+            下载
+          </el-link>
         ]
         if (editAuth) {
           arr.push(
-            <el-link type="primary" underline={false} onClick={() => openForm('edit', scope.row)}>编辑</el-link>
+            <el-link type="primary" underline={false} onClick={() => openForm('edit', scope.row)}>
+              编辑
+            </el-link>
           )
         }
         if (detailAuth) {
           arr.push(
-            <el-link type="primary" underline={false} onClick={() => openForm('detail', scope.row)}>明细</el-link>
+            <el-link type="primary" underline={false} onClick={() => openForm('detail', scope.row)}>
+              明细
+            </el-link>
           )
         }
         if (delAuth) {
           arr.push(
-            <el-link type="danger" underline={false} onClick={() => del([scope.row])}>删除</el-link>
+            <el-link type="danger" underline={false} onClick={() => del([scope.row])}>
+              删除
+            </el-link>
           )
         }
         // 添加分隔符
-        return join(arr, <el-divider direction="vertical"/>)
+        return join(arr, <el-divider direction="vertical" />)
       }
     }
   })
@@ -121,10 +146,11 @@ function openForm (type, r) {
 }
 
 function del (rows) {
-  delFileByIds(rows.map(i => i.id).join(','), {
+  delFileByIds(rows.map((i) => i.id).join(','), {
     showLoading: true,
     showBeforeConfirm: true,
-    confirmMsg: '确认删除吗？此操作会删除实际文件。'
+    showSuccessMsg: true,
+    confirmMsg: '确认删除吗？此操作会删除实际文件，删除后不可恢复！'
   }).then(() => {
     tableRef.value.fetchQuery()
   })
@@ -140,14 +166,18 @@ function previewImage (scope) {
   const file = scope.row
   if (file.contentType.startsWith('image')) {
     const src = getDownloadFileUrl({ object: file.object, isScale: true })
-    return <el-image {...{
-      src,
-      style: 'width: 30px; height: 30px;',
-      fit: 'cover',
-      previewSrcList: [getDownloadFileUrl({ object: file.object })],
-      hideOnClickModal: true,
-      previewTeleported: true,
-    }} />
+    return (
+      <el-image
+        {...{
+          src,
+          style: 'width: 25px; height: 25px;',
+          fit: 'cover',
+          previewSrcList: [getDownloadFileUrl({ object: file.object })],
+          hideOnClickModal: true,
+          previewTeleported: true
+        }}
+      />
+    )
   }
 }
 
