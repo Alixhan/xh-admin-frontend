@@ -20,11 +20,6 @@ export interface OperationButton {
   onClick?: (row: any) => void
   disabled?: boolean | ((row: any) => boolean)
 }
-const a: OperationButton = {
-  icon: '1123'
-}
-a.label = 1
-console.info(a)
 export default defineComponent({
   inheritAttrs: false,
   name: 'MOperationButton',
@@ -45,7 +40,7 @@ export default defineComponent({
     const arr1 = ref<Array<OperationButton>>([])
     const arr2 = ref<Array<OperationButton>>([])
     watchEffect(() => {
-      const buttons: Array<OperationButton> = props.buttons?.filter((i) => {
+      const buttons: Array<OperationButton> = props.buttons.filter((i) => {
         if (!i.auth) return true
         return auth(i.auth, i.authLogic, i.authFull)
       })

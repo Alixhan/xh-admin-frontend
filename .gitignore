@@ -28,3 +28,4 @@ dist-ssr
 /app/
 /platforms/
 /plugins/
+/tsconfig.app.tsbuildinfo

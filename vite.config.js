@@ -6,7 +6,7 @@ import checker from 'vite-plugin-checker'
 import { fileURLToPath, URL } from 'node:url'
 
 export default defineConfig({
-  plugins: [vue(), vueJsx(), eslint(), checker({ typescript: true })],
+  plugins: [vue(), vueJsx(), eslint(), checker({ typescript: true, vueTsc: true })],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
