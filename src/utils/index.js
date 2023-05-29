@@ -5,7 +5,7 @@ import { useSystemStore } from '@/stores/system'
  * @param object
  * @returns {string}
  */
-export function getDownloadFileUrl (param) {
+export function getDownloadFileUrl(param) {
   if (!param) return ''
   let fileBaseUrl = import.meta.env.VITE_FILE_BASE_URL
   if (!fileBaseUrl.startsWith('http')) fileBaseUrl = import.meta.env.VITE_BASE_URL + fileBaseUrl
@@ -20,7 +20,7 @@ export function getDownloadFileUrl (param) {
  * @param cz 剩余的毫秒数
  * @returns {string}
  */
-export function getTimeLeftInfo (cz) {
+export function getTimeLeftInfo(cz) {
   const leftsecond = parseInt(cz / 1000)
   let day = Math.floor(leftsecond / (60 * 60 * 24))
   let hour = Math.floor((leftsecond - day * 24 * 60 * 60) / 3600)

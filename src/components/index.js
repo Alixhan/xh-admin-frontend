@@ -7,10 +7,11 @@ import MTopFilter from './TopFilter.vue'
 import MSingleDatePicker from './form/SingleDatePicker.vue'
 import MComment from './Comment.vue'
 import MUpload from './form/Upload.vue'
+import MOperationButton from './table/OperationButton.vue'
 // import ElDialog from './Dialog.vue'
 
 export default {
-  install (app) {
+  install(app) {
     app.component('MForm', MForm)
     app.component('MTable', MTable)
     app.component('MSvgIcon', MSvgIcon)
@@ -21,5 +22,6 @@ export default {
     app.component('MIconSelect', MIconSelect)
     app.component('MComment', MComment)
     app.component('MUpload', MUpload)
+    app.component('MOperationButton', MOperationButton)
   }
 }

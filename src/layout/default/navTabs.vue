@@ -57,7 +57,7 @@ const currentIndex = ref()
 const menuItems = ref()
 watchEffect(initMenuItems)
 
-function initMenuItems () {
+function initMenuItems() {
   menuItems.value = [
     {
       label: '重新加载',
@@ -94,7 +94,7 @@ watch(
  * 根据menuId移除一个导航tab
  * @param menuId
  */
-function removeTab (menuId) {
+function removeTab(menuId) {
   systemStore.removeNavTabByMenuId(menuId)
   tabRefs.value.pop()
 }
@@ -102,7 +102,7 @@ function removeTab (menuId) {
 /**
  * 右击触发菜单项
  */
-function onContextmenu (index) {
+function onContextmenu(index) {
   virtualRef.value = tabRefs.value[index]
   nextTick(() => {
     if (!visible.value) virtualRef.value.click()
@@ -110,7 +110,7 @@ function onContextmenu (index) {
   currentIndex.value = index
 }
 
-function clickMenu (menu) {
+function clickMenu(menu) {
   virtualRef.value.click()
   if (menu.label === '重新加载') {
     systemStore.setRefresh(true)

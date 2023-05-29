@@ -85,7 +85,7 @@ export default {
     }
   },
   emits: ['update:modelValue'],
-  setup (props, { emit }) {
+  setup(props, { emit }) {
     const width = ref()
     const isFocus = ref()
     const visible = ref()
@@ -106,7 +106,7 @@ export default {
     watchEffect(initIcon)
 
     // 初始化icon
-    function initIcon () {
+    function initIcon() {
       // 实际的表单时是一个用类型和实际组件名或者路径用‘|’拼接的字符串
       const [type, icon] = (props.modelValue ?? '').split('|')
       iconType.value = type
@@ -119,17 +119,17 @@ export default {
       }
     }
 
-    function onModelValue (val) {
+    function onModelValue(val) {
       emit('update:modelValue', val)
     }
 
-    function updateVisible () {
+    function updateVisible() {
       isFocus.value || (visible.value = false)
     }
 
     const refInput = ref()
 
-    function inputRef (el) {
+    function inputRef(el) {
       refInput.value = el
       const clientWidth = el?.$el.clientWidth
       let sl = round(Number(clientWidth) / 41.3, 0)
@@ -148,7 +148,7 @@ export default {
       return result
     })
 
-    function selectIcon (icon) {
+    function selectIcon(icon) {
       emit('update:modelValue', `${currentTab.value}|${icon}`)
       visible.value = false
       active.value = false
@@ -157,7 +157,7 @@ export default {
       })
     }
 
-    function inputBlur () {
+    function inputBlur() {
       isFocus.value = false
       active.value || (visible.value = false)
     }

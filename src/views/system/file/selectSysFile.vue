@@ -31,7 +31,7 @@ import { statusList } from '@/views/system/file/constant'
 import { getDownloadFileUrl } from '@/utils'
 import { filesize } from 'filesize'
 
-const props = defineProps({
+defineProps({
   selection: {
     type: String,
     default: 'multiple'
@@ -85,7 +85,7 @@ const columns = ref([
 ])
 
 // 图片文件预览
-function previewImage (scope) {
+function previewImage(scope) {
   const file = scope.row
   if (file.contentType.startsWith('image')) {
     const src = getDownloadFileUrl({ object: file.object, isScale: true })
@@ -102,10 +102,6 @@ function previewImage (scope) {
       />
     )
   }
-}
-
-function close (type) {
-  emit('close', type)
 }
 </script>
 <style lang="scss" scoped>

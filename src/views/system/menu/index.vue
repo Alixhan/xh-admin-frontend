@@ -78,7 +78,7 @@ const columns = ref([
     label: '排序号',
     width: 85,
     comment: '菜单的排列顺序，小号排在前，大号排在后。',
-    formatter (row, col, val) {
+    formatter(row, col, val) {
       if (row.type === 'btn') return '--'
       return val
     }
@@ -100,7 +100,7 @@ if (addAuth || editAuth || detailAuth) {
     width,
     notExport: true,
     slots: {
-      default (scope) {
+      default(scope) {
         const arr = []
         if (addAuth) {
           arr.push(
@@ -137,7 +137,7 @@ const row = ref()
 /**
  * 查询所有菜单并变成树形结构
  */
-function fetchMenus (pageQuery, option) {
+function fetchMenus(pageQuery, option) {
   // 转为树形结构
   return queryMenuList(pageQuery, option).then((res) => {
     const list = res.data.list
@@ -162,7 +162,7 @@ function fetchMenus (pageQuery, option) {
 const expand = ref(false)
 
 // 展开/收缩所有
-function toggleExpand () {
+function toggleExpand() {
   expand.value = !expand.value
   const arr = [...data.value]
   while (arr.length) {
@@ -174,14 +174,14 @@ function toggleExpand () {
   }
 }
 
-function openForm (type, r) {
+function openForm(type, r) {
   row.value = r
   formVisible.value = true
   handleType.value = type
 }
 
 // 生成菜单的图标
-function generateMenuIcon (scope) {
+function generateMenuIcon(scope) {
   const menu = scope.row
   if (menu.type === 'btn') return '--'
   return (
@@ -194,9 +194,11 @@ function generateMenuIcon (scope) {
   )
 }
 
-function switchSlot (scope) {
+function switchSlot(scope) {
   const row = scope.row
-  if (scope.column.property === 'cache' && (row.type !== 'menu' || row.handleType === 'outer')) { return '--' }
+  if (scope.column.property === 'cache' && (row.type !== 'menu' || row.handleType === 'outer')) {
+    return '--'
+  }
   const prop = scope.column.property
   return (
     <el-switch
@@ -214,7 +216,7 @@ function switchSlot (scope) {
   )
 }
 
-function close (type) {
+function close(type) {
   formVisible.value = false
   if (type === 'refresh') {
     tableRef.value.fetchQuery()

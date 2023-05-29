@@ -7,17 +7,17 @@
   />
   <div class="sort-view" :ref="sortViewRef">
     <el-checkbox
-      v-for="column in props.columns"
+      v-for="column in columnsR"
       :key="column.prop ?? '' + column.label ?? ''"
       :label="column.label"
       :model-value="!column.hidden"
-      @update:model-value="column.hidden = !column.hidden"
+      @update:model-value="updateValue(column)"
     />
   </div>
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import Sortable from 'sortablejs'
 
 /**
@@ -25,6 +25,8 @@ import Sortable from 'sortablejs'
  * sxh
  * 2023-3-24
  */
+
+const emits = defineEmits(['change'])
 const props = defineProps({
   columns: {
     type: Array,
@@ -32,28 +34,35 @@ const props = defineProps({
   }
 })
 
+const columnsR = ref(props.columns)
 const sortViewRef = (el) => {
   // 拖拽排序
   Sortable.create(el, {
     animation: 150,
-    onEnd ({ oldIndex, newIndex }) {
+    onEnd({ oldIndex, newIndex }) {
       if (oldIndex !== newIndex) {
         const columns = props.columns
         // 先取出元素
         const column = columns.splice(oldIndex, 1)
         // 插入新位置
         columns.splice(newIndex, 0, ...column)
+        emits('change')
       }
     }
   })
 }
 
-const checkAll = computed(() => props.columns.every((i) => !i.hidden))
-const indeterminate = computed(() => !(props.columns.every((i) => i.hidden) || checkAll.value))
+const checkAll = computed(() => columnsR.value.every((i) => !i.hidden))
+const indeterminate = computed(() => !(columnsR.value.every((i) => i.hidden) || checkAll.value))
 
-function handleCheckAllChange () {
+function updateValue(column) {
+  column.hidden = !column.hidden
+  emits('change')
+}
+function handleCheckAllChange() {
   const hidden = checkAll.value
-  props.columns.forEach((i) => (i.hidden = hidden))
+  columnsR.value.forEach((i) => (i.hidden = hidden))
+  emits('change')
 }
 </script>
 <style scoped lang="scss">

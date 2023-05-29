@@ -6,7 +6,7 @@ import axios from 'axios'
  */
 const fileBinaryMap = new Map()
 
-function readFileBinary (src) {
+function readFileBinary(src) {
   let fileBinary = fileBinaryMap.get(src)
   if (fileBinary) {
     if (fileBinary.binary) return Promise.resolve(fileBinary.binary)

@@ -1,7 +1,7 @@
 import { useSystemStore } from '@/stores/system'
 
 export default {
-  install (app) {
+  install(app) {
     // 鉴权指令
     app.directive('auth', {
       mounted: (el, binding) => {
@@ -21,7 +21,7 @@ export default {
  * @param logic <String>逻辑运算符，'and'|'or'
  * @param full <Boolean> 是否全路径匹配
  */
-export function auth (value, logic = 'or', full = false) {
+export function auth(value, logic = 'or', full = false) {
   /**
    * 默认是匹配当前菜单下的权限
    * 传入full的话，就是直接匹配所有菜单权限，每个菜单的auth是经过拼接的（会拼接上父级auth:）

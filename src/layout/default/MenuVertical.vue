@@ -16,7 +16,7 @@ import MenuItem from '@/layout/default/MenuItem.vue'
 
 const systemStore = useSystemStore()
 
-function select (index) {
+function select(index) {
   const menu = systemStore.menus.find((i) => i.id === Number(index))
   if (menu.handleType === 'outer') {
     window.open(menu.outerUrl)

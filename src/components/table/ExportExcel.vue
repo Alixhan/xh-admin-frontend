@@ -41,7 +41,7 @@ const props = defineProps({
 
 const loading = ref(false)
 
-async function exportExcel () {
+async function exportExcel() {
   const pageQuery = cloneDeep(props.pageQuery)
   pageQuery.isExport = true // 标识为导出请求
   let data = props.data
@@ -83,7 +83,7 @@ async function exportExcel () {
  * excel树,提供遍历方法和导出文件方法
  */
 class ExcelTree {
-  constructor (columns) {
+  constructor(columns) {
     this.children = [...columns]
     this.nodes = [] // 所有可用节点集合，前序排列
     const stackArray = [this]
@@ -159,14 +159,14 @@ class ExcelTree {
   }
 
   // 前序遍历方法不包含根
-  eachNode (callback) {
+  eachNode(callback) {
     this.nodes.forEach(callback)
   }
 
   /**
    * 导出为excel文件
    */
-  exportExcel (fileName, data) {
+  exportExcel(fileName, data) {
     const workbook = new ExcelJS.Workbook()
     const worksheet = workbook.addWorksheet('sheet')
     this.eachNode((node) => {

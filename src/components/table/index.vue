@@ -11,8 +11,10 @@ import TopFilter from '@/components/TopFilter.vue'
 import { useThrottleFn } from '@vueuse/core'
 import TableColumnSort from './TableColumnSort.vue'
 import ExportExcel from './ExportExcel.vue'
+import MOperationButton from './OperationButton.vue'
 import { useSystemStore } from '@/stores/system'
 import { ElTable } from 'element-plus'
+import { auth } from '@/directive'
 
 /**
  * 通用表格组件
@@ -92,7 +94,7 @@ export default {
     }
   },
   emits: [...ElTable.emits, 'update:data'],
-  setup (props, { attrs, emit, slots, expose }) {
+  setup(props, { attrs, emit, slots, expose }) {
     const systemStore = useSystemStore()
     const pageQuery = ref({
       isPage: props.isPage, // 是否分页
@@ -173,7 +175,7 @@ export default {
       fetchQuery
     })
 
-    function rowClick (row, column, event) {
+    function rowClick(row, column, event) {
       if (props.selection === 'single') {
         selectionRows.value = [row]
         emit('selection-change', selectionRows.value)
@@ -181,18 +183,20 @@ export default {
         if (
           selectionRows.value.length >= props.selectionLimit &&
           !selectionRows.value.some((i) => i === row)
-        ) { return }
+        ) {
+          return
+        }
         tableRef.value.toggleRowSelection(row)
       }
       emit('row-click', row, column, event)
     }
 
-    function selectionChange (rows) {
+    function selectionChange(rows) {
       selectionRows.value = rows
       emit('selection-change', selectionRows.value)
     }
 
-    function selectable (row) {
+    function selectable(row) {
       if (selectionRows.value.length >= props.selectionLimit) {
         return selectionRows.value.some((i) => i === row)
       }
@@ -200,22 +204,51 @@ export default {
     }
 
     // 初始化表格列参数
-    function initTableColumnsParams () {
-      columns.value = props.columns.map((column) => initCommonColumns(column))
+    function initTableColumnsParams() {
+      columns.value = initCommonColumns(props.columns)
+      initTableColumnParamFun()
+    }
+
+    function initCommonColumns(initColumns) {
+      return initColumns
+        .filter((i) => {
+          // 操作类型时，判断如果buttons没有，则隐藏操作列
+          if (i.type === 'operation') {
+            return i.buttons?.filter((i) => {
+              if (!i.auth) return true
+              return auth(i.auth, i.authLogic, i.authFull)
+            })?.length
+          }
+          return true
+        })
+        .map((column) => {
+          // el-table序号列，自动添加标题，标题居中
+          const r = { ...column }
+          if (r.type === 'index') {
+            r.label ??= '序'
+            r.width ??= 50
+            r.showOverflowTooltip ??= false
+          }
+          // 如果是操作列需要生成操作按钮
+          if (r.type === 'operation') {
+            r.notExport ??= true
+            r.label ??= '操作'
+            r.showOverflowTooltip ??= false
+          }
+          if (r.itemList) r.itemList = getItemListRef(r)
+          // 递归生成多层级table
+          if (r.children?.length) {
+            r.children = initCommonColumns(r.children)
+          }
+          return r
+        })
+    }
+
+    function initTableColumnParamFun() {
       tableColumnsParams.value = columns.value.map((column) => initTableColumnParam(column))
     }
 
-    function initCommonColumns (column) {
-      const r = { ...column }
-      if (r.itemList) r.itemList = getItemListRef(r)
-      // 递归生成多层级table
-      if (column.children?.length) {
-        column.children = column.children.map((i) => initCommonColumns(i))
-      }
-      return r
-    }
-
-    function initTableColumnParam (column) {
+    function initTableColumnParam(column) {
       if (column.hidden) return column
       // column属性
       const tableColumParams = {
@@ -248,11 +281,9 @@ export default {
             <div style="display: flex; align-items: center;">
               {tableColumParams.required ? <span style="color: red">*</span> : null}
               {tableColumParams.label}
-              {tableColumParams.comment
-                ? (
+              {tableColumParams.comment ? (
                 <m-comment label={tableColumParams.label} comment={tableColumParams.comment} />
-                  )
-                : null}
+              ) : null}
             </div>
           )
         }
@@ -265,6 +296,11 @@ export default {
             pagination.value.pageSize * (pagination.value.currentPage - 1) + i + 1
         }
       }
+      // 如果是操作列需要生成操作按钮
+      if (tableColumParams.type === 'operation' && !tableColumParams.slots.default) {
+        tableColumParams.slots.default = (scope) =>
+          createVNode(MOperationButton, { ...tableColumParams, row: scope.row })
+      }
       // 默认表格格式化函数
       generateFormatter(tableColumParams)
       // 生成可编辑表格插槽
@@ -273,7 +309,7 @@ export default {
     }
 
     // 生成可编辑column的参数
-    function initEditFormItemParam (column) {
+    function initEditFormItemParam(column) {
       if (!['add', 'edit'].includes(props.formType)) return
       // 如果有定义插槽了，优先使用插槽内容
       if (column?.slots?.default) return
@@ -311,12 +347,15 @@ export default {
         }
         renderArgs.param = {
           ...renderArgs.param,
-          ...vModelValue({
-            type: column.type,
-            prop2: column.prop2,
-            prop: column.prop,
-            single: column.single,
-          }, scope.row)
+          ...vModelValue(
+            {
+              type: column.type,
+              prop2: column.prop2,
+              prop: column.prop,
+              single: column.single
+            },
+            scope.row
+          )
         }
 
         const formItemParam = {
@@ -335,7 +374,7 @@ export default {
     }
 
     // 生成表格列
-    function generateTableColumn (column) {
+    function generateTableColumn(column) {
       if (column.hidden) return null
       if (column.children?.length) {
         column.slots.default = () => column.children.map((i) => generateTableColumn(i))
@@ -353,7 +392,7 @@ export default {
     }
 
     // 生成搜索框
-    function generateTopFilter () {
+    function generateTopFilter() {
       if (props.isFilterTable && props.filterColumns) {
         return (
           <TopFilter
@@ -367,7 +406,7 @@ export default {
     }
 
     // 生成合计框
-    function generateTotalView () {
+    function generateTotalView() {
       if (pagination.value.layout.includes('total')) {
         const content = [
           <el-icon class="total-icon" size="15">
@@ -378,24 +417,32 @@ export default {
           </span>
         ]
         if (props.selection) {
-          const arr = []
-          content.push(<span>，已选中 <span class="total-text">{selectionRows.value.length}</span>
-            {props.selectionLimit
-              ? (
-                <span> / <span class="total-text">{props.selectionLimit}</span></span>)
-              : ''} 条</span>)
+          content.push(
+            <span>
+              ，已选中 <span class="total-text">{selectionRows.value.length}</span>
+              {props.selectionLimit ? (
+                <span>
+                  {' '}
+                  / <span class="total-text">{props.selectionLimit}</span>
+                </span>
+              ) : (
+                ''
+              )}{' '}
+              条
+            </span>
+          )
         }
         return <div class="total-view">{content}</div>
       }
     }
 
     // 生成表格选择列
-    function generateSelectionColumn () {
+    function generateSelectionColumn() {
       if (props.selection === 'multiple') {
         return <el-table-column type="selection" selectable={selectable} />
       } else if (props.selection === 'single') {
         const slots = {
-          default (scope) {
+          default(scope) {
             return (
               <el-radio
                 onClick={(e) => e.preventDefault()}
@@ -412,7 +459,7 @@ export default {
     }
 
     // 生成table
-    function generateTableView () {
+    function generateTableView() {
       const tableParam = {
         ...attrs,
         ...props,
@@ -450,8 +497,7 @@ export default {
               </div>
               <div class="right-action">
                 {slots['right-action']?.()}
-                {props.isExportExcel
-                  ? (
+                {props.isExportExcel ? (
                   <ExportExcel
                     class="action-btn"
                     pageQuery={pageQuery.value}
@@ -460,8 +506,7 @@ export default {
                     data={data.value}
                     columns={columns.value}
                   />
-                    )
-                  : undefined}
+                ) : undefined}
                 <el-button icon="Operation" type="primary" text class="action-btn">
                   高级筛选
                 </el-button>
@@ -470,7 +515,7 @@ export default {
                   hideAfter={0}
                   popper-style="min-width: 100px; width: auto;"
                   v-slots={{
-                    reference () {
+                    reference() {
                       return (
                         <el-button type="primary" text icon="operation" class="action-btn">
                           列排序
@@ -479,7 +524,7 @@ export default {
                     }
                   }}
                 >
-                  <TableColumnSort columns={props.columns} />
+                  <TableColumnSort columns={columns.value} onChange={initTableColumnParamFun} />
                 </el-popover>
               </div>
             </el-scrollbar>
@@ -503,19 +548,24 @@ export default {
     /**
      * 生成分页框
      */
-    function generatePaginationView () {
+    function generatePaginationView() {
       if (pageQuery.value.isPage) {
-        return <el-scrollbar class="table-scrollbar pagination" wrap-style="height: auto;">
-          <el-pagination
-            {...pagination.value}
-            small={systemStore.layout.widthShrink}
-            layout={pagination.value.layout.split(',').filter(i => i !== 'total').join(',')}
-            onCurrentChange={fetchQuery}
-            onSizeChange={fetchQuery}
-            v-model:current-page={pageQuery.value.currentPage}
-            v-model:page-size={pageQuery.value.pageSize}
-          />
-        </el-scrollbar>
+        return (
+          <el-scrollbar class="table-scrollbar pagination" wrap-style="height: auto;">
+            <el-pagination
+              {...pagination.value}
+              small={systemStore.layout.widthShrink}
+              layout={pagination.value.layout
+                .split(',')
+                .filter((i) => i !== 'total')
+                .join(',')}
+              onCurrentChange={fetchQuery}
+              onSizeChange={fetchQuery}
+              v-model:current-page={pageQuery.value.currentPage}
+              v-model:page-size={pageQuery.value.pageSize}
+            />
+          </el-scrollbar>
+        )
       }
     }
 
@@ -524,6 +574,7 @@ export default {
         <div class={`m-table ${systemStore.layout.heightShrink ? 'height-shrink' : ''}`}>
           {generateTopFilter()}
           {generateTableView()}
+          {columns.value[0].label}
         </div>
       )
     }

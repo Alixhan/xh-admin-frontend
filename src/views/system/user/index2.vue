@@ -1,7 +1,7 @@
 <script lang="jsx">
 import { reactive, ref } from 'vue'
 export default {
-  setup () {
+  setup() {
     const data = ref([])
     const num = ref(1)
     const formData = reactive({
@@ -9,17 +9,17 @@ export default {
       b: '所经历的副科级塑料袋封口吉林科技'
     })
 
-    function add () {
+    function add() {
       for (let i = 0; i < num.value; i++) {
         data.value.push({ ...formData })
       }
     }
 
-    function getColumns () {
+    function getColumns() {
       const s = []
       for (let i = 0; i < 10; i++) {
         const slos = {
-          default (scope) {
+          default(scope) {
             return <el-input v-model={scope.row.b} />
           }
         }
@@ -29,7 +29,7 @@ export default {
     }
 
     const sdfs = {
-      default (scope) {
+      default(scope) {
         return (
           <el-select v-model={scope.row.b}>
             <el-option label="123" value="1" />

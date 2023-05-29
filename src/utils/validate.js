@@ -35,7 +35,7 @@ export default function (formData, validRule) {
 }
 
 // 单个字段多个rules验证
-export function fieldValid (fieldName, rules, formValue, formData) {
+export function fieldValid(fieldName, rules, formValue, formData) {
   rules = rules instanceof Array ? rules : [rules ?? {}]
   const rulePromiseArr = rules.map((rule) => {
     return ruleValid(rule, formValue, formData)
@@ -53,7 +53,7 @@ export function fieldValid (fieldName, rules, formValue, formData) {
 }
 
 // 单个rule验证
-export function ruleValid (rule = {}, formValue = '', formData) {
+export function ruleValid(rule = {}, formValue = '', formData) {
   return new Promise((resolve, reject) => {
     if (rule.required) {
       // 验证必填

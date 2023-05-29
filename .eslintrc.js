@@ -1,24 +1,24 @@
+require('@rushstack/eslint-patch/modern-module-resolution')
+
 module.exports = {
   env: {
+    node: true,
     browser: true,
-    es2021: true
+    es2022: true
   },
   extends: [
     'plugin:vue/vue3-essential',
-    'standard'
-  ],
-  overrides: [
+    '@vue/eslint-config-prettier',
+    '@vue/eslint-config-typescript'
   ],
   parserOptions: {
     ecmaVersion: 'latest',
     sourceType: 'module'
   },
   plugins: [
-    'vue'
+    'vue',
+    '@typescript-eslint',
   ],
-  globals: {
-    wx: true,
-  },
   rules: {
     semi: [2, 'never'], // 禁止尾部使用分号“ ; ”
     'no-var': 'error', // 禁止使用 var
@@ -28,8 +28,8 @@ module.exports = {
     'vue/html-closing-bracket-newline': 'off', // 不强制换行
     'vue/singleline-html-element-content-newline': 'off', // 不强制换行
     'vue/max-attributes-per-line': ['error', {
-      singleline: { max: 5 },
-      multiline: { max: 5 },
+      singleline: { max: 8 },
+      multiline: { max: 8 }
     }], // vue template模板元素第一行最多5个属性
     'comma-dangle': [0, 'never'], // 对象字面量项尾可以有逗号
     'no-unused-vars': [
@@ -42,6 +42,6 @@ module.exports = {
       ignores: ['index']// 需要忽略的组件名
     }],
     'prefer-promise-reject-errors': 0,
-    'vue/require-default-prop': 0,
+    'vue/require-default-prop': 0
   }
 }

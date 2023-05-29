@@ -29,12 +29,7 @@
         <!--        <el-button type="success" @click="toggleExpand"> 全部 展开/收起</el-button>-->
       </template>
       <template #right-action>
-        <el-button
-          type="primary"
-          icon="plus"
-          @click="openForm('add')"
-          >新增
-        </el-button>
+        <el-button type="primary" icon="plus" @click="openForm('add')">新增</el-button>
       </template>
     </m-table>
     <el-dialog
@@ -55,8 +50,6 @@ import { reactive, ref, shallowRef } from 'vue'
 import { queryDictDetailList, queryDictTypeList } from '@/api/system/dict'
 import { sfList } from '@/views/system/menu/constant'
 import DictForm from './dictForm.vue'
-import { auth } from '@/directive'
-import { join } from '@/utils/arrays'
 
 const formTitle = {
   copy: '数据字典复制',
@@ -74,10 +67,9 @@ const dictTypeQueryParam = ref({
 })
 queryDictType()
 
-function queryDictType () {
+function queryDictType() {
   queryDictTypeList(dictTypeQueryParam.value).then((res) => {
     dictTypeData.value = [{ id: 0, name: '全部字典', children: res.data.list }]
-    console.info(res)
   })
 }
 
@@ -98,8 +90,23 @@ const topFilterColumns = shallowRef([
   { prop: 'label', label: '字典名称' },
   { prop: 'enabled', label: '是否启用', type: 'select', itemList: sfList }
 ])
-
 const columns = ref([
+  {
+    type: 'operation',
+    width: 130,
+    fixed: 'right',
+    align: 'center',
+    buttons: [
+      { label: '编辑', auth: 'edit', onClick: (row) => openForm('edit', row) },
+      { label: '明细', auth: 'detail', onClick: (row) => openForm('detail', row) },
+      {
+        label: '删除',
+        auth: 'del',
+        type: 'danger',
+        onClick: (row) => openForm('', row)
+      }
+    ]
+  },
   { type: 'index', label: '序', width: 50 },
   { prop: 'id', label: 'ID', width: 50 },
   { prop: 'dictTypeName', label: '字典类型' },
@@ -117,54 +124,11 @@ const columns = ref([
   { prop: 'updateTime', label: '修改时间', type: 'datetime', width: 155 }
 ])
 
-const addAuth = auth('add')
-const editAuth = auth('edit')
-const detailAuth = auth('detail')
-// 添加操作栏
-if (addAuth || editAuth || detailAuth) {
-  let width = 44 * ((addAuth ? 1 : 0) + (editAuth ? 1 : 0) + (detailAuth ? 1 : 0))
-  if (width < 50) width = 50
-  columns.value.unshift({
-    label: '操作',
-    fixed: 'right',
-    width,
-    notExport: true,
-    slots: {
-      default (scope) {
-        const arr = []
-        if (addAuth) {
-          arr.push(
-            <el-link type="primary" underline={false} onClick={() => openForm('copy', scope.row)}>
-              复制
-            </el-link>
-          )
-        }
-        if (editAuth) {
-          arr.push(
-            <el-link type="primary" underline={false} onClick={() => openForm('edit', scope.row)}>
-              编辑
-            </el-link>
-          )
-        }
-        if (detailAuth) {
-          arr.push(
-            <el-link type="primary" underline={false} onClick={() => openForm('detail', scope.row)}>
-              明细
-            </el-link>
-          )
-        }
-        // 添加分隔符
-        return join(arr, <el-divider direction="vertical" />)
-      }
-    }
-  })
-}
-
 const formVisible = ref(false)
 const handleType = ref()
 const row = ref()
 
-function handleNodeClick (node) {
+function handleNodeClick(node) {
   filterParam.dictTypeId = node.id
   filterParam.dictTypeName = node.name
   if (node.id === 0) {
@@ -174,7 +138,7 @@ function handleNodeClick (node) {
   tableRef.value.fetchQuery()
 }
 
-function openForm (type, r) {
+function openForm(type, r) {
   row.value = r
   if (type === 'add') {
     row.value = {
@@ -186,7 +150,7 @@ function openForm (type, r) {
   handleType.value = type
 }
 
-function close (type) {
+function close(type) {
   formVisible.value = false
   if (type === 'refresh') {
     tableRef.value.fetchQuery()

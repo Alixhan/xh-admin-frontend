@@ -1,5 +1,5 @@
 <template>
-  <el-upload :="uploadParam" ref="uploadRef">
+  <el-upload v-bind="uploadParam" ref="uploadRef">
     <template v-for="name in Object.keys($slots)" #[name]="ctx">
       <slot :name="name" v-bind="ctx" />
     </template>
@@ -161,12 +161,12 @@ const visible2 = ref(false)
 const cropperOption = ref({})
 const cropperFile = ref()
 
-function onChange (file, files) {
+function onChange(file, files) {
   if (props.cropper) {
     visible2.value = true
     cropperOption.value = {
       img: file.url,
-      onCropper (blob) {
+      onCropper(blob) {
         const fileName = cropperFile.value.name.replace(/\.[0-9a-z]+$/, '') + '.png'
         const file = new File([blob], fileName, { type: blob.type })
         fileList.value.push({
@@ -187,17 +187,17 @@ function onChange (file, files) {
   attrs.onChange?.(file, files)
 }
 
-function onRemove (file, files) {
+function onRemove(file, files) {
   onUpdateFileList(file, files)
   attrs.onRemove?.(file, files)
 }
 
-function onUpdateFileList (file, files) {
+function onUpdateFileList(file, files) {
   fileList.value = files
   emit('update:modelValue', fileList.value)
 }
 
-function onPreview (file) {
+function onPreview(file) {
   if (props.type === 'upload-img') {
     previewImageUrlList.value = fileList.value.map((i) => i.url)
     initialIndex.value = fileList.value.findIndex((i) => i === file)
@@ -208,15 +208,15 @@ function onPreview (file) {
     }
   }
 }
-
-function onDownload (file) {
-  previewImageUrlList.value = fileList.value.map((i) => i.url)
-  initialIndex.value = fileList.value.findIndex((i) => i === file)
-  previewImageVisible.value = true
-}
+//
+// function onDownload (file) {
+//   previewImageUrlList.value = fileList.value.map((i) => i.url)
+//   initialIndex.value = fileList.value.findIndex((i) => i === file)
+//   previewImageVisible.value = true
+// }
 
 // 图片库选择后事件
-function select (rows) {
+function select(rows) {
   onUpdateFileList(null, [
     ...fileList.value,
     ...rows.map((i) => {
@@ -239,7 +239,7 @@ function select (rows) {
 }
 
 // 文件手动上传
-async function upload () {
+async function upload() {
   // 'ready' | 'uploading' | 'success' | 'fail'
   const uploadFiles = fileList.value.filter((i) => ['ready', 'fail'].includes(i.status))
   while (uploadFiles.length) {

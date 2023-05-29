@@ -25,7 +25,7 @@ const props = defineProps({
 })
 
 // 显示疑问注释信息
-function openComment () {
+function openComment() {
   ElMessageBox({
     title: (props.label ?? '') + '❔',
     message: props.comment

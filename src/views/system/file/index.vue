@@ -101,7 +101,7 @@ if (delAuth || editAuth || detailAuth) {
     width,
     notExport: true,
     slots: {
-      default (scope) {
+      default(scope) {
         const arr = [
           <el-link type="success" underline={false} onClick={() => download(scope.row)}>
             下载
@@ -139,13 +139,13 @@ const formVisible = ref(false)
 const handleType = ref()
 const row = ref()
 
-function openForm (type, r) {
+function openForm(type, r) {
   row.value = r
   formVisible.value = true
   handleType.value = type
 }
 
-function del (rows) {
+function del(rows) {
   delFileByIds(rows.map((i) => i.id).join(','), {
     showLoading: true,
     showBeforeConfirm: true,
@@ -157,12 +157,12 @@ function del (rows) {
 }
 
 // 文件下载
-function download (file) {
+function download(file) {
   window.open(getDownloadFileUrl({ object: file.object, fileName: file.name }))
 }
 
 // 图片文件预览
-function previewImage (scope) {
+function previewImage(scope) {
   const file = scope.row
   if (file.contentType.startsWith('image')) {
     const src = getDownloadFileUrl({ object: file.object, isScale: true })
@@ -181,7 +181,7 @@ function previewImage (scope) {
   }
 }
 
-function cellStyle ({ row, column }) {
+function cellStyle({ row, column }) {
   if (column.property === 'status' && row.status === 1) {
     return {
       color: 'green'
@@ -189,7 +189,7 @@ function cellStyle ({ row, column }) {
   }
 }
 
-function close (type) {
+function close(type) {
   formVisible.value = false
   if (type === 'refresh') {
     tableRef.value.fetchQuery()

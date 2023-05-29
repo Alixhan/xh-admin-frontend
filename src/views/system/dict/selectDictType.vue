@@ -27,11 +27,8 @@
 <script setup lang="jsx">
 import { ref, shallowRef } from 'vue'
 import { queryDictTypeList } from '@/api/system/dict'
-import { statusList } from '@/views/system/file/constant'
-import { getDownloadFileUrl } from '@/utils'
-import { filesize } from 'filesize'
 
-const props = defineProps({
+defineProps({
   selection: {
     type: String,
     default: 'multiple'
@@ -47,7 +44,7 @@ const props = defineProps({
     type: Number
   }
 })
-const emit = defineEmits(['close', 'select'])
+const emit = defineEmits(['select'])
 
 const selectRows = ref([])
 
@@ -60,30 +57,6 @@ const columns = ref([
   { prop: 'name', label: '数据字典类型名称' },
   { prop: 'createTime', label: '创建时间', disabled: true }
 ])
-
-// 图片文件预览
-function previewImage (scope) {
-  const file = scope.row
-  if (file.contentType.startsWith('image')) {
-    const src = getDownloadFileUrl({ object: file.object, isScale: true })
-    return (
-      <el-image
-        {...{
-          src,
-          style: 'width: 30px; height: 30px;',
-          fit: 'cover',
-          previewSrcList: [getDownloadFileUrl({ object: file.object })],
-          hideOnClickModal: true,
-          previewTeleported: true
-        }}
-      />
-    )
-  }
-}
-
-function close (type) {
-  emit('close', type)
-}
 </script>
 <style lang="scss" scoped>
 .form-view {

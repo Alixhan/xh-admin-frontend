@@ -20,24 +20,24 @@ const defaultOption = {
 }
 
 // 对请求进行增强处理
-export default function createAxios (option) {
+export default function createAxios(option) {
   option = Object.assign({}, defaultOption, option)
   let loadingInstance
 
   // 重置loading
-  function resetLoading () {
+  function resetLoading() {
     isRef(option.loadingRef) && (option.loadingRef.value = false)
     loadingInstance?.close()
   }
 
   // 提示错误信息
-  function showErrorMsg (e) {
+  function showErrorMsg(e) {
     if (e === 'cancel') return Promise.reject(e)
     ElNotification({
       duration: defaultOption.errorDuration,
       type: e?.status ?? 'error',
       message: e?.message ?? option.errorMsg,
-      onClose () {
+      onClose() {
         // 需要重新登录
         if (e.httpCode === 403) {
           const systemStore = useSystemStore()

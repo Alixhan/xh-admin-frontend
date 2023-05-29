@@ -26,13 +26,13 @@ export default defineComponent({
     'rangeSeparator'
   ],
   emits: ['update:start', 'update:end'],
-  setup (props, { attrs, emit }) {
+  setup(props, { attrs, emit }) {
     const type = props.type.replace('range', '')
 
     const shortcuts = [
       {
         text: '最近一周',
-        value () {
+        value() {
           const start = dayjs().subtract(1, 'week').toDate()
           updateEnd(getFormatDate(new Date()))
           return start
@@ -40,7 +40,7 @@ export default defineComponent({
       },
       {
         text: '最近一个月',
-        value () {
+        value() {
           const start = dayjs().subtract(1, 'month').toDate()
           updateEnd(getFormatDate(new Date()))
           return start
@@ -48,7 +48,7 @@ export default defineComponent({
       },
       {
         text: '最近三个月',
-        value () {
+        value() {
           const start = dayjs().subtract(3, 'month').toDate()
           updateEnd(getFormatDate(new Date()))
           return start
@@ -56,7 +56,7 @@ export default defineComponent({
       },
       {
         text: '最近六个月',
-        value () {
+        value() {
           const start = dayjs().subtract(6, 'month').toDate()
           updateEnd(getFormatDate(new Date()))
           return start
@@ -64,7 +64,7 @@ export default defineComponent({
       },
       {
         text: '当月',
-        value () {
+        value() {
           const start = dayjs().date(1).toDate()
           updateEnd(getFormatDate(new Date()))
           return start
@@ -72,7 +72,7 @@ export default defineComponent({
       },
       {
         text: '当年',
-        value () {
+        value() {
           const start = dayjs().month(0).date(1).toDate()
           updateEnd(getFormatDate(new Date()))
           return start
@@ -80,7 +80,7 @@ export default defineComponent({
       },
       {
         text: '上个月',
-        value () {
+        value() {
           const start = dayjs().subtract(1, 'month').date(1).toDate()
           const end = dayjs().date(1).subtract(1, 'day').toDate()
           updateEnd(getFormatDate(end))
@@ -89,7 +89,7 @@ export default defineComponent({
       },
       {
         text: '去年',
-        value () {
+        value() {
           const start = dayjs().subtract(1, 'year').month(0).date(1).toDate()
           const end = dayjs().month(0).date(1).subtract(1, 'day').toDate()
           updateEnd(getFormatDate(end))
@@ -98,16 +98,16 @@ export default defineComponent({
       }
     ]
 
-    function getFormatDate (date) {
+    function getFormatDate(date) {
       if (props.valueFormat) date = dayjs(date).format(props.valueFormat)
       return date
     }
 
-    function updateStart (val) {
+    function updateStart(val) {
       emit('update:start', val)
     }
 
-    function updateEnd (val) {
+    function updateEnd(val) {
       emit('update:end', val)
     }
 
@@ -122,7 +122,7 @@ export default defineComponent({
       type,
       'onUpdate:modelValue': updateStart,
       shortcuts,
-      disabledDate (date) {
+      disabledDate(date) {
         if (props.end) return date.getTime() > new Date(props.end).getTime()
       }
     }
@@ -134,7 +134,7 @@ export default defineComponent({
       className: 'date-picker',
       type,
       'onUpdate:modelValue': updateEnd,
-      disabledDate (date) {
+      disabledDate(date) {
         if (props.start) return date.getTime() < new Date(props.start).getTime()
       }
     }

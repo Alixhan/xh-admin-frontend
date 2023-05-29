@@ -20,13 +20,13 @@ export default {
     }
   },
   emits: ['update:modelValue'],
-  setup (props) {
+  setup(props) {
     const iconType = ref()
     const src = shallowRef()
     watchEffect(initIcon)
 
     // 初始化icon
-    function initIcon () {
+    function initIcon() {
       // 实际的表单时是一个用类型和实际组件名或者路径用‘|’拼接的字符串
       const [type, icon] = (props.modelValue ?? '').split('|')
       iconType.value = type

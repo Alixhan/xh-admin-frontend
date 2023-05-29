@@ -26,7 +26,7 @@ import defaultAvatar from '@/assets/image/avatar-default.png'
 
 const systemStore = useSystemStore()
 
-function handleCommand (key) {
+function handleCommand(key) {
   if (key === 'user') {
     console.info('个人中心')
   } else if (key === 'logout') {

@@ -19,7 +19,6 @@
 </template>
 <script setup lang="jsx">
 import { reactive, ref } from 'vue'
-import { useSystemStore } from '@/stores/system'
 
 const data = ref([])
 const num = ref(1)
@@ -28,12 +27,10 @@ const formData = reactive({
   b: '所经历的副科级塑料袋封口吉林科技'
 })
 
-function add () {
+function add() {
   for (let i = 0; i < num.value; i++) {
     data.value.push({ ...formData })
   }
 }
-
-const systemStore = useSystemStore()
 </script>
 <style lang="scss" scoped></style>

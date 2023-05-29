@@ -28,7 +28,7 @@ export default defineComponent({
     }
   },
   emits: ['search'],
-  setup (props, { emit, expose }) {
+  setup(props, { emit, expose }) {
     const systemStore = useSystemStore()
     const topFilterRef = ref()
     // 搜索框是否展开
@@ -46,46 +46,48 @@ export default defineComponent({
       colspan.value = span
     })
 
-    function search () {
+    function search() {
       if (systemStore.layout.heightShrink) expand.value = false
       emit('search', props.param)
     }
 
     // 重置
-    function reset () {
+    function reset() {
       topFilterRef.value.resetFields()
     }
 
     expose({ reset })
 
-    function initColumnsParams () {
-      columnsParams.value = props.columns.filter(i => !i.hidden).map((column) => {
-        const { component, param, slots } = generateDynamicColumn(column)
-        generatePlaceholder(param)
-        const formItemParam = {
-          slots: {},
-          prop: column.prop,
-          label: column.label,
-          labelWidth: props.labelWidth
-        }
-        formItemParam.slots.default = () => {
-          const vModelParam = vModelValue(
-            {
-              type: column.type,
-              prop2: column.prop2,
-              prop: column.prop,
-              single: column.single
-            },
-            props.param
-          )
-          return createVNode(component, { ...param, ...vModelParam }, slots)
-        }
-        return formItemParam
-      })
+    function initColumnsParams() {
+      columnsParams.value = props.columns
+        .filter((i) => !i.hidden)
+        .map((column) => {
+          const { component, param, slots } = generateDynamicColumn(column)
+          generatePlaceholder(param)
+          const formItemParam = {
+            slots: {},
+            prop: column.prop,
+            label: column.label,
+            labelWidth: props.labelWidth
+          }
+          formItemParam.slots.default = () => {
+            const vModelParam = vModelValue(
+              {
+                type: column.type,
+                prop2: column.prop2,
+                prop: column.prop,
+                single: column.single
+              },
+              props.param
+            )
+            return createVNode(component, { ...param, ...vModelParam }, slots)
+          }
+          return formItemParam
+        })
     }
 
     // 生成column
-    function generateFilterColumn () {
+    function generateFilterColumn() {
       return columnsParams.value.map((i) => {
         let span = i.colspan || colspan.value
         if (systemStore.layout.widthShrink) {
@@ -127,7 +129,10 @@ export default defineComponent({
               <el-button onClick={reset}>重置</el-button>
             </div>
           </div>
-          <div class="filter-view" style={`height: ${expand.value ? filterSize.value.height : 0}px;`} >
+          <div
+            class="filter-view"
+            style={`height: ${expand.value ? filterSize.value.height : 0}px;`}
+          >
             <el-form ref={topFilterRef} model={props.param}>
               <el-scrollbar max-height="45vh">
                 <el-row>{generateFilterColumn()}</el-row>

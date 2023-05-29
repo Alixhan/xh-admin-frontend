@@ -5,7 +5,7 @@
  * @returns {*[]} 新数组
  */
 
-export function join (arr, item) {
+export function join(arr, item) {
   const arr2 = []
   arr.forEach((i) => arr2.push(i, item))
   arr2.pop()

@@ -90,7 +90,7 @@ watchEffect(() => {
 })
 
 // 保存方法
-function save () {
+function save() {
   formRef.value.validate().then(() => {
     postSaveFile(formData.value, {
       loadingRef: saveLoading,
@@ -100,7 +100,7 @@ function save () {
   })
 }
 
-function close (type) {
+function close(type) {
   emit('close', type)
 }
 </script>

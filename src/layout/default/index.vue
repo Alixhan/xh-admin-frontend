@@ -2,7 +2,7 @@
   <div
     class="default-root-view"
     :class="{
-      'menu-expand': !systemStore.layout.menuCollapse,
+      'menu-expand': !systemStore.layout.menuCollapse
     }"
   >
     <div class="left-view">

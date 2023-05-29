@@ -102,7 +102,7 @@ watchEffect(() => {
       label: '字典类型ID',
       rules: { required: true, trigger: 'change' },
       slots: {
-        append () {
+        append() {
           return <el-button onClick={() => (visible1.value = true)}>选择</el-button>
         }
       }
@@ -113,7 +113,7 @@ watchEffect(() => {
       label: '上级id',
       readonly: true,
       slots: {
-        append () {
+        append() {
           return <el-button onClick={() => (visible2.value = true)}>选择</el-button>
         }
       }
@@ -130,7 +130,7 @@ const visible1 = ref(false)
 const visible2 = ref(false)
 
 // 选择了数据字典类型
-function selectedDictType (rows) {
+function selectedDictType(rows) {
   formData.value.sysDictTypeId = rows[0].id
   formData.value.dictTypeName = rows[0].name
   formData.value.parentId = ''
@@ -139,7 +139,7 @@ function selectedDictType (rows) {
 }
 
 // 选择了上级数据字典
-function selectedParentDict (rows) {
+function selectedParentDict(rows) {
   formData.value.sysDictTypeId = rows[0].dictTypeId
   formData.value.dictTypeName = rows[0].dictTypeName
   formData.value.parentId = rows[0].id
@@ -148,7 +148,7 @@ function selectedParentDict (rows) {
 }
 
 // 保存方法
-function save () {
+function save() {
   formRef.value.validate().then(() => {
     postSaveDictDetail(formData.value, {
       loadingRef: saveLoading,
@@ -158,7 +158,7 @@ function save () {
   })
 }
 
-function close (type) {
+function close(type) {
   emit('close', type)
 }
 </script>

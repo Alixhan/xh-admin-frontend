@@ -9,7 +9,7 @@ import { useSystemStore } from '@/stores/system'
  */
 export default defineComponent({
   name: 'layout',
-  setup () {
+  setup() {
     const systemStore = useSystemStore()
     const layout = {
       Default

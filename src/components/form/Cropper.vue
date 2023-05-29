@@ -4,7 +4,7 @@
       <div class="cropperView">
         <div class="item-class">
           <div>
-            <vue-cropper ref="cropper" :style="itemStyle" :="ctx" />
+            <vue-cropper ref="cropper" :style="itemStyle" v-bind="ctx" />
             <div class="btn-view">
               <el-button type="primary" @click="cropper.refresh()">刷新</el-button>
               <el-button type="primary" @click="changeScale(1)">放大</el-button>
@@ -44,8 +44,12 @@
  */
 import { VueCropper } from 'vue-cropper'
 import 'vue-cropper/dist/index.css'
-import { computed, ref, useAttrs, watchEffect } from 'vue'
+import { computed, defineOptions, ref, useAttrs, watchEffect } from 'vue'
 import { useElementSize } from '@vueuse/core'
+
+defineOptions({
+  name: 'MCropper'
+})
 
 const emit = defineEmits(['cropper'])
 
@@ -89,25 +93,17 @@ watchEffect(() => {
 })
 
 // 实时裁剪预览
-function onRealTime (data) {
+function onRealTime(data) {
   previews.value = data
 }
 
-function changeScale (num) {
+function changeScale(num) {
   num = num || 1
   cropper.value.changeScale(num)
 }
 
-function rotateLeft () {
-  cropper.value.rotateLeft()
-}
-
-function rotateRight () {
-  cropper.value.rotateRight()
-}
-
-function sure () {
-  cropper.value.getCropBlob(blob => {
+function sure() {
+  cropper.value.getCropBlob((blob) => {
     emit('cropper', blob)
   })
 }

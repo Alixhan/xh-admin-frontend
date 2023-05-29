@@ -119,7 +119,7 @@ watchEffect(() => {
       type: 'select',
       filterable: true,
       itemList: parentMenuList.value,
-      onChange (val) {
+      onChange(val) {
         formData.value.platform = parentMenuList.value.find((i) => i.value === val)?.platform
       }
     },
@@ -138,7 +138,7 @@ watchEffect(() => {
       hidden: formData.value.type !== 'menu',
       type: 'radio-group',
       itemList: handleTypeList,
-      onChange (val) {
+      onChange(val) {
         if (val === 'iframe') formData.value.component = '/src/views/iframe/index.vue'
       },
       comment: (
@@ -218,7 +218,7 @@ watchEffect(() => {
 })
 
 // 保存方法
-function save () {
+function save() {
   formRef.value.validate().then(() => {
     postSaveMenu(formData.value, {
       loadingRef: saveLoading,
@@ -228,7 +228,7 @@ function save () {
   })
 }
 
-function close (type) {
+function close(type) {
   emit('close', type)
 }
 </script>

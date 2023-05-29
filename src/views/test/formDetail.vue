@@ -18,7 +18,6 @@
 </template>
 <script setup lang="jsx">
 import { ref, watchEffect } from 'vue'
-import { handleTypeList, menuTypeList, platFormList } from './constant'
 
 const props = defineProps({
   handleType: {
@@ -159,18 +158,14 @@ watchEffect(() => {
   ]
 })
 
-function feff (a, b) {
-  console.info('水电费水电费水电费', a, b)
-}
-
 // 保存方法
-function save () {
+function save() {
   formRef.value.submit().then((res) => {
     console.info(res)
   })
 }
 
-function close (type) {
+function close(type) {
   emit('close', type)
 }
 </script>

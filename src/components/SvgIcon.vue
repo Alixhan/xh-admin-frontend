@@ -13,11 +13,11 @@ export default defineComponent({
     property: Object, // 修改svg属性值
     inherited: Boolean // 是否继承当前字体颜色
   },
-  setup (props) {
+  setup(props) {
     const svg = ref()
     watchEffect(compSvg)
 
-    async function compSvg () {
+    async function compSvg() {
       let src = props.src
       if (src instanceof Promise) src = await src
       let svgStr = await binary(src)
@@ -33,7 +33,7 @@ export default defineComponent({
       svg.value = svgStr
     }
 
-    function replaceStr (baseStr, prop, newProps) {
+    function replaceStr(baseStr, prop, newProps) {
       const regExp = new RegExp(prop + '="[^"]*"', 'g')
       const strArr = baseStr.split(regExp)
       const oldColorArr = baseStr.match(regExp)

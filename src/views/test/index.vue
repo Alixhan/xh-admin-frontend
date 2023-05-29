@@ -31,7 +31,7 @@ const formData = reactive({
   b: '所经历的副科级塑料袋封口吉林科技'
 })
 
-function add () {
+function add() {
   for (let i = 0; i < num.value; i++) {
     data.value.push({ ...formData })
   }

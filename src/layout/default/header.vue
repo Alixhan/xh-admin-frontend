@@ -44,7 +44,7 @@ import { ElMessage } from 'element-plus'
 
 const { copy } = useClipboard()
 usePermission('clipboard-write')
-function cp () {
+function cp() {
   copy(route.meta.component).then(() => {
     console.info('恭喜你！你发现了这个贴心的小功能~👻🏀🐔')
     ElMessage({
@@ -59,7 +59,7 @@ const systemStore = useSystemStore()
 const menuCollapse = toRef(systemStore.layout, 'menuCollapse')
 const route = useRoute()
 
-function toggleMenuCollapse () {
+function toggleMenuCollapse() {
   menuCollapse.value = !menuCollapse.value
 }
 </script>

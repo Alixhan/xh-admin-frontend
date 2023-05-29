@@ -3,7 +3,7 @@ import { defineComponent, nextTick, shallowRef, watchEffect } from 'vue'
 import { useSystemStore } from '@/stores/system'
 
 export default defineComponent({
-  setup () {
+  setup() {
     const systemStore = useSystemStore()
 
     const menus = shallowRef()
@@ -12,14 +12,14 @@ export default defineComponent({
     /**
      * 初始化菜单
      */
-    function initMenus () {
+    function initMenus() {
       menus.value = systemStore.treeMenus.map((i) => generateMenu(i))
     }
 
     /**
      * 递归生成层级菜单
      */
-    function generateMenu (menu) {
+    function generateMenu(menu) {
       // 只有目录和菜单渲染，其他类型不渲染
       if (!['dir', 'menu'].includes(menu.type)) return
       // 生成菜单图标
@@ -57,7 +57,7 @@ export default defineComponent({
       class: 'el-menu',
       collapseTransition: false,
       // 选中菜单
-      onSelect (index) {
+      onSelect(index) {
         // 小屏设备收起菜单
         if (systemStore.layout.widthShrink) systemStore.layout.menuCollapse = true
         const menu = systemStore.menus.find((i) => i.id === Number(index))

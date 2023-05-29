@@ -59,7 +59,7 @@ const columns = ref([
     prop: 'autocomplete',
     label: 'autocomplete自动补全输入框',
     type: 'autocomplete',
-    fetchSuggestions (queryString, callbback) {
+    fetchSuggestions(queryString, callbback) {
       const res = [
         { value: 'vue', link: 'https://github.com/vuejs/vue' },
         { value: 'element', link: 'https://github.com/ElemeFE/element' },
@@ -71,7 +71,7 @@ const columns = ref([
       ]
       callbback(res.filter((i) => i.value.indexOf(queryString) !== -1))
     },
-    onSelect (item) {
+    onSelect(item) {
       console.log(item)
     }
   },
@@ -238,7 +238,7 @@ const columns = ref([
     props: {
       expandTrigger: 'hover'
     },
-    onChange (val) {
+    onChange(val) {
       console.log(val)
     }
   },
@@ -356,7 +356,7 @@ const columns = ref([
   }
 ])
 
-async function submit () {
+async function submit() {
   // 提交前会验证表单
   const data = await formRef.value.submit()
   console.info(data)

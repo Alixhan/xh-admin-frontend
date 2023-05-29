@@ -32,7 +32,7 @@ import MUpload from '@/components/form/Upload.vue'
  * sxh
  * 2023-3-14
  */
-export function generateDynamicColumn (column) {
+export function generateDynamicColumn(column) {
   if (!column.prop) return
   const param = {
     clearable: true,
@@ -138,7 +138,7 @@ export function generateDynamicColumn (column) {
 }
 
 // 生成双向绑定属性值
-export function vModelValue (param, form) {
+export function vModelValue(param, form) {
   const returnParam = {}
   // 需要双向绑定
   if (form && param.prop) {
@@ -185,7 +185,7 @@ export function vModelValue (param, form) {
 /**
  * 生成默认的placeholder
  */
-export function generatePlaceholder (column) {
+export function generatePlaceholder(column) {
   const type = column.type ?? 'input'
   if (!Object.prototype.hasOwnProperty.call(column, 'placeholder')) {
     const label = column.label ?? ''
@@ -208,14 +208,18 @@ export function generatePlaceholder (column) {
 /**
  * 生成itemListRef数据
  */
-export function getItemListRef (column) {
+export function getItemListRef(column) {
   // 生成方法
   const generateItemList = (data) => {
     return data.map((i) => {
       let label = i.label
       let value = i.value
-      if (column.labelKey) { label = column.labelKey instanceof Function ? column.labelKey(i) : i[column.labelKey] }
-      if (column.valueKey) { value = column.valueKey instanceof Function ? column.valueKey(i) : i[column.valueKey] }
+      if (column.labelKey) {
+        label = column.labelKey instanceof Function ? column.labelKey(i) : i[column.labelKey]
+      }
+      if (column.valueKey) {
+        value = column.valueKey instanceof Function ? column.valueKey(i) : i[column.valueKey]
+      }
       return {
         label,
         value
@@ -239,7 +243,7 @@ export function getItemListRef (column) {
 /**
  * 增强el-form表单验证
  */
-export function generateFormRules (column, formData) {
+export function generateFormRules(column, formData) {
   if (!column.rules) return
   let rules = column.rules
   if (rules) {
@@ -263,7 +267,7 @@ export function generateFormRules (column, formData) {
 }
 
 // 生成默认的formatter函数
-export function generateFormatter (tableColumParams) {
+export function generateFormatter(tableColumParams) {
   // itemList需要转化一下显示
   if (tableColumParams.itemList) {
     tableColumParams.formatter ??= (row, column, cellValue) => {
@@ -276,7 +280,7 @@ export function generateFormatter (tableColumParams) {
 }
 
 // 通过名称获取组件对象
-function getFormComponentByName (compName) {
+function getFormComponentByName(compName) {
   let component = ElInput
   if (compName === 'el-autocomplete') component = ElAutocomplete
   if (compName === 'el-cascader') component = ElCascader

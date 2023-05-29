@@ -46,7 +46,7 @@ export const useSystemStore = defineStore('system', () => {
   // 监听窗口变化
   window.addEventListener('resize', onResize)
   onResize()
-  function onResize () {
+  function onResize() {
     layout.windowWidth = window.innerWidth
     layout.windowHeight = window.innerHeight
     layout.widthShrink = window.innerWidth < 800
@@ -89,7 +89,7 @@ export const useSystemStore = defineStore('system', () => {
       .map((i) => i.componentName)
   })
 
-  function setRefresh (val) {
+  function setRefresh(val) {
     refresh.value = val
   }
   // 当前激活的菜单组
@@ -100,7 +100,7 @@ export const useSystemStore = defineStore('system', () => {
   const router = useRouter()
 
   // 路由前置守卫，自动登录
-  async function beforeEach (to) {
+  async function beforeEach(to) {
     // 白名单直接跳转
     if (whiteList.includes(to.fullPath)) {
       return
@@ -138,12 +138,12 @@ export const useSystemStore = defineStore('system', () => {
   }
 
   // 设置token
-  function setToken (val) {
+  function setToken(val) {
     token.value = val
   }
 
   // 设置登录用户信息
-  function setLoginUserInfo (loginUserInfo) {
+  function setLoginUserInfo(loginUserInfo) {
     // 开发环境把开发文档置顶
     if (import.meta.env.DEV) {
       loginUserInfo.menus.unshift(...devMenus)
@@ -156,7 +156,7 @@ export const useSystemStore = defineStore('system', () => {
   }
 
   // 初始化动态菜单
-  function initMenu () {
+  function initMenu() {
     menusObj.value = {}
     menus.value.forEach((i) => {
       i.children = []
@@ -175,7 +175,7 @@ export const useSystemStore = defineStore('system', () => {
   }
 
   // 获取菜单id的层级数组
-  function getMenuLevelArr (id) {
+  function getMenuLevelArr(id) {
     const arr = []
     let currentMenu = menusObj.value[id]
     while (currentMenu) {
@@ -186,7 +186,7 @@ export const useSystemStore = defineStore('system', () => {
   }
 
   // 初始化动态路由
-  function initDynamicRouter () {
+  function initDynamicRouter() {
     const viewsComponent = import.meta.glob('/src/views/**/*.vue')
     router.addRoute({
       name: layoutRouteName,
@@ -238,7 +238,7 @@ export const useSystemStore = defineStore('system', () => {
   }
 
   // 获取当前用户菜单首个路由
-  function getFirstRoute () {
+  function getFirstRoute() {
     const arr = [...treeMenus.value]
     while (arr.length) {
       const menu = arr.shift()
@@ -259,7 +259,7 @@ export const useSystemStore = defineStore('system', () => {
   )
 
   // 路由跳转成功后钩子，设置当前路由信息，navTabs等，浏览器标题等
-  function afterEach (guard) {
+  function afterEach(guard) {
     const fullPath = guard.fullPath
     const tab = navTabs.value.find((i) => i.fullPath === fullPath)
     const menu = menus.value.find((i) => i.fullPath === fullPath)
@@ -275,12 +275,12 @@ export const useSystemStore = defineStore('system', () => {
   }
 
   // 设置当前激活菜单id
-  function setActiveMenuId (val) {
+  function setActiveMenuId(val) {
     activeMenuId.value = val
   }
 
   // 通过menuId移除navTab
-  function removeNavTabByMenuId (menuId) {
+  function removeNavTabByMenuId(menuId) {
     let index = navTabs.value.findIndex((i) => i.id === menuId)
     const currentMenu = navTabs.value[index]
     navTabs.value.splice(index, 1)
@@ -293,7 +293,7 @@ export const useSystemStore = defineStore('system', () => {
   }
 
   // 注销
-  function logout () {
+  function logout() {
     // router.push('/login').then(() => {
     //   router.removeRoute(layoutRouteName) // 移除动态路由
     //   activeMenuId.value = null

@@ -50,7 +50,7 @@ export default {
     }
   },
   emits: [],
-  setup (
+  setup(
     props,
     {
       attrs,
@@ -81,7 +81,7 @@ export default {
     provide('uploadInstances', uploadInstances.value)
 
     // 表单提交，表单验证，通过后统一上传文件
-    async function submit () {
+    async function submit() {
       await formRef.value.validate()
       await Promise.all(uploadInstances.value.map((i) => i.upload()))
       return props.model
@@ -106,7 +106,7 @@ export default {
       submit
     })
 
-    function initFormItemParams () {
+    function initFormItemParams() {
       formItemParams.value = props.columns.map((i) => {
         // 隐藏的直接返回
         if (i.hidden) return i
@@ -127,7 +127,7 @@ export default {
       })
     }
 
-    function generateFormColumns () {
+    function generateFormColumns() {
       return formItemParams.value.map((i) => {
         // 隐藏的不显示
         if (i.hidden) return null

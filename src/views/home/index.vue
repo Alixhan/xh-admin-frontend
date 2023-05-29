@@ -8,7 +8,7 @@
 import { useSystemStore } from '@/stores/system'
 import { getMenuById } from '@/api/system/menu'
 
-function test (id) {
+function test(id) {
   getMenuById(id).then((res) => {
     console.info(res)
   })

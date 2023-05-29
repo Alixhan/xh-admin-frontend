@@ -103,17 +103,17 @@ const systemStore = useSystemStore()
 
 add()
 
-function rowClick (row, a, b) {
+function rowClick(row, a, b) {
   console.info(row)
 }
 
-function validTable () {
+function validTable() {
   tableRef.value.validate().then((r) => {
     console.info(r)
   })
 }
 
-function add () {
+function add() {
   for (let i = 0; i < num.value; i++) {
     data.value.push({
       id: data.value.length,

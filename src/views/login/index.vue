@@ -68,11 +68,15 @@
   </el-scrollbar>
 </template>
 <script setup>
-import { reactive, ref } from 'vue'
+import { defineOptions, reactive, ref } from 'vue'
 import { userLogin } from '@/api/system/user'
 import { useSystemStore } from '@/stores/system'
 import { useRouter } from 'vue-router'
 import SwitchStyle from '@/layout/default/action/switchStyle.vue'
+
+defineOptions({
+  name: 'SystemLogin'
+})
 
 const systemStore = useSystemStore()
 const router = useRouter()
@@ -107,9 +111,9 @@ const rules = reactive({
 
 const formRef = ref()
 
-function refresh () {}
+function refresh() {}
 
-function submit () {
+function submit() {
   formRef.value.validate((valid) => {
     if (valid) {
       systemStore.setToken('')
