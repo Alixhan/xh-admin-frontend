@@ -7,7 +7,10 @@ body {
   background-size: cover; //或者background-size:100%;
 }
 
-#app,
+#app {
+  height: 100%;
+}
+
 .root {
   height: 100%;
 }
@@ -36,11 +39,13 @@ body {
     opacity: 0;
     color: transparent !important;
   }
+
   /* Firefox 4 至 18 */
   input:-moz-placeholder {
     opacity: 0;
     color: transparent !important;
   }
+
   /* Firefox 19+ */
   input::-moz-placeholder {
     opacity: 0;

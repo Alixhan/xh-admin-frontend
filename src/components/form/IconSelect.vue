@@ -1,13 +1,6 @@
 <template>
-  <el-popover
-    ref="popover"
-    placement="bottom"
-    trigger="focus"
-    :hide-after="0"
-    :visible="visible"
-    :width="width"
-    @update:visible="updateVisible"
-  >
+  <el-popover ref="popover" placement="bottom" trigger="focus" :hide-after="0" :visible="visible"
+              :width="width" @update:visible="updateVisible">
     <template #reference>
       <el-input
         :ref="inputRef"
@@ -44,13 +37,7 @@
         </div>
         <el-scrollbar class="icon-scroll" height="250px">
           <div class="icon-views">
-            <div
-              v-for="(icon, index) in currentIcons"
-              :title="icon"
-              :key="index"
-              class="icon-item-view"
-              @click="selectIcon(icon)"
-            >
+            <div v-for="(icon, index) in currentIcons" :title="icon" :key="index" class="icon-item-view" @click="selectIcon(icon)">
               <m-icon :size="20" :model-value="`${currentTab}|${icon}`" />
             </div>
           </div>

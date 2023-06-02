@@ -16,15 +16,7 @@ import dayjs from 'dayjs'
 export default defineComponent({
   inheritAttrs: false,
   name: 'MSingleDatePicker',
-  props: [
-    'start',
-    'end',
-    'valueFormat',
-    'type',
-    'startPlaceholder',
-    'endPlaceholder',
-    'rangeSeparator'
-  ],
+  props: ['start', 'end', 'valueFormat', 'type', 'startPlaceholder', 'endPlaceholder', 'rangeSeparator'],
   emits: ['update:start', 'update:end'],
   setup(props, { attrs, emit }) {
     const type = props.type.replace('range', '')

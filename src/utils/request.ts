@@ -5,23 +5,23 @@ import { isRef } from 'vue'
 
 axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8'
 
-const defaultOption = {
-  showLoading: false, // 是否显示loading
-  loadingRef: undefined, // vue3中的ref,可以动态更新此值
-  showBeforeConfirm: false, // 提交前是否显示确认弹框
-  confirmButtonText: '确定', // 确认弹框按钮文字信息
-  confirmMsg: '确认是否继续此操作?', // 确认弹框的提示信息
-  loadingText: '操作中', // 加载中文本
-  showSuccessMsg: false, // 显示成功的消息
-  successDuration: 3000, // 成功消息的存续时间
-  successMsg: '操作成功', // 成功的提示信息
-  errorDuration: 3000, // 失败消息的存续时间
-  errorMsg: '操作失败' // 失败的提示信息
+const defaultOption: RequestOption = {
+  showLoading: false,
+  loadingRef: undefined,
+  showBeforeConfirm: false,
+  confirmButtonText: '确定',
+  confirmMsg: '确认是否继续此操作?',
+  loadingText: '操作中',
+  showSuccessMsg: false,
+  successDuration: 3000,
+  successMsg: '操作成功',
+  errorDuration: 3000,
+  errorMsg: '操作失败'
 }
 
 // 对请求进行增强处理
-export default function createAxios(option) {
-  option = Object.assign({}, defaultOption, option)
+export default function createAxios(opt?: RequestOption) {
+  const option: RequestOption = Object.assign({}, defaultOption, opt)
   let loadingInstance
 
   // 重置loading
@@ -58,7 +58,9 @@ export default function createAxios(option) {
   service.interceptors.request.use(async (config) => {
     if (option.showBeforeConfirm) {
       // 确认的提示
-      await ElMessageBox.confirm(option.confirmMsg, '提示')
+      await ElMessageBox.confirm(option.confirmMsg, '提示', {
+        type: 'warning'
+      })
     }
     isRef(option.loadingRef) && (option.loadingRef.value = true)
     if (option.showLoading) {
@@ -83,8 +85,7 @@ export default function createAxios(option) {
       if (option.showSuccessMsg) {
         ElNotification({
           type: 'success',
-          message:
-            option.successMsg instanceof Function ? option.successMsg(data) : option.successMsg,
+          message: option.successMsg instanceof Function ? option.successMsg(data) : option.successMsg,
           duration: defaultOption.successDuration
         })
       }

@@ -1,13 +1,7 @@
 <template>
   <div class="form-view">
     <el-scrollbar class="m-form-scroll">
-      <m-form
-        ref="formRef"
-        :colspan="24"
-        :columns="columns"
-        :model="formData"
-        :handleType="handleType2"
-      />
+      <m-form ref="formRef" :colspan="24" :columns="columns" :model="formData" :handleType="handleType2" />
     </el-scrollbar>
     <div class="m-footer">
       <el-button icon="close" @click="close()">取消</el-button>
@@ -130,7 +124,11 @@ watchEffect(() => {
       itemList: menuTypeList,
       rules: { required: true, trigger: 'blur' }
     },
-    { prop: 'title', label: '菜单标题', rules: { required: true, trigger: 'blur' } },
+    {
+      prop: 'title',
+      label: '菜单标题',
+      rules: { required: true, trigger: 'blur' }
+    },
     {
       prop: 'handleType',
       label: '处理类型',
@@ -158,8 +156,7 @@ watchEffect(() => {
       // 处理类型是外链，隐藏此项
       hidden: formData.value.handleType === 'outer',
       rules: { required: true, trigger: 'blur' },
-      comment:
-        '作为后端鉴权使用，建议使用实际意义的英文单词，web平台同时对应vue-router的name属性，鉴权时需要拼接上级name。'
+      comment: '作为后端鉴权使用，建议使用实际意义的英文单词，web平台同时对应vue-router的name属性，鉴权时需要拼接上级name。'
     },
     {
       prop: 'path',
@@ -169,8 +166,7 @@ watchEffect(() => {
       rules: { required: true, trigger: 'blur' },
       comment: (
         <span>
-          web平台对应vue-router的path,
-          实际访问的路由路径会在浏览器地址栏显示，系统会自动拼接父级路径变成一个完整路径，
+          web平台对应vue-router的path, 实际访问的路由路径会在浏览器地址栏显示，系统会自动拼接父级路径变成一个完整路径，
           <span style="color: red;">所以不用手动拼接父路由路径。</span>
         </span>
       )
@@ -182,8 +178,7 @@ watchEffect(() => {
       disabled: formData.value.handleType === 'iframe',
       // 菜单类型为目录或按钮,或者处理类型是外链，隐藏此项
       hidden: ['dir', 'btn'].includes(formData.value.type) || formData.value.handleType === 'outer',
-      comment:
-        'web平台对应vue-router的component路径，请填写组件的完整路径，例：/views/system/menu/index.vue',
+      comment: 'web平台对应vue-router的component路径，请填写组件的完整路径，例：/views/system/menu/index.vue',
       rules: { required: true, trigger: 'blur' }
     },
     // iframe和外链需要填写URL

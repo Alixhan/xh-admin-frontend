@@ -10,10 +10,7 @@
       <div class="header-left">
         <div class="nav-view">
           <el-icon class="collapse-icon" color="var(--el-color-primary)" size="28">
-            <Fold
-              @click="toggleMenuCollapse"
-              :class="{ rotate180: systemStore.layout.menuCollapse }"
-            />
+            <Fold @click="toggleMenuCollapse" :class="{ rotate180: systemStore.layout.menuCollapse }" />
           </el-icon>
           <NavTabs v-if="systemStore.layout.heightShrink" key="nav-tabs" class="nav-tabs" />
           <Breadcrumb v-else-if="!systemStore.layout.widthShrink" class="breadcrumb" />
@@ -24,12 +21,7 @@
       </el-link>
       <Action class="action" />
     </div>
-    <NavTabs
-      v-if="!systemStore.layout.heightShrink"
-      key="nav-tabs"
-      class="nav-tabs"
-      style="margin-top: 5px"
-    />
+    <NavTabs v-if="!systemStore.layout.heightShrink" key="nav-tabs" class="nav-tabs" style="margin-top: 5px" />
   </div>
 </template>
 <script setup>
@@ -73,6 +65,7 @@ function toggleMenuCollapse() {
 
     .collapse-icon {
       margin-right: 10px;
+      cursor: pointer;
     }
 
     .rotate180 {

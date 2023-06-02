@@ -13,27 +13,12 @@
       v-model:data="data"
       :cell-style="cellStyle"
     >
-      <template #left-action> </template>
       <template #right-action>
-        <el-button
-          v-auth="'del'"
-          type="danger"
-          icon="delete"
-          :disabled="selectRows.length === 0"
-          @click="del(selectRows)"
-          >删除</el-button
-        >
+        <el-button v-auth="'del'" type="danger" icon="delete" :disabled="selectRows.length === 0" @click="del(selectRows)">删除 </el-button>
       </template>
     </m-table>
-    <el-dialog
-      :title="formTitle[handleType]"
-      v-model="formVisible"
-      align-center
-      draggable
-      destroy-on-close
-      :close-on-click-modal="false"
-      width="70%"
-    >
+    <el-dialog :title="formTitle[handleType]" v-model="formVisible" align-center draggable destroy-on-close
+:close-on-click-modal="false" width="70%">
       <file-form :handle-type="handleType" :model-value="row" style="height: 75vh" @close="close" />
     </el-dialog>
   </div>
@@ -43,8 +28,6 @@ import { reactive, ref, shallowRef } from 'vue'
 import { delFileByIds, queryFileList } from '@/api/file/fileOperation'
 import { statusList } from '@/views/system/file/constant'
 import FileForm from './fileForm.vue'
-import { auth } from '@/directive'
-import { join } from '@/utils/arrays'
 import { filesize } from 'filesize'
 import { getDownloadFileUrl } from '@/utils'
 
@@ -73,7 +56,12 @@ const columns = ref([
   { prop: 'id', label: 'ID', width: 50 },
   { prop: 'name', label: '原文件名' },
   { prop: 'object', label: '对象存储key', width: 150 },
-  { prop: 'contentType', label: '文件类型', comment: '文件的MIME类型', width: 100 },
+  {
+    prop: 'contentType',
+    label: '文件类型',
+    comment: '文件的MIME类型',
+    width: 100
+  },
   { prop: 'suffix', label: '文件后缀扩展名', width: 120 },
   {
     prop: 'size',
@@ -85,55 +73,29 @@ const columns = ref([
   { prop: 'imgHeight', label: '图片高度' },
   { prop: 'imgRatio', label: '图片宽高比', width: 100 },
   { prop: 'status', label: '文件状态', type: 'select', itemList: statusList },
-  { prop: 'createTime', label: '上传时间', type: 'datetime', width: 155 }
-])
-
-const delAuth = auth('del')
-const editAuth = auth('edit')
-const detailAuth = auth('detail')
-// 添加操作栏
-if (delAuth || editAuth || detailAuth) {
-  let width = 45 * (1 + (delAuth ? 1 : 0) + (editAuth ? 1 : 0) + (detailAuth ? 1 : 0))
-  if (width < 50) width = 50
-  columns.value.unshift({
-    label: '操作',
+  { prop: 'createTime', label: '上传时间', type: 'datetime', width: 155 },
+  {
+    type: 'operation',
+    width: 130,
     fixed: 'right',
-    width,
-    notExport: true,
-    slots: {
-      default(scope) {
-        const arr = [
-          <el-link type="success" underline={false} onClick={() => download(scope.row)}>
-            下载
-          </el-link>
-        ]
-        if (editAuth) {
-          arr.push(
-            <el-link type="primary" underline={false} onClick={() => openForm('edit', scope.row)}>
-              编辑
-            </el-link>
-          )
-        }
-        if (detailAuth) {
-          arr.push(
-            <el-link type="primary" underline={false} onClick={() => openForm('detail', scope.row)}>
-              明细
-            </el-link>
-          )
-        }
-        if (delAuth) {
-          arr.push(
-            <el-link type="danger" underline={false} onClick={() => del([scope.row])}>
-              删除
-            </el-link>
-          )
-        }
-        // 添加分隔符
-        return join(arr, <el-divider direction="vertical" />)
+    align: 'center',
+    buttons: [
+      { label: '下载', onClick: download },
+      { label: '编辑', auth: 'edit', onClick: (row) => openForm('edit', row) },
+      {
+        label: '明细',
+        auth: 'detail',
+        onClick: (row) => openForm('detail', row)
+      },
+      {
+        label: '删除',
+        auth: 'del',
+        type: 'danger',
+        onClick: (row) => del([row])
       }
-    }
-  })
-}
+    ]
+  }
+])
 
 const formVisible = ref(false)
 const handleType = ref()

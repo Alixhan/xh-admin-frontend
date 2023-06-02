@@ -1,14 +1,8 @@
 <template>
   <div class="form-view">
     <el-scrollbar class="m-form-scroll">
-      <m-form
-        ref="formRef"
-        :colspan="24"
-        :columns="columns"
-        :model="formData"
-        :handleType="props.handleType"
-        v-model:loading="saveLoading"
-      />
+      <m-form ref="formRef" :colspan="24" :columns="columns" :model="formData" :handleType="props.handleType"
+v-model:loading="saveLoading" />
     </el-scrollbar>
     <div class="m-footer">
       <el-button icon="close" @click="close()">取消</el-button>
@@ -124,8 +118,7 @@ watchEffect(() => {
       rules: { required: true, trigger: 'blur' },
       comment: (
         <span>
-          web平台对应vue-router的path,
-          实际访问的路由路径会在浏览器地址栏显示，系统会自动拼接父级路径变成一个完整路径，
+          web平台对应vue-router的path, 实际访问的路由路径会在浏览器地址栏显示，系统会自动拼接父级路径变成一个完整路径，
           <span style="color: red;">所以不用手动拼接父路由路径。</span>
         </span>
       )

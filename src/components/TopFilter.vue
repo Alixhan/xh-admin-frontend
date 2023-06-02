@@ -129,10 +129,7 @@ export default defineComponent({
               <el-button onClick={reset}>重置</el-button>
             </div>
           </div>
-          <div
-            class="filter-view"
-            style={`height: ${expand.value ? filterSize.value.height : 0}px;`}
-          >
+          <div class="filter-view" style={`height: ${expand.value ? filterSize.value.height : 0}px;`}>
             <el-form ref={topFilterRef} model={props.param}>
               <el-scrollbar max-height="45vh">
                 <el-row>{generateFilterColumn()}</el-row>

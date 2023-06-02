@@ -1,12 +1,7 @@
 <template>
   <el-dropdown trigger="click" @command="handleCommand">
     <div class="avatar">
-      <el-avatar
-        shape="circle"
-        :size="30"
-        fit="cover"
-        :src="systemStore.user?.avatar ?? defaultAvatar"
-      />
+      <el-avatar shape="circle" :size="30" fit="cover" :src="systemStore.user?.avatar ?? defaultAvatar" />
       <div class="username">{{ systemStore.user?.name }}</div>
     </div>
     <template #dropdown>

@@ -1,9 +1,5 @@
 <template>
-  <el-scrollbar
-    ref="scrollbar"
-    class="main"
-    :view-style="systemStore.layout.heightShrink ? null : 'height: 100%;'"
-  >
+  <el-scrollbar ref="scrollbar" class="main" :view-style="systemStore.layout.heightShrink ? null : 'height: 100%;'">
     <router-view v-slot="{ Component, route }">
       <transition :name="systemStore.layout.mainAnimation" mode="out-in">
         <keep-alive :include="systemStore.keepAliveComponentNameList">

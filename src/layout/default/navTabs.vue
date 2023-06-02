@@ -64,9 +64,18 @@ function initMenuItems() {
       icon: 'Refresh',
       disabled: navTabs[currentIndex.value]?.id !== systemStore.activeMenuId
     },
-    { label: '关闭此页签', icon: 'close', disabled: navTabs.length < 2, type: 'default' },
+    {
+      label: '关闭此页签',
+      icon: 'close',
+      disabled: navTabs.length < 2,
+      type: 'default'
+    },
     { label: '关闭其他页签', icon: 'Minus', disabled: navTabs.length < 2 },
-    { label: '关闭左侧页签', icon: 'ArrowLeft', disabled: currentIndex.value === 0 },
+    {
+      label: '关闭左侧页签',
+      icon: 'ArrowLeft',
+      disabled: currentIndex.value === 0
+    },
     {
       label: '关闭右侧页签',
       icon: 'ArrowRight',

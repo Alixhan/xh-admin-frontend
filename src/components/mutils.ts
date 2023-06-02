@@ -1,3 +1,4 @@
+import type { Ref } from 'vue'
 import { createVNode, isRef, ref, toRaw } from 'vue'
 import { ruleValid } from '@/utils/validate'
 import {
@@ -32,13 +33,13 @@ import MUpload from '@/components/form/Upload.vue'
  * sxh
  * 2023-3-14
  */
-export function generateDynamicColumn(column) {
+export function generateDynamicColumn(column: CommonColumn) {
   if (!column.prop) return
   const param = {
     clearable: true,
     ...column
   }
-  if (!['switch', 'radio', 'checkbox'].includes(param.type)) {
+  if (!['switch', 'radio', 'checkbox'].includes(param.type ?? '')) {
     param.style = 'width: 100%;' + param.style ?? ''
   }
   const slots = {
@@ -87,22 +88,10 @@ export function generateDynamicColumn(column) {
     }
   }
 
-  let type = column.type ?? 'input'
-  if (['text', 'textarea'].includes(type)) {
+  let type: string = column.type ?? 'input'
+  if (['text', 'textarea', 'password', 'number'].includes(type)) {
     type = 'el-input'
-  } else if (
-    [
-      'year',
-      'month',
-      'date',
-      'dates',
-      'datetime',
-      'week',
-      'datetimerange',
-      'daterange',
-      'monthrange'
-    ].includes(type)
-  ) {
+  } else if (['year', 'month', 'date', 'dates', 'datetime', 'week', 'datetimerange', 'daterange', 'monthrange'].includes(type)) {
     // 设置默认的格式化
     if (!param.valueFormat) {
       if (['year'].includes(type)) param.valueFormat = 'YYYY'
@@ -122,7 +111,7 @@ export function generateDynamicColumn(column) {
   }
 
   // 日期区间需要单独处理
-  if (['daterange', 'datetimerange', 'monthrange'].includes(param.type)) {
+  if (['daterange', 'datetimerange', 'monthrange'].includes(param.type ?? '')) {
     if (!param.prop2) throw Error('prop2属性缺失')
     // 日期区间拆分独立选择
     if (param.single) {
@@ -138,12 +127,12 @@ export function generateDynamicColumn(column) {
 }
 
 // 生成双向绑定属性值
-export function vModelValue(param, form) {
-  const returnParam = {}
+export function vModelValue(param: CommonColumn & { prop: any; prop2: any }, form) {
+  const returnParam: CommonModelParam = {}
   // 需要双向绑定
   if (form && param.prop) {
     // 日期区间需要单独处理
-    if (['daterange', 'datetimerange', 'monthrange'].includes(param.type)) {
+    if (['daterange', 'datetimerange', 'monthrange'].includes(param.type ?? '')) {
       if (!param.prop2) throw Error('prop2属性缺失')
       // 日期区间拆分独立选择
       if (param.single) {
@@ -189,11 +178,7 @@ export function generatePlaceholder(column) {
   const type = column.type ?? 'input'
   if (!Object.prototype.hasOwnProperty.call(column, 'placeholder')) {
     const label = column.label ?? ''
-    if (
-      ['select', 'cascader', 'year', 'month', 'date', 'dates', 'datetime', 'week', 'icon'].includes(
-        type
-      )
-    ) {
+    if (['select', 'cascader', 'year', 'month', 'date', 'dates', 'datetime', 'week', 'icon'].includes(type)) {
       column.placeholder = '请选择' + label
     } else if (['datetimerange', 'daterange', 'monthrange'].includes(type)) {
       column.startPlaceholder = column.startPlaceholder ?? label + '起'
@@ -208,7 +193,7 @@ export function generatePlaceholder(column) {
 /**
  * 生成itemListRef数据
  */
-export function getItemListRef(column) {
+export function getItemListRef(column: CommonColumn): Ref<CommonItemData[]> {
   // 生成方法
   const generateItemList = (data) => {
     return data.map((i) => {
@@ -227,7 +212,7 @@ export function getItemListRef(column) {
     })
   }
   // 下拉框option数据
-  const itemArr = ref([])
+  const itemArr: Ref<CommonItemData[]> = ref([])
   let itemList = toRaw(column.itemList ?? [])
   if (itemList instanceof Function) {
     itemList = itemList()
@@ -271,9 +256,7 @@ export function generateFormatter(tableColumParams) {
   // itemList需要转化一下显示
   if (tableColumParams.itemList) {
     tableColumParams.formatter ??= (row, column, cellValue) => {
-      const itemList = isRef(tableColumParams.itemList)
-        ? tableColumParams.itemList.value
-        : tableColumParams.itemList
+      const itemList = isRef(tableColumParams.itemList) ? tableColumParams.itemList.value : tableColumParams.itemList
       return itemList.find((i) => i.value === cellValue)?.label ?? cellValue
     }
   }
@@ -281,7 +264,7 @@ export function generateFormatter(tableColumParams) {
 
 // 通过名称获取组件对象
 function getFormComponentByName(compName) {
-  let component = ElInput
+  let component: any = ElInput
   if (compName === 'el-autocomplete') component = ElAutocomplete
   if (compName === 'el-cascader') component = ElCascader
   if (compName === 'el-checkbox') component = ElCheckbox
@@ -301,7 +284,6 @@ function getFormComponentByName(compName) {
   if (compName === 'el-upload') component = ElUpload
   if (compName === 'el-radio-group') component = ElRadioGroup
   if (compName === 'el-checkbox-group') component = ElCheckboxGroup
-  if (compName === 'el-autocomplete') component = ElAutocomplete
   if (compName === 'm-single-date-picker') component = SingleDatePicker
   if (compName === 'm-icon-select') component = IconSelect
   if (compName === 'm-upload') component = MUpload

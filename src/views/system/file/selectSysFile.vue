@@ -14,10 +14,7 @@
       @selection-change="(rows) => (selectRows = rows)"
     >
       <template #left-action>
-        <el-button
-          :disabled="selectRows.length === 0 || selectRows.length > selectionLimit"
-          type="primary"
-          @click="emit('select', selectRows)"
+        <el-button :disabled="selectRows.length === 0 || selectRows.length > selectionLimit" type="primary" @click="emit('select', selectRows)"
           >选择
         </el-button>
       </template>
@@ -63,7 +60,12 @@ const topFilterColumns = shallowRef([
 const columns = ref([
   { prop: 'object', label: '对象存储key', width: 120 },
   { prop: 'name', label: '文件名' },
-  { prop: 'contentType', label: '文件类型', comment: '文件的MIME类型', width: 100 },
+  {
+    prop: 'contentType',
+    label: '文件类型',
+    comment: '文件的MIME类型',
+    width: 100
+  },
   { prop: 'suffix', label: '文件后缀扩展名', width: 120 },
   {
     prop: 'size',

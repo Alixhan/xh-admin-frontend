@@ -1,12 +1,6 @@
-<script lang="jsx">
-import { createVNode, nextTick, ref, shallowRef, watch, watchEffect } from 'vue'
-import {
-  generateDynamicColumn,
-  generateFormatter,
-  generateFormRules,
-  getItemListRef,
-  vModelValue
-} from '@/components/mutils'
+<script lang="tsx">
+import { createVNode, defineComponent, defineSlots, nextTick, ref, shallowRef, watch } from 'vue'
+import { generateDynamicColumn, generateFormatter, generateFormRules, getItemListRef, vModelValue } from '@/components/mutils'
 import TopFilter from '@/components/TopFilter.vue'
 import { useThrottleFn } from '@vueuse/core'
 import TableColumnSort from './TableColumnSort.vue'
@@ -14,15 +8,25 @@ import ExportExcel from './ExportExcel.vue'
 import MOperationButton from './OperationButton.vue'
 import { useSystemStore } from '@/stores/system'
 import { ElTable } from 'element-plus'
+import { InfoFilled } from '@element-plus/icons-vue'
 import { auth } from '@/directive'
+
+defineSlots<{
+  append?: (props: { msg: string }) => any
+  default?: (props: { msg: string }) => any
+  empty?: (props: { id: number }) => any
+  'left-action'?: (props: { msg: string }) => any
+  'right-action'?: (props: { id: number }) => any
+}>()
 
 /**
  * 通用表格组件
  * sxh
  * 2023-3-12
  */
-export default {
+export default defineComponent({
   name: 'MTable',
+  extends: ElTable,
   props: {
     formType: {
       type: String,
@@ -47,7 +51,8 @@ export default {
      * 最多可选择行数
      */
     selectionLimit: {
-      type: Number
+      type: Number,
+      default: 0
     },
     // 导出的文件名
     exportFileName: {
@@ -93,7 +98,7 @@ export default {
       default: true
     }
   },
-  emits: [...ElTable.emits, 'update:data'],
+  emits: [...(ElTable.emits as Iterable<any>), 'update:data'],
   setup(props, { attrs, emit, slots, expose }) {
     const systemStore = useSystemStore()
     const pageQuery = ref({
@@ -164,10 +169,15 @@ export default {
 
     const columns = shallowRef([])
     // 表格列参数
-    const tableColumnsParams = shallowRef([])
-    watchEffect(initTableColumnsParams)
+    const tableColumnsParams = shallowRef<TableColumn[]>([])
+    initTableColumnsParams()
+    watch(
+      () => [props.columns],
+      () => initTableColumnsParams,
+      { deep: true }
+    )
 
-    const selectionRows = ref([])
+    const selectionRows = ref<any[]>([])
 
     expose({
       tableRef,
@@ -180,10 +190,7 @@ export default {
         selectionRows.value = [row]
         emit('selection-change', selectionRows.value)
       } else if (props.selection === 'multiple') {
-        if (
-          selectionRows.value.length >= props.selectionLimit &&
-          !selectionRows.value.some((i) => i === row)
-        ) {
+        if (selectionRows.value.length >= props.selectionLimit && !selectionRows.value.some((i) => i === row)) {
           return
         }
         tableRef.value.toggleRowSelection(row)
@@ -211,16 +218,6 @@ export default {
 
     function initCommonColumns(initColumns) {
       return initColumns
-        .filter((i) => {
-          // 操作类型时，判断如果buttons没有，则隐藏操作列
-          if (i.type === 'operation') {
-            return i.buttons?.filter((i) => {
-              if (!i.auth) return true
-              return auth(i.auth, i.authLogic, i.authFull)
-            })?.length
-          }
-          return true
-        })
         .map((column) => {
           // el-table序号列，自动添加标题，标题居中
           const r = { ...column }
@@ -242,9 +239,20 @@ export default {
           }
           return r
         })
+        .filter((i) => {
+          // 操作类型时，判断如果buttons没有，则隐藏操作列
+          if (i.type === 'operation') {
+            i.buttons = i.buttons?.filter((j) => {
+              if (!j.auth) return true
+              return auth(j.auth, j.authLogic, j.authFull)
+            })
+            return i.buttons?.length
+          }
+          return true
+        })
     }
 
-    function initTableColumnParamFun() {
+    function initTableColumnParamFun(): void {
       tableColumnsParams.value = columns.value.map((column) => initTableColumnParam(column))
     }
 
@@ -272,18 +280,13 @@ export default {
         }
       })()
       // 优先使用自定义header插槽
-      if (
-        (tableColumParams.required || tableColumParams.comment) &&
-        !tableColumParams.slots.header
-      ) {
+      if ((tableColumParams.required || tableColumParams.comment) && !tableColumParams.slots.header) {
         tableColumParams.slots.header ??= () => {
           return (
             <div style="display: flex; align-items: center;">
               {tableColumParams.required ? <span style="color: red">*</span> : null}
               {tableColumParams.label}
-              {tableColumParams.comment ? (
-                <m-comment label={tableColumParams.label} comment={tableColumParams.comment} />
-              ) : null}
+              {tableColumParams.comment ? <m-comment label={tableColumParams.label} comment={tableColumParams.comment} /> : null}
             </div>
           )
         }
@@ -292,14 +295,16 @@ export default {
       if (tableColumParams.type === 'index') {
         // 默认实现后端分页页码
         if (props.fetchData) {
-          tableColumParams.index ??= (i) =>
-            pagination.value.pageSize * (pagination.value.currentPage - 1) + i + 1
+          tableColumParams.index ??= (i) => pagination.value.pageSize * (pagination.value.currentPage - 1) + i + 1
         }
       }
       // 如果是操作列需要生成操作按钮
       if (tableColumParams.type === 'operation' && !tableColumParams.slots.default) {
         tableColumParams.slots.default = (scope) =>
-          createVNode(MOperationButton, { ...tableColumParams, row: scope.row })
+          createVNode(MOperationButton, {
+            ...tableColumParams,
+            row: scope.row
+          })
       }
       // 默认表格格式化函数
       generateFormatter(tableColumParams)
@@ -310,7 +315,7 @@ export default {
 
     // 生成可编辑column的参数
     function initEditFormItemParam(column) {
-      if (!['add', 'edit'].includes(props.formType)) return
+      if (!['add', 'edit'].includes(props.formType ?? '')) return
       // 如果有定义插槽了，优先使用插槽内容
       if (column?.slots?.default) return
       if (!column.editable) return
@@ -365,11 +370,7 @@ export default {
           inlineMessage: true,
           rules: generateFormRules({ label: column.label, rules: editParam?.rules }, scope.row)
         }
-        return (
-          <el-form-item {...formItemParam}>
-            {createVNode(renderArgs.component, renderArgs.param, renderArgs.slots)}
-          </el-form-item>
-        )
+        return <el-form-item {...formItemParam}>{createVNode(renderArgs.component, renderArgs.param, renderArgs.slots)}</el-form-item>
       }
     }
 
@@ -380,7 +381,7 @@ export default {
         column.slots.default = () => column.children.map((i) => generateTableColumn(i))
       }
       // 允许用户按照自己的slotName定制
-      if (column.slotName && slots[column.slotName]) return slots[column.slotName]()
+      if (column.slotName && slots[column.slotName ?? '']) return slots[column.slotName ?? '']?.()
       const param = {
         ...column
       }
@@ -394,14 +395,7 @@ export default {
     // 生成搜索框
     function generateTopFilter() {
       if (props.isFilterTable && props.filterColumns) {
-        return (
-          <TopFilter
-            class="top-filter"
-            columns={props.filterColumns}
-            v-model:param={pageQuery.value.param}
-            onSearch={fetchQuery}
-          />
-        )
+        return <TopFilter class="top-filter" columns={props.filterColumns} v-model:param={pageQuery.value.param} onSearch={fetchQuery} />
       }
     }
 
@@ -444,11 +438,7 @@ export default {
         const slots = {
           default(scope) {
             return (
-              <el-radio
-                onClick={(e) => e.preventDefault()}
-                label={true}
-                modelValue={selectionRows.value.includes(scope.row)}
-              >
+              <el-radio onClick={(e) => e.preventDefault()} label={true} modelValue={selectionRows.value.includes(scope.row)}>
                 <span />
               </el-radio>
             )
@@ -487,10 +477,7 @@ export default {
       return (
         <div class={`table-view ${props.isFilterTable ? 'table-view-filter' : ''}`}>
           <div class="table-top">
-            <el-scrollbar
-              class="table-scrollbar"
-              view-style="display: flex; justify-content: space-between;"
-            >
+            <el-scrollbar class="table-scrollbar" view-style="display: flex; justify-content: space-between;">
               <div class="left-action">
                 {generateTotalView()}
                 {slots['left-action']?.()}
@@ -524,18 +511,18 @@ export default {
                     }
                   }}
                 >
-                  <TableColumnSort columns={columns.value} onChange={initTableColumnParamFun} />
+                  <TableColumnSort
+                    {...{
+                      columns: columns.value,
+                      onChange: initTableColumnParamFun
+                    }}
+                  />
                 </el-popover>
               </div>
             </el-scrollbar>
           </div>
           <el-form ref={formRef} class="table-form" model={props.data} scroll-to-error>
-            <el-table
-              {...tableParam}
-              v-slots={slots}
-              v-loading={loadingRef.value}
-              class={{ 'radio-selection': props.selection === 'single' }}
-            >
+            <el-table {...tableParam} v-slots={slots} v-loading={loadingRef.value} class={{ 'radio-selection': props.selection === 'single' }}>
               {generateSelectionColumn()}
               {tableColumnsParams.value.map((i) => generateTableColumn(i))}
             </el-table>
@@ -574,12 +561,11 @@ export default {
         <div class={`m-table ${systemStore.layout.heightShrink ? 'height-shrink' : ''}`}>
           {generateTopFilter()}
           {generateTableView()}
-          {columns.value[0].label}
         </div>
       )
     }
   }
-}
+})
 </script>
 <style scoped lang="scss">
 .m-table {
@@ -726,10 +712,4 @@ export default {
     display: none;
   }
 }
-
-//.dark {
-//  .top-filter, .table-view-filter {
-//    border-color: var(--el-border-color);
-//  }
-//}
 </style>

@@ -1,6 +1,5 @@
 <template>
-  <el-switch class="switch" v-model="isDark" active-icon="Moon" inactive-icon="Sunny" inline-prompt>
-  </el-switch>
+  <el-switch class="switch" v-model="isDark" active-icon="Moon" inactive-icon="Sunny" inline-prompt> </el-switch>
 </template>
 <script setup>
 import { toRef } from 'vue'

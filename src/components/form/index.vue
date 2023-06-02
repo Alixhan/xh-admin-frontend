@@ -1,12 +1,7 @@
 <script lang="jsx">
 import { createVNode, onUnmounted, provide, ref, shallowRef, watchEffect } from 'vue'
 import { ElForm } from 'element-plus'
-import {
-  generateDynamicColumn,
-  generateFormRules,
-  generatePlaceholder,
-  vModelValue
-} from '@/components/mutils'
+import { generateDynamicColumn, generateFormRules, generatePlaceholder, vModelValue } from '@/components/mutils'
 import { useSystemStore } from '@/stores/system'
 import { useElementSize } from '@vueuse/core'
 
@@ -189,11 +184,7 @@ export default {
         formParam.labelPosition = 'top'
       }
       return (
-        <el-form
-          {...formParam}
-          v-slots={slots}
-          class={{ 'detail-form': props.handleType === 'detail' }}
-        >
+        <el-form {...formParam} v-slots={slots} class={{ 'detail-form': props.handleType === 'detail' }}>
           <el-row>{generateFormColumns()}</el-row>
         </el-form>
       )

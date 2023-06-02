@@ -11,14 +11,8 @@
         <div class="title-view">用户登录</div>
         <el-form @keyup.enter="submit" ref="formRef" :rules="rules" size="large" :model="formData">
           <el-form-item prop="username">
-            <el-input
-              ref="usernameRef"
-              type="text"
-              clearable
-              v-model="formData.username"
-              placeholder="请输入账号"
-              prefix-icon="User"
-            />
+            <el-input ref="usernameRef" type="text" clearable v-model="formData.username" placeholder="请输入账号"
+prefix-icon="User" />
           </el-form-item>
           <el-form-item prop="password">
             <el-input
@@ -52,16 +46,8 @@
           <div class="forget-password-view">
             <el-link type="primary" icon="QuestionFilled"> 忘记密码 </el-link>
           </div>
-          <el-button
-            :loading="loading"
-            class="submit-button"
-            round
-            type="primary"
-            size="large"
-            @click="submit"
-          >
-            登录
-          </el-button>
+          <el-button :loading="loading" class="submit-button" round type="primary" size="large"
+@click="submit"> 登录 </el-button>
         </el-form>
       </div>
     </div>

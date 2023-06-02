@@ -1,13 +1,7 @@
 <template>
   <div class="form-view">
     <el-scrollbar class="m-form-scroll">
-      <m-form
-        ref="formRef"
-        :colspan="24"
-        :columns="columns"
-        :model="formData"
-        :handleType="handleType2"
-      />
+      <m-form ref="formRef" :colspan="24" :columns="columns" :model="formData" :handleType="handleType2" />
     </el-scrollbar>
     <div class="m-footer">
       <el-button icon="close" @click="close()">取消</el-button>
@@ -22,21 +16,9 @@
         保存
       </el-button>
     </div>
-    <el-dialog
-      title="选择数据字典类型"
-      v-model="visible1"
-      draggable
-      destroy-on-close
-      align-center
-      :close-on-click-modal="false"
-      width="70%"
-    >
-      <selectDictType
-        selection="single"
-        style="height: calc(90vh - 80px)"
-        @select="selectedDictType"
-        @close="visible1 = false"
-      />
+    <el-dialog title="选择数据字典类型" v-model="visible1" draggable destroy-on-close align-center
+:close-on-click-modal="false" width="70%">
+      <selectDictType selection="single" style="height: calc(90vh - 80px)" @select="selectedDictType" @close="visible1 = false" />
     </el-dialog>
     <el-dialog
       title="选择上级字典"

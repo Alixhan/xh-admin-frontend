@@ -11,36 +11,27 @@
       :columns="columns"
       :fetch-data="fetchMenus"
       v-model:data="data"
+      @selection-change="(rows) => (selectRows = rows)"
     >
       <template #left-action>
-        <el-button type="success" @click="toggleExpand"> 全部 展开/收起 </el-button>
+        <el-button type="success" @click="toggleExpand"> 全部 展开/收起</el-button>
       </template>
       <template #right-action>
-        <el-button v-auth="'add'" type="primary" icon="plus" @click="openForm('add')"
-          >新增</el-button
-        >
+        <el-button v-auth="'add'" type="primary" icon="plus" @click="openForm('add')"> 新增 </el-button>
+        <el-button v-auth="'del'" type="danger" icon="delete" :disabled="selectRows.length === 0" @click="del(selectRows)"> 删除 </el-button>
       </template>
     </m-table>
-    <el-dialog
-      :title="formTitle[handleType]"
-      v-model="formVisible"
-      align-center
-      draggable
-      destroy-on-close
-      :close-on-click-modal="false"
-      width="70%"
-    >
+    <el-dialog :title="formTitle[handleType]" v-model="formVisible" align-center draggable destroy-on-close
+:close-on-click-modal="false" width="70%">
       <menu-form :handle-type="handleType" :model-value="row" style="height: 75vh" @close="close" />
     </el-dialog>
   </div>
 </template>
 <script setup lang="jsx">
 import { reactive, ref, shallowRef } from 'vue'
-import { postSwitchMenuProp, queryMenuList } from '@/api/system/menu'
+import { delMenuByIds, postSwitchMenuProp, queryMenuList } from '@/api/system/menu'
 import { menuTypeList, sfList } from '@/views/system/menu/constant'
 import MenuForm from './menuForm.vue'
-import { auth } from '@/directive'
-import { join } from '@/utils/arrays'
 
 const formTitle = {
   copy: '菜单复制',
@@ -51,6 +42,7 @@ const formTitle = {
 
 const tableRef = ref()
 const data = ref([])
+const selectRows = ref([])
 
 const filterParam = reactive({})
 
@@ -60,19 +52,25 @@ const topFilterColumns = shallowRef([
 ])
 
 const columns = ref([
+  { type: 'selection', width: 50 },
   { prop: 'title', label: '菜单标题', fixed: false, width: 200 },
   { prop: 'id', label: 'ID', width: 50 },
   { prop: 'platform', label: '平台' },
   { prop: 'name', label: 'name' },
   { prop: 'type', label: '菜单类型', type: 'select', itemList: menuTypeList },
+  { prop: 'icon', label: '菜单图标', slots: { default: generateMenuIcon } },
   {
-    prop: 'icon',
-    label: '菜单图标',
-    showOverflowTooltip: false,
-    slots: { default: generateMenuIcon }
+    prop: 'cache',
+    label: '缓存',
+    itemList: sfList,
+    slots: { default: switchSlot }
   },
-  { prop: 'cache', label: '缓存', itemList: sfList, slots: { default: switchSlot } },
-  { prop: 'enabled', label: '启用', itemList: sfList, slots: { default: switchSlot } },
+  {
+    prop: 'enabled',
+    label: '启用',
+    itemList: sfList,
+    slots: { default: switchSlot }
+  },
   {
     prop: 'order',
     label: '排序号',
@@ -84,51 +82,29 @@ const columns = ref([
     }
   },
   { prop: 'createTime', label: '创建时间', type: 'datetime', width: 155 },
-  { prop: 'updateTime', label: '修改时间', type: 'datetime', width: 155 }
-])
-
-const addAuth = auth('add')
-const editAuth = auth('edit')
-const detailAuth = auth('detail')
-// 添加操作栏
-if (addAuth || editAuth || detailAuth) {
-  let width = 44 * ((addAuth ? 1 : 0) + (editAuth ? 1 : 0) + (detailAuth ? 1 : 0))
-  if (width < 50) width = 50
-  columns.value.unshift({
-    label: '操作',
+  { prop: 'updateTime', label: '修改时间', type: 'datetime', width: 155 },
+  {
+    type: 'operation',
+    width: 130,
     fixed: 'right',
-    width,
-    notExport: true,
-    slots: {
-      default(scope) {
-        const arr = []
-        if (addAuth) {
-          arr.push(
-            <el-link type="primary" underline={false} onClick={() => openForm('copy', scope.row)}>
-              复制
-            </el-link>
-          )
-        }
-        if (editAuth) {
-          arr.push(
-            <el-link type="primary" underline={false} onClick={() => openForm('edit', scope.row)}>
-              编辑
-            </el-link>
-          )
-        }
-        if (detailAuth) {
-          arr.push(
-            <el-link type="primary" underline={false} onClick={() => openForm('detail', scope.row)}>
-              明细
-            </el-link>
-          )
-        }
-        // 添加分隔符
-        return join(arr, <el-divider direction="vertical" />)
+    align: 'center',
+    buttons: [
+      { label: '复制', auth: 'add', onClick: (row) => openForm('copy', row) },
+      { label: '编辑', auth: 'edit', onClick: (row) => openForm('edit', row) },
+      {
+        label: '明细',
+        auth: 'detail',
+        onClick: (row) => openForm('detail', row)
+      },
+      {
+        label: '删除',
+        auth: 'del',
+        type: 'danger',
+        onClick: (row) => openForm('', row)
       }
-    }
-  })
-}
+    ]
+  }
+])
 
 const formVisible = ref(false)
 const handleType = ref()
@@ -214,6 +190,17 @@ function switchSlot(scope) {
       }}
     />
   )
+}
+
+function del(rows) {
+  delMenuByIds(rows.map((i) => i.id).join(','), {
+    showLoading: true,
+    showBeforeConfirm: true,
+    showSuccessMsg: true,
+    confirmMsg: '确认删除吗？删除后不可恢复！'
+  }).then(() => {
+    tableRef.value.fetchQuery()
+  })
 }
 
 function close(type) {

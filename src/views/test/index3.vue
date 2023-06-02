@@ -18,40 +18,20 @@
         <el-button type="primary" @click="tableRef.fetchQuery()">查询</el-button>
       </template>
     </m-table>
-    <el-dialog
-      title="ffff"
-      v-model="formVisible"
-      align-center
-      draggable
-      destroy-on-close
-      :close-on-click-modal="false"
-      width="70%"
-    >
+    <el-dialog title="ffff" v-model="formVisible" align-center draggable destroy-on-close
+:close-on-click-modal="false" width="70%">
       <FormDetail handle-type="add" style="height: 75vh" @close="formVisible = false" />
     </el-dialog>
   </div>
 </template>
 <script lang="jsx" setup>
-import { reactive, ref, shallowRef } from 'vue'
-import { useSystemStore } from '@/stores/system'
+import { ref } from 'vue'
 import FormDetail from './formDetail.vue'
 
 const num = ref(2)
 
 const tableRef = ref()
 const formVisible = ref(false)
-
-const pagination2 = ref({
-  total: 1000
-})
-const column = reactive({})
-
-const filterParam = ref({})
-
-const formData = reactive({
-  ssd: 'system',
-  currentPage1: 1
-})
 
 const columns = ref([
   {
@@ -99,11 +79,9 @@ const columns = ref([
 ])
 const data = ref([])
 
-const systemStore = useSystemStore()
-
 add()
 
-function rowClick(row, a, b) {
+function rowClick(row) {
   console.info(row)
 }
 

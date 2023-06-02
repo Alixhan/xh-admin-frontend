@@ -1,10 +1,5 @@
 <template>
-  <el-checkbox
-    label="全选"
-    :model-value="checkAll"
-    :indeterminate="indeterminate"
-    @change="handleCheckAllChange"
-  />
+  <el-checkbox label="全选" :model-value="checkAll" :indeterminate="indeterminate" @change="handleCheckAllChange" />
   <div class="sort-view" :ref="sortViewRef">
     <el-checkbox
       v-for="column in columnsR"

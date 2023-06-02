@@ -24,12 +24,11 @@
       :columns="columns"
       :fetch-data="queryDictDetailList"
       v-model:data="data"
+      @selection-change="(rows) => (selectRows = rows)"
     >
-      <template #left-action>
-        <!--        <el-button type="success" @click="toggleExpand"> 全部 展开/收起</el-button>-->
-      </template>
       <template #right-action>
-        <el-button type="primary" icon="plus" @click="openForm('add')">新增</el-button>
+        <el-button v-auth="'add'" type="primary" icon="plus" @click="openForm('add')"> 新增 </el-button>
+        <el-button v-auth="'del'" type="danger" icon="delete" :disabled="selectRows.length === 0" @click="del(selectRows)"> 删除 </el-button>
       </template>
     </m-table>
     <el-dialog
@@ -47,8 +46,8 @@
 </template>
 <script setup lang="jsx">
 import { reactive, ref, shallowRef } from 'vue'
-import { queryDictDetailList, queryDictTypeList } from '@/api/system/dict'
-import { sfList } from '@/views/system/menu/constant'
+import { queryDictDetailList, queryDictTypeList, delDictDetailByIds } from '@/api/system/dict'
+import { sfList } from './constant'
 import DictForm from './dictForm.vue'
 
 const formTitle = {
@@ -80,7 +79,7 @@ const defaultProps = {
 }
 
 const data = ref([])
-
+const selectRows = ref([])
 const filterParam = reactive({})
 
 const topFilterColumns = shallowRef([
@@ -98,15 +97,20 @@ const columns = ref([
     align: 'center',
     buttons: [
       { label: '编辑', auth: 'edit', onClick: (row) => openForm('edit', row) },
-      { label: '明细', auth: 'detail', onClick: (row) => openForm('detail', row) },
+      {
+        label: '明细',
+        auth: 'detail',
+        onClick: (row) => openForm('detail', row)
+      },
       {
         label: '删除',
         auth: 'del',
         type: 'danger',
-        onClick: (row) => openForm('', row)
+        onClick: (row) => del([row])
       }
     ]
   },
+  { type: 'selection' },
   { type: 'index', label: '序', width: 50 },
   { prop: 'id', label: 'ID', width: 50 },
   { prop: 'dictTypeName', label: '字典类型' },
@@ -148,6 +152,17 @@ function openForm(type, r) {
   }
   formVisible.value = true
   handleType.value = type
+}
+
+function del(rows) {
+  delDictDetailByIds(rows.map((i) => i.id).join(','), {
+    showLoading: true,
+    showBeforeConfirm: true,
+    showSuccessMsg: true,
+    confirmMsg: '确认删除吗？删除后不可恢复！'
+  }).then(() => {
+    tableRef.value.fetchQuery()
+  })
 }
 
 function close(type) {

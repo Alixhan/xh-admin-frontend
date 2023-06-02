@@ -21,28 +21,30 @@ export default {
  * @param logic <String>逻辑运算符，'and'|'or'
  * @param full <Boolean> 是否全路径匹配
  */
-export function auth(value, logic = 'or', full = false) {
+export function auth(value: string | string[], logic: 'or' | 'and' = 'or', full = false): boolean {
   /**
    * 默认是匹配当前菜单下的权限
    * 传入full的话，就是直接匹配所有菜单权限，每个菜单的auth是经过拼接的（会拼接上父级auth:）
    */
-  const systemStore = useSystemStore()
+  const systemStore: any = useSystemStore()
+  const activeMenuId = systemStore.activeMenuId
+  const menus = systemStore.menus
   // 如果是string就是传入单个权限name，其他类型就是数组
-  if (!(value instanceof Array)) value = [value]
-  let auth // 是否有权操作， 默认无
+  const val: string[] = value instanceof Array ? value : [value]
+  let auth: boolean // 是否有权操作， 默认无
   if (full) {
     if (logic === 'and') {
-      auth = value.every((i) => systemStore.menus.some((j) => j.auth === i))
+      auth = val.every((i) => menus.some((j) => j.auth === i))
     } else {
-      auth = systemStore.menus.some((i) => value.some((j) => j === i.auth))
+      auth = menus.some((i) => val.some((j) => j === i.auth))
     }
   } else {
     // 当前菜单
-    const currentMenu = systemStore.menus.find((i) => i.id === systemStore.activeMenuId)
+    const currentMenu: any = menus.find((i) => i.id === activeMenuId)
     if (logic === 'and') {
-      auth = value.every((i) => currentMenu.children?.some((j) => j.name === i))
+      auth = val.every((i) => currentMenu.children?.some((j) => j.name === i))
     } else {
-      auth = currentMenu.children?.some((i) => value.some((j) => j === i.name))
+      auth = currentMenu.children?.some((i) => val.some((j) => j === i.name))
     }
   }
   return auth

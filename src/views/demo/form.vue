@@ -254,19 +254,31 @@ const columns = ref([
       { value: '3', label: '选身体健康' }
     ]
   },
-  { prop: 'colorpicker', label: 'color-picker颜色选择器', type: 'color-picker' },
+  {
+    prop: 'colorpicker',
+    label: 'color-picker颜色选择器',
+    type: 'color-picker'
+  },
   { prop: 'date', label: '日期选择', type: 'date' },
-  { prop: 'datedaterange', prop2: 'datedaterange2', label: '日期段选择', type: 'daterange' },
+  {
+    prop: 'datedaterange',
+    prop2: 'datedaterange2',
+    label: '日期段选择',
+    type: 'daterange'
+  },
   {
     prop: 'datedaterange',
     prop2: 'datedaterange2',
     label: '日期段独立选择',
     type: 'daterange',
     single: true,
-    comment:
-      '如果需要时间段起止独立选择，则可以设置single为true, 其他时间段选择使用一致，datetimerange, monthrange'
+    comment: '如果需要时间段起止独立选择，则可以设置single为true, 其他时间段选择使用一致，datetimerange, monthrange'
   },
-  { prop: 'input-number', label: 'Input Number 数字输入框', type: 'input-number' },
+  {
+    prop: 'input-number',
+    label: 'Input Number 数字输入框',
+    type: 'input-number'
+  },
   { prop: 'radio', label: 'radio', type: 'radio' },
   {
     prop: 'radiogroup',
@@ -301,8 +313,7 @@ const columns = ref([
   {
     prop: 'input2',
     label: '输入框验证',
-    comment:
-      '验证在兼容原element验证的基础上进行了增强,如：默认将label拼接至错误消息中，添加了一些常用的验证等， 具体可以查看/utils/validate.js',
+    comment: '验证在兼容原element验证的基础上进行了增强,如：默认将label拼接至错误消息中，添加了一些常用的验证等， 具体可以查看/utils/validate.js',
     rules: [{ required: true, type: 'number' }]
   },
   {

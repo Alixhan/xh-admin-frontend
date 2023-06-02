@@ -13,11 +13,7 @@
       <Header class="header" />
       <Main class="main" />
       <transition name="el-fade-in" mode="out-in">
-        <div
-          v-if="!systemStore.layout.menuCollapse"
-          class="mock-view"
-          @click.stop="systemStore.layout.menuCollapse = true"
-        />
+        <div v-if="!systemStore.layout.menuCollapse" class="mock-view" @click.stop="systemStore.layout.menuCollapse = true" />
       </transition>
     </div>
   </div>

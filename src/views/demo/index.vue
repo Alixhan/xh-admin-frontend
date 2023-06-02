@@ -11,6 +11,9 @@
       layout="total, prev, pager, next"
       :total="1000"
     />
+    <el-table>
+      <template #empty> </template>
+    </el-table>
   </div>
 </template>
 <script setup>

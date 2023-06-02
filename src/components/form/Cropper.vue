@@ -15,15 +15,8 @@
           </div>
         </div>
         <div>
-          <div
-            class="item-class"
-            :style="itemStyle"
-            style="background-color: var(--el-border-color)"
-          >
-            <div
-              style="overflow: hidden; margin: 5px"
-              :style="{ width: previews.w + 'px', height: previews.h + 'px' }"
-            >
+          <div class="item-class" :style="itemStyle" style="background-color: var(--el-border-color)">
+            <div style="overflow: hidden; margin: 5px" :style="{ width: previews.w + 'px', height: previews.h + 'px' }">
               <div :style="previews.div" class="preview-view">
                 <img :src="previews.url" :style="previews.img" alt="" />
               </div>

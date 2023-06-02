@@ -1,10 +1,5 @@
 <template>
-  <m-svg-icon
-    class="icon-style"
-    :src="isFullscreen ? ExitFullScreenSvg : FullScreenSvg"
-    inherited
-    @click="toggle"
-  />
+  <m-svg-icon class="icon-style" :src="isFullscreen ? ExitFullScreenSvg : FullScreenSvg" inherited @click="toggle" />
 </template>
 <script setup>
 import { useFullscreen } from '@vueuse/core'

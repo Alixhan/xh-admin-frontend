@@ -41,16 +41,8 @@
       :initial-index="initialIndex"
       @close="previewImageVisible = false"
     />
-    <el-dialog
-      title="选择文件"
-      v-model="visible"
-      align-center
-      draggable
-      append-to-body
-      destroy-on-close
-      :close-on-click-modal="false"
-      width="90%"
-    >
+    <el-dialog title="选择文件" v-model="visible" align-center draggable append-to-body
+               destroy-on-close :close-on-click-modal="false" width="90%">
       <selectSysFile
         :selection="selection"
         :selection-limit="selectLimit"
@@ -59,16 +51,8 @@
         @close="visible = false"
       />
     </el-dialog>
-    <el-dialog
-      title="图片裁剪"
-      v-model="visible2"
-      align-center
-      draggable
-      append-to-body
-      destroy-on-close
-      :close-on-click-modal="false"
-      width="70%"
-    >
+    <el-dialog title="图片裁剪" v-model="visible2" align-center draggable append-to-body
+               destroy-on-close :close-on-click-modal="false" width="70%">
       <cropper :="cropperOption" @close="visible2 = false" />
     </el-dialog>
   </el-upload>

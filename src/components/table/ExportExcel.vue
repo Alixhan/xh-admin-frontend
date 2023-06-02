@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, unref } from 'vue'
 import { cloneDeep } from 'lodash'
 import FileSaver from 'file-saver'
 import ExcelJS from 'exceljs'
@@ -65,7 +65,7 @@ async function exportExcel() {
   if (data?.length) {
     try {
       loading.value = true
-      const excelTree = new ExcelTree(props.columns)
+      const excelTree = new ExcelTree(unref(props.columns))
       await excelTree.exportExcel(props.exportFileName, data)
     } finally {
       loading.value = false
@@ -84,7 +84,7 @@ async function exportExcel() {
  */
 class ExcelTree {
   constructor(columns) {
-    this.children = [...columns]
+    this.children = columns.map(clone)
     this.nodes = [] // 所有可用节点集合，前序排列
     const stackArray = [this]
     const leafNodes = [] // 叶子节点集合
@@ -174,12 +174,7 @@ class ExcelTree {
       cell.value = node.label
       if ((node.$colSpan > 1 || node.$rowSpan > 1) && node.$plies > 0) {
         // 按开始行，开始列，结束行，结束列合并
-        worksheet.mergeCells(
-          node.$row,
-          node.$col,
-          node.$row + (node.$rowSpan || 1) - 1,
-          node.$col + (node.$colSpan || 1) - 1
-        )
+        worksheet.mergeCells(node.$row, node.$col, node.$row + (node.$rowSpan || 1) - 1, node.$col + (node.$colSpan || 1) - 1)
       }
       // 标题单元格背景色
       cell.fill = {
@@ -243,6 +238,14 @@ class ExcelTree {
       FileSaver.saveAs(new Blob([buffer], { type: 'application/octet-stream' }), fileName)
     })
   }
+}
+
+function clone(tree) {
+  const obj = { ...tree }
+  if (tree.children?.length) {
+    tree.children = tree.children.map(clone)
+  }
+  return obj
 }
 </script>
 <style scoped lang="scss"></style>

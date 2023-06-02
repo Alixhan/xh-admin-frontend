@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "dev": "vite --mode development",
+    "dev": "npm run type-check && vite --mode development",
     "build": "run-p type-check build:production",
     "build:production": "vite build --mode production",
     "preview": "vite preview",
