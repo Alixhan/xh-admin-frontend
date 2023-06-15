@@ -25,8 +25,8 @@ const emits = defineEmits(['change'])
 const props = defineProps({
   columns: {
     type: Array,
-    required: true
-  }
+    required: true,
+  },
 })
 
 const columnsR = ref(props.columns)
@@ -43,7 +43,7 @@ const sortViewRef = (el) => {
         columns.splice(newIndex, 0, ...column)
         emits('change')
       }
-    }
+    },
   })
 }
 

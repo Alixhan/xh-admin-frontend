@@ -22,11 +22,89 @@ import {
   ElSwitch,
   ElTimePicker,
   ElTimeSelect,
-  ElUpload
+  ElUpload,
 } from 'element-plus'
 import SingleDatePicker from '@/components/form/SingleDatePicker.vue'
 import IconSelect from '@/components/form/IconSelect.vue'
 import MUpload from '@/components/form/Upload.vue'
+
+export declare type CommonColumnType =
+  | ''
+  | 'input'
+  | 'text'
+  | 'textarea'
+  | 'password'
+  | 'number'
+  | 'year'
+  | 'month'
+  | 'date'
+  | 'dates'
+  | 'datetime'
+  | 'week'
+  | 'datetimerange'
+  | 'daterange'
+  | 'monthrange'
+  | 'icon'
+  | 'cascader'
+  | 'checkbox'
+  | 'checkbox-button'
+  | 'checkbox-group'
+  | 'color-picker'
+  | 'date-picker'
+  | 'input-number'
+  | 'radio'
+  | 'radio-button'
+  | 'radio-group'
+  | 'rate'
+  | 'select'
+  | 'select-v2'
+  | 'slider'
+  | 'switch'
+  | 'time-picker'
+  | 'time-select'
+  | 'upload'
+  | 'upload-file'
+  | 'upload-img'
+
+/**
+ * 通用column类型
+ */
+export interface CommonColumn {
+  prop?: string
+  prop2?: string
+  type?: CommonColumnType
+  style?: string
+  valueFormat?: string
+  single?: boolean
+  itemList?: CommonItemList
+  labelKey?: string | ((item: CommonItemData) => string | number)
+  valueKey?: string | ((item: CommonItemData) => string | number)
+  rules?: import('@/utils/validate').ValidRule | Array<import('@/utils/validate').ValidRule>
+  slots?: {
+    [slotName: string]: (any) => any
+  }
+  itemParam?: {
+    border?: boolean
+  }
+  [any: string]: any
+}
+
+export declare type CommonItemList = CommonItemData[] | Promise<CommonItemData[]> | (() => CommonItemData[] | Promise<CommonItemData[]>)
+
+export interface CommonItemData {
+  value?: number | string
+  label?: number | string
+  // [any: string]: any
+}
+
+export interface CommonModelParam {
+  start?: number | string
+  end?: number | string
+  modelValue?: any
+  'onUpdate:modelValue'?: (val: any) => void
+  'onUpdate:start'?: (val: any) => void
+  'onUpdate:end'?: (val: any) => void
+}
 
 /**
  * 构造表单动态组件参数
@@ -37,20 +115,20 @@ export function generateDynamicColumn(column: CommonColumn) {
   if (!column.prop) return
   const param = {
     clearable: true,
-    ...column
+    ...column,
   }
   if (!['switch', 'radio', 'checkbox'].includes(param.type ?? '')) {
     param.style = 'width: 100%;' + param.style ?? ''
   }
   const slots = {
-    ...column.slots
+    ...column.slots,
   }
 
   // 没有默认插槽，给select，radio-group，checkbox-group初始化子选项
   if (!slots.default) {
     // 选项的通用参数
     const itemParam = {
-      ...param.itemParam
+      ...param.itemParam,
     }
     if (param.type === 'select') {
       // 下拉框option数据， ref
@@ -122,7 +200,7 @@ export function generateDynamicColumn(column: CommonColumn) {
   return {
     component,
     param,
-    slots
+    slots,
   }
 }
 
@@ -207,7 +285,7 @@ export function getItemListRef(column: CommonColumn): Ref<CommonItemData[]> {
       }
       return {
         label,
-        value
+        value,
       }
     })
   }
@@ -229,26 +307,37 @@ export function getItemListRef(column: CommonColumn): Ref<CommonItemData[]> {
  * 增强el-form表单验证
  */
 export function generateFormRules(column, formData) {
+  const rules = setRules(column)
+  if (!rules) return
+  column.rules = rules.map((i) => {
+    return {
+      required: i.required,
+      validator: async (rule, value, callback) => {
+        const errMsg = await ruleValid(i, value, formData, column.prop)
+        if (errMsg) callback(Error(errMsg?.toString()))
+        else callback()
+      },
+      trigger: i.trigger,
+    }
+  })
+  return column.rules
+}
+
+/**
+ * 设置一下rules
+ * @param column
+ */
+export function setRules(column) {
   if (!column.rules) return
   let rules = column.rules
-  if (rules) {
-    if (!(rules instanceof Array)) {
-      rules = [rules]
-    }
-    rules = rules.map((i) => {
-      i.label ??= column.label
-      return {
-        required: i.required,
-        validator: async (rule, value, callback) => {
-          const errMsg = await ruleValid(i, value, formData)
-          if (errMsg) callback(Error(errMsg?.toString()))
-          else callback()
-        },
-        trigger: i.trigger
-      }
-    })
-    return rules
+  if (!(rules instanceof Array)) {
+    rules = [rules]
   }
+  rules.forEach((rule) => {
+    rule.label ??= column.label
+  })
+  column.rules = rules
+  return rules
 }
 
 // 生成默认的formatter函数

@@ -1,23 +1,79 @@
 <script lang="tsx">
-import { createVNode, defineComponent, defineSlots, nextTick, ref, shallowRef, watch } from 'vue'
+import type { PropType, Ref } from 'vue'
+import { computed, createVNode, defineComponent, nextTick, ref, shallowRef, watch } from 'vue'
+import type { CommonColumn, CommonColumnType } from '@/components/mutils'
 import { generateDynamicColumn, generateFormatter, generateFormRules, getItemListRef, vModelValue } from '@/components/mutils'
 import TopFilter from '@/components/TopFilter.vue'
-import { useThrottleFn } from '@vueuse/core'
 import TableColumnSort from './TableColumnSort.vue'
 import ExportExcel from './ExportExcel.vue'
+import type { OperationButton } from './OperationButton.vue'
 import MOperationButton from './OperationButton.vue'
-import { useSystemStore } from '@/stores/system'
+import { useSystemStore } from '@/stores/system.js'
 import { ElTable } from 'element-plus'
 import { InfoFilled } from '@element-plus/icons-vue'
 import { auth } from '@/directive'
+import { isUndefined } from 'lodash'
 
-defineSlots<{
-  append?: (props: { msg: string }) => any
-  default?: (props: { msg: string }) => any
-  empty?: (props: { id: number }) => any
-  'left-action'?: (props: { msg: string }) => any
-  'right-action'?: (props: { id: number }) => any
-}>()
+// 表格列定义
+export interface TableColumn {
+  align?: 'left' | 'center' | 'right'
+  headerAlign?: 'left' | 'center' | 'right'
+  prop?: string
+  prop2?: string
+  fixed?: 'left' | 'right'
+  type?: CommonColumnType | 'selection' | 'index' | 'operation'
+  // 列的宽度
+  width?: number | string
+  buttons?: Array<OperationButton>
+  // 表格是否可编辑
+  editable?: boolean
+  // 表格编辑参数
+  editParam?: CommonColumn | ((row: object, column: TableColumn) => CommonColumn)
+  // 子项
+  children?: Array<TableColumn>
+}
+
+// 通用表格查询参数
+export interface PageQuery {
+  // 是否分页
+  isPage?: boolean
+  // 当前页码 分页为true时必有值
+  currentPage?: number
+  // 分页大小 分页为true时必有值
+  pageSize?: number
+  // 其他查询参数
+  param?: object
+  // 高级筛选条件
+  filters?: Array<any>
+}
+
+// 通用表格查询返回对象类型
+export interface PageResult {
+  // 列表数据
+  list: any[]
+  // 合计值
+  total: number
+  // 是否分页
+  isPage: boolean
+  // 当前页码 分页为true时必有值
+  currentPage?: number
+  // 分页大小 分页为true时必有值
+  pageSize?: number
+}
+
+// 通用表格分页参数对象类型
+export interface TablePagination {
+  // 合计值
+  total?: number
+  // 当前页码 分页为true时必有值
+  currentPage?: number
+  // 分页大小 分页为true时必有值
+  pageSize?: number
+  // 分页框有背景颜色，参考element-plus分页组件
+  background: true
+  // 显示哪些布局控件，参考element-plus分页组件
+  layout: 'total,sizes,prev,pager,next,jumper'
+}
 
 /**
  * 通用表格组件
@@ -28,85 +84,96 @@ export default defineComponent({
   name: 'MTable',
   extends: ElTable,
   props: {
+    style: {},
+    class: {},
     formType: {
       type: String,
-      default: 'add'
+      default: 'add',
     },
     // 是否是筛选过滤的表格，是：表格包含搜索框，同时布局有间距调整
     isFilterTable: {
-      type: Boolean
+      type: Boolean,
     },
     // 是否导出excel
     isExportExcel: {
       type: Boolean,
-      default: true
+      default: true,
+    },
+    // 导出的文件名
+    exportFileName: {
+      type: String,
+      default: '表格数据.xlsx',
+    },
+    // 是否表格列排序
+    isSortColumn: {
+      type: Boolean,
+      default: true,
+    },
+    // 是否高级筛选
+    isComplexFilter: {
+      type: Boolean,
+      default: false,
     },
     /**
      * 可选择行的表格 <multiple|single>
      */
     selection: {
-      type: String
+      type: String as PropType<'multiple' | 'single'>,
     },
     /**
      * 最多可选择行数
      */
     selectionLimit: {
       type: Number,
-      default: 0
-    },
-    // 导出的文件名
-    exportFileName: {
-      type: String,
-      default: '表格数据.xlsx'
     },
     // 过滤column
     filterColumns: {
-      type: Array
+      type: Array as PropType<CommonColumn>,
     },
     // 过滤param
     filterParam: {
-      type: Object
+      type: Object,
     },
     // 表格列定义
     columns: {
-      type: Array
+      type: Array as PropType<Array<TableColumn>>,
     },
     // 请求后台数据的方法
     fetchData: {
-      type: Function
+      type: Function as PropType<(pageQuery: PageQuery, option?: RequestOption) => Promise<{ data: PageResult }>>,
     },
     // 是否默认查询，启动就查询一次
     defaultQuery: {
       type: Boolean,
-      default: true
+      default: true,
     },
     // 表格数据
     data: {
-      type: Array
+      type: Array as PropType<any[]>,
     },
     // 分页对象
     isPage: {
       type: Boolean,
-      default: true
+      default: true,
     },
     // 分页对象
     pagination: {
-      type: Object
+      type: Object as PropType<TablePagination>,
     },
     stripe: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
   emits: [...(ElTable.emits as Iterable<any>), 'update:data'],
   setup(props, { attrs, emit, slots, expose }) {
     const systemStore = useSystemStore()
-    const pageQuery = ref({
-      isPage: props.isPage, // 是否分页
+    const pageQuery: Ref<PageQuery> = ref({
+      isPage: props.isPage ?? false, // 是否分页
       currentPage: 1, // 页码
       pageSize: 20, // 分页大小
       param: props.filterParam ?? {}, // 查询参数
-      filters: [] // 高级查询
+      filters: [], // 高级查询
     })
     watch(
       () => props.filterParam,
@@ -114,25 +181,35 @@ export default defineComponent({
     )
 
     // 表格数据
-    const data = ref(props.data || [])
+    const data: Ref<Array<any>> = ref(props.data || [])
     watch(
       () => props.data,
-      (val) => (data.value = val ?? [])
+      () => (data.value = props.data ?? [])
     )
-    // watch(() => data, val => props.data && emit('update:data', val))
+
+    // 当前分页数据
+    const pageData = computed(() => {
+      if (!props.fetchData) {
+        if (props.isPage) {
+          const start = pageQuery.value.pageSize! * (pageQuery.value.currentPage! - 1)
+          return data.value.slice(start, start + pageQuery.value.pageSize!)
+        }
+      }
+      return data.value
+    })
 
     // 分页信息对象
-    const pagination = ref({
+    const pagination = ref<TablePagination>({
       total: 0,
       currentPage: 1,
       pageSize: 20,
       background: true,
-      layout: 'total,sizes,prev,pager,next,jumper'
+      layout: 'total,sizes,prev,pager,next,jumper',
     })
     if (props.pagination) {
       pagination.value = Object.assign(props.pagination, {
         ...pagination.value,
-        ...props.pagination
+        ...props.pagination,
       })
     }
 
@@ -146,8 +223,9 @@ export default defineComponent({
     )
 
     const loadingRef = ref(false)
-    // 向后端请求表格数据, 函数节流
-    const fetchQuery = useThrottleFn(() => {
+
+    // 向后端请求表格数据
+    function fetchQuery() {
       if (props.fetchData) {
         props.fetchData(pageQuery.value, { loadingRef }).then((res) => {
           const resData = res.data
@@ -157,9 +235,10 @@ export default defineComponent({
             data.value = resData.list
           }
           pagination.value.total = resData.total
+          selectionChange([])
         })
       }
-    }, 1000)
+    }
 
     // 默认启动就查询
     props.defaultQuery && nextTick(fetchQuery)
@@ -182,7 +261,7 @@ export default defineComponent({
     expose({
       tableRef,
       formRef,
-      fetchQuery
+      fetchQuery,
     })
 
     function rowClick(row, column, event) {
@@ -190,7 +269,7 @@ export default defineComponent({
         selectionRows.value = [row]
         emit('selection-change', selectionRows.value)
       } else if (props.selection === 'multiple') {
-        if (selectionRows.value.length >= props.selectionLimit && !selectionRows.value.some((i) => i === row)) {
+        if (!isUndefined(props.selectionLimit) && selectionRows.value.length >= props.selectionLimit && !selectionRows.value.some((i) => i === row)) {
           return
         }
         tableRef.value.toggleRowSelection(row)
@@ -204,6 +283,7 @@ export default defineComponent({
     }
 
     function selectable(row) {
+      if (isUndefined(props.selectionLimit)) return true
       if (selectionRows.value.length >= props.selectionLimit) {
         return selectionRows.value.some((i) => i === row)
       }
@@ -246,6 +326,9 @@ export default defineComponent({
               if (!j.auth) return true
               return auth(j.auth, j.authLogic, j.authFull)
             })
+            //自动计算一下操作框的宽度
+            const buttons = i.buttons.slice(0, i.maxCount ?? 2)
+            i.width ??= buttons.reduce((size, item) => size + (item.label?.length ?? 0) + (item.icon ? 1 : 0), 0 + (buttons.length ?? 0)) * 15 + 20
             return i.buttons?.length
           }
           return true
@@ -263,7 +346,7 @@ export default defineComponent({
         key: column.prop ?? column.type,
         showOverflowTooltip: true,
         ...column,
-        slots: { ...column.slots }
+        slots: { ...column.slots },
       }
 
       // 递归生成多层级table
@@ -271,14 +354,17 @@ export default defineComponent({
         tableColumParams.children = tableColumParams.children.map((i) => initTableColumnParam(i))
       }
 
+      // 显示必填*号
       tableColumParams.required ??= (() => {
-        if (column.editParam?.rules) {
-          if (column.editParam.rules instanceof Array) {
-            return column.editParam.rules.some((i) => i.required)
+        const rules = column.rules ?? column.editParam?.rules
+        if (rules) {
+          if (rules instanceof Array) {
+            return rules.some((i) => i.required)
           }
-          return column.editParam.rules.required
+          return rules.required
         }
       })()
+
       // 优先使用自定义header插槽
       if ((tableColumParams.required || tableColumParams.comment) && !tableColumParams.slots.header) {
         tableColumParams.slots.header ??= () => {
@@ -294,8 +380,8 @@ export default defineComponent({
       // el-table序号列，自动添加标题，标题居中
       if (tableColumParams.type === 'index') {
         // 默认实现后端分页页码
-        if (props.fetchData) {
-          tableColumParams.index ??= (i) => pagination.value.pageSize * (pagination.value.currentPage - 1) + i + 1
+        if (props.isPage) {
+          tableColumParams.index ??= (i) => pagination.value.pageSize! * (pagination.value.currentPage! - 1) + i + 1
         }
       }
       // 如果是操作列需要生成操作按钮
@@ -303,7 +389,7 @@ export default defineComponent({
         tableColumParams.slots.default = (scope) =>
           createVNode(MOperationButton, {
             ...tableColumParams,
-            row: scope.row
+            row: scope.row,
           })
       }
       // 默认表格格式化函数
@@ -328,13 +414,13 @@ export default defineComponent({
         label: column.label,
         itemList: column.itemList,
         valueKey: column.valueKey,
-        labelKey: column.labelKey
+        labelKey: column.labelKey,
       }
       let renderArgsC
       if (!(column.editParam instanceof Function)) {
         renderArgsC = generateDynamicColumn({
           ...columnParam,
-          ...column.editParam
+          ...column.editParam,
         })
       }
       column.slots.default = (scope) => {
@@ -345,7 +431,7 @@ export default defineComponent({
           editParam = editParam(scope.row, column)
           renderArgs = generateDynamicColumn({
             ...columnParam,
-            ...editParam
+            ...editParam,
           })
         } else {
           renderArgs = renderArgsC
@@ -357,10 +443,10 @@ export default defineComponent({
               type: column.type,
               prop2: column.prop2,
               prop: column.prop,
-              single: column.single
+              single: column.single,
             },
             scope.row
-          )
+          ),
         }
 
         const formItemParam = {
@@ -368,7 +454,7 @@ export default defineComponent({
           prop,
           style: 'margin-bottom: 0;',
           inlineMessage: true,
-          rules: generateFormRules({ label: column.label, rules: editParam?.rules }, scope.row)
+          rules: generateFormRules({ label: column.label, rules: editParam?.rules }, scope.row),
         }
         return <el-form-item {...formItemParam}>{createVNode(renderArgs.component, renderArgs.param, renderArgs.slots)}</el-form-item>
       }
@@ -383,7 +469,7 @@ export default defineComponent({
       // 允许用户按照自己的slotName定制
       if (column.slotName && slots[column.slotName ?? '']) return slots[column.slotName ?? '']?.()
       const param = {
-        ...column
+        ...column,
       }
       delete param.slots
       delete param.children
@@ -407,14 +493,14 @@ export default defineComponent({
             <InfoFilled />
           </el-icon>,
           <span>
-            总共 <span class="total-text">{pagination.value.total}</span> 条数据
-          </span>
+            总共 <span class="total-text">{Math.max(pagination.value.total ?? 0, data.value.length)}</span> 条数据
+          </span>,
         ]
         if (props.selection) {
           content.push(
             <span>
               ，已选中 <span class="total-text">{selectionRows.value.length}</span>
-              {props.selectionLimit ? (
+              {!isUndefined(props.selectionLimit) ? (
                 <span>
                   {' '}
                   / <span class="total-text">{props.selectionLimit}</span>
@@ -442,7 +528,7 @@ export default defineComponent({
                 <span />
               </el-radio>
             )
-          }
+          },
         }
         return <el-table-column type="selection" fixed width="50" key="--" v-slots={slots} />
       }
@@ -454,9 +540,9 @@ export default defineComponent({
         ...attrs,
         ...props,
         ref: tableRef,
-        data: data.value,
+        data: pageData.value,
         onRowClick: rowClick,
-        onSelectionChange: selectionChange
+        onSelectionChange: selectionChange,
       }
       // 删除无效属性
       const invalidProps = [
@@ -469,7 +555,9 @@ export default defineComponent({
         'columns',
         'fetchData',
         'defaultQuery',
-        'pagination'
+        'pagination',
+        'style',
+        'class',
       ]
       invalidProps.forEach((property) => {
         delete tableParam[property]
@@ -484,7 +572,7 @@ export default defineComponent({
               </div>
               <div class="right-action">
                 {slots['right-action']?.()}
-                {props.isExportExcel ? (
+                {props.isExportExcel && (
                   <ExportExcel
                     class="action-btn"
                     pageQuery={pageQuery.value}
@@ -493,36 +581,45 @@ export default defineComponent({
                     data={data.value}
                     columns={columns.value}
                   />
-                ) : undefined}
-                <el-button icon="Operation" type="primary" text class="action-btn">
-                  高级筛选
-                </el-button>
-                <el-popover
-                  trigger="click"
-                  hideAfter={0}
-                  popper-style="min-width: 100px; width: auto;"
-                  v-slots={{
-                    reference() {
-                      return (
-                        <el-button type="primary" text icon="operation" class="action-btn">
-                          列排序
-                        </el-button>
-                      )
-                    }
-                  }}
-                >
-                  <TableColumnSort
-                    {...{
-                      columns: columns.value,
-                      onChange: initTableColumnParamFun
+                )}
+                {props.isComplexFilter && (
+                  <el-button icon="Operation" type="primary" text class="action-btn">
+                    高级筛选
+                  </el-button>
+                )}
+                {props.isSortColumn && (
+                  <el-popover
+                    trigger="click"
+                    hideAfter={0}
+                    popper-style="min-width: 100px; width: auto;"
+                    v-slots={{
+                      reference() {
+                        return (
+                          <el-button type="primary" text icon="operation" class="action-btn">
+                            列排序
+                          </el-button>
+                        )
+                      },
                     }}
-                  />
-                </el-popover>
+                  >
+                    <TableColumnSort
+                      {...{
+                        columns: columns.value,
+                        onChange: initTableColumnParamFun,
+                      }}
+                    />
+                  </el-popover>
+                )}
               </div>
             </el-scrollbar>
           </div>
           <el-form ref={formRef} class="table-form" model={props.data} scroll-to-error>
-            <el-table {...tableParam} v-slots={slots} v-loading={loadingRef.value} class={{ 'radio-selection': props.selection === 'single' }}>
+            <el-table
+              {...tableParam}
+              v-slots={slots}
+              v-loading={loadingRef.value}
+              class={{ 'el-table-view': true, 'radio-selection': props.selection === 'single' }}
+            >
               {generateSelectionColumn()}
               {tableColumnsParams.value.map((i) => generateTableColumn(i))}
             </el-table>
@@ -541,6 +638,7 @@ export default defineComponent({
           <el-scrollbar class="table-scrollbar pagination" wrap-style="height: auto;">
             <el-pagination
               {...pagination.value}
+              total={Math.max(pagination.value.total ?? 0, data.value.length)}
               small={systemStore.layout.widthShrink}
               layout={pagination.value.layout
                 .split(',')
@@ -558,13 +656,13 @@ export default defineComponent({
 
     return () => {
       return (
-        <div class={`m-table ${systemStore.layout.heightShrink ? 'height-shrink' : ''}`}>
+        <div class={`m-table ${systemStore.layout.heightShrink ? 'height-shrink' : ''} ${props.class}`} style={props.style}>
           {generateTopFilter()}
           {generateTableView()}
         </div>
       )
     }
-  }
+  },
 })
 </script>
 <style scoped lang="scss">
@@ -647,6 +745,10 @@ export default defineComponent({
       flex-grow: 1;
       height: 0;
 
+      .el-table-view {
+        height: 100%;
+      }
+
       :deep(.el-switch) {
         height: var(--el-input-height);
       }
@@ -709,7 +811,13 @@ export default defineComponent({
   width: 100%;
 
   :deep(.el-scrollbar__thumb) {
-    display: none;
+    //display: none;
+    z-index: 100000;
   }
 }
 </style>
+<template>
+  <!-- 此处添加只是为了有slot的提示 -->
+  <slot name="left-action" />
+  <slot name="right-action" />
+</template>

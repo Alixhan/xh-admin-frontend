@@ -19,6 +19,8 @@
       v-model:data="data"
     >
       <template #right-action>
+        <el-button v-auth="'add'" type="primary" icon="upload" @click="userImportRef.open()">导入</el-button>
+        <el-button v-auth="'add'" type="primary" icon="plus" @click="del(selectRows)">新增</el-button>
         <el-button v-auth="'del'" type="danger" icon="delete" :disabled="selectRows.length === 0" @click="del(selectRows)">删除 </el-button>
       </template>
     </m-table>
@@ -41,25 +43,28 @@
     </m-table>
     <el-dialog :title="formTitle[handleType]" v-model="formVisible" align-center draggable destroy-on-close
 :close-on-click-modal="false" width="70%">
-      <file-form :handle-type="handleType" :model-value="row" style="height: 75vh" @close="close" />
+      <user-form :handle-type="handleType" :model-value="row" style="height: 75vh" @close="close" />
     </el-dialog>
+    <user-import ref="userImportRef" />
   </div>
 </template>
-<script setup lang="jsx">
+<script setup lang="tsx">
+import type { Ref } from 'vue'
 import { reactive, ref, shallowRef } from 'vue'
 import { delUserByIds, queryUserList } from '@/api/system/user'
-import { statusList } from '@/views/system/file/constant'
-import FileForm from './userForm.vue'
+import { statusList } from '@/views/system/user/constant.js'
+import UserForm from './userForm.vue'
 import getDictDetails from '@/utils/dict'
+import UserImport from './userImport.vue'
 
 const formTitle = {
   edit: '文件编辑',
-  detail: '文件明细'
+  detail: '文件明细',
 }
 
 const tabs = [
   { id: 1, label: '用户管理' },
-  { id: 2, label: '用户组管理' }
+  { id: 2, label: '用户组管理' },
 ]
 const activeTab = ref(1)
 
@@ -71,18 +76,17 @@ const filterParam = reactive({})
 
 const topFilterColumns = shallowRef([{ prop: 'name', label: '用户名' }])
 
-const columns = ref([
+const columns: Ref<Array<TableColumn>> = ref([
   { type: 'selection', width: 50 },
   { type: 'index', label: '序', width: 50 },
   { prop: 'id', label: 'ID', width: 50 },
   { prop: 'code', label: '用户账号' },
   { prop: 'name', label: '用户名称' },
   { prop: 'status', label: '用户状态', type: 'select', itemList: statusList },
-  { prop: 'enabled', label: '是否启用', type: 'select', itemList: getDictDetails(1) },
+  { prop: 'enabled', label: '是否启用', type: 'select', itemList: getDictDetails(1, 'boolean') },
   { prop: 'createTime', label: '创建时间', type: 'datetime', width: 155 },
   {
     type: 'operation',
-    width: 130,
     fixed: 'right',
     align: 'center',
     buttons: [
@@ -90,16 +94,16 @@ const columns = ref([
       {
         label: '明细',
         auth: 'detail',
-        onClick: (row) => openForm('detail', row)
+        onClick: (row) => openForm('detail', row),
       },
       {
         label: '删除',
         auth: 'del',
         type: 'danger',
-        onClick: (row) => del([row])
-      }
-    ]
-  }
+        onClick: (row) => del([row]),
+      },
+    ],
+  },
 ])
 
 const tableRef2 = ref()
@@ -115,11 +119,10 @@ const columns2 = ref([
   { type: 'index', label: '序', width: 50 },
   { prop: 'id', label: 'ID', width: 50 },
   { prop: 'code', label: '用户组名称' },
-  { prop: 'enabled', label: '是否启用', type: 'select', itemList: getDictDetails(1) },
+  { prop: 'enabled', label: '是否启用', type: 'select', itemList: getDictDetails(1, 'boolean') },
   { prop: 'createTime', label: '创建时间', type: 'datetime', width: 155 },
   {
     type: 'operation',
-    width: 130,
     fixed: 'right',
     align: 'center',
     buttons: [
@@ -127,16 +130,16 @@ const columns2 = ref([
       {
         label: '明细',
         auth: 'detail',
-        onClick: (row) => openForm('detail', row)
+        onClick: (row) => openForm('detail', row),
       },
       {
         label: '删除',
         auth: 'del',
         type: 'danger',
-        onClick: (row) => del([row])
-      }
-    ]
-  }
+        onClick: (row) => del([row]),
+      },
+    ],
+  },
 ])
 
 const formVisible = ref(false)
@@ -154,7 +157,7 @@ function del(rows) {
     showLoading: true,
     showBeforeConfirm: true,
     showSuccessMsg: true,
-    confirmMsg: '确认删除吗？此操作会删除实际文件，删除后不可恢复！'
+    confirmMsg: '确认删除吗？此操作会删除实际文件，删除后不可恢复！',
   }).then(() => {
     tableRef.value.fetchQuery()
   })
@@ -166,6 +169,8 @@ function close(type) {
     tableRef.value.fetchQuery()
   }
 }
+
+const userImportRef = ref()
 </script>
 <style lang="scss" scoped>
 .root {

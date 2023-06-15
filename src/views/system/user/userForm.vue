@@ -27,9 +27,9 @@ import { getDownloadFileUrl } from '@/utils'
 const props = defineProps({
   handleType: {
     type: String,
-    default: 'add'
+    default: 'add',
   },
-  modelValue: {}
+  modelValue: {},
 })
 const emit = defineEmits(['close'])
 
@@ -45,14 +45,14 @@ if (props.handleType !== 'add') {
       formData.value.image = [
         {
           url: getDownloadFileUrl({ object: formData.value.object }),
-          name: formData.value.name
-        }
+          name: formData.value.name,
+        },
       ]
     }
   })
 }
 
-// 表单字段根据表单数据变化，有所不同
+// 表格列定义
 const columns = ref([])
 watchEffect(() => {
   columns.value = [
@@ -62,7 +62,7 @@ watchEffect(() => {
       type: 'upload-img',
       cols: 2,
       hidden: !(formData.value.contentType ?? '').startsWith('image'),
-      disabled: true
+      disabled: true,
     },
     { prop: 'object', label: '对象存储key', disabled: true },
     { prop: 'name', label: '文件名', rules: { required: true } },
@@ -70,7 +70,7 @@ watchEffect(() => {
       prop: 'contentType',
       label: '文件类型',
       disabled: true,
-      comment: '文件的MIME类型'
+      comment: '文件的MIME类型',
     },
     { prop: 'suffix', label: '文件后缀扩展名', disabled: true },
     { prop: 'size', label: '文件大小', disabled: true },
@@ -82,15 +82,15 @@ watchEffect(() => {
       label: '文件状态',
       type: 'select',
       itemList: statusList,
-      disabled: true
+      disabled: true,
     },
     {
       prop: 'sha1',
       label: '文件摘要sha1',
       disabled: true,
-      comment: '同一个文件的sha1相同，相同sha1不会重复上传文件'
+      comment: '同一个文件的sha1相同，相同sha1不会重复上传文件',
     },
-    { prop: 'createTime', label: '上传时间', disabled: true }
+    { prop: 'createTime', label: '上传时间', disabled: true },
   ]
 })
 
@@ -100,7 +100,7 @@ function save() {
     postSaveFile(formData.value, {
       loadingRef: saveLoading,
       showSuccessMsg: true,
-      successMsg: '保存成功'
+      successMsg: '保存成功',
     }).then(() => close('refresh'))
   })
 }

@@ -17,7 +17,7 @@
 import { reactive } from 'vue'
 
 const formData = reactive({
-  currentPage1: 1
+  currentPage1: 1,
 })
 </script>
 <style lang="scss" scoped></style>

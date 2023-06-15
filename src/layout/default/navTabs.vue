@@ -139,7 +139,7 @@ function clickMenu(menu) {
 }
 </script>
 <style scoped lang="scss">
-$transition-time: all 0.3s linear;
+$transition-time: all 0.2s linear;
 
 .nav-tabs {
   height: auto;

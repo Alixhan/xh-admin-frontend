@@ -18,8 +18,8 @@
       </template>
     </m-table>
     <el-dialog :title="formTitle[handleType]" v-model="formVisible" align-center draggable destroy-on-close
-:close-on-click-modal="false" width="70%">
-      <file-form :handle-type="handleType" :model-value="row" style="height: 75vh" @close="close" />
+:close-on-click-modal="false" width="60%">
+      <file-form :handle-type="handleType" :model-value="row" style="height: 550px" @close="close" />
     </el-dialog>
   </div>
 </template>
@@ -76,7 +76,6 @@ const columns = ref([
   { prop: 'createTime', label: '上传时间', type: 'datetime', width: 155 },
   {
     type: 'operation',
-    width: 130,
     fixed: 'right',
     align: 'center',
     buttons: [

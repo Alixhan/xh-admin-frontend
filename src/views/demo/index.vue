@@ -21,7 +21,7 @@ import { reactive } from 'vue'
 import { useSystemStore } from '@/stores/system'
 
 const formData = reactive({
-  currentPage1: 1
+  currentPage1: 1,
 })
 
 const systemStore = useSystemStore()

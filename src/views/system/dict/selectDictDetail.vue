@@ -24,7 +24,7 @@
 <script setup lang="jsx">
 import { ref, shallowRef } from 'vue'
 import { queryDictDetailList } from '@/api/system/dict'
-import { sfList } from '@/views/system/menu/constant'
+import getDictDetails from '@/utils/dict'
 
 defineProps({
   selection: {
@@ -51,10 +51,10 @@ const topFilterColumns = shallowRef([
   { prop: 'dictTypeName', label: '字典类型', readonly: true },
   { prop: 'value', label: '字典值key' },
   { prop: 'label', label: '字典名称' },
-  { prop: 'enabled', label: '是否启用', type: 'select', itemList: sfList }
+  { prop: 'enabled', label: '是否启用', type: 'select', itemList: getDictDetails(1, 'boolean') },
 ])
 
-// 表单字段根据表单数据变化，有所不同
+// 表格列定义
 const columns = ref([
   { type: 'index', label: '序', width: 50 },
   { prop: 'id', label: 'ID', width: 50 },
@@ -66,9 +66,9 @@ const columns = ref([
     prop: 'order',
     label: '排序号',
     width: 85,
-    comment: '数据字典的排列顺序，小号排在前，大号排在后。'
+    comment: '数据字典的排列顺序，小号排在前，大号排在后。',
   },
-  { prop: 'enabled', label: '是否启用', type: 'select', itemList: sfList },
+  { prop: 'enabled', label: '是否启用', type: 'select', itemList: getDictDetails(1, 'boolean') },
   { prop: 'createTime', label: '创建时间', type: 'datetime', width: 155 },
   { prop: 'updateTime', label: '修改时间', type: 'datetime', width: 155 }
 ])

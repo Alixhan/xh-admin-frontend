@@ -2,17 +2,11 @@
   <div class="root">
     <el-scrollbar class="left-tree-view">
       <div class="tree-filter-view">
-        <el-input v-model="dictTypeQueryParam.param.name" placeholder="字典类型名称" clearable />
-        <el-button style="margin-left: 10px" icon="refresh" type="primary" @click="queryDictType" />
+        <el-input v-model="orgQueryParam.name" placeholder="机构名称" clearable />
+        <el-button style="margin-left: 10px" icon="refresh" type="primary" @click="getOrgTree" />
       </div>
-      <el-tree
-        node-key="id"
-        :expand-on-click-node="false"
-        default-expand-all
-        :data="dictTypeData"
-        :props="defaultProps"
-        @node-click="handleNodeClick"
-      />
+      <el-tree node-key="id" :expand-on-click-node="false" default-expand-all :data="orgData" :props="defaultProps"
+@node-click="handleNodeClick" />
     </el-scrollbar>
     <m-table
       class="m-table"
@@ -22,12 +16,12 @@
       :filter-param="filterParam"
       :filter-columns="topFilterColumns"
       :columns="columns"
-      :fetch-data="queryDictDetailList"
+      :fetch-data="queryOrgList"
       v-model:data="data"
       @selection-change="(rows) => (selectRows = rows)"
     >
       <template #right-action>
-        <el-button v-auth="'add'" type="primary" icon="plus" @click="openForm('add')"> 新增 </el-button>
+        <el-button v-auth="'add'" type="primary" icon="plus" @click="openForm('add')"> 新增</el-button>
         <el-button v-auth="'del'" type="danger" icon="delete" :disabled="selectRows.length === 0" @click="del(selectRows)"> 删除 </el-button>
       </template>
     </m-table>
@@ -40,41 +34,53 @@
       :close-on-click-modal="false"
       width="600"
     >
-      <dict-form :handle-type="handleType" :model-value="row" style="height: 50vh" @close="close" />
+      <org-form :handle-type="handleType" :model-value="row" style="height: 50vh" @close="close" />
     </el-dialog>
   </div>
 </template>
 <script setup lang="jsx">
 import { reactive, ref, shallowRef } from 'vue'
-import { delDictDetailByIds, queryDictDetailList, queryDictTypeList } from '@/api/system/dict'
-import DictForm from './dictForm.vue'
+import { delOrgByIds, queryOrgList, queryOrgTree } from '@/api/system/org'
+import OrgForm from './orgForm.vue'
 import getDictDetails from '@/utils/dict'
 
 const formTitle = {
-  add: '数据字典新增',
-  edit: '数据字典编辑',
-  detail: '数据字典明细',
+  add: '机构新增',
+  edit: '机构编辑',
+  detail: '机构明细'
 }
 
-const dictTypeData = ref([])
-const dictTypeQueryParam = ref({
-  isPage: false,
-  param: {
-    name: '',
-  },
+const orgData = ref([])
+const orgQueryParam = ref({
+  name: ''
 })
-queryDictType()
+getOrgTree()
 
-function queryDictType() {
-  queryDictTypeList(dictTypeQueryParam.value).then((res) => {
-    dictTypeData.value = [{ id: 0, name: '全部字典', children: res.data.list }]
+function getOrgTree() {
+  queryOrgTree(orgQueryParam.value).then((res) => {
+    const list = res.data.list
+    const obj = {}
+    list.forEach((i) => {
+      i.children = []
+      obj[i.id] = i
+    })
+    const data = list.filter((i) => {
+      const parent = obj[i.parentId]
+      if (parent) {
+        parent.children.push(i)
+        return false
+      }
+      // parentId不存在的为根元素
+      return true
+    })
+    orgData.value = [{ id: 0, name: '全部机构', children: data }]
   })
 }
 
 const tableRef = ref()
 const defaultProps = {
   children: 'children',
-  label: 'name',
+  label: 'name'
 }
 
 const data = ref([])
@@ -82,11 +88,11 @@ const selectRows = ref([])
 const filterParam = reactive({})
 
 const topFilterColumns = shallowRef([
-  { prop: 'dictTypeId', label: '字典类型ID', hidden: true },
-  { prop: 'dictTypeName', label: '字典类型', readonly: true },
-  { prop: 'value', label: '字典值key' },
-  { prop: 'label', label: '字典名称' },
-  { prop: 'enabled', label: '是否启用', type: 'select', itemList: getDictDetails(1, 'boolean') },
+  { prop: 'parentId', label: '上级机构ID' },
+  { prop: 'parentName', label: '上级机构名称' },
+  { prop: 'code', label: '机构代码' },
+  { prop: 'name', label: '机构名称' },
+  { prop: 'enabled', label: '是否启用', type: 'select', itemList: getDictDetails(1, 'boolean') }
 ])
 const columns = ref([
   {
@@ -111,31 +117,31 @@ const columns = ref([
   { type: 'selection' },
   { type: 'index', label: '序', width: 50 },
   { prop: 'id', label: 'ID', width: 50 },
-  { prop: 'dictTypeName', label: '字典类型' },
-  { prop: 'parentId', label: '上级id' },
-  { prop: 'value', label: '字典key' },
-  { prop: 'label', label: '字典名称' },
-  {
-    prop: 'order',
-    label: '排序号',
-    width: 85,
-    comment: '数据字典的排列顺序，小号排在前，大号排在后。',
-  },
+  { prop: 'parentId', label: '上级机构ID', width: 100 },
+  { prop: 'parentName', label: '上级机构名称', width: 120 },
+  { prop: 'code', label: '机构代码' },
+  { prop: 'name', label: '机构名称' },
   { prop: 'enabled', label: '是否启用', type: 'select', itemList: getDictDetails(1, 'boolean') },
   { prop: 'createTime', label: '创建时间', type: 'datetime', width: 155 },
-  { prop: 'updateTime', label: '修改时间', type: 'datetime', width: 155 },
+  { prop: 'updateTime', label: '修改时间', type: 'datetime', width: 155 }
 ])
 
 const formVisible = ref(false)
 const handleType = ref()
 const row = ref()
+const currentNode = ref()
 
 function handleNodeClick(node) {
-  filterParam.dictTypeId = node.id
-  filterParam.dictTypeName = node.name
+  filterParam.parentId = node.id
+  filterParam.parentName = node.name
+  currentNode.value = {
+    parentId: node.id,
+    parentName: node.name,
+  }
   if (node.id === 0) {
-    filterParam.dictTypeId = ''
-    filterParam.dictTypeName = ''
+    filterParam.parentId = ''
+    filterParam.parentName = ''
+    currentNode.value = {}
   }
   tableRef.value.fetchQuery()
 }
@@ -144,8 +150,8 @@ function openForm(type, r) {
   row.value = r
   if (type === 'add') {
     row.value = {
-      dictTypeId: filterParam.dictTypeId,
-      dictTypeName: filterParam.dictTypeName,
+      parentId: currentNode.value?.parentId,
+      parentName: currentNode.value?.parentName
     }
   }
   formVisible.value = true
@@ -153,11 +159,11 @@ function openForm(type, r) {
 }
 
 function del(rows) {
-  delDictDetailByIds(rows.map((i) => i.id).join(','), {
+  delOrgByIds(rows.map((i) => i.id).join(','), {
     showLoading: true,
     showBeforeConfirm: true,
     showSuccessMsg: true,
-    confirmMsg: '确认删除吗？删除后不可恢复！',
+    confirmMsg: '确认删除吗？删除后不可恢复！'
   }).then(() => {
     tableRef.value.fetchQuery()
   })

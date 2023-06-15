@@ -35,6 +35,7 @@
       </div>
     </template>
     <el-image-viewer
+      teleported
       v-if="previewImageVisible"
       :url-list="previewImageUrlList"
       hide-on-click-modal

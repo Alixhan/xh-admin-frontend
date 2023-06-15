@@ -4,7 +4,7 @@
 export const xmztOptions = {
   X: '进行中',
   K: '开标中',
-  F: '已结束'
+  F: '已结束',
 }
 
 /**
@@ -29,7 +29,7 @@ export const jyztOptions = {
   '0231': '水电fjhgf鬼地方个费',
   '0123': '水电的费',
   340: '水电水电费水电费费',
-  999: '999'
+  999: '999',
 }
 
 /**
@@ -40,7 +40,7 @@ export const bztOptions = {
   A: '报价中',
   F: '报价结束',
   P: '已流拍',
-  R: '已回收'
+  R: '已回收',
 }
 
 /**
@@ -50,7 +50,7 @@ export const plbzOptions = {
   1: '国三',
   2: '国四',
   3: '国五',
-  4: '国六'
+  4: '国六',
 }
 
 /**
@@ -59,5 +59,5 @@ export const plbzOptions = {
 export const bsxOptions = {
   1: '手动',
   2: '自动',
-  3: '手自一体'
+  3: '手自一体',
 }

@@ -12,23 +12,23 @@ import { ElMessageBox } from 'element-plus'
  */
 
 defineOptions({
-  name: 'MComment'
+  name: 'MComment',
 })
 
 const props = defineProps({
   label: {
-    type: String
+    type: String,
   },
   comment: {
-    required: true
-  }
+    required: true,
+  },
 })
 
 // 显示疑问注释信息
 function openComment() {
   ElMessageBox({
     title: (props.label ?? '') + '❔',
-    message: props.comment
+    message: props.comment,
   }).catch((e) => e)
 }
 </script>

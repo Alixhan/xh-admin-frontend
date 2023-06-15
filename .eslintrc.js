@@ -45,6 +45,14 @@ module.exports = {
       }
     ],
     'prefer-promise-reject-errors': 0,
-    'vue/require-default-prop': 0
+    'vue/require-default-prop': 0,
+    // 修改标签属性的 eslint 规则 允许标签属性换行
+    'vue/first-attribute-linebreak': [
+      'error',
+      {
+        singleline: 'ignore',
+        multiline: 'ignore'
+      }
+    ],
   }
 }

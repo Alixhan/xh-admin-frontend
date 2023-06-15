@@ -29,7 +29,7 @@ const saveLoading = ref(false)
 
 const formData = reactive({})
 
-// 表单字段根据表单数据变化，有所不同
+// 表单列定义
 const columns = ref([
   { prop: 'input', label: 'input输入框' },
   {
@@ -39,8 +39,8 @@ const columns = ref([
     itemList: [
       { value: '1', label: '选我发大财' },
       { value: '2', label: '选我心想事成' },
-      { value: '3', label: '选身体健康' }
-    ]
+      { value: '3', label: '选身体健康' },
+    ],
   },
   {
     prop: 'select',
@@ -52,8 +52,8 @@ const columns = ref([
     itemList: [
       { id: '1', name: '选我发大财' },
       { id: '2', name: '选我心想事成' },
-      { id: '3', name: '选我身体健康' }
-    ]
+      { id: '3', name: '选我身体健康' },
+    ],
   },
   {
     prop: 'autocomplete',
@@ -67,13 +67,13 @@ const columns = ref([
         { value: 'mint-ui', link: 'https://github.com/ElemeFE/mint-ui' },
         { value: 'vuex', link: 'https://github.com/vuejs/vuex' },
         { value: 'vue-router', link: 'https://github.com/vuejs/vue-router' },
-        { value: 'babel', link: 'https://github.com/babel/babel' }
+        { value: 'babel', link: 'https://github.com/babel/babel' },
       ]
       callbback(res.filter((i) => i.value.indexOf(queryString) !== -1))
     },
     onSelect(item) {
       console.log(item)
-    }
+    },
   },
   {
     prop: 'cascader',
@@ -90,21 +90,21 @@ const columns = ref([
             children: [
               {
                 value: 'consistency',
-                label: 'Consistency'
+                label: 'Consistency',
               },
               {
                 value: 'feedback',
-                label: 'Feedback'
+                label: 'Feedback',
               },
               {
                 value: 'efficiency',
-                label: 'Efficiency'
+                label: 'Efficiency',
               },
               {
                 value: 'controllability',
-                label: 'Controllability'
-              }
-            ]
+                label: 'Controllability',
+              },
+            ],
           },
           {
             value: 'navigation',
@@ -112,15 +112,15 @@ const columns = ref([
             children: [
               {
                 value: 'side nav',
-                label: 'Side Navigation'
+                label: 'Side Navigation',
               },
               {
                 value: 'top nav',
-                label: 'Top Navigation'
-              }
-            ]
-          }
-        ]
+                label: 'Top Navigation',
+              },
+            ],
+          },
+        ],
       },
       {
         value: 'component',
@@ -132,25 +132,25 @@ const columns = ref([
             children: [
               {
                 value: 'layout',
-                label: 'Layout'
+                label: 'Layout',
               },
               {
                 value: 'color',
-                label: 'Color'
+                label: 'Color',
               },
               {
                 value: 'typography',
-                label: 'Typography'
+                label: 'Typography',
               },
               {
                 value: 'icon',
-                label: 'Icon'
+                label: 'Icon',
               },
               {
                 value: 'button',
-                label: 'Button'
-              }
-            ]
+                label: 'Button',
+              },
+            ],
           },
           {
             value: 'form',
@@ -158,63 +158,63 @@ const columns = ref([
             children: [
               {
                 value: 'radio',
-                label: 'Radio'
+                label: 'Radio',
               },
               {
                 value: 'checkbox',
-                label: 'Checkbox'
+                label: 'Checkbox',
               },
               {
                 value: 'input',
-                label: 'Input'
+                label: 'Input',
               },
               {
                 value: 'input-number',
-                label: 'InputNumber'
+                label: 'InputNumber',
               },
               {
                 value: 'select',
-                label: 'Select'
+                label: 'Select',
               },
               {
                 value: 'cascader',
-                label: 'Cascader'
+                label: 'Cascader',
               },
               {
                 value: 'switch',
-                label: 'Switch'
+                label: 'Switch',
               },
               {
                 value: 'slider',
-                label: 'Slider'
+                label: 'Slider',
               },
               {
                 value: 'time-picker',
-                label: 'TimePicker'
+                label: 'TimePicker',
               },
               {
                 value: 'date-picker',
-                label: 'DatePicker'
+                label: 'DatePicker',
               },
               {
                 value: 'datetime-picker',
-                label: 'DateTimePicker'
+                label: 'DateTimePicker',
               },
               {
                 value: 'upload',
-                label: 'Upload'
+                label: 'Upload',
               },
               {
                 value: 'rate',
-                label: 'Rate'
+                label: 'Rate',
               },
               {
                 value: 'form',
-                label: 'Form'
-              }
-            ]
-          }
-        ]
+                label: 'Form',
+              },
+            ],
+          },
+        ],
       },
       {
         value: 'resource',
@@ -222,25 +222,25 @@ const columns = ref([
         children: [
           {
             value: 'axure',
-            label: 'Axure Components'
+            label: 'Axure Components',
           },
           {
             value: 'sketch',
-            label: 'Sketch Templates'
+            label: 'Sketch Templates',
           },
           {
             value: 'docs',
-            label: 'Design Documentation'
-          }
-        ]
-      }
+            label: 'Design Documentation',
+          },
+        ],
+      },
     ],
     props: {
-      expandTrigger: 'hover'
+      expandTrigger: 'hover',
     },
     onChange(val) {
       console.log(val)
-    }
+    },
   },
   { prop: 'checkbox', label: 'checkbox', type: 'checkbox' },
   {
@@ -251,20 +251,20 @@ const columns = ref([
     itemList: [
       { value: '1', label: '选我发大财' },
       { value: '2', label: '选我心想事成' },
-      { value: '3', label: '选身体健康' }
-    ]
+      { value: '3', label: '选身体健康' },
+    ],
   },
   {
     prop: 'colorpicker',
     label: 'color-picker颜色选择器',
-    type: 'color-picker'
+    type: 'color-picker',
   },
   { prop: 'date', label: '日期选择', type: 'date' },
   {
     prop: 'datedaterange',
     prop2: 'datedaterange2',
     label: '日期段选择',
-    type: 'daterange'
+    type: 'daterange',
   },
   {
     prop: 'datedaterange',
@@ -272,12 +272,12 @@ const columns = ref([
     label: '日期段独立选择',
     type: 'daterange',
     single: true,
-    comment: '如果需要时间段起止独立选择，则可以设置single为true, 其他时间段选择使用一致，datetimerange, monthrange'
+    comment: '如果需要时间段起止独立选择，则可以设置single为true, 其他时间段选择使用一致，datetimerange, monthrange',
   },
   {
     prop: 'input-number',
     label: 'Input Number 数字输入框',
-    type: 'input-number'
+    type: 'input-number',
   },
   { prop: 'radio', label: 'radio', type: 'radio' },
   {
@@ -288,8 +288,8 @@ const columns = ref([
     itemList: [
       { value: '1', label: '选我发大财' },
       { value: '2', label: '选我心想事成' },
-      { value: '3', label: '选身体健康' }
-    ]
+      { value: '3', label: '选身体健康' },
+    ],
   },
   {
     prop: 'radiogroup',
@@ -301,11 +301,11 @@ const columns = ref([
     itemList: [
       { id: '1', label: '选我发大财' },
       { id: '2', label: '选我心想事成' },
-      { id: '3', label: '选身体健康' }
+      { id: '3', label: '选身体健康' },
     ],
     itemParam: {
-      border: false
-    }
+      border: false,
+    },
   },
   { prop: 'rate', label: 'rate评分', type: 'rate' },
   { prop: 'slider', label: 'rate滑块', type: 'slider' },
@@ -314,7 +314,7 @@ const columns = ref([
     prop: 'input2',
     label: '输入框验证',
     comment: '验证在兼容原element验证的基础上进行了增强,如：默认将label拼接至错误消息中，添加了一些常用的验证等， 具体可以查看/utils/validate.js',
-    rules: [{ required: true, type: 'number' }]
+    rules: [{ required: true, type: 'number' }],
   },
   {
     prop: 'file',
@@ -322,7 +322,7 @@ const columns = ref([
     type: 'upload-img',
     rules: [{ required: true, trigger: 'change' }],
     multiple: true,
-    limit: 5
+    limit: 5,
   },
   {
     prop: 'file2',
@@ -337,7 +337,7 @@ const columns = ref([
         </a>
       </span>
     ),
-    cropper: {}
+    cropper: {},
   },
   {
     prop: 'file4',
@@ -356,15 +356,15 @@ const columns = ref([
       // 固定比例
       fixed: true,
       // 固定比例
-      fixedNumber: [1, 1]
-    }
+      fixedNumber: [1, 1],
+    },
   },
   {
     prop: 'file3',
     label: '文件上传',
     type: 'upload-file',
-    limit: 5
-  }
+    limit: 5,
+  },
 ])
 
 async function submit() {

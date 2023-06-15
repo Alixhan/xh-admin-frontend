@@ -30,8 +30,9 @@
 <script setup lang="jsx">
 import { reactive, ref, shallowRef } from 'vue'
 import { delMenuByIds, postSwitchMenuProp, queryMenuList } from '@/api/system/menu'
-import { menuTypeList, sfList } from '@/views/system/menu/constant'
+import { menuTypeList } from '@/views/system/menu/constant'
 import MenuForm from './menuForm.vue'
+import getDictDetails from '@/utils/dict'
 
 const formTitle = {
   copy: '菜单复制',
@@ -48,7 +49,7 @@ const filterParam = reactive({})
 
 const topFilterColumns = shallowRef([
   { prop: 'title', label: '菜单标题' },
-  { prop: 'enabled', label: '是否启用', type: 'select', itemList: sfList }
+  { prop: 'enabled', label: '是否启用', type: 'select', itemList: getDictDetails(1, 'boolean') }
 ])
 
 const columns = ref([
@@ -62,13 +63,13 @@ const columns = ref([
   {
     prop: 'cache',
     label: '缓存',
-    itemList: sfList,
+    itemList: getDictDetails(1, 'boolean'),
     slots: { default: switchSlot }
   },
   {
     prop: 'enabled',
     label: '启用',
-    itemList: sfList,
+    itemList: getDictDetails(1, 'boolean'),
     slots: { default: switchSlot }
   },
   {
@@ -85,7 +86,6 @@ const columns = ref([
   { prop: 'updateTime', label: '修改时间', type: 'datetime', width: 155 },
   {
     type: 'operation',
-    width: 130,
     fixed: 'right',
     align: 'center',
     buttons: [

@@ -13,8 +13,3 @@ export const handleTypeList = [
   { value: 'iframe', label: 'iframe' },
   { value: 'outer', label: 'outer' }
 ]
-
-export const sfList = [
-  { value: true, label: '是' },
-  { value: false, label: '否' }
-]
