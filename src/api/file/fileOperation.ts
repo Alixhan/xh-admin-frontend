@@ -1,11 +1,12 @@
 import createAxios from '@/utils/request'
+import type { AxiosProgressEvent } from 'axios/index'
 
 const fileBaseUrl = import.meta.env.VITE_FILE_BASE_URL
 
 /**
  * 文件上传
  */
-export function uploadFile(file: File, onUploadProgress = () => {}) {
+export function uploadFile(file: File, onUploadProgress: ((event:AxiosProgressEvent) => void) = () => {}) {
   const formData = new FormData()
   formData.append('file', file)
   return createAxios().post(`${fileBaseUrl}/api/file/operation/upload`, formData, {

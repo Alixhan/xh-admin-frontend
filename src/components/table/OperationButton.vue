@@ -94,4 +94,10 @@ if (storage.value) {
   display: inline-flex;
   align-items: center;
 }
+
+:deep(.el-dropdown-menu__item) {
+  .el-icon {
+    margin-right: 5px;
+  }
+}
 </style>

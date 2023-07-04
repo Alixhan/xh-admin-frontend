@@ -11,6 +11,7 @@
     <m-table
       class="m-table"
       ref="tableRef"
+      :layout="systemStore.layout.widthShrink ? 'auto' : undefined"
       is-filter-table
       row-key="id"
       :filter-param="filterParam"
@@ -43,6 +44,7 @@ import { reactive, ref, shallowRef } from 'vue'
 import { delOrgByIds, queryOrgList, queryOrgTree } from '@/api/system/org'
 import OrgForm from './orgForm.vue'
 import getDictDetails from '@/utils/dict'
+import { useSystemStore } from '@/stores/system'
 
 const formTitle = {
   add: '机构新增',
@@ -50,6 +52,7 @@ const formTitle = {
   detail: '机构明细'
 }
 
+const systemStore = useSystemStore()
 const orgData = ref([])
 const orgQueryParam = ref({
   name: ''
@@ -203,6 +206,7 @@ function close(type) {
 
 .width-shrink-layout {
   .root {
+    height: auto;
     flex-wrap: wrap;
 
     .left-tree-view {

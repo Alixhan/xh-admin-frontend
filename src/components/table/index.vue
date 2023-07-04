@@ -75,6 +75,8 @@ export interface TablePagination {
   layout: 'total,sizes,prev,pager,next,jumper'
 }
 
+export declare type TableSelection = 'multiple' | 'single'
+
 /**
  * 通用表格组件
  * sxh
@@ -89,6 +91,10 @@ export default defineComponent({
     formType: {
       type: String,
       default: 'add',
+    },
+    // 如果高度随内容自动增高：则需要设置为 "auto", 如果表格高度制定了则需要设定为 "stretch"
+    layout: {
+      type: String as PropType<'auto' | 'stretch'>,
     },
     // 是否是筛选过滤的表格，是：表格包含搜索框，同时布局有间距调整
     isFilterTable: {
@@ -118,7 +124,7 @@ export default defineComponent({
      * 可选择行的表格 <multiple|single>
      */
     selection: {
-      type: String as PropType<'multiple' | 'single'>,
+      type: String as PropType<TableSelection>,
     },
     /**
      * 最多可选择行数
@@ -242,10 +248,10 @@ export default defineComponent({
 
     // 默认启动就查询
     props.defaultQuery && nextTick(fetchQuery)
-
     const formRef = ref()
     const tableRef = ref()
 
+    //表格列参数定义
     const columns = shallowRef([])
     // 表格列参数
     const tableColumnsParams = shallowRef<TableColumn[]>([])
@@ -256,6 +262,7 @@ export default defineComponent({
       { deep: true }
     )
 
+    //选中行的数据
     const selectionRows = ref<any[]>([])
 
     expose({
@@ -328,7 +335,7 @@ export default defineComponent({
             })
             //自动计算一下操作框的宽度
             const buttons = i.buttons.slice(0, i.maxCount ?? 2)
-            i.width ??= buttons.reduce((size, item) => size + (item.label?.length ?? 0) + (item.icon ? 1 : 0), 0 + (buttons.length ?? 0)) * 15 + 20
+            i.width ??= buttons.reduce((size, item) => size + (item.label?.length ?? 0) + (item.icon ? 1.5 : 0), 0 + (buttons.length ?? 0)) * 15 + 20
             return i.buttons?.length
           }
           return true
@@ -656,7 +663,7 @@ export default defineComponent({
 
     return () => {
       return (
-        <div class={`m-table ${systemStore.layout.heightShrink ? 'height-shrink' : ''} ${props.class}`} style={props.style}>
+        <div class={`m-table layout-${props.layout??'default'}`} style={props.style}>
           {generateTopFilter()}
           {generateTableView()}
         </div>
@@ -680,11 +687,10 @@ export default defineComponent({
   }
 
   .table-view {
-    flex-grow: 1;
     display: flex;
     flex-direction: column;
-    height: 0;
     background-color: var(--el-bg-color);
+    flex-grow: 1;
 
     .radio-selection {
       :deep(.el-table-column--selection .el-checkbox) {
@@ -741,12 +747,12 @@ export default defineComponent({
       --el-component-size: 25px;
       //--el-component-size-large: 40px;
       //--el-component-size-small: 24px;
-
       flex-grow: 1;
       height: 0;
 
       .el-table-view {
         height: 100%;
+        max-height: 100%;
       }
 
       :deep(.el-switch) {
@@ -793,16 +799,37 @@ export default defineComponent({
   }
 }
 
-.height-shrink {
-  .top-filter {
-    z-index: 3;
-  }
+.height-shrink-layout {
+  .layout-default {
+    .table-view {
+      height: auto;
 
+      .table-form {
+        height: auto;
+      }
+    }
+  }
+}
+
+//表格自动高度
+.layout-auto {
   .table-view {
     height: auto;
 
     .table-form {
       height: auto;
+    }
+  }
+}
+
+//表格伸缩自适应父级高度
+.layout-stretch {
+  .table-view {
+    flex-grow: 1;
+
+    .table-form {
+      flex-grow: 1;
+      height: 0;
     }
   }
 }

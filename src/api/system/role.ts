@@ -21,3 +21,8 @@ export function getRoleById(id) {
 export function delRoleByIds(ids, option?: RequestOption) {
   return createAxios(option).delete(`${systemBaseUrl}/api/system/role/del/${ids}`)
 }
+
+// 查询角色可配置的所有权限菜单
+export function queryRoleMenu(params, option?: RequestOption) {
+  return createAxios(option).get(`${systemBaseUrl}/api/system/role/queryRoleMenu`, { params })
+}

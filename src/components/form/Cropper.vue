@@ -2,29 +2,25 @@
   <div ref="cropperRoot">
     <el-scrollbar class="m-form-scroll">
       <div class="cropperView">
-        <div class="item-class">
-          <div>
-            <vue-cropper ref="cropper" :style="itemStyle" v-bind="ctx" />
-            <div class="btn-view">
-              <el-button type="primary" @click="cropper.refresh()">刷新</el-button>
-              <el-button type="primary" @click="changeScale(1)">放大</el-button>
-              <el-button type="primary" @click="changeScale(-1)">缩小</el-button>
-              <el-button type="primary" @click="cropper.rotateRight()">顺时针</el-button>
-              <el-button type="primary" @click="cropper.rotateLeft()">逆时针</el-button>
+        <vue-cropper ref="cropper" :style="itemStyle" v-bind="ctx" />
+        <div class="item-class" :style="itemStyle" style="background-color: var(--el-border-color)">
+          <div style="overflow: hidden; margin: 5px" :style="{ width: previews.w + 'px', height: previews.h + 'px' }">
+            <div :style="previews.div" class="preview-view">
+              <img :src="previews.url" :style="previews.img" alt="" />
             </div>
           </div>
         </div>
-        <div>
-          <div class="item-class" :style="itemStyle" style="background-color: var(--el-border-color)">
-            <div style="overflow: hidden; margin: 5px" :style="{ width: previews.w + 'px', height: previews.h + 'px' }">
-              <div :style="previews.div" class="preview-view">
-                <img :src="previews.url" :style="previews.img" alt="" />
-              </div>
-            </div>
-          </div>
-          <div class="btn-view" style="justify-content: flex-end">
-            <el-button type="primary" @click="sure">确定裁剪</el-button>
-          </div>
+      </div>
+      <div class="cropperView">
+        <div class="btn-view">
+          <el-button type="primary" @click="cropper.refresh()">刷新</el-button>
+          <el-button type="primary" @click="changeScale(1)">放大</el-button>
+          <el-button type="primary" @click="changeScale(-1)">缩小</el-button>
+          <el-button type="primary" @click="cropper.rotateRight()">顺时针</el-button>
+          <el-button type="primary" @click="cropper.rotateLeft()">逆时针</el-button>
+        </div>
+        <div class="btn-view">
+          <el-button type="primary" @click="sure">确定裁剪</el-button>
         </div>
       </div>
     </el-scrollbar>
@@ -106,6 +102,7 @@ function sure() {
   width: 100%;
   display: flex;
   justify-content: space-around;
+  gap: 10px;
 }
 
 .item-class {
@@ -121,5 +118,7 @@ function sure() {
 .btn-view {
   display: flex;
   padding: 10px 0;
+  flex-basis: 50%;
+  justify-content: center;
 }
 </style>

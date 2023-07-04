@@ -22,7 +22,7 @@
       </template>
     </m-table>
     <el-dialog :title="formTitle[handleType]" v-model="formVisible" align-center draggable destroy-on-close
-:close-on-click-modal="false" width="70%">
+               :close-on-click-modal="false" width="70%">
       <menu-form :handle-type="handleType" :model-value="row" style="height: 75vh" @close="close" />
     </el-dialog>
   </div>
@@ -77,10 +77,6 @@ const columns = ref([
     label: '排序号',
     width: 85,
     comment: '菜单的排列顺序，小号排在前，大号排在后。',
-    formatter(row, col, val) {
-      if (row.type === 'btn') return '--'
-      return val
-    }
   },
   { prop: 'createTime', label: '创建时间', type: 'datetime', width: 155 },
   { prop: 'updateTime', label: '修改时间', type: 'datetime', width: 155 },

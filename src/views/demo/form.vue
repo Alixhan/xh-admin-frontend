@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-button type="primary">辅导费</el-button>
-    <el-input v-model="handleType" placeholder="handleType" style="width: 100px" />
+    <el-switch v-model="formLoading" />
     <el-select v-model="handleType" placeholder="handleType">
       <el-option value="add">add</el-option>
       <el-option value="edit">edit</el-option>
@@ -15,7 +15,7 @@
       :model="formData"
       label-position="top"
       :handleType="handleType"
-      v-model:loading="saveLoading"
+      :loading="formLoading"
     />
     <el-button type="primary" @click="submit">提交表单</el-button>
   </div>
@@ -25,7 +25,7 @@ import { reactive, ref } from 'vue'
 
 const formRef = ref()
 const handleType = ref('add')
-const saveLoading = ref(false)
+const formLoading = ref(false)
 
 const formData = reactive({})
 

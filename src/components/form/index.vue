@@ -1,9 +1,12 @@
-<script lang="jsx">
-import { createVNode, onUnmounted, provide, ref, shallowRef, watchEffect } from 'vue'
+<script lang="tsx">
+import { createVNode, provide, ref, shallowRef, watchEffect } from 'vue'
+import type { PropType } from 'vue'
 import { ElForm } from 'element-plus'
 import { generateDynamicColumn, generateFormRules, generatePlaceholder, vModelValue } from '@/components/mutils'
+import type { CommonColumn } from '@/components/mutils'
 import { useSystemStore } from '@/stores/system'
 import { useElementSize } from '@vueuse/core'
+import type { UploadCtx } from '@/components/form/Upload.vue'
 
 /**
  * 通用表单组件
@@ -17,32 +20,36 @@ export default {
     // 表单处理类型， add,edit,detail
     handleType: {
       type: String,
-      default: 'add'
+      default: 'add',
     },
     // 跨列数，对应el-col
     colspan: {
-      type: Number
+      type: Number,
     },
     // 表单对象
     model: {
       type: Object,
-      required: true
+      required: true,
     },
     // 表格列定义
     columns: {
-      type: Array,
-      required: true
+      type: Array as PropType<CommonColumn>,
+      required: true,
     },
     labelWidth: {
       type: String,
-      default: '9em'
+      default: '9em',
     },
     scrollToError: {
-      default: true
+      default: true,
     },
     scrollIntoViewOptions: {
-      default: { behavior: 'smooth', block: 'center', inline: 'center' }
-    }
+      default: { behavior: 'smooth', block: 'center', inline: 'center' },
+    },
+    //加载状态，为true时展示骨架屏
+    loading: {
+      type: Boolean,
+    },
   },
   emits: [],
   setup(
@@ -50,14 +57,11 @@ export default {
     {
       attrs,
       slots,
-      expose
+      expose,
       // emit,
     }
   ) {
     const systemStore = useSystemStore()
-    onUnmounted(() => {
-      formItemParams.value = null
-    })
 
     const formRef = ref()
     const formSize = ref(useElementSize(formRef))
@@ -68,10 +72,10 @@ export default {
       colspan.value = span
     })
 
-    const formItemParams = shallowRef([])
+    const formItemParams = shallowRef<CommonColumn>([])
     watchEffect(initFormItemParams)
 
-    const uploadInstances = ref([])
+    const uploadInstances = ref<UploadCtx[]>([])
 
     provide('uploadInstances', uploadInstances.value)
 
@@ -98,7 +102,7 @@ export default {
       validate: function () {
         return formRef.value.validate(...arguments)
       },
-      submit
+      submit,
     })
 
     function initFormItemParams() {
@@ -113,22 +117,23 @@ export default {
             label: i.label,
             labelWidth: i.labelWidth,
             required: i.required,
-            rules: generateFormRules(i)
+            rules: generateFormRules(i),
           },
-          renderArgs: generateDynamicColumn(i)
+          renderArgs: generateDynamicColumn(i),
         }
-        generatePlaceholder(formItemObj.renderArgs.param)
+        generatePlaceholder(formItemObj.renderArgs?.param)
         return formItemObj
       })
     }
 
+    //生成表单列
     function generateFormColumns() {
       return formItemParams.value.map((i) => {
         // 隐藏的不显示
         if (i.hidden) return null
         const column = i.columnParam
         // 允许用户按照自己的slotName定制
-        if (column.slotName && slots[column.slotName]) return slots[column.slotName]()
+        if (column.slotName && slots[column.slotName]) return slots[column.slotName]?.()
         const param = {
           class: 'form-input',
           ...i.renderArgs.param,
@@ -137,13 +142,13 @@ export default {
               type: column.type,
               prop: column.prop,
               prop2: column.prop2,
-              single: column.single
+              single: column.single,
             },
             props.model
-          )
+          ),
         }
-        const formItemSlots = {
-          default: () => createVNode(i.renderArgs.component, param, i.renderArgs.slots)
+        const formItemSlots: { [name: string]: Function } = {
+          default: () => createVNode(i.renderArgs.component, param, i.renderArgs.slots),
         }
         if (column.comment) {
           formItemSlots.label = () => {
@@ -167,29 +172,84 @@ export default {
       })
     }
 
+    //生成骨架屏表单列
+    function generateFormSkeletons() {
+      return formItemParams.value.map((i) => {
+        // 隐藏的不显示
+        if (i.hidden) return null
+        const column = i.columnParam
+        const formItemSlots: { [name: string]: Function } = {
+          default: () => {
+            const skeletonParam = {
+              variant: 'text',
+              style: {
+                width: '100%',
+                height: 'var(--el-component-size)',
+                'align-self': 'center',
+              },
+            }
+            if (column.type === 'switch') skeletonParam.style.width = '50px'
+            if (['upload-img'].includes(column.type)) {
+              skeletonParam.style.width = '150px'
+              skeletonParam.style.height = '150px'
+              skeletonParam.variant = 'image'
+            }
+            return <el-skeleton-item {...skeletonParam} />
+          },
+          label: () => {
+            const skeletonParam = {
+              variant: 'text',
+              style: {
+                width: `${column?.label?.length ?? 6}em`,
+                maxWidth: '100%',
+                height: '1em',
+                'align-self': 'center',
+              },
+            }
+            return <el-skeleton-item {...skeletonParam} />
+          },
+        }
+        let span = column.colspan || props.colspan || colspan.value
+        if (systemStore.layout.widthShrink && span < colspan.value) span = colspan.value
+        if (column.cols) span = parseInt(column.cols) * span
+        if (span > 24) span = 24
+        return (
+          <el-col span={span}>
+            <el-form-item {...{...i.formItemParams, required: false}} v-slots={formItemSlots} />
+          </el-col>
+        )
+      })
+    }
+
     return () => {
       const formParam = {
         ref: formRef,
-        disabled: props.handleType === 'detail',
         ...attrs,
-        ...props
+        ...props,
       }
       // 明细类型需要禁用表单
       if (props.handleType === 'detail') {
         formParam.disabled = true
-        // param.placeholder = ''
       }
-      // 小屏设备需要强制改变布局方式
+      // 小屏设备需要强制改变布局方式（竖屏）
       if (systemStore.layout.widthShrink && colspan.value === 24) {
         formParam.labelPosition = 'top'
       }
+      const skeletonParam = {
+        loading: props.loading ?? false,
+        animated: true
+      }
+      const skeletonSlots = {
+        default: () => <el-row>{generateFormColumns()}</el-row>,
+        template: () => <el-row>{generateFormSkeletons()}</el-row>,
+      }
       return (
         <el-form {...formParam} v-slots={slots} class={{ 'detail-form': props.handleType === 'detail' }}>
-          <el-row>{generateFormColumns()}</el-row>
+          <el-skeleton {...skeletonParam} v-slots={skeletonSlots} />
         </el-form>
       )
     }
-  }
+  },
 }
 </script>
 <style scoped lang="scss">

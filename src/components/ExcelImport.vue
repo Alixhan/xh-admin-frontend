@@ -91,7 +91,7 @@ const tip = ref<{
 const tipObj = computed(() => {
   const steps = {
     1: { do: '导入excel', error: '导入excel文件失败' },
-    2: { do: '解析excel', error: '解析excel', success: '解析excel成功' },
+    2: { do: '解析excel', error: '解析excel失败', success: '解析excel成功' },
     3: { do: '验证数据中', error: '验证数据有误', success: '验证数据成功' },
     4: { do: '数据导入中', error: '导入失败（服务器校验未通过）', success: '数据导入成功' },
     5: { do: '清空中', success: '清空成功' },

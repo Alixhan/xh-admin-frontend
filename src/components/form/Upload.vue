@@ -58,7 +58,7 @@
     </el-dialog>
   </el-upload>
 </template>
-<script setup>
+<script setup lang="ts">
 /**
  * 增强el-upload上传功能，增加裁剪，直接粘贴图片文件等。
  * sxh 2023-4-14
@@ -93,7 +93,7 @@ const props = defineProps({
   },
   tip: {
     type: String
-  }
+  },
 })
 
 const attrs = useAttrs()
@@ -101,7 +101,11 @@ const attrs = useAttrs()
 const uploadRef = ref()
 
 const uploadParam = computed(() => {
-  const defaultParam = {
+  const defaultParam: {
+    autoUpload?: boolean
+    listType?: string
+    accept?: string
+  } = {
     autoUpload: false
   }
 
@@ -117,19 +121,19 @@ const uploadParam = computed(() => {
     fileList: fileList.value,
     onChange,
     onRemove,
-    onPreview
+    onPreview,
+    // 需要裁剪的图片一次只能选择一张
+    multiple: !props.cropper
   }
-  // 需要裁剪的图片一次只能选择一张
-  if (props.cropper) param.multiple = false
   return param
 })
 
-const fileList = ref([])
+const fileList = ref<any[]>([])
 watchEffect(() => {
-  fileList.value = props.modelValue
+  fileList.value = props.modelValue ?? []
 })
 
-const previewImageUrlList = ref([])
+const previewImageUrlList = ref<string[]>([])
 const previewImageVisible = ref(false)
 const initialIndex = ref(1)
 
@@ -139,7 +143,7 @@ const selectLimit = computed(() => {
   if (attrs.limit) {
     return Number(attrs.limit) - fileList.value.length
   }
-  return null
+  return undefined
 })
 
 const visible2 = ref(false)
@@ -159,22 +163,23 @@ function onChange(file, files) {
           name: fileName,
           raw: file,
           size: file.size,
-          url: (window.createObjectURL || window.URL.createObjectURL)(file)
+          // @ts-ignore
+          url: (window.createObjectURL || window.URL.createObjectURL)(file),
         })
         visible2.value = false
       },
-      ...props.cropper
+      ...props.cropper,
     }
     cropperFile.value = file
     files.pop()
   }
   onUpdateFileList(file, files)
-  attrs.onChange?.(file, files)
+  attrs.onChange instanceof Function &&  attrs.onChange?.(file, files)
 }
 
 function onRemove(file, files) {
   onUpdateFileList(file, files)
-  attrs.onRemove?.(file, files)
+  attrs.onRemove instanceof Function &&  attrs.onRemove?.(file, files)
 }
 
 function onUpdateFileList(file, files) {
@@ -232,7 +237,7 @@ async function upload() {
     item.status = 'uploading'
     try {
       const res = await uploadFile(item.raw, (progressEvent) => {
-        item.percentage = (progressEvent.loaded / progressEvent.total) * 100
+        item.percentage = (progressEvent.loaded! / progressEvent.total!) * 100
       })
       item.status = 'success'
       item.id = res.data.id
@@ -251,11 +256,15 @@ async function upload() {
   emit('update:modelValue', fileList.value)
 }
 
-const ctx = {
+export interface UploadCtx {
+  upload: () => Promise<void>
+}
+
+const ctx: UploadCtx = {
   upload
 }
 defineExpose(ctx)
-const uploadInstances = inject('uploadInstances', null)
+const uploadInstances: UploadCtx[] = inject('uploadInstances', [])
 if (uploadInstances) {
   uploadInstances.push(ctx)
   onUnmounted(() => {

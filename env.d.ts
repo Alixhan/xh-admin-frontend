@@ -22,3 +22,4 @@ declare type OperationButton = import('@/components/table').OperationButton
 declare type PageQuery = import('@/components/table').PageQuery
 declare type PageResult = import('@/components/table').PageResult
 declare type TablePagination = import('@/components/table').TablePagination
+declare type TableSelection = import('@/components/table').TableSelection

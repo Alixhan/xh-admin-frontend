@@ -33,7 +33,7 @@ router.beforeEach(async (to, from, next) => {
 
 router.afterEach((guard) => {
   if (window.existLoading) {
-    loading.hide()
+    setTimeout(() => loading.hide(), 1000)
   }
   NProgress.done()
   const systemStore = useSystemStore()

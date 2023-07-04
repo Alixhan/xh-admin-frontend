@@ -29,7 +29,7 @@ function handleCommand(key) {
       showSuccessMsg: true,
       successMsg: '注销成功'
     }).then(() => {
-      systemStore.logout()
+      setTimeout(systemStore.logout, 1000)
     })
   }
 }

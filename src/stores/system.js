@@ -294,18 +294,6 @@ export const useSystemStore = defineStore('system', () => {
 
   // 注销
   function logout() {
-    // router.push('/login').then(() => {
-    //   router.removeRoute(layoutRouteName) // 移除动态路由
-    //   activeMenuId.value = null
-    // })
-    // 重置
-    // token.value = null
-    // loginStatus.value = null
-    // user.value = null
-    // menus.value = []
-    // menusObj.value = []
-    // treeMenus.value = []
-    // navTabs.value = []
     window.location.reload()
   }
 

@@ -3,7 +3,7 @@ import createAxios from '@/utils/request'
 const systemBaseUrl = import.meta.env.VITE_SYSTEM_BASE_URL
 
 // 菜单列表查询
-export function queryMenuList(params = {}, option?: RequestOption) {
+export function queryMenuList(params: PageQuery, option?: RequestOption) {
   return createAxios(option).post(`${systemBaseUrl}/api/system/menu/query`, params)
 }
 

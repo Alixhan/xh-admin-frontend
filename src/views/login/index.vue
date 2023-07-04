@@ -54,7 +54,7 @@ prefix-icon="User" />
   </el-scrollbar>
 </template>
 <script setup>
-import { defineOptions, reactive, ref } from 'vue'
+import { defineOptions, nextTick, reactive, ref } from 'vue'
 import { userLogin } from '@/api/system/user'
 import { useSystemStore } from '@/stores/system'
 import { useRouter } from 'vue-router'
@@ -76,23 +76,14 @@ const formData = reactive({
 })
 const rules = reactive({
   username: [
-    {
-      required: true,
-      message: '请输入账号'
-    }
+    { required: true, message: '请输入账号' }
   ],
   password: [
-    {
-      required: true,
-      message: '请输入密码'
-    }
+    { required: true, message: '请输入密码' }
   ],
   captcha: [
-    {
-      required: true,
-      message: '请输入图形验证码'
-    }
-  ]
+    { required: true, message: '请输入图形验证码' }
+  ],
 })
 
 const formRef = ref()
@@ -112,7 +103,7 @@ function submit() {
         const data = res.data
         systemStore.setLoginUserInfo(data)
         const firstRoute = systemStore.getFirstRoute()
-        router.replace(firstRoute.fullPath)
+        nextTick(() => router.replace(firstRoute.fullPath))
       })
     }
   })

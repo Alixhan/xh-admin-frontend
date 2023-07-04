@@ -72,7 +72,17 @@ const columns = ref([
   { prop: 'imgWidth', label: '图片宽度' },
   { prop: 'imgHeight', label: '图片高度' },
   { prop: 'imgRatio', label: '图片宽高比', width: 100 },
-  { prop: 'status', label: '文件状态', type: 'select', itemList: statusList },
+  {
+    prop: 'status',
+    label: '文件状态',
+    slots: {
+      default: (scope) => {
+        return <el-tag type={scope.row.status === 1 ? 'success': 'danger'}>
+          {statusList.find((i) => i.value === scope.row.status)?.label ?? scope.row.status}
+        </el-tag>
+      }
+    }
+  },
   { prop: 'createTime', label: '上传时间', type: 'datetime', width: 155 },
   {
     type: 'operation',

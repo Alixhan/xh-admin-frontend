@@ -8,7 +8,7 @@ axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8'
 export interface RequestOption {
   // 是否显示loading
   showLoading?: boolean
-  // vue3中的ref,可以动态更新此值
+  // vue3中的ref,会动态更新此值标记请求为loading状态
   loadingRef?: import('vue').Ref<boolean>
   // 提交前是否显示确认弹框
   showBeforeConfirm?: boolean
@@ -22,11 +22,11 @@ export interface RequestOption {
   showSuccessMsg?: boolean
   // 成功消息的存续时间
   successDuration?: number
-  // 成功的提示信息 | res为系统的返回值
+  // 成功的提示信息 | res为请求的返回值
   successMsg?: string | ((res: any) => string)
   // 失败消息的存续时间
   errorDuration?: number
-  // 失败的提示信息 | res为系统的返回值
+  // 失败的提示信息 | res为请求的返回值
   errorMsg?: string | ((res: any) => string)
 }
 
@@ -118,7 +118,7 @@ export default function createAxios(opt?: RequestOption) {
     },
     (e) => {
       resetLoading()
-      return showErrorMsg(e)
+      return showErrorMsg(e?.response?.data ?? e)
     }
   )
   return service

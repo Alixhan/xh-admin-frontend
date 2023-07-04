@@ -41,7 +41,7 @@ defineProps({
    * 最多可选择行数
    */
   selectionLimit: {
-    type: Number
+    type: [Number, undefined]
   }
 })
 const emit = defineEmits(['close', 'select'])

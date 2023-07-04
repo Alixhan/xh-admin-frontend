@@ -2,7 +2,9 @@
   <!-- 全局主题，国际化等配置 -->
   <el-config-provider :locale="locale" :size="systemStore.layout.size" :button="btnConfig">
     <router-view :class="rootClass" v-slot="{ Component }">
-      <component :is="Component" />
+      <transition :name="systemStore.layout.mainAnimation" mode="out-in">
+        <component :is="Component" />
+      </transition>
     </router-view>
   </el-config-provider>
 </template>

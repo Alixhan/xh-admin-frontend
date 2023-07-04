@@ -72,6 +72,7 @@ export declare type CommonColumnType =
 export interface CommonColumn {
   prop?: string
   prop2?: string
+  label?: string
   type?: CommonColumnType
   style?: string
   valueFormat?: string
@@ -86,6 +87,8 @@ export interface CommonColumn {
   itemParam?: {
     border?: boolean
   }
+  //定义一个插槽名称，此项可以作为组件的插槽名使用
+  slotName?: string
   [any: string]: any
 }
 
@@ -253,6 +256,7 @@ export function vModelValue(param: CommonColumn & { prop: any; prop2: any }, for
  * 生成默认的placeholder
  */
 export function generatePlaceholder(column) {
+  if(!column?.prop) return
   const type = column.type ?? 'input'
   if (!Object.prototype.hasOwnProperty.call(column, 'placeholder')) {
     const label = column.label ?? ''
@@ -306,7 +310,7 @@ export function getItemListRef(column: CommonColumn): Ref<CommonItemData[]> {
 /**
  * 增强el-form表单验证
  */
-export function generateFormRules(column, formData) {
+export function generateFormRules(column, formData?:object) {
   const rules = setRules(column)
   if (!rules) return
   column.rules = rules.map((i) => {

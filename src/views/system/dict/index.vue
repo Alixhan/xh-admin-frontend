@@ -17,6 +17,7 @@
     <m-table
       class="m-table"
       ref="tableRef"
+      :layout="systemStore.layout.widthShrink ? 'auto' : undefined"
       is-filter-table
       row-key="id"
       :filter-param="filterParam"
@@ -49,12 +50,15 @@ import { reactive, ref, shallowRef } from 'vue'
 import { delDictDetailByIds, queryDictDetailList, queryDictTypeList } from '@/api/system/dict'
 import DictForm from './dictForm.vue'
 import getDictDetails from '@/utils/dict'
+import { useSystemStore } from '@/stores/system'
 
 const formTitle = {
   add: '数据字典新增',
   edit: '数据字典编辑',
   detail: '数据字典明细',
 }
+
+const systemStore = useSystemStore()
 
 const dictTypeData = ref([])
 const dictTypeQueryParam = ref({
@@ -197,6 +201,7 @@ function close(type) {
 
 .width-shrink-layout {
   .root {
+    height: auto;
     flex-wrap: wrap;
 
     .left-tree-view {

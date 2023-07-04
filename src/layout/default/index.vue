@@ -11,7 +11,9 @@
     </div>
     <div class="right-view">
       <Header class="header" />
-      <Main class="main" />
+      <div class="main">
+        <Main style="height: 100%"/>
+      </div>
       <transition name="el-fade-in" mode="out-in">
         <div v-if="!systemStore.layout.menuCollapse" class="mock-view" @click.stop="systemStore.layout.menuCollapse = true" />
       </transition>
@@ -78,6 +80,7 @@ $transition: width 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
       padding: 10px;
       flex-grow: 1;
       height: 0;
+      border-radius: 5px;
     }
   }
 }

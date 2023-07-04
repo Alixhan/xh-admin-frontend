@@ -17,7 +17,7 @@
       </el-button>
     </div>
     <el-dialog title="选择上级机构" v-model="visible" draggable append-to-body align-center
-width="80%">
+               width="80%">
       <selectOrg selection="single" style="height: calc(90vh - 80px)" @select="selectedParentOrg" @close="visible = false" />
     </el-dialog>
   </div>
@@ -73,7 +73,7 @@ watchEffect(() => {
     { prop: 'parentName', label: '上级机构名称', readonly: true },
     { prop: 'code', label: '机构代码', rules: { required: true } },
     { prop: 'name', label: '机构名称', rules: { required: true } },
-    { prop: 'enabled', label: '是否启用', type: 'switch' },
+    { prop: 'enabled', label: '是否启用', type: 'switch' }
   ]
 })
 
