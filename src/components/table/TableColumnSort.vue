@@ -1,14 +1,25 @@
 <template>
-  <el-checkbox label="全选" :model-value="checkAll" :indeterminate="indeterminate" @change="handleCheckAllChange" />
-  <div class="sort-view" :ref="sortViewRef">
-    <el-checkbox
-      v-for="column in columnsR"
-      :key="column.prop ?? '' + column.label ?? ''"
-      :label="column.label"
-      :model-value="!column.hidden"
-      @update:model-value="updateValue(column)"
-    />
-  </div>
+  <el-popover
+    trigger="click"
+    :hideAfter="0"
+    popper-style="min-width: 100px; width: auto;"
+  >
+    <template #reference>
+      <el-button type="primary" text icon="operation" class="action-btn">
+        列排序
+      </el-button>
+    </template>
+    <el-checkbox label="全选" :model-value="checkAll" :indeterminate="indeterminate" @change="handleCheckAllChange" />
+    <div class="sort-view" :ref="sortViewRef">
+      <el-checkbox
+        v-for="column in columnsR"
+        :key="column.prop ?? '' + column.label ?? ''"
+        :label="column.label"
+        :model-value="!column.hidden"
+        @update:model-value="updateValue(column)"
+      />
+    </div>
+  </el-popover>
 </template>
 
 <script setup>

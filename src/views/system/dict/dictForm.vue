@@ -12,16 +12,18 @@
     </el-scrollbar>
     <div class="m-footer">
       <el-button icon="close" @click="close()">取消</el-button>
-      <el-button
-        v-if="['add', 'edit'].includes(handleType2)"
-        v-auth="['add', 'edit']"
-        icon="check"
-        type="primary"
-        :loading="saveLoading"
-        @click="save"
-      >
-        保存
-      </el-button>
+      <template v-if="!formLoading">
+        <el-button
+          v-if="['add', 'edit'].includes(handleType2)"
+          v-auth="['add', 'edit']"
+          icon="check"
+          type="primary"
+          :loading="saveLoading"
+          @click="save"
+        >
+          保存
+        </el-button>
+      </template>
     </div>
     <el-dialog title="选择数据字典类型" v-model="visible1" draggable destroy-on-close align-center
 :close-on-click-modal="false" width="70%">

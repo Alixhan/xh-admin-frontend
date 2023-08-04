@@ -88,7 +88,7 @@ $transition: width 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
 .width-shrink-layout {
   .left-view {
     background-color: var(--el-bg-color);
-    z-index: 100;
+    z-index: 2002;
     width: 0;
     position: absolute;
     top: 0;
@@ -96,7 +96,7 @@ $transition: width 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
   }
 
   .mock-view {
-    z-index: 3;
+    z-index: 2001;
     position: absolute;
     inset: 0;
     background-color: var(--el-overlay-color-lighter);

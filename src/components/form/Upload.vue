@@ -1,5 +1,5 @@
 <template>
-  <el-upload v-bind="uploadParam" ref="uploadRef">
+  <el-upload v-bind="uploadParam" ref="uploadRef" :class="{ 'select-limit': selectLimit && selectLimit <= 0 }">
     <template v-for="name in Object.keys($slots)" #[name]="ctx">
       <slot :name="name" v-bind="ctx" />
     </template>
@@ -26,11 +26,11 @@
     <!--    </template>-->
     <template #trigger>
       <div v-if="type === 'upload-img'" class="el-upload--picture-card">
-        <div class="file-lib-btn" @click.stop="visible = true">文件库</div>
+        <div class="file-lib-btn" @click.stop="openFileLib('image/')">文件库</div>
         <Plus class="icon" />
       </div>
       <div v-else>
-        <el-button icon="plus" @click.stop="visible = true" />
+        <el-button type="success" @click.stop="openFileLib()"> 文件库 </el-button>
         <el-button type="primary" icon="upload">选择文件</el-button>
       </div>
     </template>
@@ -42,9 +42,18 @@
       :initial-index="initialIndex"
       @close="previewImageVisible = false"
     />
-    <el-dialog title="选择文件" v-model="visible" align-center draggable append-to-body
-               destroy-on-close :close-on-click-modal="false" width="90%">
+    <el-dialog
+      title="选择文件"
+      v-model="visible"
+      align-center
+      draggable
+      append-to-body
+      destroy-on-close
+      :close-on-click-modal="false"
+      width="90%"
+    >
       <selectSysFile
+        :param="param"
         :selection="selection"
         :selection-limit="selectLimit"
         style="height: calc(90vh - 80px)"
@@ -52,8 +61,16 @@
         @close="visible = false"
       />
     </el-dialog>
-    <el-dialog title="图片裁剪" v-model="visible2" align-center draggable append-to-body
-               destroy-on-close :close-on-click-modal="false" width="70%">
+    <el-dialog
+      title="图片裁剪"
+      v-model="visible2"
+      align-center
+      draggable
+      append-to-body
+      destroy-on-close
+      :close-on-click-modal="false"
+      width="70%"
+    >
       <cropper :="cropperOption" @close="visible2 = false" />
     </el-dialog>
   </el-upload>
@@ -64,35 +81,39 @@
  * sxh 2023-4-14
  */
 import { computed, inject, onUnmounted, ref, useAttrs, watchEffect } from 'vue'
+import type { PropType } from 'vue'
 import { uploadFile } from '@/api/file/fileOperation'
 import selectSysFile from '@/views/system/file/selectSysFile.vue'
 import { getDownloadFileUrl } from '@/utils'
+import type { DownloadParam } from '@/utils'
 import Cropper from './Cropper.vue'
 
 defineOptions({
-  name: 'MUpload'
+  name: 'MUpload',
 })
 
 const emit = defineEmits(['update:fileList', 'update:modelValue'])
 
 const props = defineProps({
+  //设置为单一文件，直接传入文件表ID即可
+  single: {
+    type: String as PropType<'id'|'object'>,
+  },
   type: {
-    type: String
+    type: String,
   },
   disabled: {
     type: Boolean,
-    default: false
+    default: false,
   },
   modelValue: {
-    type: Array,
     required: true,
-    default: () => []
   },
   cropper: {
-    type: Object
+    type: Object,
   },
   tip: {
-    type: String
+    type: String,
   },
 })
 
@@ -106,7 +127,7 @@ const uploadParam = computed(() => {
     listType?: string
     accept?: string
   } = {
-    autoUpload: false
+    autoUpload: false,
   }
 
   // 上传图片默认参数
@@ -115,6 +136,7 @@ const uploadParam = computed(() => {
     defaultParam.accept = 'image/*'
   }
   const param = {
+    limit: attrs.limit,
     ...defaultParam,
     ...attrs,
     ...props,
@@ -123,14 +145,35 @@ const uploadParam = computed(() => {
     onRemove,
     onPreview,
     // 需要裁剪的图片一次只能选择一张
-    multiple: !props.cropper
+    multiple: !props.cropper,
+  }
+//如果是单文件上传，设置limit为1
+  if(props.single) {
+    param.limit = 1
   }
   return param
 })
 
 const fileList = ref<any[]>([])
 watchEffect(() => {
-  fileList.value = props.modelValue ?? []
+  if (props.single && props.modelValue) {
+    const downloadParam: DownloadParam = {}
+    if(props.single === 'id') {
+      downloadParam.id = props.modelValue as number | string
+    }
+    if(props.single === 'object') {
+      downloadParam.object = props.modelValue as string
+    }
+    fileList.value = [
+      {
+        ...downloadParam,
+        status: 'success',
+        url: getDownloadFileUrl(downloadParam),
+      },
+    ]
+  } else {
+    fileList.value = props.modelValue as any [] ?? []
+  }
 })
 
 const previewImageUrlList = ref<string[]>([])
@@ -138,11 +181,13 @@ const previewImageVisible = ref(false)
 const initialIndex = ref(1)
 
 const visible = ref(false)
+const param = ref({
+  type: '',
+})
 const selection = ref('multiple')
 const selectLimit = computed(() => {
-  if (attrs.limit) {
-    return Number(attrs.limit) - fileList.value.length
-  }
+  if(props.single) return 1 - fileList.value.length
+  if (attrs.limit) return Number(attrs.limit) - fileList.value.length
   return undefined
 })
 
@@ -174,17 +219,17 @@ function onChange(file, files) {
     files.pop()
   }
   onUpdateFileList(file, files)
-  attrs.onChange instanceof Function &&  attrs.onChange?.(file, files)
+  attrs.onChange instanceof Function && attrs.onChange?.(file, files)
 }
 
 function onRemove(file, files) {
   onUpdateFileList(file, files)
-  attrs.onRemove instanceof Function &&  attrs.onRemove?.(file, files)
+  attrs.onRemove instanceof Function && attrs.onRemove?.(file, files)
 }
 
 function onUpdateFileList(file, files) {
   fileList.value = files
-  emit('update:modelValue', fileList.value)
+  emitModelValue()
 }
 
 function onPreview(file) {
@@ -231,7 +276,7 @@ function select(rows) {
 // 文件手动上传
 async function upload() {
   // 'ready' | 'uploading' | 'success' | 'fail'
-  const uploadFiles = fileList.value.filter((i) => ['ready', 'fail'].includes(i.status))
+  const uploadFiles = fileList.value.filter((i) => ['ready', 'fail'].includes(i.status) || !i.status)
   while (uploadFiles.length) {
     const item = uploadFiles.shift()
     item.status = 'uploading'
@@ -253,7 +298,22 @@ async function upload() {
       item.status = 'fail'
     }
   }
-  emit('update:modelValue', fileList.value)
+  emitModelValue()
+}
+
+//从文件库中直接选择
+function openFileLib(type?) {
+  param.value.type = type
+  visible.value = true
+}
+
+function emitModelValue(){
+  if (props.single) {
+    if(props.single === 'id') emit('update:modelValue', fileList.value[0]?.id)
+    if(props.single === 'object') emit('update:modelValue', fileList.value[0]?.object)
+  }else {
+    emit('update:modelValue', fileList.value)
+  }
 }
 
 export interface UploadCtx {
@@ -261,7 +321,7 @@ export interface UploadCtx {
 }
 
 const ctx: UploadCtx = {
-  upload
+  upload,
 }
 defineExpose(ctx)
 const uploadInstances: UploadCtx[] = inject('uploadInstances', [])
@@ -308,5 +368,11 @@ if (uploadInstances) {
 
 :deep(.is-disabled .el-upload) {
   display: none;
+}
+
+.select-limit {
+  :deep(.el-upload) {
+    display: none;
+  }
 }
 </style>

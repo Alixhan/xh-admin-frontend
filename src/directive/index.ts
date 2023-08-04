@@ -9,7 +9,10 @@ export default {
         const full = binding.modifiers.full
         const value = binding.value // 权限name
         const bool = auth(value, logicAnd ? 'and' : 'or', full)
-        if (!bool) el.parentNode?.removeChild(el)
+        if (!bool) {
+          el.parentNode?.removeChild(el)
+          el = null
+        }
       }
     })
   }

@@ -9,6 +9,14 @@ import { useElementSize } from '@vueuse/core'
 import type { UploadCtx } from '@/components/form/Upload.vue'
 
 /**
+ * 表单列类型
+ */
+export interface FormColumn extends CommonColumn {
+  //上传文件的限制数量
+  limit?: number
+}
+
+/**
  * 通用表单组件
  * sxh 2023-3-24
  */
@@ -33,7 +41,7 @@ export default {
     },
     // 表格列定义
     columns: {
-      type: Array as PropType<CommonColumn>,
+      type: Array as PropType<FormColumn>,
       required: true,
     },
     labelWidth: {
@@ -72,7 +80,7 @@ export default {
       colspan.value = span
     })
 
-    const formItemParams = shallowRef<CommonColumn>([])
+    const formItemParams = shallowRef<FormColumn>([])
     watchEffect(initFormItemParams)
 
     const uploadInstances = ref<UploadCtx[]>([])
@@ -215,7 +223,7 @@ export default {
         if (span > 24) span = 24
         return (
           <el-col span={span}>
-            <el-form-item {...{...i.formItemParams, required: false}} v-slots={formItemSlots} />
+            <el-form-item {...{ ...i.formItemParams, required: false }} v-slots={formItemSlots} />
           </el-col>
         )
       })
@@ -237,7 +245,7 @@ export default {
       }
       const skeletonParam = {
         loading: props.loading ?? false,
-        animated: true
+        animated: true,
       }
       const skeletonSlots = {
         default: () => <el-row>{generateFormColumns()}</el-row>,

@@ -259,7 +259,7 @@ export default defineComponent({
     watch(
       () => [props.columns],
       () => initTableColumnsParams,
-      { deep: true }
+      // { deep: true }
     )
 
     //选中行的数据
@@ -595,27 +595,13 @@ export default defineComponent({
                   </el-button>
                 )}
                 {props.isSortColumn && (
-                  <el-popover
-                    trigger="click"
-                    hideAfter={0}
-                    popper-style="min-width: 100px; width: auto;"
-                    v-slots={{
-                      reference() {
-                        return (
-                          <el-button type="primary" text icon="operation" class="action-btn">
-                            列排序
-                          </el-button>
-                        )
-                      },
+                  <TableColumnSort
+                    class="action-btn"
+                    {...{
+                      columns: columns.value,
+                      onChange: initTableColumnParamFun,
                     }}
-                  >
-                    <TableColumnSort
-                      {...{
-                        columns: columns.value,
-                        onChange: initTableColumnParamFun,
-                      }}
-                    />
-                  </el-popover>
+                  />
                 )}
               </div>
             </el-scrollbar>
@@ -783,12 +769,12 @@ export default defineComponent({
     border-radius: var(--el-border-radius-base);
   }
 
-  .action-btn {
+  :deep(.action-btn) {
     padding: 0 4px;
     margin-left: 3px;
     margin-right: 0;
 
-    :deep(span) {
+    >span {
       margin-left: 2px;
     }
   }

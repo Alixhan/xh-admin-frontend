@@ -1,7 +1,14 @@
 <template>
   <div class="form-view">
     <el-scrollbar class="m-form-scroll">
-      <m-form ref="formRef" :colspan="24" :columns="columns" :model="formData" :handleType="handleType2" />
+      <m-form
+        ref="formRef"
+        :colspan="24"
+        :columns="columns"
+        :model="formData"
+        :handleType="handleType2"
+        :loading="formLoading"
+      />
     </el-scrollbar>
     <div class="m-footer">
       <el-button icon="close" @click="close()">取消</el-button>
@@ -33,6 +40,7 @@ const props = defineProps({
 const emit = defineEmits(['close'])
 
 const formRef = ref()
+const formLoading = ref(false)
 const saveLoading = ref(false)
 const formData = ref({
   cache: true,
@@ -40,58 +48,78 @@ const formData = ref({
 })
 
 const handleType2 = ref(props.handleType)
-if (handleType2.value !== 'add') {
-  // 查询明细
-  getMenuById(props.modelValue.id).then((res) => {
-    formData.value = res.data
-    if (handleType2.value === 'copy') {
-      handleType2.value = 'add'
-      formData.value.id = ''
-    }
-  })
-}
+
+init()
+
 // 上级菜单下拉框数据
 const parentMenuList = ref([])
-queryMenuList({ isPage: false, param: { flag: 'selectParentMenu' } }).then((res) => {
-  let list = res.data.list.reverse()
-  const menus = []
-  let currentMenu
-  while (list.length) {
-    // 排列，符合的排到末尾等待取出
-    const leftArr = []
-    const rightArr = []
-    list.forEach((a) => {
-      if (currentMenu) {
-        if (a.parentId === currentMenu.id) rightArr.push(a)
-        else leftArr.push(a)
-      } else {
-        if (a.parentId) leftArr.push(a)
-        else rightArr.push(a)
+
+async function init() {
+  formLoading.value = true
+  await Promise.all([
+    initFormData(),
+    initParentMenuData()
+  ])
+  formLoading.value = false
+}
+
+function initFormData(){
+  if (handleType2.value !== 'add') {
+    // 查询明细
+    return getMenuById(props.modelValue.id).then((res) => {
+      formData.value = res.data
+      if (handleType2.value === 'copy') {
+        handleType2.value = 'add'
+        formData.value.id = ''
       }
     })
-    // 匹配数据第一个的标记当前子项最后一个
-    if (rightArr.length) rightArr[0].isLastChid = true
-    // 标记匹配项的层级
-    rightArr.forEach((i) => {
-      i.level = currentMenu ? currentMenu.level + 1 : 0
-    })
-    list = [...leftArr, ...rightArr]
-    // 取出最后一项
-    currentMenu = list.pop()
-    let prefix = ''
-    if (currentMenu.level) {
-      let level = currentMenu.level
-      while (level--) prefix += '****'
-      prefix += currentMenu.isLastChid ? '└ ' : '├ '
-    }
-    menus.push({
-      platform: currentMenu.platform,
-      value: currentMenu.id,
-      label: prefix + currentMenu.title
-    })
   }
-  parentMenuList.value = menus
-})
+  return Promise.resolve()
+}
+
+//初始化上级菜单数据
+function initParentMenuData() {
+  return queryMenuList({ isPage: false, param: { flag: 'selectParentMenu' } }).then((res) => {
+    let list = res.data.list.reverse()
+    const menus = []
+    let currentMenu
+    while (list.length) {
+      // 排列，符合的排到末尾等待取出
+      const leftArr = []
+      const rightArr = []
+      list.forEach((a) => {
+        if (currentMenu) {
+          if (a.parentId === currentMenu.id) rightArr.push(a)
+          else leftArr.push(a)
+        } else {
+          if (a.parentId) leftArr.push(a)
+          else rightArr.push(a)
+        }
+      })
+      // 匹配数据第一个的标记当前子项最后一个
+      if (rightArr.length) rightArr[0].isLastChid = true
+      // 标记匹配项的层级
+      rightArr.forEach((i) => {
+        i.level = currentMenu ? currentMenu.level + 1 : 0
+      })
+      list = [...leftArr, ...rightArr]
+      // 取出最后一项
+      currentMenu = list.pop()
+      let prefix = ''
+      if (currentMenu.level) {
+        let level = currentMenu.level
+        while (level--) prefix += '****'
+        prefix += currentMenu.isLastChid ? '└ ' : '├ '
+      }
+      menus.push({
+        platform: currentMenu.platform,
+        value: currentMenu.id,
+        label: prefix + currentMenu.title
+      })
+    }
+    parentMenuList.value = menus
+  })
+}
 
 // 表单字段根据表单数据变化，有所不同
 const columns = ref([])

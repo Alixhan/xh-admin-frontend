@@ -96,7 +96,7 @@ const columns = ref([
         label: '删除',
         auth: 'del',
         type: 'danger',
-        onClick: (row) => openForm('', row)
+        onClick: (row) => del([row] )
       }
     ]
   }
@@ -132,7 +132,6 @@ function fetchMenus(pageQuery, option) {
 }
 
 const expand = ref(false)
-
 // 展开/收缩所有
 function toggleExpand() {
   expand.value = !expand.value

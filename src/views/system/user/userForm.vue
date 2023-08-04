@@ -1,7 +1,14 @@
 <template>
   <div class="form-view">
     <el-scrollbar class="m-form-scroll">
-      <m-form ref="formRef" :colspan="12" :columns="columns" :model="formData" :handleType="handleType" />
+      <m-form
+        ref="formRef"
+        :colspan="24"
+        :columns="columns"
+        :model="formData"
+        :handleType="handleType"
+        :loading="formLoading"
+      />
     </el-scrollbar>
     <div class="m-footer">
       <el-button icon="close" @click="close()">取消</el-button>
@@ -20,8 +27,7 @@
 </template>
 <script setup lang="jsx">
 import { ref, watchEffect } from 'vue'
-import { getFileById, postSaveFile } from '@/api/file/fileOperation'
-import { statusList } from '@/views/system/file/constant'
+import { getUserById, postSaveUser } from '@/api/system/user'
 import { getDownloadFileUrl } from '@/utils'
 
 const props = defineProps({
@@ -34,12 +40,16 @@ const props = defineProps({
 const emit = defineEmits(['close'])
 
 const formRef = ref()
+const formLoading = ref(false)
 const saveLoading = ref(false)
-const formData = ref({})
+const formData = ref({
+  enabled: true
+})
 
 if (props.handleType !== 'add') {
   // 查询明细
-  getFileById(props.modelValue.id).then((res) => {
+  formLoading.value = true
+  getUserById(props.modelValue.id).then((res) => {
     formData.value = res.data
     if ((formData.value.contentType ?? '').startsWith('image')) {
       formData.value.image = [
@@ -49,6 +59,7 @@ if (props.handleType !== 'add') {
         },
       ]
     }
+    formLoading.value = false
   })
 }
 
@@ -57,47 +68,20 @@ const columns = ref([])
 watchEffect(() => {
   columns.value = [
     {
-      prop: 'image',
-      label: '图片预览',
-      type: 'upload-img',
-      cols: 2,
-      hidden: !(formData.value.contentType ?? '').startsWith('image'),
-      disabled: true,
+      prop: 'code',
+      label: '登录账号',
+      rules: [{ required: true }, { pattern: /[a-zA-Z0-9]+/, message: '登录账号只能是大小写字母和数字！' }],
     },
-    { prop: 'object', label: '对象存储key', disabled: true },
-    { prop: 'name', label: '文件名', rules: { required: true } },
-    {
-      prop: 'contentType',
-      label: '文件类型',
-      disabled: true,
-      comment: '文件的MIME类型',
-    },
-    { prop: 'suffix', label: '文件后缀扩展名', disabled: true },
-    { prop: 'size', label: '文件大小', disabled: true },
-    { prop: 'imgWidth', label: '图片宽度', disabled: true },
-    { prop: 'imgHeight', label: '图片高度', disabled: true },
-    { prop: 'imgRatio', label: '图片宽高比', disabled: true },
-    {
-      prop: 'status',
-      label: '文件状态',
-      type: 'select',
-      itemList: statusList,
-      disabled: true,
-    },
-    {
-      prop: 'sha1',
-      label: '文件摘要sha1',
-      disabled: true,
-      comment: '同一个文件的sha1相同，相同sha1不会重复上传文件',
-    },
-    { prop: 'createTime', label: '上传时间', disabled: true },
+    { prop: 'name', label: '用户名', rules: { required: true } },
+    { prop: 'avatar', label: '头像', type: 'upload-img', single: 'object' },
+    { prop: 'enabled', label: '是否启用', type: 'switch' },
   ]
 })
 
 // 保存方法
 function save() {
-  formRef.value.validate().then(() => {
-    postSaveFile(formData.value, {
+  formRef.value.submit().then(() => {
+    postSaveUser(formData.value, {
       loadingRef: saveLoading,
       showSuccessMsg: true,
       successMsg: '保存成功',

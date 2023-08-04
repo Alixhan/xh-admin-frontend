@@ -1,4 +1,5 @@
 import { createApp } from 'vue'
+import type { App as VueApp } from 'vue'
 import App from './App.vue'
 import { createPinia } from 'pinia'
 import router from './router'
@@ -11,7 +12,7 @@ import { loading } from '@/utils/loading'
 // import 'default-passive-events'
 
 loading.show()
-const app = createApp(App)
+const app: VueApp<Element> = createApp(App)
 
 app.use(createPinia())
 app.use(ElementPlus)

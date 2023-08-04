@@ -16,27 +16,27 @@ export function userLogout(option?: RequestOption) {
   return createAxios(option).post(`${systemBaseUrl}/api/system/user/logout`)
 }
 
-// 菜单列表查询
+// 用户列表查询
 export function queryUserList(params = {}, option?: RequestOption) {
   return createAxios(option).post(`${systemBaseUrl}/api/system/user/query`, params)
 }
 
-// 切换菜单字段值
+// 切换用户字段值
 export function postSwitchUserProp(params = {}, option?: RequestOption) {
   return createAxios(option).post(`${systemBaseUrl}/api/system/user/switch_prop`, params)
 }
 
-// 保存系统菜单
+// 保存系统用户
 export function postSaveUser(params = {}, option?: RequestOption) {
   return createAxios(option).post(`${systemBaseUrl}/api/system/user/save`, params)
 }
 
-// 获取菜单详情
+// 获取用户详情
 export function getUserById(id) {
   return createAxios().get(`${systemBaseUrl}/api/system/user/get/${id}`)
 }
 
-// 批量删除菜单
+// 批量删除用户
 export function delUserByIds(ids, option: RequestOption) {
   return createAxios(option).delete(`${systemBaseUrl}/api/system/user/del/${ids}`)
 }

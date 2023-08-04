@@ -1,20 +1,29 @@
 <template>
   <div class="form-view">
     <el-scrollbar class="m-form-scroll">
-      <m-form ref="formRef" :colspan="12" :columns="columns" :model="formData" :handleType="handleType" />
+      <m-form
+        ref="formRef"
+        :colspan="12"
+        :columns="columns"
+        :model="formData"
+        :handleType="handleType"
+        :loading="formLoading"
+      />
     </el-scrollbar>
     <div class="m-footer">
       <el-button icon="close" @click="close()">取消</el-button>
-      <el-button
-        v-if="['add', 'edit'].includes(handleType)"
-        v-auth="['add', 'edit']"
-        icon="check"
-        type="primary"
-        :loading="saveLoading"
-        @click="save"
-      >
-        保存
-      </el-button>
+      <template v-if="!formLoading">
+        <el-button
+          v-if="['add', 'edit'].includes(handleType)"
+          v-auth="['add', 'edit']"
+          icon="check"
+          type="primary"
+          :loading="saveLoading"
+          @click="save"
+        >
+          保存
+        </el-button>
+      </template>
     </div>
   </div>
 </template>
@@ -33,11 +42,13 @@ const props = defineProps({
 })
 const emit = defineEmits(['close'])
 
+const formLoading = ref(false)
 const formRef = ref()
 const saveLoading = ref(false)
 const formData = ref({})
 
 if (props.handleType !== 'add') {
+  formLoading.value = true
   // 查询明细
   getFileById(props.modelValue.id).then((res) => {
     formData.value = res.data
@@ -49,6 +60,7 @@ if (props.handleType !== 'add') {
         }
       ]
     }
+    formLoading.value = false
   })
 }
 

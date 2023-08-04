@@ -76,7 +76,7 @@ export interface CommonColumn {
   type?: CommonColumnType
   style?: string
   valueFormat?: string
-  single?: boolean
+  single?: boolean | 'id' | 'object'
   itemList?: CommonItemList
   labelKey?: string | ((item: CommonItemData) => string | number)
   valueKey?: string | ((item: CommonItemData) => string | number)

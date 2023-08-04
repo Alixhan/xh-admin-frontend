@@ -175,7 +175,7 @@ export default defineComponent({
   }
 
   .filter-view {
-    //transition: height 0.2s ease-in-out;
+    transition: height 0.2s ease-in-out;
     overflow: hidden;
   }
 }

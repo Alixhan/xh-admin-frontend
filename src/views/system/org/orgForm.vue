@@ -1,7 +1,14 @@
 <template>
   <div class="form-view">
     <el-scrollbar class="m-form-scroll">
-      <m-form ref="formRef" :colspan="24" :columns="columns" :model="formData" :handleType="handleType2" />
+      <m-form
+        ref="formRef"
+        :colspan="24"
+        :columns="columns"
+        :model="formData"
+        :handleType="handleType2"
+        :loading="formLoading"
+      />
     </el-scrollbar>
     <div class="m-footer">
       <el-button icon="close" @click="close()">取消</el-button>
@@ -37,6 +44,8 @@ const props = defineProps({
 const emit = defineEmits(['close'])
 
 const formRef = ref()
+//初始化加载状态
+const formLoading = ref(false)
 const saveLoading = ref(false)
 const formData = ref({
   parentId: props.modelValue?.parentId,
@@ -47,12 +56,14 @@ const formData = ref({
 const handleType2 = ref(props.handleType)
 if (handleType2.value !== 'add') {
   // 查询明细
+  formLoading.value = true
   getOrgById(props.modelValue.id).then((res) => {
     formData.value = res.data
     if (handleType2.value === 'copy') {
       handleType2.value = 'add'
       formData.value.id = ''
     }
+    formLoading.value = false
   })
 }
 

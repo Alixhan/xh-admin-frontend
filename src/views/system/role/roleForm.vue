@@ -97,7 +97,7 @@ const handleType2 = ref(props.handleType)
 const menuTreeRef = ref()
 //权限树形结构数据
 const menuTrees = ref<TreeNode[]>([])
-let roleMenus = []
+let roleMenus: any [] = []
 const checkedMenus = ref([])
 initFormData()
 
@@ -171,7 +171,7 @@ function clearParentRole(){
 }
 
 // 表单字段根据表单数据变化，有所不同
-const columns = ref<CommonColumn[]>([])
+const columns = ref<FormColumn[]>([])
 watchEffect(() => {
   columns.value = [
     {

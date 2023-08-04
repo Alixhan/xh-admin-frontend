@@ -6,6 +6,26 @@ import { useDark, useLocalStorage, useTitle } from '@vueuse/core'
 import _ from 'lodash'
 import { devMenus } from '@/router/static'
 
+interface Menu {
+  id: number
+  title: string
+  name: string
+  parentId?: number
+  cache: boolean
+  componentName?: string
+  fullPath: string
+  auth: string
+  type: string
+  component: string
+  handleType: string
+  path: string
+  children?: Menu []
+}
+
+interface NavTab extends Menu{
+}
+
+
 /**
  * 系统全局store,主要定义项目布局信息，系统登录， 路由管理，权限管理，浏览器标题管理，注销等
  * sxh 2023-03-31
@@ -55,26 +75,26 @@ export const useSystemStore = defineStore('system', () => {
   }
 
   // 浏览器title
-  const title = useTitle(import.meta.env.VITE_TITLE)
+  useTitle(import.meta.env.VITE_TITLE)
   // 语言，默认为简体中文
   const language = ref('zh-cn')
   // 当前登录的token ，持久化到本地储存
   const token = useLocalStorage(import.meta.env.VITE_SYS_TOKEN_KEY, '')
   // 登录状态 success, failed
-  const loginStatus = ref(null)
+  const loginStatus = ref<'success' | 'failed'>()
   /**
    * 当前登录的用户信息
    * @type {avatar: string}
    */
   const user = ref({})
   // 当前用户的所有菜单
-  const menus = ref([])
+  const menus = ref<Menu []>([])
   // 当前所有菜单，id为key,value为menu
-  const menusObj = ref({})
+  const menusObj = ref<{[id: number]: Menu}>({})
   // 菜单树形结构
-  const treeMenus = ref([])
+  const treeMenus = ref<Menu []>([])
   // 导航路由页签
-  const navTabs = ref([])
+  const navTabs = ref<NavTab []>([])
   // 当前激活的菜单的id
   const activeMenuId = ref()
   // 刷新当前页签
@@ -106,7 +126,7 @@ export const useSystemStore = defineStore('system', () => {
       return
     }
     let path
-    if (token.value && loginStatus.value === null) {
+    if (token.value && !loginStatus.value) {
       path = await userLogin()
         .then((res) => {
           // 用户已登录
@@ -129,12 +149,28 @@ export const useSystemStore = defineStore('system', () => {
     }
     // 如果是登录成功的，并且路由是根路径或者登录页的，跳转到菜单第一个路由
     if (loginStatus.value === 'success' && ['/', '/login'].includes(to.fullPath)) {
-      path = getFirstRoute().fullPath
+      path = getFirstRoute()?.fullPath
     }
     // 重定向路由和原跳转路由路径相同，则无需处理
     if (to.fullPath !== path) {
       return path
     }
+  }
+
+  // 路由跳转成功后钩子，设置当前路由信息，navTabs等，浏览器标题等
+  function afterEach(guard) {
+    const fullPath = guard.fullPath
+    const tab = navTabs.value.find((i) => i.fullPath === fullPath)
+    const menu = menus.value.find((i) => i.fullPath === fullPath)
+    // 如果不存在，则添加tab
+    if (!tab && menu) nextTick().then(() => navTabs.value.push(menu))
+    // 如果是跳转到动态菜单，设置activeId
+    if (menu) activeMenuId.value = menu.id
+
+    // 设置浏览器标题
+    let tit = import.meta.env.VITE_TITLE
+    if (guard.meta.title) tit = guard.meta.title + '-' + tit
+    useTitle(tit)
   }
 
   // 设置token
@@ -164,9 +200,9 @@ export const useSystemStore = defineStore('system', () => {
     })
     // 转为树形结构
     treeMenus.value = menus.value.filter((i) => {
-      const parent = menusObj.value[i.parentId]
+      const parent = menusObj.value[i.parentId!]
       if (parent) {
-        parent.children.push(i)
+        parent.children!.push(i)
         return false
       }
       return true
@@ -176,11 +212,11 @@ export const useSystemStore = defineStore('system', () => {
 
   // 获取菜单id的层级数组
   function getMenuLevelArr(id) {
-    const arr = []
+    const arr: Menu [] = []
     let currentMenu = menusObj.value[id]
     while (currentMenu) {
       arr.unshift(currentMenu)
-      currentMenu = menusObj.value[currentMenu.parentId]
+      currentMenu = menusObj.value[currentMenu.parentId!]
     }
     return arr
   }
@@ -191,7 +227,7 @@ export const useSystemStore = defineStore('system', () => {
     router.addRoute({
       name: layoutRouteName,
       path: `/${layoutRouteName}`,
-      component: () => import('@/layout')
+      component: () => import('@/layout/index.vue')
     })
     menus.value.forEach((i) => {
       // 权限name,用冒号拼接上父级name
@@ -218,7 +254,7 @@ export const useSystemStore = defineStore('system', () => {
           component: () => {
             const component = viewsComponent[i.component]
             if (!component) throw new Error(`${i.component} 文件不存在！`)
-            return component().then((comp) => ({
+            return component().then((comp: any) => ({
               ...comp.default,
               name: componentName
             }))
@@ -242,6 +278,7 @@ export const useSystemStore = defineStore('system', () => {
     const arr = [...treeMenus.value]
     while (arr.length) {
       const menu = arr.shift()
+      if(!menu) return
       if (menu.type === 'menu') return menu
       if (menu.children?.length) {
         arr.unshift(...menu.children)
@@ -257,22 +294,6 @@ export const useSystemStore = defineStore('system', () => {
       menu && router.push(menu.fullPath)
     }
   )
-
-  // 路由跳转成功后钩子，设置当前路由信息，navTabs等，浏览器标题等
-  function afterEach(guard) {
-    const fullPath = guard.fullPath
-    const tab = navTabs.value.find((i) => i.fullPath === fullPath)
-    const menu = menus.value.find((i) => i.fullPath === fullPath)
-    // 如果不存在，则添加tab
-    if (!tab && menu) nextTick().then(() => navTabs.value.push(menu))
-    // 如果是跳转到动态菜单，设置activeId
-    if (menu) activeMenuId.value = menu.id
-
-    // 设置浏览器标题
-    let tit = import.meta.env.VITE_TITLE
-    if (guard.meta.title) tit = guard.meta.title + '-' + tit
-    title.value = tit
-  }
 
   // 设置当前激活菜单id
   function setActiveMenuId(val) {

@@ -41,8 +41,8 @@ html {
   }
 
   .el-dialog {
-    min-width: min(350px, 100vw);
-    max-width: 100vw;
+    min-width: min(350px, 95vw);
+    max-width: 95vw;
 
     .el-dialog__header {
       padding-bottom: 0;
@@ -74,13 +74,7 @@ html {
     align-items: center;
 
     .el-icon {
-      margin-right: 2px;
-    }
-  }
-
-  .el-input {
-    .el-input__wrapper {
-      background-color: var(--);
+      margin-right: 5px;
     }
   }
 }
