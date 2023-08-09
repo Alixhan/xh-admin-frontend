@@ -6,7 +6,7 @@ import router from './router'
 import ElementPlus from 'element-plus'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue' // element图标
 import MyComponents from '@/components'
-import MyDirective from '@/directive'
+import { AuthDirective } from '@/directive'
 import '@/styles/index.scss' // 样式引入
 import { loading } from '@/utils/loading'
 // import 'default-passive-events'
@@ -21,8 +21,8 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component)
 }
 // 全局注册自定义组件
-MyComponents.install(app)
-// 全局注册自定义指令
-app.use(MyDirective)
+app.use(MyComponents)
+// 全局注册权限自定义指令
+app.directive('auth', AuthDirective)
 // 必须放到最后挂载
 app.mount('#app')

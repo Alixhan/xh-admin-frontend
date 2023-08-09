@@ -6,7 +6,7 @@ import { useDark, useLocalStorage, useTitle } from '@vueuse/core'
 import _ from 'lodash'
 import { devMenus } from '@/router/static'
 
-interface Menu {
+export interface Menu {
   id: number
   title: string
   name: string

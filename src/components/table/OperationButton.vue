@@ -14,7 +14,12 @@
         </el-link>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item v-for="(i, index2) in arr2" :key="index2" :="i" :style="`color: var(--el-color-${i.type})`">
+            <el-dropdown-item
+              v-for="(i, index2) in arr2"
+              :key="index2"
+              :="i"
+              :style="`color: var(--el-color-${i.type})`"
+            >
               {{ i.label }}
             </el-dropdown-item>
           </el-dropdown-menu>
@@ -23,11 +28,11 @@
     </template>
   </div>
 </template>
-
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref, toRef } from 'vue'
 import { auth as auth2 } from '@/directive'
 import { ElDropdown, ElDropdownMenu, ElLink } from 'element-plus'
+import { DefaultMaxCount } from '@/components/constants'
 
 /**
  * 操作按钮，主要简化表格按钮的控制，超出的按钮归纳在更多的下拉菜单里
@@ -60,14 +65,14 @@ export interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   auth: false,
-  maxCount: 2,
+  maxCount: DefaultMaxCount,
 })
 
 // 需要收纳
 const storage = ref(false)
 const arr1 = ref<Array<OperationButton>>([])
 const arr2 = ref<Array<OperationButton>>([])
-const buttons: any[] = props.buttons.map((i) => {
+const buttons: any[] = toRef(props, 'buttons').value.map((i) => {
   return {
     type: 'primary',
     ...i,

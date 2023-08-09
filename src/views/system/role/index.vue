@@ -27,6 +27,7 @@
       v-model="formVisible"
       draggable
       destroy-on-close
+      append-to-body
       align-center
       :close-on-click-modal="false"
       width="600px"

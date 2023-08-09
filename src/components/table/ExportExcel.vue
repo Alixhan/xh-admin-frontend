@@ -1,5 +1,5 @@
 <template>
-  <el-button icon="Download" type="primary" text :loading="loading" @click="exportExcel"> 导出 </el-button>
+  <el-button icon="Download" type="primary" text :loading="loading" @click="exportExcel"> 导出</el-button>
 </template>
 <script setup lang="ts">
 import { ref, unref } from 'vue'
@@ -7,6 +7,7 @@ import type { PropType } from 'vue'
 import { cloneDeep } from 'lodash'
 import { ElMessageBox, ElNotification } from 'element-plus'
 import { ExcelTree } from '@/utils/excel'
+import type { TableColumn } from '@/components/table/index.vue'
 
 /**
  * 通用表格导出到excel
@@ -25,7 +26,7 @@ const props = defineProps({
     type: Array,
   },
   columns: {
-    type: Array,
+    type: Array as PropType<Array<TableColumn>>,
     required: true,
   },
   exportFileName: {

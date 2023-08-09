@@ -46,13 +46,15 @@ const defaultOption: RequestOption = {
 
 // 对请求进行增强处理
 export default function createAxios(opt?: RequestOption) {
-  const option: RequestOption = Object.assign({}, defaultOption, opt)
+  const option: RequestOption = {...defaultOption, ...opt}
   let loadingInstance
 
   // 重置loading
   function resetLoading() {
     isRef(option.loadingRef) && (option.loadingRef.value = false)
     loadingInstance?.close()
+    //解除占用，防止内存泄漏
+    option.loadingRef = undefined
   }
 
   // 提示错误信息
@@ -90,6 +92,7 @@ export default function createAxios(opt?: RequestOption) {
     isRef(option.loadingRef) && (option.loadingRef.value = true)
     if (option.showLoading) {
       loadingInstance = ElLoading.service({
+        body: true,
         fullscreen: true,
         lock: true,
         text: defaultOption.loadingText,

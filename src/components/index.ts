@@ -8,10 +8,11 @@ import MSingleDatePicker from './form/SingleDatePicker.vue'
 import MComment from './Comment.vue'
 import MUpload from './form/Upload.vue'
 import MOperationButton from './table/OperationButton.vue'
+import type { App } from 'vue'
 // import ElDialog from './Dialog.vue'
 
 export default {
-  install(app) {
+  install(app: App<Element>) {
     app.component('MForm', MForm)
     app.component('MTable', MTable)
     app.component('MSvgIcon', MSvgIcon)

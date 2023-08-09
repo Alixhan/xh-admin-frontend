@@ -1,18 +1,25 @@
 <script lang="tsx">
 import type { PropType, Ref } from 'vue'
-import { computed, createVNode, defineComponent, nextTick, ref, shallowRef, watch } from 'vue'
+import { computed, createVNode, defineComponent, nextTick, ref, shallowRef, toRef, watch } from 'vue'
 import type { CommonColumn, CommonColumnType } from '@/components/mutils'
-import { generateDynamicColumn, generateFormatter, generateFormRules, getItemListRef, vModelValue } from '@/components/mutils'
+import {
+  generateDynamicColumn,
+  generateFormatter,
+  generateFormRules,
+  getItemListRef,
+  vModelValue,
+} from '@/components/mutils'
 import TopFilter from '@/components/TopFilter.vue'
-import TableColumnSort from './TableColumnSort.vue'
 import ExportExcel from './ExportExcel.vue'
 import type { OperationButton } from './OperationButton.vue'
 import MOperationButton from './OperationButton.vue'
+import TableColumnSort from './TableColumnSort.vue'
 import { useSystemStore } from '@/stores/system.js'
 import { ElTable } from 'element-plus'
 import { InfoFilled } from '@element-plus/icons-vue'
 import { auth } from '@/directive'
 import { isUndefined } from 'lodash'
+import { DefaultMaxCount } from '@/components/constants'
 
 // 表格列定义
 export interface TableColumn {
@@ -175,10 +182,10 @@ export default defineComponent({
   setup(props, { attrs, emit, slots, expose }) {
     const systemStore = useSystemStore()
     const pageQuery: Ref<PageQuery> = ref({
-      isPage: props.isPage ?? false, // 是否分页
+      isPage: toRef(props, 'isPage').value ?? false, // 是否分页
       currentPage: 1, // 页码
       pageSize: 20, // 分页大小
-      param: props.filterParam ?? {}, // 查询参数
+      param: toRef(props, 'filterParam').value ?? {}, // 查询参数
       filters: [], // 高级查询
     })
     watch(
@@ -187,7 +194,7 @@ export default defineComponent({
     )
 
     // 表格数据
-    const data: Ref<Array<any>> = ref(props.data || [])
+    const data: Ref<Array<any>> = ref(toRef(props, 'data').value || [])
     watch(
       () => props.data,
       () => (data.value = props.data ?? [])
@@ -259,7 +266,7 @@ export default defineComponent({
     watch(
       () => [props.columns],
       () => initTableColumnsParams,
-      // { deep: true }
+      { deep: true }
     )
 
     //选中行的数据
@@ -276,7 +283,11 @@ export default defineComponent({
         selectionRows.value = [row]
         emit('selection-change', selectionRows.value)
       } else if (props.selection === 'multiple') {
-        if (!isUndefined(props.selectionLimit) && selectionRows.value.length >= props.selectionLimit && !selectionRows.value.some((i) => i === row)) {
+        if (
+          !isUndefined(props.selectionLimit) &&
+          selectionRows.value.length >= props.selectionLimit &&
+          !selectionRows.value.some((i) => i === row)
+        ) {
           return
         }
         tableRef.value.toggleRowSelection(row)
@@ -303,11 +314,12 @@ export default defineComponent({
       initTableColumnParamFun()
     }
 
-    function initCommonColumns(initColumns) {
+    function initCommonColumns(initColumns, parentId = '') {
       return initColumns
-        .map((column) => {
+        .map((column, i) => {
           // el-table序号列，自动添加标题，标题居中
           const r = { ...column }
+          r._id = parentId + i
           if (r.type === 'index') {
             r.label ??= '序'
             r.width ??= 50
@@ -322,7 +334,7 @@ export default defineComponent({
           if (r.itemList) r.itemList = getItemListRef(r)
           // 递归生成多层级table
           if (r.children?.length) {
-            r.children = initCommonColumns(r.children)
+            r.children = initCommonColumns(r.children, r._id)
           }
           return r
         })
@@ -334,8 +346,15 @@ export default defineComponent({
               return auth(j.auth, j.authLogic, j.authFull)
             })
             //自动计算一下操作框的宽度
-            const buttons = i.buttons.slice(0, i.maxCount ?? 2)
-            i.width ??= buttons.reduce((size, item) => size + (item.label?.length ?? 0) + (item.icon ? 1.5 : 0), 0 + (buttons.length ?? 0)) * 15 + 20
+            const buttons = i.buttons.slice(0, i.maxCount ?? DefaultMaxCount)
+            if(buttons.length < i.buttons?.length) {
+              buttons[buttons.length - 1] = {icon: 'el|more', label: '更多'}
+            }
+            i.width ??=
+              buttons.reduce(
+                (size, item) => size + (item.label?.length ?? 0) + (item.icon ? 1.5 : 0),
+                2.2 + ((buttons.length - 1) * 1.5)
+              ) * 12
             return i.buttons?.length
           }
           return true
@@ -379,7 +398,9 @@ export default defineComponent({
             <div style="display: flex; align-items: center;">
               {tableColumParams.required ? <span style="color: red">*</span> : null}
               {tableColumParams.label}
-              {tableColumParams.comment ? <m-comment label={tableColumParams.label} comment={tableColumParams.comment} /> : null}
+              {tableColumParams.comment ? (
+                <m-comment label={tableColumParams.label} comment={tableColumParams.comment} />
+              ) : null}
             </div>
           )
         }
@@ -463,7 +484,11 @@ export default defineComponent({
           inlineMessage: true,
           rules: generateFormRules({ label: column.label, rules: editParam?.rules }, scope.row),
         }
-        return <el-form-item {...formItemParam}>{createVNode(renderArgs.component, renderArgs.param, renderArgs.slots)}</el-form-item>
+        return (
+          <el-form-item {...formItemParam}>
+            {createVNode(renderArgs.component, renderArgs.param, renderArgs.slots)}
+          </el-form-item>
+        )
       }
     }
 
@@ -488,7 +513,14 @@ export default defineComponent({
     // 生成搜索框
     function generateTopFilter() {
       if (props.isFilterTable && props.filterColumns) {
-        return <TopFilter class="top-filter" columns={props.filterColumns} v-model:param={pageQuery.value.param} onSearch={fetchQuery} />
+        return (
+          <TopFilter
+            class="top-filter"
+            columns={props.filterColumns}
+            v-model:param={pageQuery.value.param}
+            onSearch={fetchQuery}
+          />
+        )
       }
     }
 
@@ -531,7 +563,11 @@ export default defineComponent({
         const slots = {
           default(scope) {
             return (
-              <el-radio onClick={(e) => e.preventDefault()} label={true} modelValue={selectionRows.value.includes(scope.row)}>
+              <el-radio
+                onClick={(e) => e.preventDefault()}
+                label={true}
+                modelValue={selectionRows.value.includes(scope.row)}
+              >
                 <span />
               </el-radio>
             )
@@ -610,7 +646,7 @@ export default defineComponent({
             <el-table
               {...tableParam}
               v-slots={slots}
-              v-loading={loadingRef.value}
+              // v-loading={loadingRef.value} 发现此处加入loading会导致内存泄漏。。。。
               class={{ 'el-table-view': true, 'radio-selection': props.selection === 'single' }}
             >
               {generateSelectionColumn()}
@@ -628,7 +664,7 @@ export default defineComponent({
     function generatePaginationView() {
       if (pageQuery.value.isPage) {
         return (
-          <el-scrollbar class="table-scrollbar pagination" wrap-style="height: auto;">
+          <el-scrollbar class={['table-scrollbar', 'pagination']} wrap-style="height: auto;">
             <el-pagination
               {...pagination.value}
               total={Math.max(pagination.value.total ?? 0, data.value.length)}
@@ -649,7 +685,7 @@ export default defineComponent({
 
     return () => {
       return (
-        <div class={`m-table layout-${props.layout??'default'}`} style={props.style}>
+        <div class={`m-table layout-${props.layout ?? 'default'}`} style={props.style}>
           {generateTopFilter()}
           {generateTableView()}
         </div>
@@ -774,7 +810,7 @@ export default defineComponent({
     margin-left: 3px;
     margin-right: 0;
 
-    >span {
+    > span {
       margin-left: 2px;
     }
   }

@@ -2,6 +2,15 @@
   <div class="root">
     {{ useSystemStore().user?.name }}
     <el-button type="primary" @click="test(1)" style="width: 100px">查询</el-button>
+    <el-tree
+      :data="data"
+      :props="{
+        children: 'children',
+        label: 'label',
+      }"
+      draggable
+      show-checkbox
+    />
   </div>
 </template>
 <script lang="jsx" setup>
@@ -13,6 +22,12 @@ function test(id) {
     console.info(res)
   })
 }
+
+const data = [
+  { id: 1, label: 'aaa' },
+  { id: 2, label: 'bbb' },
+  { id: 3, label: 'ccc' },
+]
 </script>
 <style lang="scss" scoped>
 .root {

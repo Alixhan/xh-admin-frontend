@@ -6,7 +6,7 @@
   </div>
 </template>
 <script>
-import { defineComponent } from 'vue'
+import { defineComponent, toRef } from 'vue'
 import dayjs from 'dayjs'
 
 /**
@@ -19,7 +19,7 @@ export default defineComponent({
   props: ['start', 'end', 'valueFormat', 'type', 'startPlaceholder', 'endPlaceholder', 'rangeSeparator'],
   emits: ['update:start', 'update:end'],
   setup(props, { attrs, emit }) {
-    const type = props.type.replace('range', '')
+    const type = toRef(props, 'type').value.replace('range', '')
 
     const shortcuts = [
       {
@@ -109,7 +109,7 @@ export default defineComponent({
       ...attrs,
       ...props,
       key: '1',
-      placeholder: props.startPlaceholder,
+      placeholder: toRef(props, 'startPlaceholder').value,
       className: 'date-picker',
       type,
       'onUpdate:modelValue': updateStart,
@@ -122,7 +122,7 @@ export default defineComponent({
       ...attrs,
       ...props,
       key: '2',
-      placeholder: props.endPlaceholder,
+      placeholder: toRef(props, 'endPlaceholder').value,
       className: 'date-picker',
       type,
       'onUpdate:modelValue': updateEnd,

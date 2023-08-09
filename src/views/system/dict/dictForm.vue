@@ -6,7 +6,7 @@
         :colspan="24"
         :columns="columns"
         :model="formData"
-        :handleType="handleType2"
+        :handleType="handleType"
         :loading="formLoading"
       />
     </el-scrollbar>
@@ -14,7 +14,7 @@
       <el-button icon="close" @click="close()">取消</el-button>
       <template v-if="!formLoading">
         <el-button
-          v-if="['add', 'edit'].includes(handleType2)"
+          v-if="['add', 'edit'].includes(handleType)"
           v-auth="['add', 'edit']"
           icon="check"
           type="primary"
@@ -25,9 +25,22 @@
         </el-button>
       </template>
     </div>
-    <el-dialog title="选择数据字典类型" v-model="visible1" draggable destroy-on-close align-center
-:close-on-click-modal="false" width="70%">
-      <selectDictType selection="single" style="height: calc(90vh - 80px)" @select="selectedDictType" @close="visible1 = false" />
+    <el-dialog
+      title="选择数据字典类型"
+      v-model="visible1"
+      draggable
+      destroy-on-close
+      align-center
+      :close-on-click-modal="false"
+      width="70%"
+      append-to-body
+    >
+      <selectDictType
+        selection="single"
+        style="height: calc(90vh - 80px)"
+        @select="selectedDictType"
+        @close="visible1 = false"
+      />
     </el-dialog>
     <el-dialog
       title="选择上级字典"
@@ -50,7 +63,7 @@
   </div>
 </template>
 <script setup lang="jsx">
-import { ref, watchEffect } from 'vue'
+import { ref, toRef, watchEffect } from 'vue'
 import { getDictDetailById, postSaveDictDetail } from '@/api/system/dict'
 import selectDictType from './selectDictType.vue'
 import selectDictDetail from './selectDictDetail.vue'
@@ -58,9 +71,9 @@ import selectDictDetail from './selectDictDetail.vue'
 const props = defineProps({
   handleType: {
     type: String,
-    default: 'add'
+    default: 'add',
   },
-  modelValue: {}
+  modelValue: {},
 })
 const emit = defineEmits(['close'])
 
@@ -69,19 +82,19 @@ const formLoading = ref(false)
 const formRef = ref()
 const saveLoading = ref(false)
 const formData = ref({
-  sysDictTypeId: props.modelValue?.dictTypeId,
-  dictTypeName: props.modelValue?.dictTypeName,
-  enabled: true
+  sysDictTypeId: toRef(props, 'modelValue').value.dictTypeId,
+  dictTypeName: toRef(props, 'modelValue').value.dictTypeName,
+  enabled: true,
 })
 
-const handleType2 = ref(props.handleType)
-if (handleType2.value !== 'add') {
+const handleType = toRef(props, 'handleType')
+if (handleType.value !== 'add') {
   // 查询明细
   formLoading.value = true
   getDictDetailById(props.modelValue.id).then((res) => {
     formData.value = res.data
-    if (handleType2.value === 'copy') {
-      handleType2.value = 'add'
+    if (handleType.value === 'copy') {
+      handleType.value = 'add'
       formData.value.id = ''
     }
     formLoading.value = false
@@ -99,8 +112,8 @@ watchEffect(() => {
       slots: {
         append() {
           return <el-button onClick={() => (visible1.value = true)}>选择</el-button>
-        }
-      }
+        },
+      },
     },
     { prop: 'dictTypeName', label: '字典类型名称', readonly: true },
     {
@@ -110,14 +123,14 @@ watchEffect(() => {
       slots: {
         append() {
           return <el-button onClick={() => (visible2.value = true)}>选择</el-button>
-        }
-      }
+        },
+      },
     },
     { prop: 'parentLabel', label: '上级字典名称', readonly: true },
     { prop: 'value', label: '字典值key', rules: { required: true } },
     { prop: 'label', label: '字典名称', rules: { required: true } },
     { prop: 'order', label: '排序号' },
-    { prop: 'enabled', label: '是否启用', type: 'switch' }
+    { prop: 'enabled', label: '是否启用', type: 'switch' },
   ]
 })
 
@@ -148,7 +161,7 @@ function save() {
     postSaveDictDetail(formData.value, {
       loadingRef: saveLoading,
       showSuccessMsg: true,
-      successMsg: '保存成功'
+      successMsg: '保存成功',
     }).then(() => close('refresh'))
   })
 }

@@ -1,30 +1,28 @@
 <template>
-  <el-popover
-    trigger="click"
-    :hideAfter="0"
-    popper-style="min-width: 100px; width: auto;"
-  >
+  <el-popover trigger="click" :hideAfter="0" popper-style="min-width: 100px; width: auto;">
     <template #reference>
-      <el-button type="primary" text icon="operation" class="action-btn">
-        列排序
-      </el-button>
+      <el-button type="primary" text icon="operation" class="action-btn"> 列排序</el-button>
     </template>
-    <el-checkbox label="全选" :model-value="checkAll" :indeterminate="indeterminate" @change="handleCheckAllChange" />
-    <div class="sort-view" :ref="sortViewRef">
-      <el-checkbox
-        v-for="column in columnsR"
-        :key="column.prop ?? '' + column.label ?? ''"
-        :label="column.label"
-        :model-value="!column.hidden"
-        @update:model-value="updateValue(column)"
-      />
-    </div>
+    <el-tree
+      class="column-sort"
+      ref="treeRef"
+      :data="treeData"
+      :props="defaultProps"
+      node-key="_id"
+      show-checkbox
+      default-expand-all
+      draggable
+      :default-checked-keys="['root']"
+      :expand-on-click-node="false"
+      :allow-drop="allowDrop"
+      @check-change="checkChange"
+      @node-drop="nodeDrop"
+    />
   </el-popover>
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
-import Sortable from 'sortablejs'
+import { ref, toRef } from 'vue'
 
 /**
  * 通用表格列排序
@@ -40,48 +38,43 @@ const props = defineProps({
   },
 })
 
-const columnsR = ref(props.columns)
-const sortViewRef = (el) => {
-  // 拖拽排序
-  Sortable.create(el, {
-    animation: 150,
-    onEnd({ oldIndex, newIndex }) {
-      if (oldIndex !== newIndex) {
-        const columns = props.columns
-        // 先取出元素
-        const column = columns.splice(oldIndex, 1)
-        // 插入新位置
-        columns.splice(newIndex, 0, ...column)
-        emits('change')
-      }
-    },
-  })
+const treeRef = ref()
+
+const columns = toRef(props, 'columns')
+
+const defaultProps = {
+  children: 'children',
+  label: 'label',
 }
 
-const checkAll = computed(() => columnsR.value.every((i) => !i.hidden))
-const indeterminate = computed(() => !(columnsR.value.every((i) => i.hidden) || checkAll.value))
+const treeData = ref([
+  {
+    _id: 'root',
+    label: '全部列',
+    children: columns.value,
+  },
+])
 
-function updateValue(column) {
-  column.hidden = !column.hidden
-  emits('change')
+//只允许同级拖拽
+function allowDrop(draggingNode, dropNode, type) {
+  return ['prev', 'next'].includes(type) && draggingNode.parent === dropNode.parent
 }
-function handleCheckAllChange() {
-  const hidden = checkAll.value
-  columnsR.value.forEach((i) => (i.hidden = hidden))
+
+function checkChange(node, checked, halfChecked) {
+  if (node._id !== 'root') {
+    node.hidden = !(checked || halfChecked)
+    emits('change')
+  }
+}
+
+function nodeDrop() {
   emits('change')
 }
 </script>
 <style scoped lang="scss">
-.sort-view {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  border-top: var(--el-border);
-  padding-top: 5px;
-
-  > .el-checkbox {
-    height: 25px;
-    margin-right: 0;
+.column-sort {
+  :deep(.el-tree-node__expand-icon) {
+    display: none;
   }
 }
 </style>

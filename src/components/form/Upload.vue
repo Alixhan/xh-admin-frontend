@@ -64,12 +64,11 @@
     <el-dialog
       title="图片裁剪"
       v-model="visible2"
-      align-center
       draggable
       append-to-body
       destroy-on-close
       :close-on-click-modal="false"
-      width="70%"
+      width="75%"
     >
       <cropper :="cropperOption" @close="visible2 = false" />
     </el-dialog>

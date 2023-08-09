@@ -29,10 +29,14 @@ html {
     --el-table-header-bg-color: var(--el-color-primary-light-8);
     --el-table-header-text-color: var(--el-text-color-regular);
     --el-font-size-base: 12px;
-    font-size: 13px;
+    font-size: 12px;
 
     .el-table__cell {
       padding: 4px 0;
+    }
+
+    thead {
+      font-size: 13px;
     }
 
     thead.is-group th.el-table__cell {

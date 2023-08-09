@@ -65,6 +65,7 @@
       v-model="formVisible"
       draggable
       destroy-on-close
+      append-to-body
       :close-on-click-modal="false"
       width="500px"
     >

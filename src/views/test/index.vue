@@ -25,11 +25,13 @@
 import { reactive, ref } from 'vue'
 
 const data = ref([])
-const num = ref(1)
+const num = ref(20)
 const formData = reactive({
   a: 'fsdfsdf',
   b: '所经历的副科级塑料袋封口吉林科技'
 })
+
+add()
 
 function add() {
   for (let i = 0; i < num.value; i++) {

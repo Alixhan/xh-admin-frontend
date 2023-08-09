@@ -6,7 +6,7 @@
         :colspan="24"
         :columns="columns"
         :model="formData"
-        :handleType="handleType2"
+        :handleType="handleType"
         :loading="formLoading"
       >
         <template #permission>
@@ -32,7 +32,7 @@
       <el-button icon="close" @click="close()">取消</el-button>
       <template v-if="!formLoading">
         <el-button
-          v-if="['add', 'edit'].includes(handleType2)"
+          v-if="['add', 'edit'].includes(handleType)"
           v-auth="['add', 'edit']"
           icon="check"
           type="primary"
@@ -50,7 +50,7 @@
   </div>
 </template>
 <script setup lang="tsx">
-import { ref, watchEffect } from 'vue'
+import { ref, toRef, watchEffect } from 'vue'
 import type { PropType } from 'vue'
 import { getRoleById, postSaveRole, queryRoleMenu } from '@/api/system/role'
 import SelectRole from '@/views/system/role/selectRole.vue'
@@ -93,7 +93,7 @@ const formData = ref<{ [prop: string]: any }>({
   cache: true,
   enabled: true,
 })
-const handleType2 = ref(props.handleType)
+const handleType = toRef(props, 'handleType')
 const menuTreeRef = ref()
 //权限树形结构数据
 const menuTrees = ref<TreeNode[]>([])
@@ -104,13 +104,13 @@ initFormData()
 //初始化form数据
 async function initFormData() {
   formLoading.value = true
-  if (handleType2.value !== 'add') {
+  if (handleType.value !== 'add') {
     // 查询明细
     await getRoleById(props.modelValue!.id).then((res) => {
       formData.value = res.data
       checkedMenus.value = formData.value.roleMenus.map(i => i.sysMenuId)
-      if (handleType2.value === 'copy') {
-        handleType2.value = 'add'
+      if (handleType.value === 'copy') {
+        handleType.value = 'add'
         formData.value.id = ''
       }
     })

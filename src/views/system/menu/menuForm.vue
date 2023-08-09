@@ -6,14 +6,14 @@
         :colspan="24"
         :columns="columns"
         :model="formData"
-        :handleType="handleType2"
+        :handleType="handleType"
         :loading="formLoading"
       />
     </el-scrollbar>
     <div class="m-footer">
       <el-button icon="close" @click="close()">取消</el-button>
       <el-button
-        v-if="['add', 'edit'].includes(handleType2)"
+        v-if="['add', 'edit'].includes(handleType)"
         v-auth="['add', 'edit']"
         icon="check"
         type="primary"
@@ -26,7 +26,7 @@
   </div>
 </template>
 <script setup lang="jsx">
-import { ref, watchEffect } from 'vue'
+import { ref, toRef, watchEffect } from 'vue'
 import { handleTypeList, menuTypeList, platFormList } from './constant'
 import { queryMenuList, postSaveMenu, getMenuById } from '@/api/system/menu'
 
@@ -47,7 +47,7 @@ const formData = ref({
   enabled: true
 })
 
-const handleType2 = ref(props.handleType)
+const handleType = toRef(props, 'handleType')
 
 init()
 
@@ -64,12 +64,12 @@ async function init() {
 }
 
 function initFormData(){
-  if (handleType2.value !== 'add') {
+  if (handleType.value !== 'add') {
     // 查询明细
     return getMenuById(props.modelValue.id).then((res) => {
       formData.value = res.data
-      if (handleType2.value === 'copy') {
-        handleType2.value = 'add'
+      if (handleType.value === 'copy') {
+        handleType.value = 'add'
         formData.value.id = ''
       }
     })
@@ -234,6 +234,8 @@ watchEffect(() => {
       prop: 'cache',
       label: '是否缓存',
       type: 'switch',
+      // 按钮不需要排序号
+      hidden: ['dir', 'btn'].includes(formData.value.type),
       comment: '开启后，切换菜单时，导航页签的页面内容将会缓存起来。'
     },
     { prop: 'enabled', label: '是否启用', type: 'switch' }

@@ -1,21 +1,17 @@
+import type { DirectiveBinding } from 'vue'
+import type { Menu } from '@/stores/system'
 import { useSystemStore } from '@/stores/system'
 
-export default {
-  install(app) {
-    // 鉴权指令
-    app.directive('auth', {
-      mounted: (el, binding) => {
-        const logicAnd = binding.modifiers.and // 权限逻辑运算符 or 或者 and， 默认的是or
-        const full = binding.modifiers.full
-        const value = binding.value // 权限name
-        const bool = auth(value, logicAnd ? 'and' : 'or', full)
-        if (!bool) {
-          el.parentNode?.removeChild(el)
-          el = null
-        }
-      }
-    })
-  }
+export const AuthDirective = {
+  mounted: (el: Element, binding: DirectiveBinding) => {
+    const logicAnd = binding.modifiers.and // 权限逻辑运算符 or 或者 and， 默认的是or
+    const full = binding.modifiers.full
+    const value = binding.value // 权限name
+    const bool = auth(value, logicAnd ? 'and' : 'or', full)
+    if (!bool) {
+      el.parentNode?.removeChild(el)
+    }
+  },
 }
 
 /**
@@ -29,9 +25,9 @@ export function auth(value: string | string[], logic: 'or' | 'and' = 'or', full 
    * 默认是匹配当前菜单下的权限
    * 传入full的话，就是直接匹配所有菜单权限，每个菜单的auth是经过拼接的（会拼接上父级auth:）
    */
-  const systemStore: any = useSystemStore()
+  const systemStore = useSystemStore()
   const activeMenuId = systemStore.activeMenuId
-  const menus = systemStore.menus
+  const menus: Menu[] = systemStore.menus
   // 如果是string就是传入单个权限name，其他类型就是数组
   const val: string[] = value instanceof Array ? value : [value]
   let auth: boolean // 是否有权操作， 默认无
@@ -43,11 +39,11 @@ export function auth(value: string | string[], logic: 'or' | 'and' = 'or', full 
     }
   } else {
     // 当前菜单
-    const currentMenu: any = menus.find((i) => i.id === activeMenuId)
+    const currentMenu: Menu = menus.find((i) => i.id === activeMenuId)!
     if (logic === 'and') {
       auth = val.every((i) => currentMenu.children?.some((j) => j.name === i))
     } else {
-      auth = currentMenu.children?.some((i) => val.some((j) => j === i.name))
+      auth = currentMenu.children?.some((i) => val.some((j) => j === i.name)) ?? false
     }
   }
   return auth

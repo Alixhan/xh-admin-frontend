@@ -17,12 +17,28 @@
         <el-button type="success" @click="toggleExpand"> 全部 展开/收起</el-button>
       </template>
       <template #right-action>
-        <el-button v-auth="'add'" type="primary" icon="plus" @click="openForm('add')"> 新增 </el-button>
-        <el-button v-auth="'del'" type="danger" icon="delete" :disabled="selectRows.length === 0" @click="del(selectRows)"> 删除 </el-button>
+        <el-button v-auth="'add'" type="primary" icon="plus" @click="openForm('add')"> 新增</el-button>
+        <el-button
+          v-auth="'del'"
+          type="danger"
+          icon="delete"
+          :disabled="selectRows.length === 0"
+          @click="del(selectRows)"
+        >
+          删除
+        </el-button>
       </template>
     </m-table>
-    <el-dialog :title="formTitle[handleType]" v-model="formVisible" align-center draggable destroy-on-close
-               :close-on-click-modal="false" width="70%">
+    <el-dialog
+      :title="formTitle[handleType]"
+      v-model="formVisible"
+      align-center
+      draggable
+      destroy-on-close
+      :close-on-click-modal="false"
+      width="70%"
+      append-to-body
+    >
       <menu-form :handle-type="handleType" :model-value="row" style="height: 75vh" @close="close" />
     </el-dialog>
   </div>
@@ -38,7 +54,7 @@ const formTitle = {
   copy: '菜单复制',
   add: '菜单新增',
   edit: '菜单编辑',
-  detail: '菜单明细'
+  detail: '菜单明细',
 }
 
 const tableRef = ref()
@@ -49,7 +65,7 @@ const filterParam = reactive({})
 
 const topFilterColumns = shallowRef([
   { prop: 'title', label: '菜单标题' },
-  { prop: 'enabled', label: '是否启用', type: 'select', itemList: getDictDetails(1, 'boolean') }
+  { prop: 'enabled', label: '是否启用', type: 'select', itemList: getDictDetails(1, 'boolean') },
 ])
 
 const columns = ref([
@@ -64,13 +80,13 @@ const columns = ref([
     prop: 'cache',
     label: '缓存',
     itemList: getDictDetails(1, 'boolean'),
-    slots: { default: switchSlot }
+    slots: { default: switchSlot },
   },
   {
     prop: 'enabled',
     label: '启用',
     itemList: getDictDetails(1, 'boolean'),
-    slots: { default: switchSlot }
+    slots: { default: switchSlot },
   },
   {
     prop: 'order',
@@ -90,16 +106,16 @@ const columns = ref([
       {
         label: '明细',
         auth: 'detail',
-        onClick: (row) => openForm('detail', row)
+        onClick: (row) => openForm('detail', row),
       },
       {
         label: '删除',
         auth: 'del',
         type: 'danger',
-        onClick: (row) => del([row] )
-      }
-    ]
-  }
+        onClick: (row) => del([row]),
+      },
+    ],
+  },
 ])
 
 const formVisible = ref(false)
@@ -132,6 +148,7 @@ function fetchMenus(pageQuery, option) {
 }
 
 const expand = ref(false)
+
 // 展开/收缩所有
 function toggleExpand() {
   expand.value = !expand.value
@@ -145,6 +162,7 @@ function toggleExpand() {
   }
 }
 
+//打开表单明细弹框
 function openForm(type, r) {
   row.value = r
   formVisible.value = true
@@ -158,8 +176,8 @@ function generateMenuIcon(scope) {
   return (
     <m-icon
       {...{
-        size: 20,
-        modelValue: menu.icon
+        size: 18,
+        modelValue: menu.icon,
       }}
     />
   )
@@ -173,12 +191,13 @@ function switchSlot(scope) {
   const prop = scope.column.property
   return (
     <el-switch
+      size="small"
       v-model={row[prop]}
       beforeChange={async () => {
         const requestParam = {
           id: row.id,
           prop,
-          value: !row[prop]
+          value: !row[prop],
         }
         await postSwitchMenuProp(requestParam, { showLoading: true })
         return true
@@ -192,7 +211,7 @@ function del(rows) {
     showLoading: true,
     showBeforeConfirm: true,
     showSuccessMsg: true,
-    confirmMsg: '确认删除吗？删除后不可恢复！'
+    confirmMsg: '确认删除吗？删除后不可恢复！',
   }).then(() => {
     tableRef.value.fetchQuery()
   })
