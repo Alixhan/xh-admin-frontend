@@ -47,7 +47,7 @@ const formData = ref({
   enabled: true
 })
 
-const handleType = toRef(props, 'handleType')
+const handleType = ref(toRef(props, 'handleType').value)
 
 init()
 

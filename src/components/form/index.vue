@@ -3,15 +3,18 @@ import { createVNode, provide, ref, shallowRef, watchEffect } from 'vue'
 import type { PropType } from 'vue'
 import { ElForm } from 'element-plus'
 import { generateDynamicColumn, generateFormRules, generatePlaceholder, vModelValue } from '@/components/mutils'
-import type { CommonColumn } from '@/components/mutils'
+import type { CommonColumnType, CommonColumn } from '@/components/mutils'
 import { useSystemStore } from '@/stores/system'
 import { useElementSize } from '@vueuse/core'
 import type { UploadCtx } from '@/components/form/Upload.vue'
+
+export declare type FormHandleType = 'add' | 'edit' | 'detail'
 
 /**
  * 表单列类型
  */
 export interface FormColumn extends CommonColumn {
+  type?: CommonColumnType | 'separator'
   //上传文件的限制数量
   limit?: number
 }
@@ -25,9 +28,9 @@ export default {
   inheritAttrs: false,
   extends: ElForm,
   props: {
-    // 表单处理类型， add,edit,detail
+    // 表单处理类型
     handleType: {
-      type: String,
+      type: String as PropType<FormHandleType>,
       default: 'add',
     },
     // 跨列数，对应el-col
@@ -39,9 +42,9 @@ export default {
       type: Object,
       required: true,
     },
-    // 表格列定义
+    // 表单列定义
     columns: {
-      type: Array as PropType<FormColumn>,
+      type: Array as PropType<FormColumn[]>,
       required: true,
     },
     labelWidth: {
@@ -80,7 +83,7 @@ export default {
       colspan.value = span
     })
 
-    const formItemParams = shallowRef<FormColumn>([])
+    const formItemParams = shallowRef<FormColumn[]>([])
     watchEffect(initFormItemParams)
 
     const uploadInstances = ref<UploadCtx[]>([])
@@ -139,9 +142,21 @@ export default {
       return formItemParams.value.map((i) => {
         // 隐藏的不显示
         if (i.hidden) return null
+        if (i.columnParam.type === 'separator') {
+          return (
+            <el-col span={24}>
+              <el-divider content-position="left">
+                <div class="separator">
+                  <div />
+                  {i.columnParam.label}
+                </div>
+              </el-divider>
+            </el-col>
+          )
+        }
         const column = i.columnParam
         // 允许用户按照自己的slotName定制
-        if (column.slotName && slots[column.slotName]) return slots[column.slotName]?.()
+        if (column.slotName) return slots[column.slotName]?.()
         const param = {
           class: 'form-input',
           ...i.renderArgs.param,
@@ -185,13 +200,15 @@ export default {
       return formItemParams.value.map((i) => {
         // 隐藏的不显示
         if (i.hidden) return null
+        if(i.columnParam.type === 'separator') return <el-skeleton-item style="width: 60%; margin-bottom: 1em;" />
         const column = i.columnParam
         const formItemSlots: { [name: string]: Function } = {
           default: () => {
+            const randomWidth = 30 + Math.random()* 70
             const skeletonParam = {
               variant: 'text',
               style: {
-                width: '100%',
+                width: `${randomWidth}%`,
                 height: 'var(--el-component-size)',
                 'align-self': 'center',
               },
@@ -264,5 +281,18 @@ export default {
 .form-item-label {
   display: inline-flex;
   align-items: center;
+}
+.separator {
+  font-size: 14px;
+  color: var(--el-text-color);
+  display: flex;
+  align-items: center;
+
+  > div {
+    width: 6px;
+    height: 15px;
+    background-color: var(--el-color-primary);
+    margin-right: 10px;
+  }
 }
 </style>

@@ -1,14 +1,21 @@
 <template>
   <div class="form-view">
-    <el-scrollbar class="m-form-scroll">
+    <el-scrollbar class="m-form-scroll" :style="handleType === 'detail' && 'height: 65vh;'">
       <m-form
         ref="formRef"
-        :colspan="24"
+        :colspan="handleType === 'detail' ? 12 : 24"
         :columns="columns"
         :model="formData"
         :handleType="handleType"
         :loading="formLoading"
-      />
+      >
+        <template #job>
+          <jobs v-model="jobData" :handle-type="handleType" />
+        </template>
+        <template #group>
+          <m-table :is-page="false" style="width: 100%" :columns="groupColumns" layout="auto" :data="groupData" />
+        </template>
+      </m-form>
     </el-scrollbar>
     <div class="m-footer">
       <el-button icon="close" @click="close()">取消</el-button>
@@ -25,17 +32,20 @@
     </div>
   </div>
 </template>
-<script setup lang="jsx">
+<script setup lang="tsx">
+import type { PropType } from 'vue'
 import { ref, watchEffect } from 'vue'
-import { getUserById, postSaveUser } from '@/api/system/user'
-import { getDownloadFileUrl } from '@/utils'
+import { getUserById, getUserGroups, getUserJobs, postSaveUser } from '@/api/system/user'
+import Jobs from '@/views/system/user/jobs.vue'
 
 const props = defineProps({
   handleType: {
     type: String,
     default: 'add',
   },
-  modelValue: {},
+  modelValue: {
+    type: Object as PropType<{ id: number }>,
+  },
 })
 const emit = defineEmits(['close'])
 
@@ -43,28 +53,32 @@ const formRef = ref()
 const formLoading = ref(false)
 const saveLoading = ref(false)
 const formData = ref({
-  enabled: true
+  enabled: true,
 })
+
+const jobData = ref([])
+const groupData = ref([])
 
 if (props.handleType !== 'add') {
   // 查询明细
   formLoading.value = true
-  getUserById(props.modelValue.id).then((res) => {
-    formData.value = res.data
-    if ((formData.value.contentType ?? '').startsWith('image')) {
-      formData.value.image = [
-        {
-          url: getDownloadFileUrl({ object: formData.value.object }),
-          name: formData.value.name,
-        },
-      ]
-    }
+  Promise.all([
+    getUserById(props.modelValue!.id!),
+    getUserJobs({
+      type: 1,
+      userId: props.modelValue!.id!,
+    }),
+    getUserGroups(props.modelValue!.id),
+  ]).then(([a, b, c]) => {
+    formData.value = a.data
+    jobData.value = b.data
+    groupData.value = c.data
     formLoading.value = false
   })
 }
 
-// 表格列定义
-const columns = ref([])
+// 表单列定义
+const columns = ref<FormColumn[]>([])
 watchEffect(() => {
   columns.value = [
     {
@@ -75,8 +89,19 @@ watchEffect(() => {
     { prop: 'name', label: '用户名', rules: { required: true } },
     { prop: 'avatar', label: '头像', type: 'upload-img', single: 'object' },
     { prop: 'enabled', label: '是否启用', type: 'switch' },
+    { type: 'separator', label: '用户岗位', hidden: props.handleType !== 'detail' },
+    { slotName: 'job', hidden: props.handleType !== 'detail' },
+    { type: 'separator', label: '所在用户组', hidden: props.handleType !== 'detail' },
+    { slotName: 'group', hidden: props.handleType !== 'detail' },
   ]
 })
+
+const groupColumns = [
+  { type: 'index', label: '序', width: 50 },
+  { prop: 'id', label: 'ID', width: 50 },
+  { prop: 'name', label: '用户组名称' },
+  { prop: 'createTime', label: '创建时间', type: 'datetime', width: 155 },
+]
 
 // 保存方法
 function save() {
@@ -89,7 +114,7 @@ function save() {
   })
 }
 
-function close(type) {
+function close(type?: any) {
   emit('close', type)
 }
 </script>
@@ -104,5 +129,10 @@ function close(type) {
     padding-right: 10px;
     margin-right: -10px;
   }
+}
+
+.m-form-scroll {
+  flex-grow: 0;
+  height: auto;
 }
 </style>

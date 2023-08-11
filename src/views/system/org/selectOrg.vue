@@ -58,10 +58,10 @@ const topFilterColumns = shallowRef([
 const columns = ref([
   { type: 'index', label: '序', width: 50 },
   { prop: 'id', label: 'ID', width: 50 },
-  { prop: 'parentName', label: '上级机构' },
-  { prop: 'parentId', label: '上级机构ID', width: 100 },
   { prop: 'code', label: '机构代码' },
   { prop: 'name', label: '机构名称' },
+  { prop: 'parentName', label: '上级机构' },
+  { prop: 'parentId', label: '上级机构ID', width: 100 },
   { prop: 'createTime', label: '创建时间', type: 'datetime', width: 155 },
 ])
 </script>

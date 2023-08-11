@@ -37,6 +37,51 @@ export function getUserById(id) {
 }
 
 // 批量删除用户
-export function delUserByIds(ids, option: RequestOption) {
+export function delUserByIds(ids: string, option: RequestOption) {
   return createAxios(option).delete(`${systemBaseUrl}/api/system/user/del/${ids}`)
+}
+
+export interface  UserJobsParam {
+  //数据类型 1：用户，2：用户组
+  type: 1 | 2
+  // 用户id或用户组id
+  userId: number
+  // 用户岗位信息
+  userJobs?: any []
+}
+
+// 获取用户或者用户组的岗位信息
+export function getUserJobs(params: UserJobsParam) {
+  return createAxios().get(`${systemBaseUrl}/api/system/user/getUserJobs`, {params})
+}
+
+// 保存系统用户
+export function saveUserJobs(params: UserJobsParam, option?: RequestOption) {
+  return createAxios(option).post(`${systemBaseUrl}/api/system/user/saveUserJobs`, params)
+}
+
+// 用户组列表查询
+export function queryUserGroupList(params: PageQuery = {}, option?: RequestOption) {
+  return createAxios(option).post(`${systemBaseUrl}/api/system/user/queryUserGroupList`, params)
+}
+
+
+// 用户组保存
+export function saveUserGroup(params = {}, option?: RequestOption) {
+  return createAxios(option).post(`${systemBaseUrl}/api/system/user/saveUserGroup`, params)
+}
+
+// id获取用户组详情
+export function getUserGroupById(id) {
+  return createAxios().get(`${systemBaseUrl}/api/system/user/getUserGroup/${id}`)
+}
+
+// ids批量删除用户组
+export function delUserGroupByIds(ids: string, option: RequestOption) {
+  return createAxios(option).delete(`${systemBaseUrl}/api/system/user/delUserGroup/${ids}`)
+}
+
+// 用户id获取用户所在的所有用户组信息
+export function getUserGroups(id) {
+  return createAxios().get(`${systemBaseUrl}/api/system/user/getUserGroups/${id}`)
 }

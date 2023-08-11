@@ -8,67 +8,63 @@
       :filter-param="param"
       :filter-columns="topFilterColumns"
       :columns="columns"
-      :fetch-data="queryRoleList"
+      :fetch-data="queryUserList"
       :selection="selection"
       :selection-limit="selectionLimit"
       @selection-change="(rows) => (selectRows = rows)"
     >
       <template #left-action>
         <el-button
-          :disabled="selectRows.length === 0 || (selectionLimit && (selectRows.length > selectionLimit))"
+          :disabled="selectRows.length === 0 || selectRows.length > selectionLimit"
           type="primary"
           @click="emit('select', selectRows)"
-        >
-          选择
+          >选择
         </el-button>
-        <el-button @click="emit('clear')">清空</el-button>
       </template>
     </m-table>
   </div>
 </template>
-<script setup lang="tsx">
+<script setup lang="jsx">
 import { ref, shallowRef } from 'vue'
-import type { PropType } from 'vue'
-import { queryRoleList } from '@/api/system/role'
 import getDictDetails from '@/utils/dict'
-import type { TableSelection } from '@/components/table/index.vue'
+import { queryUserList } from '@/api/system/user'
+import { statusList } from '@/views/system/user/constant'
 
 defineProps({
   selection: {
-    type: String as PropType<TableSelection>,
-    default: 'multiple'
+    type: String,
+    default: 'multiple',
   },
   param: {
     type: Object,
-    default: () => ({})
+    default: () => ({}),
   },
   /**
    * 最多可选择行数
    */
   selectionLimit: {
-    type: Number
+    type: Number,
   },
 })
-const emit = defineEmits(['select', 'clear'])
+const emit = defineEmits(['select'])
 
 const selectRows = ref([])
 
 const topFilterColumns = shallowRef([
-  { prop: 'parentId', label: '上级角色id', hidden: true },
-  { prop: 'parentName', label: '上级角色名称', readonly: true },
-  { prop: 'name', label: '角色名称' },
-  { prop: 'enabled', label: '是否启用', type: 'select', itemList: getDictDetails(1, 'boolean') },
+  { prop: 'code', label: '用户账号' },
+  { prop: 'name', label: '用户名' },
 ])
 
 // 表格列定义
-const columns: TableColumn[] = [
+const columns = ref([
   { type: 'index', label: '序', width: 50 },
   { prop: 'id', label: 'ID', width: 50 },
-  { prop: 'name', label: '角色名称' },
-  { prop: 'parentName', label: '上级角色' },
-  { prop: 'parentId', label: '上级角色ID', width: 100 },
+  { prop: 'code', label: '用户账号' },
+  { prop: 'name', label: '用户名称' },
+  { prop: 'status', label: '用户状态', type: 'select', itemList: statusList },
+  { prop: 'enabled', label: '是否启用', type: 'select', itemList: getDictDetails(1, 'boolean') },
   { prop: 'createTime', label: '创建时间', type: 'datetime', width: 155 },
-]
+])
 </script>
 <style lang="scss" scoped>
 .form-view {

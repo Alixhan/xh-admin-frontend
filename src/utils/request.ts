@@ -46,7 +46,7 @@ const defaultOption: RequestOption = {
 
 // 对请求进行增强处理
 export default function createAxios(opt?: RequestOption) {
-  const option: RequestOption = {...defaultOption, ...opt}
+  const option: RequestOption = { ...defaultOption, ...opt }
   let loadingInstance
 
   // 重置loading
@@ -60,10 +60,12 @@ export default function createAxios(opt?: RequestOption) {
   // 提示错误信息
   function showErrorMsg(e) {
     if (e === 'cancel') return Promise.reject(e)
+    let type = e?.status ?? 'error'
+    if (!['success', 'warning', 'error', 'info'].includes(type)) type = 'error'
     ElNotification({
       duration: defaultOption.errorDuration,
-      type: e?.status ?? 'error',
-      message: e?.message ?? option.errorMsg,
+      type,
+      message: e?.error ?? e?.message ?? option.errorMsg,
       onClose() {
         // 需要重新登录
         if (e.httpCode === 403) {

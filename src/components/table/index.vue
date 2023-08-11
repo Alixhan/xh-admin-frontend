@@ -22,11 +22,9 @@ import { isUndefined } from 'lodash'
 import { DefaultMaxCount } from '@/components/constants'
 
 // 表格列定义
-export interface TableColumn {
+export interface TableColumn extends CommonColumn {
   align?: 'left' | 'center' | 'right'
   headerAlign?: 'left' | 'center' | 'right'
-  prop?: string
-  prop2?: string
   fixed?: 'left' | 'right'
   type?: CommonColumnType | 'selection' | 'index' | 'operation'
   // 列的宽度
@@ -41,7 +39,7 @@ export interface TableColumn {
 }
 
 // 通用表格查询参数
-export interface PageQuery {
+export interface PageQuery<T = object> {
   // 是否分页
   isPage?: boolean
   // 当前页码 分页为true时必有值
@@ -49,15 +47,15 @@ export interface PageQuery {
   // 分页大小 分页为true时必有值
   pageSize?: number
   // 其他查询参数
-  param?: object
+  param?: T
   // 高级筛选条件
   filters?: Array<any>
 }
 
 // 通用表格查询返回对象类型
-export interface PageResult {
+export interface PageResult<T extends object = object> {
   // 列表数据
-  list: any[]
+  list: T []
   // 合计值
   total: number
   // 是否分页
@@ -347,13 +345,13 @@ export default defineComponent({
             })
             //自动计算一下操作框的宽度
             const buttons = i.buttons.slice(0, i.maxCount ?? DefaultMaxCount)
-            if(buttons.length < i.buttons?.length) {
-              buttons[buttons.length - 1] = {icon: 'el|more', label: '更多'}
+            if (buttons.length < i.buttons?.length) {
+              buttons[buttons.length - 1] = { icon: 'el|more', label: '更多' }
             }
             i.width ??=
               buttons.reduce(
                 (size, item) => size + (item.label?.length ?? 0) + (item.icon ? 1.5 : 0),
-                2.2 + ((buttons.length - 1) * 1.5)
+                2.2 + (buttons.length - 1) * 1.5
               ) * 12
             return i.buttons?.length
           }
@@ -370,7 +368,7 @@ export default defineComponent({
       // column属性
       const tableColumParams = {
         key: column.prop ?? column.type,
-        showOverflowTooltip: true,
+        showOverflowTooltip: !(column.slotName || column.editable),
         ...column,
         slots: { ...column.slots },
       }
@@ -456,7 +454,7 @@ export default defineComponent({
         let renderArgs
         let editParam = column.editParam
         if (editParam instanceof Function) {
-          editParam = editParam(scope.row, column)
+          editParam = editParam(scope, column)
           renderArgs = generateDynamicColumn({
             ...columnParam,
             ...editParam,
@@ -607,7 +605,7 @@ export default defineComponent({
       })
       return (
         <div class={`table-view ${props.isFilterTable ? 'table-view-filter' : ''}`}>
-          <div class="table-top">
+          <el-form disabled={false} class="table-top">
             <el-scrollbar class="table-scrollbar" view-style="display: flex; justify-content: space-between;">
               <div class="left-action">
                 {generateTotalView()}
@@ -641,7 +639,7 @@ export default defineComponent({
                 )}
               </div>
             </el-scrollbar>
-          </div>
+          </el-form>
           <el-form ref={formRef} class="table-form" model={props.data} scroll-to-error>
             <el-table
               {...tableParam}
@@ -769,6 +767,8 @@ export default defineComponent({
       --el-component-size: 25px;
       //--el-component-size-large: 40px;
       //--el-component-size-small: 24px;
+
+
       flex-grow: 1;
       height: 0;
 
@@ -778,6 +778,10 @@ export default defineComponent({
       }
 
       :deep(.el-switch) {
+        height: var(--el-input-height);
+      }
+
+      :slotted(.el-switch) {
         height: var(--el-input-height);
       }
 
@@ -791,9 +795,11 @@ export default defineComponent({
 
       :deep(.el-button) {
         height: var(--el-component-size) !important;
-        line-height: var(--el-component-size);
+        line-height: var(--el-component-size) !important;
         display: inline-flex;
-        padding: 0;
+        >span {
+          line-height: normal;
+        }
       }
     }
   }

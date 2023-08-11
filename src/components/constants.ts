@@ -1,2 +1,2 @@
 //收纳按钮组件默认数量
-export const DefaultMaxCount = 3
+export const DefaultMaxCount = 2

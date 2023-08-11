@@ -30,8 +30,10 @@
         <Plus class="icon" />
       </div>
       <div v-else>
-        <el-button type="success" @click.stop="openFileLib()"> 文件库 </el-button>
-        <el-button type="primary" icon="upload">选择文件</el-button>
+        <el-button-group>
+          <el-button type="primary" @click.stop="openFileLib()" icon="search" />
+          <el-button type="primary" >选择文件</el-button>
+        </el-button-group>
       </div>
     </template>
     <el-image-viewer
@@ -43,7 +45,7 @@
       @close="previewImageVisible = false"
     />
     <el-dialog
-      title="选择文件"
+      title="从文件库选择"
       v-model="visible"
       align-center
       draggable

@@ -19,9 +19,10 @@ declare type CommonModelParam = import('@/components/mutils').CommonModelParam
 
 declare type TableColumn = import('@/components/table').TableColumn
 declare type OperationButton = import('@/components/table').OperationButton
-declare type PageQuery = import('@/components/table').PageQuery
-declare type PageResult = import('@/components/table').PageResult
+declare type PageQuery<T = object> = import('@/components/table').PageQuery<T>
+declare type PageResult<T = object> = import('@/components/table').PageResult<T>
 declare type TablePagination = import('@/components/table').TablePagination
 declare type TableSelection = import('@/components/table').TableSelection
 
+declare type FormHandleType = import('@/components/form').FormHandleType
 declare type FormColumn = import('@/components/form').FormColumn

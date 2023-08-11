@@ -27,7 +27,7 @@ module.exports = {
     'vue/max-attributes-per-line': [
       'error',
       {
-        singleline: { max: 5 },
+        singleline: { max: 8 },
         multiline: { max: 5 }
       }
     ], // vue template模板元素第一行最多5个属性

@@ -73,7 +73,6 @@ export interface CommonColumn {
   prop?: string
   prop2?: string
   label?: string
-  type?: CommonColumnType
   style?: string
   valueFormat?: string
   single?: boolean | 'id' | 'object'
@@ -92,7 +91,10 @@ export interface CommonColumn {
   [any: string]: any
 }
 
-export declare type CommonItemList = CommonItemData[] | Promise<CommonItemData[]> | (() => CommonItemData[] | Promise<CommonItemData[]>)
+export declare type CommonItemList =
+  | CommonItemData[]
+  | Promise<CommonItemData[]>
+  | (() => CommonItemData[] | Promise<CommonItemData[]>)
 
 export interface CommonItemData {
   value?: number | string
@@ -114,7 +116,7 @@ export interface CommonModelParam {
  * sxh
  * 2023-3-14
  */
-export function generateDynamicColumn(column: CommonColumn) {
+export function generateDynamicColumn(column: FormColumn) {
   if (!column.prop) return
   const param = {
     clearable: true,
@@ -172,7 +174,9 @@ export function generateDynamicColumn(column: CommonColumn) {
   let type: string = column.type ?? 'input'
   if (['text', 'textarea', 'password', 'number'].includes(type)) {
     type = 'el-input'
-  } else if (['year', 'month', 'date', 'dates', 'datetime', 'week', 'datetimerange', 'daterange', 'monthrange'].includes(type)) {
+  } else if (
+    ['year', 'month', 'date', 'dates', 'datetime', 'week', 'datetimerange', 'daterange', 'monthrange'].includes(type)
+  ) {
     // 设置默认的格式化
     if (!param.valueFormat) {
       if (['year'].includes(type)) param.valueFormat = 'YYYY'
@@ -208,7 +212,7 @@ export function generateDynamicColumn(column: CommonColumn) {
 }
 
 // 生成双向绑定属性值
-export function vModelValue(param: CommonColumn & { prop: any; prop2: any }, form) {
+export function vModelValue(param: FormColumn & { prop: any; prop2: any }, form) {
   const returnParam: CommonModelParam = {}
   // 需要双向绑定
   if (form && param.prop) {
@@ -256,7 +260,7 @@ export function vModelValue(param: CommonColumn & { prop: any; prop2: any }, for
  * 生成默认的placeholder
  */
 export function generatePlaceholder(column) {
-  if(!column?.prop) return
+  if (!column?.prop) return
   const type = column.type ?? 'input'
   if (!Object.prototype.hasOwnProperty.call(column, 'placeholder')) {
     const label = column.label ?? ''
@@ -310,7 +314,7 @@ export function getItemListRef(column: CommonColumn): Ref<CommonItemData[]> {
 /**
  * 增强el-form表单验证
  */
-export function generateFormRules(column, formData?:object) {
+export function generateFormRules(column, formData?: object) {
   const rules = setRules(column)
   if (!rules) return
   column.rules = rules.map((i) => {
