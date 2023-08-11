@@ -18,12 +18,10 @@
 </template>
 <script setup>
 import { reactive } from 'vue'
-import { useSystemStore } from '@/stores/system'
 
 const formData = reactive({
   currentPage1: 1,
 })
 
-const systemStore = useSystemStore()
 </script>
 <style lang="scss" scoped></style>

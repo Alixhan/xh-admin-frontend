@@ -47,7 +47,7 @@ export interface  UserJobsParam {
   // 用户id或用户组id
   userId: number
   // 用户岗位信息
-  userJobs?: any []
+  jobData?: any []
 }
 
 // 获取用户或者用户组的岗位信息

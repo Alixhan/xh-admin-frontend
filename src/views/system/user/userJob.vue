@@ -83,7 +83,7 @@ async function save() {
     {
       type: props.type!,
       userId: props.userId!,
-      userJobs: jobData.value,
+      jobData: jobData.value,
     },
     {
       loadingRef: saveLoading,
