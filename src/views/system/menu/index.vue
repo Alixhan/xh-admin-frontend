@@ -17,9 +17,9 @@
         <el-button type="success" @click="toggleExpand"> 全部 展开/收起</el-button>
       </template>
       <template #right-action>
-        <el-button v-auth="'add'" type="primary" icon="plus" @click="openForm('add')"> 新增</el-button>
+        <el-button v-auth="'system:menu:add'" type="primary" icon="plus" @click="openForm('add')"> 新增</el-button>
         <el-button
-          v-auth="'del'"
+          v-auth="'system:menu:del'"
           type="danger"
           icon="delete"
           :disabled="selectRows.length === 0"
@@ -101,18 +101,26 @@ const columns = ref([
     fixed: 'right',
     align: 'center',
     buttons: [
-      { label: '复制', auth: 'add', onClick: (row) => openForm('copy', row) },
-      { label: '编辑', auth: 'edit', onClick: (row) => openForm('edit', row) },
+      { label: '编辑', icon: 'edit', auth: 'system:menu:edit', onClick: (row) => openForm('edit', row) },
       {
         label: '明细',
-        auth: 'detail',
+        icon: 'document',
+        auth: 'system:menu:detail',
         onClick: (row) => openForm('detail', row),
       },
       {
         label: '删除',
-        auth: 'del',
+        icon: 'delete',
+        auth: 'system:menu:del',
         type: 'danger',
         onClick: (row) => del([row]),
+      },
+      {
+        label: '复制',
+        type: 'success',
+        icon: 'CopyDocument',
+        auth: 'system:menu:add',
+        onClick: (row) => openForm('copy', row),
       },
     ],
   },

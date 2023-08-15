@@ -20,9 +20,8 @@ body {
   .el-input__wrapper,
   .el-radio {
     box-shadow: none;
-    border-style: dashed;
-    border-width: 1px;
-    border-color: var(--el-text-color-disabled);
+    outline: 1px dashed var(--el-text-color-disabled);
+    outline-offset: -1px;
   }
 
   .el-input.is-disabled .el-input__wrapper {
@@ -30,6 +29,10 @@ body {
   }
 
   .el-form-item__label::before {
+    display: none;
+  }
+
+  .el-upload {
     display: none;
   }
 

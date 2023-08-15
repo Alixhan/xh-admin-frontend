@@ -22,8 +22,8 @@
       @selection-change="(rows) => (selectRows = rows)"
     >
       <template #right-action>
-        <el-button v-auth="'add'" type="primary" icon="plus" @click="openForm('add')"> 新增</el-button>
-        <el-button v-auth="'del'" type="danger" icon="delete" :disabled="selectRows.length === 0" @click="del(selectRows)"> 删除 </el-button>
+        <el-button v-auth="'system:org:add'" type="primary" icon="plus" @click="openForm('add')"> 新增</el-button>
+        <el-button v-auth="'system:org:del'" type="danger" icon="delete" :disabled="selectRows.length === 0" @click="del(selectRows)"> 删除 </el-button>
       </template>
     </m-table>
     <el-dialog
@@ -103,15 +103,15 @@ const columns = ref([
     fixed: 'right',
     align: 'center',
     buttons: [
-      { label: '编辑', auth: 'edit', onClick: (row) => openForm('edit', row) },
+      { label: '编辑', auth: 'system:org:edit', onClick: (row) => openForm('edit', row) },
       {
         label: '明细',
-        auth: 'detail',
+        auth: 'system:org:detail',
         onClick: (row) => openForm('detail', row),
       },
       {
         label: '删除',
-        auth: 'del',
+        auth: 'system:org:del',
         type: 'danger',
         onClick: (row) => del([row]),
       },

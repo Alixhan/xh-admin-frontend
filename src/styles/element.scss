@@ -18,15 +18,13 @@
 }
 
 html {
-  background: url('@/assets/bg.jpg') no-repeat;
-
   .el-menu {
     border-right: none;
   }
 
   .el-table {
     --el-table-border-color: var(--el-border-color);
-    --el-table-header-bg-color: var(--el-color-primary-light-8);
+    --el-table-header-bg-color: var(--el-color-primary-light-9);
     --el-table-header-text-color: var(--el-text-color-regular);
     --el-font-size-base: 12px;
     font-size: 12px;

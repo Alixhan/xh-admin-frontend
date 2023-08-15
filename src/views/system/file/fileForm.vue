@@ -15,7 +15,7 @@
       <template v-if="!formLoading">
         <el-button
           v-if="['add', 'edit'].includes(handleType)"
-          v-auth="['add', 'edit']"
+          v-auth="['system:file:add', 'system:file:edit']"
           icon="check"
           type="primary"
           :loading="saveLoading"

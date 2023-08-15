@@ -15,7 +15,7 @@ import type { OperationButton } from './OperationButton.vue'
 import MOperationButton from './OperationButton.vue'
 import TableColumnSort from './TableColumnSort.vue'
 import { useSystemStore } from '@/stores/system.js'
-import { ElTable } from 'element-plus'
+import { ElForm, ElTable } from 'element-plus'
 import { InfoFilled } from '@element-plus/icons-vue'
 import { auth } from '@/directive'
 import { isUndefined } from 'lodash'
@@ -55,7 +55,7 @@ export interface PageQuery<T = object> {
 // 通用表格查询返回对象类型
 export interface PageResult<T extends object = object> {
   // 列表数据
-  list: T []
+  list: T[]
   // 合计值
   total: number
   // 是否分页
@@ -77,7 +77,7 @@ export interface TablePagination {
   // 分页框有背景颜色，参考element-plus分页组件
   background: true
   // 显示哪些布局控件，参考element-plus分页组件
-  layout: 'total,sizes,prev,pager,next,jumper'
+  layout: 'total,sizes,prev,pager,next,jumper' | string
 }
 
 export declare type TableSelection = 'multiple' | 'single'
@@ -341,7 +341,7 @@ export default defineComponent({
           if (i.type === 'operation') {
             i.buttons = i.buttons?.filter((j) => {
               if (!j.auth) return true
-              return auth(j.auth, j.authLogic, j.authFull)
+              return auth(j.auth, j.authLogic)
             })
             //自动计算一下操作框的宽度
             const buttons = i.buttons.slice(0, i.maxCount ?? DefaultMaxCount)
@@ -605,7 +605,7 @@ export default defineComponent({
       })
       return (
         <div class={`table-view ${props.isFilterTable ? 'table-view-filter' : ''}`}>
-          <el-form disabled={false} class="table-top">
+          <ElForm disabled={false} class="table-top">
             <el-scrollbar class="table-scrollbar" view-style="display: flex; justify-content: space-between;">
               <div class="left-action">
                 {generateTotalView()}
@@ -639,7 +639,7 @@ export default defineComponent({
                 )}
               </div>
             </el-scrollbar>
-          </el-form>
+          </ElForm>
           <el-form ref={formRef} class="table-form" model={props.data} scroll-to-error>
             <el-table
               {...tableParam}
@@ -663,19 +663,21 @@ export default defineComponent({
       if (pageQuery.value.isPage) {
         return (
           <el-scrollbar class={['table-scrollbar', 'pagination']} wrap-style="height: auto;">
-            <el-pagination
-              {...pagination.value}
-              total={Math.max(pagination.value.total ?? 0, data.value.length)}
-              small={systemStore.layout.widthShrink}
-              layout={pagination.value.layout
-                .split(',')
-                .filter((i) => i !== 'total')
-                .join(',')}
-              onCurrentChange={fetchQuery}
-              onSizeChange={fetchQuery}
-              v-model:current-page={pageQuery.value.currentPage}
-              v-model:page-size={pageQuery.value.pageSize}
-            />
+            <ElForm disabled={false}>
+              <el-pagination
+                {...pagination.value}
+                total={Math.max(pagination.value.total ?? 0, data.value.length)}
+                small={systemStore.layout.widthShrink}
+                layout={pagination.value.layout
+                  .split(',')
+                  .filter((i) => i !== 'total')
+                  .join(',')}
+                onCurrentChange={fetchQuery}
+                onSizeChange={fetchQuery}
+                v-model:current-page={pageQuery.value.currentPage}
+                v-model:page-size={pageQuery.value.pageSize}
+              />
+            </ElForm>
           </el-scrollbar>
         )
       }
@@ -768,7 +770,6 @@ export default defineComponent({
       //--el-component-size-large: 40px;
       //--el-component-size-small: 24px;
 
-
       flex-grow: 1;
       height: 0;
 
@@ -797,7 +798,7 @@ export default defineComponent({
         height: var(--el-component-size) !important;
         line-height: var(--el-component-size) !important;
         display: inline-flex;
-        >span {
+        > span {
           line-height: normal;
         }
       }

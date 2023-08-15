@@ -51,7 +51,6 @@ export interface OperationButton {
   icon?: string
   auth?: string | string[]
   authLogic?: 'and' | 'or'
-  authFull?: boolean
   onClick?: any
   disabled?: ((row: any) => boolean) | any
 }
@@ -83,7 +82,7 @@ const buttons: any[] = toRef(props, 'buttons').value.map((i) => {
 if (props.auth) {
   buttons.filter((i) => {
     if (!i.auth) return true
-    return auth2(i.auth, i.authLogic, i.authFull)
+    return auth2(i.auth, i.authLogic)
   })
 }
 storage.value = buttons.length > props.maxCount

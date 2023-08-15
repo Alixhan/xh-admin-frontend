@@ -14,7 +14,7 @@
       <el-button icon="close" @click="close()">取消</el-button>
       <el-button
         v-if="['add', 'edit'].includes(handleType)"
-        v-auth="['add', 'edit']"
+        v-auth="['system:org:add', 'system:org:edit']"
         icon="check"
         type="primary"
         :loading="saveLoading"

@@ -1,5 +1,8 @@
 <template>
-  <el-switch class="switch" v-model="isDark" active-icon="Moon" inactive-icon="Sunny" inline-prompt> </el-switch>
+  <el-icon @click="isDark = !isDark" size="15" style="cursor: pointer">
+    <Sunny v-if="isDark" />
+    <Moon v-else />
+  </el-icon>
 </template>
 <script setup>
 import { toRef } from 'vue'
@@ -7,8 +10,3 @@ import { useSystemStore } from '@/stores/system'
 
 const isDark = toRef(useSystemStore().layout, 'isDark')
 </script>
-<style scoped lang="scss">
-.switch {
-  --el-switch-on-color: #494949;
-}
-</style>

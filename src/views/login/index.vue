@@ -1,9 +1,9 @@
 <template>
-  <el-scrollbar max-height="100vh">
+  <el-scrollbar height="100%" class="login-root">
     <div
       class="login-view"
       :class="{
-        'width-layout-shrink': systemStore.layout.windowWidth < 500
+        'width-layout-shrink': systemStore.layout.windowWidth < 500,
       }"
     >
       <SwitchStyle class="switch-style" />
@@ -11,8 +11,14 @@
         <div class="title-view">用户登录</div>
         <el-form @keyup.enter="submit" ref="formRef" :rules="rules" size="large" :model="formData">
           <el-form-item prop="username">
-            <el-input ref="usernameRef" type="text" clearable v-model="formData.username" placeholder="请输入账号"
-prefix-icon="User" />
+            <el-input
+              ref="usernameRef"
+              type="text"
+              clearable
+              v-model="formData.username"
+              placeholder="请输入账号"
+              prefix-icon="User"
+            />
           </el-form-item>
           <el-form-item prop="password">
             <el-input
@@ -44,10 +50,11 @@ prefix-icon="User" />
             </el-row>
           </el-form-item>
           <div class="forget-password-view">
-            <el-link type="primary" icon="QuestionFilled"> 忘记密码 </el-link>
+            <el-link type="primary" icon="QuestionFilled"> 忘记密码</el-link>
           </div>
-          <el-button :loading="loading" class="submit-button" round type="primary" size="large"
-@click="submit"> 登录 </el-button>
+          <el-button :loading="loading" class="submit-button" round type="primary" size="large" @click="submit">
+            登录
+          </el-button>
         </el-form>
       </div>
     </div>
@@ -61,7 +68,7 @@ import { useRouter } from 'vue-router'
 import SwitchStyle from '@/layout/default/action/switchStyle.vue'
 
 defineOptions({
-  name: 'SystemLogin'
+  name: 'SystemLogin',
 })
 
 const systemStore = useSystemStore()
@@ -72,18 +79,12 @@ const verificationUrl = ref('')
 const formData = reactive({
   username: 'admin',
   password: 'admin123',
-  captcha: ''
+  captcha: '',
 })
 const rules = reactive({
-  username: [
-    { required: true, message: '请输入账号' }
-  ],
-  password: [
-    { required: true, message: '请输入密码' }
-  ],
-  captcha: [
-    { required: true, message: '请输入图形验证码' }
-  ],
+  username: [{ required: true, message: '请输入账号' }],
+  password: [{ required: true, message: '请输入密码' }],
+  captcha: [{ required: true, message: '请输入图形验证码' }],
 })
 
 const formRef = ref()
@@ -98,7 +99,7 @@ function submit() {
         loadingRef: loading, // vue3中的ref,可以动态更新此值
         showSuccessMsg: true,
         successMsg: (res) => '登录成功！欢迎你，尊敬的' + res.data.user.name, // 成功的提示信息
-        errorMsg: '登录失败' // 失败的提示信息
+        errorMsg: '登录失败', // 失败的提示信息
       }).then((res) => {
         const data = res.data
         systemStore.setLoginUserInfo(data)
@@ -110,6 +111,10 @@ function submit() {
 }
 </script>
 <style scoped lang="scss">
+.login-root {
+  background: url('@/assets/bg.jpg') no-repeat;
+}
+
 .login-view {
   width: 100%;
   height: 100%;

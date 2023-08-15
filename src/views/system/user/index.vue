@@ -13,10 +13,10 @@
       v-model:data="data"
     >
       <template #right-action>
-        <el-button v-auth="'add'" type="primary" icon="upload" @click="userImportRef.open()">导入</el-button>
-        <el-button v-auth="'add'" type="primary" icon="plus" @click="openForm('add', null)">新增</el-button>
+        <el-button v-auth="'system:user:import'" type="primary" icon="upload" @click="userImportRef.open()">导入</el-button>
+        <el-button v-auth="'system:user:add'" type="primary" icon="plus" @click="openForm('add', null)">新增</el-button>
         <el-button
-          v-auth="'del'"
+          v-auth="'system:user:del'"
           type="danger"
           icon="delete"
           :disabled="selectRows.length === 0"
@@ -90,10 +90,10 @@ const columns: Ref<Array<TableColumn>> = ref([
     fixed: 'right',
     align: 'center',
     buttons: [
-      { label: '编辑', auth: 'edit', icon: 'edit', onClick: (row) => openForm('edit', row) },
-      { label: '岗位维护', auth: 'role', icon: 'stamp', onClick: (row) => openForm('job', row) },
-      { label: '明细', auth: 'detail', icon: 'document', onClick: (row) => openForm('detail', row) },
-      { label: '删除', auth: 'del', icon: 'delete', type: 'danger', onClick: (row) => del([row]) },
+      { label: '编辑', auth: 'system:user:edit', icon: 'edit', onClick: (row) => openForm('edit', row) },
+      { label: '岗位维护', auth: 'system:user:role', icon: 'stamp', onClick: (row) => openForm('job', row) },
+      { label: '明细', auth: 'system:user:detail', icon: 'document', onClick: (row) => openForm('detail', row) },
+      { label: '删除', auth: 'system:user:del', icon: 'delete', type: 'danger', onClick: (row) => del([row]) },
     ],
   },
 ])

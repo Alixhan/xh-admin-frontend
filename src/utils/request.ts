@@ -68,7 +68,7 @@ export default function createAxios(opt?: RequestOption) {
       message: e?.error ?? e?.message ?? option.errorMsg,
       onClose() {
         // 需要重新登录
-        if (e.httpCode === 403) {
+        if (e.httpCode === 401) {
           const systemStore = useSystemStore()
           systemStore.logout()
         }

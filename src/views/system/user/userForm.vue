@@ -21,7 +21,7 @@
       <el-button icon="close" @click="close()">取消</el-button>
       <el-button
         v-if="['add', 'edit'].includes(handleType)"
-        v-auth="['add', 'edit']"
+        v-auth="['system:user:add', 'system:user:edit']"
         icon="check"
         type="primary"
         :loading="saveLoading"
@@ -40,7 +40,7 @@ import Jobs from '@/views/system/user/jobs.vue'
 
 const props = defineProps({
   handleType: {
-    type: String,
+    type: String as PropType<FormHandleType>,
     default: 'add',
   },
   modelValue: {
@@ -88,6 +88,7 @@ watchEffect(() => {
     },
     { prop: 'name', label: '用户名', rules: { required: true } },
     { prop: 'avatar', label: '头像', type: 'upload-img', single: 'object' },
+    { prop: 'password', label: '初始密码', hidden: props.handleType !== 'add' },
     { prop: 'enabled', label: '是否启用', type: 'switch' },
     { type: 'separator', label: '用户岗位', hidden: props.handleType !== 'detail' },
     { slotName: 'job', hidden: props.handleType !== 'detail' },
@@ -96,7 +97,7 @@ watchEffect(() => {
   ]
 })
 
-const groupColumns = [
+const groupColumns: TableColumn[] = [
   { type: 'index', label: '序', width: 50 },
   { prop: 'id', label: 'ID', width: 50 },
   { prop: 'name', label: '用户组名称' },

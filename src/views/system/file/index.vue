@@ -15,7 +15,7 @@
     >
       <template #right-action>
         <el-button
-          v-auth="'del'"
+          v-auth="'system:file:del'"
           type="danger"
           icon="delete"
           :disabled="selectRows.length === 0"
@@ -107,15 +107,15 @@ const columns = ref([
     align: 'center',
     buttons: [
       { label: '下载', onClick: download },
-      { label: '编辑', auth: 'edit', onClick: (row) => openForm('edit', row) },
+      { label: '编辑', auth: 'system:file:edit', onClick: (row) => openForm('edit', row) },
       {
         label: '明细',
-        auth: 'detail',
+        auth: 'system:file:detail',
         onClick: (row) => openForm('detail', row),
       },
       {
         label: '删除',
-        auth: 'del',
+        auth: 'system:file:del',
         type: 'danger',
         onClick: (row) => del([row]),
       },

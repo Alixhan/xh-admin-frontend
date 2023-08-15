@@ -13,9 +13,9 @@
       v-model:data="data"
     >
       <template #right-action>
-        <el-button v-auth="'add'" type="primary" icon="plus" @click="openForm('add', null)">新增</el-button>
+        <el-button v-auth="'system:userGroup:add'" type="primary" icon="plus" @click="openForm('add', null)">新增</el-button>
         <el-button
-          v-auth="'del'"
+          v-auth="'system:userGroup:del'"
           type="danger"
           icon="delete"
           :disabled="selectRows.length === 0"
@@ -70,9 +70,9 @@ const columns = ref<TableColumn[]>([
     fixed: 'right',
     align: 'center',
     buttons: [
-      { label: '编辑', auth: 'edit', icon: 'edit', onClick: (row) => openForm('edit', row) },
-      { label: '明细', auth: 'detail', icon: 'document', onClick: (row) => openForm('detail', row) },
-      { label: '删除', auth: 'del', icon: 'delete', type: 'danger', onClick: (row) => del([row]) },
+      { label: '编辑', auth: 'system:userGroup:edit', icon: 'edit', onClick: (row) => openForm('edit', row) },
+      { label: '明细', auth: 'system:userGroup:detail', icon: 'document', onClick: (row) => openForm('detail', row) },
+      { label: '删除', auth: 'system:userGroup:del', icon: 'delete', type: 'danger', onClick: (row) => del([row]) },
     ],
   },
 ])

@@ -145,30 +145,5 @@ export default defineComponent({
   display: inline-flex;
   justify-content: space-between;
   align-items: stretch;
-  box-shadow: 0 0 0 1px var(--el-input-border-color, var(--el-border-color)) inset;
-  border-radius: var(--el-input-border-radius, var(--el-border-radius-base));
-  background-color: var(--el-input-bg-color, var(--el-fill-color-blank));
-  transition: var(--el-transition-box-shadow);
-
-  &:hover {
-    box-shadow: 0 0 0 1px var(--el-text-color-disabled, var(--el-border-color)) inset;
-  }
-
-  .is-focus {
-    box-shadow: 0 0 0 1px var(--el-color-primary, var(--el-border-color)) inset;
-  }
-
-  .date-picker {
-    text-align: center;
-  }
-
-  :deep(.el-input) {
-    padding: 1px;
-  }
-
-  :deep(.el-input__wrapper) {
-    border: none;
-    box-shadow: none;
-  }
 }
 </style>

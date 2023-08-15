@@ -14,17 +14,14 @@ export interface Menu {
   cache: boolean
   componentName?: string
   fullPath: string
-  auth: string
   type: string
   component: string
   handleType: string
   path: string
-  children?: Menu []
+  children?: Menu[]
 }
 
-interface NavTab extends Menu{
-}
-
+interface NavTab extends Menu {}
 
 /**
  * 系统全局store,主要定义项目布局信息，系统登录， 路由管理，权限管理，浏览器标题管理，注销等
@@ -60,12 +57,13 @@ export const useSystemStore = defineStore('system', () => {
     // 宽度是否收缩(小宽度设备)
     widthShrink: false,
     // 高度是否收缩(矮高度设备)
-    heightShrink: false
+    heightShrink: false,
   })
 
   // 监听窗口变化
   window.addEventListener('resize', onResize)
   onResize()
+
   function onResize() {
     layout.windowWidth = window.innerWidth
     layout.windowHeight = window.innerHeight
@@ -88,13 +86,13 @@ export const useSystemStore = defineStore('system', () => {
    */
   const user = ref({})
   // 当前用户的所有菜单
-  const menus = ref<Menu []>([])
+  const menus = ref<Menu[]>([])
   // 当前所有菜单，id为key,value为menu
-  const menusObj = ref<{[id: number]: Menu}>({})
+  const menusObj = ref<{ [id: number]: Menu }>({})
   // 菜单树形结构
-  const treeMenus = ref<Menu []>([])
+  const treeMenus = ref<Menu[]>([])
   // 导航路由页签
-  const navTabs = ref<NavTab []>([])
+  const navTabs = ref<NavTab[]>([])
   // 当前激活的菜单的id
   const activeMenuId = ref()
   // 刷新当前页签
@@ -112,6 +110,7 @@ export const useSystemStore = defineStore('system', () => {
   function setRefresh(val) {
     refresh.value = val
   }
+
   // 当前激活的菜单组
   const activeMenuArr = computed(() => {
     return getMenuLevelArr(activeMenuId.value)
@@ -185,7 +184,7 @@ export const useSystemStore = defineStore('system', () => {
       loginUserInfo.menus.unshift(...devMenus)
     }
     loginStatus.value = 'success' // 登录成功
-    setToken(loginUserInfo.token)
+    setToken(loginUserInfo.tokenInfo.tokenValue)
     user.value = loginUserInfo.user
     menus.value = loginUserInfo.menus
     initMenu()
@@ -212,7 +211,7 @@ export const useSystemStore = defineStore('system', () => {
 
   // 获取菜单id的层级数组
   function getMenuLevelArr(id) {
-    const arr: Menu [] = []
+    const arr: Menu[] = []
     let currentMenu = menusObj.value[id]
     while (currentMenu) {
       arr.unshift(currentMenu)
@@ -227,13 +226,9 @@ export const useSystemStore = defineStore('system', () => {
     router.addRoute({
       name: layoutRouteName,
       path: `/${layoutRouteName}`,
-      component: () => import('@/layout/index.vue')
+      component: () => import('@/layout/index.vue'),
     })
     menus.value.forEach((i) => {
-      // 权限name,用冒号拼接上父级name
-      i.auth = getMenuLevelArr(i.id)
-        .map((i) => i.name)
-        .join(':')
       if (i.type === 'menu' && ['route', 'iframe'].includes(i.handleType)) {
         // 路由名称
         const name = getMenuLevelArr(i.id)
@@ -256,15 +251,15 @@ export const useSystemStore = defineStore('system', () => {
             if (!component) throw new Error(`${i.component} 文件不存在！`)
             return component().then((comp: any) => ({
               ...comp.default,
-              name: componentName
+              name: componentName,
             }))
           },
           meta: {
             menuId: i.id,
             title: i.title,
             cache: i.cache,
-            component: i.component
-          }
+            component: i.component,
+          },
         }
         i.fullPath = fullPath
         i.componentName = componentName
@@ -278,7 +273,7 @@ export const useSystemStore = defineStore('system', () => {
     const arr = [...treeMenus.value]
     while (arr.length) {
       const menu = arr.shift()
-      if(!menu) return
+      if (!menu) return
       if (menu.type === 'menu') return menu
       if (menu.children?.length) {
         arr.unshift(...menu.children)
@@ -338,6 +333,6 @@ export const useSystemStore = defineStore('system', () => {
     removeNavTabByMenuId,
     logout,
     refresh,
-    setRefresh
+    setRefresh,
   }
 })
