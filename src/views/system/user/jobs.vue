@@ -59,6 +59,7 @@ watchEffect(() => {
       minWidth: 200,
       prop: 'orgName',
       label: '机构',
+      required: handleType.value !== 'detail',
       editable: handleType.value !== 'detail',
       editParam: (scope) => {
         return {
@@ -74,6 +75,7 @@ watchEffect(() => {
       minWidth: 200,
       prop: 'roleName',
       label: '角色',
+      required: handleType.value !== 'detail',
       editable: handleType.value !== 'detail',
       editParam: (scope) => {
         return {

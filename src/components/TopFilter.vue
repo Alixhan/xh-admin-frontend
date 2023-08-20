@@ -1,5 +1,5 @@
 <script lang="jsx">
-import { defineComponent, createVNode, ref, shallowRef, watchEffect } from 'vue'
+import { createVNode, defineComponent, ref, shallowRef, watchEffect } from 'vue'
 import { generateDynamicColumn, generatePlaceholder, vModelValue } from '@/components/mutils'
 import { useSystemStore } from '@/stores/system'
 import { useElementSize } from '@vueuse/core'
@@ -15,17 +15,21 @@ export default defineComponent({
     // 参数对象
     param: {
       type: Object,
-      required: true
+      required: true,
     },
     // 过滤列定义
     columns: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     labelWidth: {
       type: String,
-      default: '7em'
-    }
+      default: '7em',
+    },
+    loading: {
+      type: Boolean,
+      default: false,
+    },
   },
   emits: ['search'],
   setup(props, { emit, expose }) {
@@ -68,7 +72,7 @@ export default defineComponent({
             slots: {},
             prop: column.prop,
             label: column.label,
-            labelWidth: props.labelWidth
+            labelWidth: props.labelWidth,
           }
           formItemParam.slots.default = () => {
             const vModelParam = vModelValue(
@@ -76,7 +80,7 @@ export default defineComponent({
                 type: column.type,
                 prop2: column.prop2,
                 prop: column.prop,
-                single: column.single
+                single: column.single,
               },
               props.param
             )
@@ -123,10 +127,12 @@ export default defineComponent({
               >
                 {expand.value ? '收起' : '展开'}
               </el-button>
-              <el-button type="primary" onClick={search}>
+              <el-button type="primary" icon="search" onClick={search} loading={props.loading}>
                 搜索
               </el-button>
-              <el-button onClick={reset}>重置</el-button>
+              <el-button onClick={reset} icon="refresh">
+                重置
+              </el-button>
             </div>
           </div>
           <div class="filter-view" style={`height: ${expand.value ? filterSize.value.height : 0}px;`}>
@@ -139,7 +145,7 @@ export default defineComponent({
         </div>
       )
     }
-  }
+  },
 })
 </script>
 <style scoped lang="scss">

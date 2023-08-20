@@ -10,10 +10,27 @@ export function userLogin(params = {}, option?: RequestOption) {
 }
 
 /**
+ * 系统角色切换
+ */
+export function switchUserRole(params = {}, option?: RequestOption) {
+  return createAxios(option).post(`${systemBaseUrl}/api/system/user/switchUserRole`, params)
+}
+
+/**
  * 系统注销
  */
 export function userLogout(option?: RequestOption) {
   return createAxios(option).post(`${systemBaseUrl}/api/system/user/logout`)
+}
+
+// 在线用户查询
+export function queryOnlineUser(params = {}, option?: RequestOption) {
+  return createAxios(option).post(`${systemBaseUrl}/api/system/user/queryOnlineUser`, params)
+}
+
+// 踢用户下线
+export function kickOut(params = {}, option?: RequestOption) {
+  return createAxios(option).post(`${systemBaseUrl}/api/system/user/kickOut`, params)
 }
 
 // 用户列表查询
@@ -41,18 +58,18 @@ export function delUserByIds(ids: string, option: RequestOption) {
   return createAxios(option).delete(`${systemBaseUrl}/api/system/user/del/${ids}`)
 }
 
-export interface  UserJobsParam {
+export interface UserJobsParam {
   //数据类型 1：用户，2：用户组
   type: 1 | 2
   // 用户id或用户组id
   userId: number
   // 用户岗位信息
-  jobData?: any []
+  jobData?: any[]
 }
 
 // 获取用户或者用户组的岗位信息
 export function getUserJobs(params: UserJobsParam) {
-  return createAxios().get(`${systemBaseUrl}/api/system/user/getUserJobs`, {params})
+  return createAxios().get(`${systemBaseUrl}/api/system/user/getUserJobs`, { params })
 }
 
 // 保存系统用户
@@ -64,7 +81,6 @@ export function saveUserJobs(params: UserJobsParam, option?: RequestOption) {
 export function queryUserGroupList(params: PageQuery = {}, option?: RequestOption) {
   return createAxios(option).post(`${systemBaseUrl}/api/system/user/queryUserGroupList`, params)
 }
-
 
 // 用户组保存
 export function saveUserGroup(params = {}, option?: RequestOption) {

@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { computed, nextTick, reactive, ref, watch } from 'vue'
-import { userLogin } from '@/api/system/user'
+import { switchUserRole, userLogin } from '@/api/system/user'
 import { useRouter } from 'vue-router'
 import { useDark, useLocalStorage, useTitle } from '@vueuse/core'
 import _ from 'lodash'
@@ -19,6 +19,26 @@ export interface Menu {
   handleType: string
   path: string
   children?: Menu[]
+}
+
+// 用户角色
+export interface OrgRole {
+  //数据类型，1：用户，2：用户组
+  type: number
+  //用户id或者用户组的id
+  userId: number
+  //机构id
+  sysOrgId: number
+  //角色id
+  sysRoleId: number
+  //机构代码
+  orgCode: string
+  //机构名称
+  orgName: string
+  //角色名称
+  roleName: string
+  //是否当前使用的角色
+  active: boolean
 }
 
 interface NavTab extends Menu {}
@@ -85,6 +105,8 @@ export const useSystemStore = defineStore('system', () => {
    * @type {avatar: string}
    */
   const user = ref({})
+  //当前用户拥有的角色
+  const orgRoles = ref<OrgRole[]>([])
   // 当前用户的所有菜单
   const menus = ref<Menu[]>([])
   // 当前所有菜单，id为key,value为menu
@@ -184,9 +206,10 @@ export const useSystemStore = defineStore('system', () => {
       loginUserInfo.menus.unshift(...devMenus)
     }
     loginStatus.value = 'success' // 登录成功
-    setToken(loginUserInfo.tokenInfo.tokenValue)
+    setToken(loginUserInfo.tokenValue)
     user.value = loginUserInfo.user
     menus.value = loginUserInfo.menus
+    orgRoles.value = loginUserInfo.roles
     initMenu()
   }
 
@@ -309,6 +332,16 @@ export const useSystemStore = defineStore('system', () => {
   }
 
   // 注销
+  function switchRole(orgRole: OrgRole) {
+    return switchUserRole(orgRole, {
+      showSuccessMsg: true,
+      successMsg: '切换角色成功',
+    }).then(() => {
+      setTimeout(() => window.location.reload(), 1000)
+    })
+  }
+
+  // 注销
   function logout() {
     window.location.reload()
   }
@@ -320,6 +353,7 @@ export const useSystemStore = defineStore('system', () => {
     user,
     treeMenus,
     menus,
+    orgRoles,
     navTabs,
     activeMenuId,
     activeMenuArr,
@@ -331,6 +365,7 @@ export const useSystemStore = defineStore('system', () => {
     setLoginUserInfo,
     setActiveMenuId,
     removeNavTabByMenuId,
+    switchRole,
     logout,
     refresh,
     setRefresh,

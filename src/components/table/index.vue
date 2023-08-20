@@ -352,7 +352,7 @@ export default defineComponent({
               buttons.reduce(
                 (size, item) => size + (item.label?.length ?? 0) + (item.icon ? 1.5 : 0),
                 2.2 + (buttons.length - 1) * 1.5
-              ) * 12
+              ) * 12 + 2
             return i.buttons?.length
           }
           return true
@@ -516,6 +516,7 @@ export default defineComponent({
             class="top-filter"
             columns={props.filterColumns}
             v-model:param={pageQuery.value.param}
+            loading={loadingRef.value}
             onSearch={fetchQuery}
           />
         )
