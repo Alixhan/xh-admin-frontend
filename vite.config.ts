@@ -28,5 +28,8 @@ export default defineConfig({
     host: true,
     https: false,
     open: true,
+  },
+  build: {
+    target: 'es2015'
   }
 })

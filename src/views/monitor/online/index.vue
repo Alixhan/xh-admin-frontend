@@ -38,6 +38,7 @@ const columns = ref([
   { prop: 'loginIp', label: 'ip地址' },
   { prop: 'loginAddress', label: '登录地点' },
   { prop: 'loginBrowser', label: '浏览器' },
+  { prop: 'browserVersion', label: '浏览器版本' },
   { prop: 'loginOs', label: '操作系统' },
   { prop: 'isMobile', label: '是否手机端', itemList: getDictDetails(1, 'boolean') },
   { prop: 'orgName', label: '登录机构' },
