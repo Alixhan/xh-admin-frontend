@@ -91,10 +91,10 @@ const selectRows = ref([])
 const filterParam = reactive({})
 
 const topFilterColumns = shallowRef([
-  { prop: 'parentId', label: '上级机构ID' },
-  { prop: 'parentName', label: '上级机构名称' },
   { prop: 'code', label: '机构代码' },
   { prop: 'name', label: '机构名称' },
+  { prop: 'parentId', label: '上级机构ID' },
+  { prop: 'parentName', label: '上级机构名称' },
   { prop: 'enabled', label: '是否启用', type: 'select', itemList: getDictDetails(1, 'boolean') }
 ])
 const columns = ref([
@@ -120,10 +120,10 @@ const columns = ref([
   { type: 'selection' },
   { type: 'index', label: '序', width: 50 },
   { prop: 'id', label: 'ID', width: 50 },
-  { prop: 'parentId', label: '上级机构ID', width: 100 },
-  { prop: 'parentName', label: '上级机构名称', width: 120 },
   { prop: 'code', label: '机构代码' },
   { prop: 'name', label: '机构名称' },
+  { prop: 'parentId', label: '上级机构ID', width: 100 },
+  { prop: 'parentName', label: '上级机构名称', width: 120 },
   { prop: 'enabled', label: '是否启用', type: 'select', itemList: getDictDetails(1, 'boolean') },
   { prop: 'createTime', label: '创建时间', type: 'datetime', width: 155 },
   { prop: 'updateTime', label: '修改时间', type: 'datetime', width: 155 }

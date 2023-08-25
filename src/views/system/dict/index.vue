@@ -28,8 +28,16 @@
       @selection-change="(rows) => (selectRows = rows)"
     >
       <template #right-action>
-        <el-button v-auth="'system:dict:add'" type="primary" icon="plus" @click="openForm('add')"> 新增 </el-button>
-        <el-button v-auth="'system:dict:del'" type="danger" icon="delete" :disabled="selectRows.length === 0" @click="del(selectRows)"> 删除 </el-button>
+        <el-button v-auth="'system:dict:add'" type="primary" icon="plus" @click="openForm('add')"> 新增</el-button>
+        <el-button
+          v-auth="'system:dict:del'"
+          type="danger"
+          icon="delete"
+          :disabled="selectRows.length === 0"
+          @click="del(selectRows)"
+        >
+          删除
+        </el-button>
       </template>
     </m-table>
     <el-dialog
@@ -71,14 +79,25 @@ queryDictType()
 
 function queryDictType() {
   queryDictTypeList(dictTypeQueryParam.value).then((res) => {
-    dictTypeData.value = [{ id: 0, name: '全部字典', children: res.data.list }]
+    dictTypeData.value = [
+      {
+        id: 0,
+        name: '全部字典',
+        children: res.data.list.map((i) => {
+          return {
+            ...i,
+            title: `${i.name}  -  ${i.id}`,
+          }
+        }),
+      },
+    ]
   })
 }
 
 const tableRef = ref()
 const defaultProps = {
   children: 'children',
-  label: 'name',
+  label: 'title',
 }
 
 const data = ref([])

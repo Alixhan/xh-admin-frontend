@@ -3,13 +3,13 @@
     class="header-view"
     :class="{
       'width-shrink-layout': systemStore.layout.widthShrink,
-      'height-shrink-layout': systemStore.layout.heightShrink
+      'height-shrink-layout': systemStore.layout.heightShrink,
     }"
   >
     <div class="header-top">
       <div class="header-left">
         <div class="nav-view">
-          <el-icon class="collapse-icon" color="var(--el-color-primary)" size="28">
+          <el-icon class="collapse-icon" color="var(--el-color-primary)" size="20">
             <Fold @click="toggleMenuCollapse" :class="{ rotate180: systemStore.layout.menuCollapse }" />
           </el-icon>
           <NavTabs v-if="systemStore.layout.heightShrink" key="nav-tabs" class="nav-tabs" />
@@ -26,7 +26,7 @@
 </template>
 <script setup>
 import Action from '@/layout/default/action'
-import NavTabs from './navTabs'
+import NavTabs from './navTabs2'
 import Breadcrumb from './breadcrumb'
 import { useSystemStore } from '@/stores/system'
 import { toRef } from 'vue'
@@ -36,12 +36,13 @@ import { ElMessage } from 'element-plus'
 
 const { copy } = useClipboard()
 usePermission('clipboard-write')
+
 function cp() {
   copy(route.meta.component).then(() => {
     console.info('恭喜你！你发现了这个贴心的小功能~👻🏀🐔')
     ElMessage({
       type: 'success',
-      message: '已复制到剪切板'
+      message: '已复制到剪切板',
     })
   })
 }
@@ -57,7 +58,7 @@ function toggleMenuCollapse() {
 </script>
 <style scoped lang="scss">
 .header-view {
-  padding: 10px 10px 10px 10px;
+  padding: 5px 10px 5px 10px;
 
   .header-top {
     display: flex;
@@ -84,7 +85,9 @@ function toggleMenuCollapse() {
 
     .action {
       flex-shrink: 0;
-      box-shadow: var(--el-box-shadow);
+      box-shadow: none;
+
+      box-shadow: none;
     }
   }
 }
@@ -92,17 +95,6 @@ function toggleMenuCollapse() {
 .width-shrink-layout,
 .height-shrink-layout {
   padding-top: 0;
-
-  .header-top {
-    .action {
-      box-shadow: none;
-
-      :deep(.action-item) {
-        padding: 0 7px;
-        border-right: none;
-      }
-    }
-  }
 
   .nav-tabs {
     :deep(.nav-tabs) {

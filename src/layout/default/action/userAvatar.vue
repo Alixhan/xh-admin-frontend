@@ -1,7 +1,7 @@
 <template>
   <el-dropdown trigger="click" @command="handleCommand">
     <div class="avatar">
-      <el-avatar shape="circle" :size="30" fit="cover" :src="avatar" />
+      <el-avatar shape="circle" :size="26" fit="cover" :src="avatar" />
       <div class="username">{{ systemStore.user?.name }}</div>
       <el-drawer style="min-width: min(100vw, 500px);"  append-to-body v-model="drawerVisible" title="用户角色" direction="rtl">
         <div v-for="(item, i) in systemStore.orgRoles" :key="i" class="role-item">

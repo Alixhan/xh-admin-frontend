@@ -1,5 +1,5 @@
 <template>
-  <el-icon @click="isDark = !isDark" size="18" style="cursor: pointer">
+  <el-icon @click="isDark = !isDark" size="16" style="cursor: pointer">
     <Sunny v-if="isDark" />
     <Moon v-else />
   </el-icon>

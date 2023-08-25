@@ -10,7 +10,7 @@ const { isFullscreen, toggle } = useFullscreen()
 </script>
 <style scoped lang="scss">
 .icon-style {
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
 }
 </style>

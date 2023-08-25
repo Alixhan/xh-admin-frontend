@@ -13,25 +13,21 @@ import SwitchStyle from '@/layout/default/action/switchStyle.vue'
 <style scoped lang="scss">
 .action-view {
   display: flex;
-  align-items: stretch;
-  height: 45px;
+  align-items: center;
+  height: 30px;
 
   border-radius: var(--el-border-radius-base);
 
   .action-item {
-    height: 45px;
-    padding: 0 15px;
+    height: 30px;
+    padding: 0 10px;
     transition: all 0.2s ease-in-out;
     cursor: pointer;
-    border-right: 1px solid var(--el-border-color);
-  }
-
-  .action-item:last-child {
-    border-right: none;
   }
 
   .action-item:hover {
     background-color: var(--el-color-primary-light-9);
+
     :deep(> svg) {
       animation: bounceIn 0.5s linear forwards;
     }
