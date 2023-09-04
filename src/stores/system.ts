@@ -1,10 +1,18 @@
 import { defineStore } from 'pinia'
-import { computed, nextTick, reactive, ref, watch } from 'vue'
+import { computed, nextTick, reactive, ref } from 'vue'
 import { switchUserRole, userLogin } from '@/api/system/user'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useDark, useLocalStorage, useTitle } from '@vueuse/core'
 import _ from 'lodash'
 import { devMenus } from '@/router/static'
+
+export interface User {
+  id?: number
+  code?: string
+  name?: string
+  avatar?: string
+  password?: string
+}
 
 export interface Menu {
   id: number
@@ -41,7 +49,16 @@ export interface OrgRole {
   active: boolean
 }
 
-interface NavTab extends Menu {}
+interface NavTab {
+  //标题
+  title: string
+  //路由全路径
+  fullPath: string
+  //是否缓存
+  cache?: boolean
+  // 组件名
+  componentName?: string
+}
 
 /**
  * 系统全局store,主要定义项目布局信息，系统登录， 路由管理，权限管理，浏览器标题管理，注销等
@@ -63,7 +80,7 @@ export const useSystemStore = defineStore('system', () => {
     // 主页面切换动画，可选值<slide-right|slide-left|el-fade-in-linear|el-fade-in|el-zoom-in-center|el-zoom-in-top|el-zoom-in-bottom>
     mainAnimation: 'slide-left',
     // 侧边菜单宽度(展开时)，单位px
-    menuWidth: 200,
+    menuWidth: 206,
     // 是否水平折叠收起菜单
     menuCollapse: false,
     // 是否只保持一个子菜单的展开(手风琴)
@@ -104,7 +121,7 @@ export const useSystemStore = defineStore('system', () => {
    * 当前登录的用户信息
    * @type {avatar: string}
    */
-  const user = ref({})
+  const user = ref<User>({})
   //当前用户拥有的角色
   const orgRoles = ref<OrgRole[]>([])
   // 当前用户的所有菜单
@@ -115,15 +132,13 @@ export const useSystemStore = defineStore('system', () => {
   const treeMenus = ref<Menu[]>([])
   // 导航路由页签
   const navTabs = ref<NavTab[]>([])
-  // 当前激活的菜单的id
-  const activeMenuId = ref()
   // 刷新当前页签
   const refresh = ref()
   // 缓存的组件名称
   const keepAliveComponentNameList = computed(() => {
     return navTabs.value
       .filter((i) => {
-        if (refresh.value && i.id === activeMenuId.value) return false
+        if (refresh.value && i.fullPath === route.fullPath) return false
         return i.cache
       })
       .map((i) => i.componentName)
@@ -135,10 +150,13 @@ export const useSystemStore = defineStore('system', () => {
 
   // 当前激活的菜单组
   const activeMenuArr = computed(() => {
-    return getMenuLevelArr(activeMenuId.value)
+    const menu = menus.value.find((i) => i.fullPath === route.fullPath)
+    if (menu) return getMenuLevelArr(menu.id)
+    return [route.meta]
   })
 
   const router = useRouter()
+  const route = useRoute()
 
   // 路由前置守卫，自动登录
   async function beforeEach(to) {
@@ -154,6 +172,7 @@ export const useSystemStore = defineStore('system', () => {
           if (res.status + '' === 'success' && res.data) {
             // 初始化登录逻辑
             setLoginUserInfo(res.data)
+            return to.fullPath
           } else {
             return Promise.reject()
           }
@@ -167,10 +186,13 @@ export const useSystemStore = defineStore('system', () => {
     // 如果是登录失败的，直接跳转到登录页
     if (loginStatus.value !== 'success') {
       path = '/login'
-    }
-    // 如果是登录成功的，并且路由是根路径或者登录页的，跳转到菜单第一个路由
-    if (loginStatus.value === 'success' && ['/', '/login'].includes(to.fullPath)) {
-      path = getFirstRoute()?.fullPath
+    } else {
+      // 如果是登录成功的，并且路由是根路径或者登录页的，跳转到菜单第一个路由
+      if (['/', '/login'].includes(to.fullPath)) {
+        path = getFirstRoute()?.fullPath
+      } else {
+        return path
+      }
     }
     // 重定向路由和原跳转路由路径相同，则无需处理
     if (to.fullPath !== path) {
@@ -182,12 +204,16 @@ export const useSystemStore = defineStore('system', () => {
   function afterEach(guard) {
     const fullPath = guard.fullPath
     const tab = navTabs.value.find((i) => i.fullPath === fullPath)
-    const menu = menus.value.find((i) => i.fullPath === fullPath)
     // 如果不存在，则添加tab
-    if (!tab && menu) nextTick().then(() => navTabs.value.push(menu))
-    // 如果是跳转到动态菜单，设置activeId
-    if (menu) activeMenuId.value = menu.id
-
+    if (!tab && guard.fullPath.startsWith(`/${import.meta.env.VITE_LAYOUT_ROUTE_NAME}/`))
+      nextTick().then(() =>
+        navTabs.value.push({
+          title: guard.meta.title,
+          fullPath: guard.fullPath,
+          componentName: guard.meta.componentName,
+          cache: guard.meta.cache,
+        })
+      )
     // 设置浏览器标题
     let tit = import.meta.env.VITE_TITLE
     if (guard.meta.title) tit = guard.meta.title + '-' + tit
@@ -252,17 +278,18 @@ export const useSystemStore = defineStore('system', () => {
       component: () => import('@/layout/index.vue'),
     })
     menus.value.forEach((i) => {
+      // 路由路径
+      const path = getMenuLevelArr(i.id)
+        .map((i) => i.path)
+        .join('/')
+      // 路由全路径
+      const fullPath = `/${layoutRouteName}/${path}`
+      i.fullPath = fullPath
       if (i.type === 'menu' && ['route', 'iframe'].includes(i.handleType)) {
         // 路由名称
         const name = getMenuLevelArr(i.id)
           .map((i) => i.name)
           .join('/')
-        // 路由路径
-        const path = getMenuLevelArr(i.id)
-          .map((i) => i.path)
-          .join('/')
-        // 路由全路径
-        const fullPath = `/${layoutRouteName}/${path}`
         // 组件name
         const componentName = _.camelCase(fullPath)
         const dynamicRoute = {
@@ -278,13 +305,12 @@ export const useSystemStore = defineStore('system', () => {
             }))
           },
           meta: {
-            menuId: i.id,
             title: i.title,
             cache: i.cache,
             component: i.component,
+            componentName,
           },
         }
-        i.fullPath = fullPath
         i.componentName = componentName
         router.addRoute(layoutRouteName, dynamicRoute)
       }
@@ -304,30 +330,21 @@ export const useSystemStore = defineStore('system', () => {
     }
   }
 
-  // 监听activeMenuId变化，设置路由等
-  watch(
-    () => activeMenuId.value,
-    (menuId) => {
-      const menu = menusObj.value[menuId]
-      menu && router.push(menu.fullPath)
-    }
-  )
-
-  // 设置当前激活菜单id
-  function setActiveMenuId(val) {
-    activeMenuId.value = val
+  // 通过fullPath移除navTab
+  function removeNavTabByFullPath(fullPath) {
+    const index = navTabs.value.findIndex((i) => i.fullPath === fullPath)
+    return removeNavTabByIndex(index)
   }
 
-  // 通过menuId移除navTab
-  function removeNavTabByMenuId(menuId) {
-    let index = navTabs.value.findIndex((i) => i.id === menuId)
+  // 通过index移除navTab
+  function removeNavTabByIndex(index) {
     const currentMenu = navTabs.value[index]
     navTabs.value.splice(index, 1)
     // 如果删除了当前激活的路由，则需要自动跳转到右边的tab
-    if (currentMenu.id === activeMenuId.value) {
+    if (currentMenu.fullPath === route.fullPath) {
       // 如果是最右边路由，则需要左移一位
       if (index > navTabs.value.length - 1) index--
-      activeMenuId.value = navTabs.value[index].id
+      return router.push(navTabs.value[index].fullPath)
     }
   }
 
@@ -355,7 +372,6 @@ export const useSystemStore = defineStore('system', () => {
     menus,
     orgRoles,
     navTabs,
-    activeMenuId,
     activeMenuArr,
     keepAliveComponentNameList,
     getFirstRoute,
@@ -363,8 +379,7 @@ export const useSystemStore = defineStore('system', () => {
     afterEach,
     setToken,
     setLoginUserInfo,
-    setActiveMenuId,
-    removeNavTabByMenuId,
+    removeNavTabByFullPath,
     switchRole,
     logout,
     refresh,

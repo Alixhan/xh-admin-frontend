@@ -13,7 +13,9 @@
       v-model:data="data"
     >
       <template #right-action>
-        <el-button v-auth="'system:user:import'" type="primary" icon="upload" @click="userImportRef.open()">导入</el-button>
+        <el-button v-auth="'system:user:import'" type="primary" icon="upload" @click="userImportRef.open()"
+          >导入
+        </el-button>
         <el-button v-auth="'system:user:add'" type="primary" icon="plus" @click="openForm('add', null)">新增</el-button>
         <el-button
           v-auth="'system:user:del'"
@@ -82,7 +84,9 @@ const columns: Ref<Array<TableColumn>> = ref([
   { prop: 'id', label: 'ID', width: 50 },
   { prop: 'code', label: '用户账号' },
   { prop: 'name', label: '用户名称' },
+  { prop: 'telephone', label: '手机号码' },
   { prop: 'status', label: '用户状态', type: 'select', itemList: statusList },
+  { prop: 'lockMsg', label: '锁定原因' },
   { prop: 'enabled', label: '是否启用', type: 'select', itemList: getDictDetails(1, 'boolean') },
   { prop: 'createTime', label: '创建时间', type: 'datetime', width: 155 },
   {

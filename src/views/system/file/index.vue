@@ -154,6 +154,7 @@ function previewImage(scope) {
   const file = scope.row
   if (file.contentType.startsWith('image')) {
     const src = getDownloadFileUrl({ object: file.object, isScale: true })
+    if(file.suffix === 'svg') return <m-svg-icon inherited={true} style="width: 25px; height: 25px; display: block" src={src} />
     return (
       <el-image
         {...{

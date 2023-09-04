@@ -82,7 +82,7 @@ function queryDictType() {
     dictTypeData.value = [
       {
         id: 0,
-        name: '全部字典',
+        title: '全部字典',
         children: res.data.list.map((i) => {
           return {
             ...i,

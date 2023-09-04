@@ -68,27 +68,27 @@ const formLoading = ref(false)
 const saveLoading = ref(false)
 const formData = ref({
   enabled: true,
-  memberData: [] as any [],
+  memberData: [] as any[],
 })
 
 if (props.handleType !== 'add') {
   // 查询明细
   init()
+}
 
-  async function init() {
-    // 查询明细
-    formLoading.value = true
-    await getUserGroupById(props.modelValue!.id).then((res) => {
-      formData.value = res.data
-    })
-    await getUserJobs({
-      type: 2,
-      userId: props.modelValue!.id!,
-    }).then((res) => {
-      jobData.value = res.data
-    })
-    formLoading.value = false
-  }
+async function init() {
+  // 查询明细
+  formLoading.value = true
+  await getUserGroupById(props.modelValue!.id).then((res) => {
+    formData.value = res.data
+  })
+  await getUserJobs({
+    type: 2,
+    userId: props.modelValue!.id!,
+  }).then((res) => {
+    jobData.value = res.data
+  })
+  formLoading.value = false
 }
 
 // 表单列定义

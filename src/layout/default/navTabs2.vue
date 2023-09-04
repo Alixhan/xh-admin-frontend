@@ -5,15 +5,15 @@
         v-for="(tab, index) in navTabs"
         :key="index"
         @contextmenu.prevent="onContextmenu(index)"
-        @click="systemStore.activeMenuId = tab.id"
-        @close="removeTab(tab.id)"
+        @click="router.push(tab.fullPath)"
+        @close="removeTab(tab.fullPath)"
         :closable="navTabs.length > 1"
         :class="{
-          'active-tab': systemStore.activeMenuId === tab.id,
+          'active-tab': route.fullPath === tab.fullPath,
         }"
         class="tab-item"
-        :color="systemStore.activeMenuId === tab.id ? '' : 'var(--layout-bg-color)'"
-        :type="systemStore.activeMenuId === tab.id ? '' : 'info'"
+        :color="route.fullPath === tab.fullPath ? '' : 'var(--layout-bg-color)'"
+        :type="route.fullPath === tab.fullPath ? '' : 'info'"
       >
         <div class="trigger-view" :ref="(e) => (tabRefs[index] = e)" @click.stop />
         {{ tab.title }}
@@ -47,9 +47,13 @@
 <script setup>
 import { useSystemStore } from '@/stores/system'
 import { nextTick, ref, watch, watchEffect } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 
 const systemStore = useSystemStore()
 const navTabs = systemStore.navTabs
+const route = useRoute()
+const router = useRouter()
+
 const visible = ref(false)
 const virtualRef = ref()
 const tabRefs = ref([])
@@ -62,7 +66,7 @@ function initMenuItems() {
     {
       label: '重新加载',
       icon: 'Refresh',
-      disabled: navTabs[currentIndex.value]?.id !== systemStore.activeMenuId,
+      disabled: navTabs[currentIndex.value]?.fullPath !== route.fullPath,
     },
     {
       label: '关闭此页签',
@@ -88,7 +92,7 @@ function initMenuItems() {
  * 当前菜单变化或者增加菜单项需将当前菜单页签滚动至可视区域
  */
 watch(
-  () => [systemStore.activeMenuId, navTabs.length],
+  () => [route.fullPath, navTabs.length],
   () => {
     nextTick(() => {
       const dom = document.getElementsByClassName('active-tab').item(0)
@@ -100,11 +104,11 @@ watch(
 )
 
 /**
- * 根据menuId移除一个导航tab
- * @param menuId
+ * 根据fullPath移除一个导航tab
+ * @param fullPath
  */
-function removeTab(menuId) {
-  systemStore.removeNavTabByMenuId(menuId)
+function removeTab(fullPath) {
+  systemStore.removeNavTabByFullPath(fullPath)
   tabRefs.value.pop()
 }
 
@@ -124,7 +128,7 @@ function clickMenu(menu) {
   if (menu.label === '重新加载') {
     systemStore.setRefresh(true)
   } else if (menu.label === '关闭此页签') {
-    removeTab(navTabs[currentIndex.value].id)
+    removeTab(navTabs[currentIndex.value].fullPath)
   } else {
     navTabs
       .filter((i, index) => {
@@ -133,7 +137,7 @@ function clickMenu(menu) {
         if (menu.label === '关闭右侧页签') return index > currentIndex.value
         return false
       })
-      .map((i) => i.id)
+      .map((i) => i.fullPath)
       .forEach(removeTab)
   }
 }

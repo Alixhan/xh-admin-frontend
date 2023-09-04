@@ -1,10 +1,13 @@
 <script lang="jsx">
 import { defineComponent, nextTick, shallowRef, watchEffect } from 'vue'
 import { useSystemStore } from '@/stores/system'
+import { useRoute, useRouter } from 'vue-router'
 
 export default defineComponent({
   setup() {
     const systemStore = useSystemStore()
+    const router = useRouter()
+    const route = useRoute()
 
     const menus = shallowRef()
     watchEffect(initMenus)
@@ -29,24 +32,24 @@ export default defineComponent({
       if (children && children.length) {
         return (
           <el-sub-menu
-            index={menu.id + ''}
+            index={menu.fullPath ?? ''}
             v-slots={{
               title: () => {
                 return [icon, <span>{menu.title}</span>]
               },
-              default: () => children.map((i) => generateMenu(i))
+              default: () => children.map((i) => generateMenu(i)),
             }}
           />
         )
       } else {
         return (
           <el-menu-item
-            index={menu.id + ''}
+            index={menu.fullPath ?? '' + menu.id}
             v-slots={{
               title: () => {
                 return <span>{menu.title}</span>
               },
-              default: () => icon
+              default: () => icon,
             }}
           />
         )
@@ -57,16 +60,16 @@ export default defineComponent({
       class: 'el-menu',
       collapseTransition: false,
       // 选中菜单
-      onSelect(index) {
+      onSelect(fullPath) {
         // 小屏设备收起菜单
         if (systemStore.layout.widthShrink) systemStore.layout.menuCollapse = true
-        const menu = systemStore.menus.find((i) => i.id === Number(index))
+        const menu = systemStore.menus.find((i) => i.fullPath === fullPath)
         if (menu.handleType === 'outer') {
           window.open(menu.outerUrl)
         } else {
-          nextTick(() => systemStore.setActiveMenuId(Number(index)))
+          nextTick(() => router.push(menu.fullPath))
         }
-      }
+      },
     }
 
     return () => (
@@ -74,15 +77,15 @@ export default defineComponent({
         <el-menu
           {...{
             ...menuParam,
-            defaultActive: systemStore.activeMenuId + '',
-            collapse: systemStore.layout.menuCollapse
+            defaultActive: route.fullPath,
+            collapse: systemStore.layout.menuCollapse,
           }}
         >
           {menus.value}
         </el-menu>
       </el-scrollbar>
     )
-  }
+  },
 })
 </script>
 <style scoped lang="scss">

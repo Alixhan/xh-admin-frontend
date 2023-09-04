@@ -9,7 +9,7 @@
     <div class="header-top">
       <div class="header-left">
         <div class="nav-view">
-          <el-icon class="collapse-icon" color="var(--el-color-primary)" size="20">
+          <el-icon class="collapse-icon" color="var(--el-color-primary)" size="24">
             <Fold @click="toggleMenuCollapse" :class="{ rotate180: systemStore.layout.menuCollapse }" />
           </el-icon>
           <NavTabs v-if="systemStore.layout.heightShrink" key="nav-tabs" class="nav-tabs" />

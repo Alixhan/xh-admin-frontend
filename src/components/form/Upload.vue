@@ -26,13 +26,13 @@
     <!--    </template>-->
     <template #trigger>
       <div v-if="type === 'upload-img'" class="el-upload--picture-card">
-        <div class="file-lib-btn" @click.stop="openFileLib('image/')">文件库</div>
+        <div class="file-lib-btn" v-auth="'system:file'" @click.stop="openFileLib('image/')">文件库</div>
         <Plus class="icon" />
       </div>
       <div v-else>
         <el-button-group>
           <el-button type="primary" @click.stop="openFileLib()" icon="search" />
-          <el-button type="primary" >选择文件</el-button>
+          <el-button type="primary" v-auth="'system:file'">选择文件</el-button>
         </el-button-group>
       </div>
     </template>
@@ -98,7 +98,7 @@ const emit = defineEmits(['update:fileList', 'update:modelValue'])
 const props = defineProps({
   //设置为单一文件，直接传入文件表ID即可
   single: {
-    type: String as PropType<'id'|'object'>,
+    type: String as PropType<'id' | 'object'>,
   },
   type: {
     type: String,
@@ -148,8 +148,8 @@ const uploadParam = computed(() => {
     // 需要裁剪的图片一次只能选择一张
     multiple: !props.cropper,
   }
-//如果是单文件上传，设置limit为1
-  if(props.single) {
+  //如果是单文件上传，设置limit为1
+  if (props.single) {
     param.limit = 1
   }
   return param
@@ -159,10 +159,10 @@ const fileList = ref<any[]>([])
 watchEffect(() => {
   if (props.single && props.modelValue) {
     const downloadParam: DownloadParam = {}
-    if(props.single === 'id') {
+    if (props.single === 'id') {
       downloadParam.id = props.modelValue as number | string
     }
-    if(props.single === 'object') {
+    if (props.single === 'object') {
       downloadParam.object = props.modelValue as string
     }
     fileList.value = [
@@ -173,7 +173,7 @@ watchEffect(() => {
       },
     ]
   } else {
-    fileList.value = props.modelValue as any [] ?? []
+    fileList.value = (props.modelValue as any[]) ?? []
   }
 })
 
@@ -187,7 +187,7 @@ const param = ref({
 })
 const selection = ref('multiple')
 const selectLimit = computed(() => {
-  if(props.single) return 1 - fileList.value.length
+  if (props.single) return 1 - fileList.value.length
   if (attrs.limit) return Number(attrs.limit) - fileList.value.length
   return undefined
 })
@@ -244,6 +244,7 @@ function onPreview(file) {
     }
   }
 }
+
 //
 // function onDownload (file) {
 //   previewImageUrlList.value = fileList.value.map((i) => i.url)
@@ -267,9 +268,9 @@ function select(rows) {
         size: i.size,
         imgWidth: i.imgWidth,
         imgHeight: i.imgHeight,
-        imgRatio: i.imgRatio
+        imgRatio: i.imgRatio,
       }
-    })
+    }),
   ])
   visible.value = false
 }
@@ -308,11 +309,11 @@ function openFileLib(type?) {
   visible.value = true
 }
 
-function emitModelValue(){
+function emitModelValue() {
   if (props.single) {
-    if(props.single === 'id') emit('update:modelValue', fileList.value[0]?.id)
-    if(props.single === 'object') emit('update:modelValue', fileList.value[0]?.object)
-  }else {
+    if (props.single === 'id') emit('update:modelValue', fileList.value[0]?.id)
+    if (props.single === 'object') emit('update:modelValue', fileList.value[0]?.object)
+  } else {
     emit('update:modelValue', fileList.value)
   }
 }

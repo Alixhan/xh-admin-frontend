@@ -141,7 +141,7 @@ export function ruleValid(rule: ValidRule = {}, formValue: any = '', formData?: 
       }
     }
     // 自定义验证方法
-    if (rule.validator) rule.validator(rule, formValue, (e) => (e instanceof Error ? reject(e.message) : ''), formData)
+    if (rule.validator) rule.validator(rule, formValue, (e) => (e instanceof Error ? reject(e.message) : resolve('')), formData)
     else resolve('')
   }).catch((e: string) => e) // 捕获错误信息，resolve Promise
 }

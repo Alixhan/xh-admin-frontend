@@ -54,6 +54,7 @@ const formLoading = ref(false)
 const saveLoading = ref(false)
 const formData = ref({
   enabled: true,
+  password: '',
 })
 
 const jobData = ref([])
@@ -71,6 +72,7 @@ if (props.handleType !== 'add') {
     getUserGroups(props.modelValue!.id),
   ]).then(([a, b, c]) => {
     formData.value = a.data
+    formData.value.password = ''
     jobData.value = b.data
     groupData.value = c.data
     formLoading.value = false
@@ -88,7 +90,8 @@ watchEffect(() => {
     },
     { prop: 'name', label: '用户名', rules: { required: true } },
     { prop: 'avatar', label: '头像', type: 'upload-img', single: 'object' },
-    { prop: 'password', label: '初始密码', hidden: props.handleType !== 'add' },
+    { prop: 'telephone', label: '手机号码', rules: { type: 'phone' } },
+    { prop: 'password', label: '初始密码', autocomplete: 'new-password', hidden: props.handleType !== 'add' },
     { prop: 'enabled', label: '是否启用', type: 'switch' },
     { type: 'separator', label: '用户岗位', hidden: props.handleType !== 'detail' },
     { slotName: 'job', hidden: props.handleType !== 'detail' },

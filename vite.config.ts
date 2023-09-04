@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
+//@ts-ignore
 import eslint from 'vite-plugin-eslint'
 import checker from 'vite-plugin-checker'
 import { fileURLToPath, URL } from 'node:url'
@@ -21,7 +22,7 @@ export default defineConfig({
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
-    extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.vue'],
+    extensions: ['.mjs', '.js', '.ts', '.mts', '.jsx', '.tsx', '.json', '.vue'],
   },
   // vite 相关配置
   server: {

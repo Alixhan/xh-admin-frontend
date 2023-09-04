@@ -23,8 +23,26 @@ export const staticRouters = [
     component: Layout,
     children: [
       // 将匹配所有内容并将其放在 `$route.params.pathMatch` 下
-      { path: '/:pathMatch(.*)*', name: 'NotFound', component: () => import('@/views/NotFond.vue') },
-    ]},
+      {
+        path: '/:pathMatch(.*)*',
+        name: 'NotFound',
+        component: () => import('@/views/NotFond.vue'),
+        meta: {
+          title: '404',
+        },
+      },
+      {
+        path: `/${import.meta.env.VITE_LAYOUT_ROUTE_NAME}/personalCenter`,
+        name: 'personalCenter',
+        component: () => import('@/views/personalCenter'),
+        meta: {
+          title: '个人中心',
+          cache: true,
+          componentName: `/${import.meta.env.VITE_LAYOUT_ROUTE_NAME}/personalCenter`,
+        },
+      },
+    ],
+  },
 ]
 
 const router = createRouter({

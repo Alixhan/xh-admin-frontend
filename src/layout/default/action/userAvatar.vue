@@ -3,7 +3,13 @@
     <div class="avatar">
       <el-avatar shape="circle" :size="26" fit="cover" :src="avatar" />
       <div class="username">{{ systemStore.user?.name }}</div>
-      <el-drawer style="min-width: min(100vw, 500px);"  append-to-body v-model="drawerVisible" title="用户角色" direction="rtl">
+      <el-drawer
+        style="min-width: min(90vw, 500px)"
+        append-to-body
+        v-model="drawerVisible"
+        title="用户角色"
+        direction="rtl"
+      >
         <div v-for="(item, i) in systemStore.orgRoles" :key="i" class="role-item">
           <el-text> {{ item.orgName }} -- {{ item.roleName }}</el-text>
           <div>
@@ -30,8 +36,10 @@ import { userLogout } from '@/api/system/user'
 import defaultAvatar from '@/assets/image/avatar-default.png'
 import { computed, ref } from 'vue'
 import { getDownloadFileUrl } from '@/utils'
+import { useRouter } from 'vue-router'
 
 const systemStore = useSystemStore()
+const router = useRouter()
 
 const avatar = computed(() => {
   if (systemStore.user?.avatar)
@@ -45,7 +53,7 @@ const drawerVisible = ref(false)
 
 function handleCommand(key) {
   if (key === 'user') {
-    console.info('个人中心')
+    router.push(`/${import.meta.env.VITE_LAYOUT_ROUTE_NAME}/personalCenter`)
   }
   if (key === 'switchRole') {
     drawerVisible.value = true
