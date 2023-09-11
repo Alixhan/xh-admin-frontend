@@ -19,7 +19,7 @@ const projectTitle = import.meta.env.VITE_TITLE
 </script>
 <style scoped lang="scss">
 .logo-view {
-  padding: 15px;
+  padding: 10px;
   display: flex;
   align-items: center;
   font-size: 15px;

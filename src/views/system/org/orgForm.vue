@@ -65,10 +65,6 @@ if (handleType.value !== 'add') {
   formLoading.value = true
   getOrgById(props.modelValue.id).then((res) => {
     formData.value = res.data
-    if (handleType.value === 'copy') {
-      handleType.value = 'add'
-      formData.value.id = ''
-    }
     formLoading.value = false
   })
 }

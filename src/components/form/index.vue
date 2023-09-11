@@ -171,7 +171,10 @@ export default {
           ),
         }
         const formItemSlots: { [name: string]: Function } = {
-          default: () => createVNode(i.renderArgs.component, param, i.renderArgs.slots),
+          default: () => {
+            if(i.columnParam.render) return i.columnParam.render()
+            return createVNode(i.renderArgs.component, param, i.renderArgs.slots)
+          },
         }
         if (column.comment) {
           formItemSlots.label = () => {
@@ -200,11 +203,11 @@ export default {
       return formItemParams.value.map((i) => {
         // 隐藏的不显示
         if (i.hidden) return null
-        if(i.columnParam.type === 'separator') return <el-skeleton-item style="width: 60%; margin-bottom: 1em;" />
+        if (i.columnParam.type === 'separator') return <el-skeleton-item style="width: 60%; margin-bottom: 1em;" />
         const column = i.columnParam
         const formItemSlots: { [name: string]: Function } = {
           default: () => {
-            const randomWidth = 30 + Math.random()* 70
+            const randomWidth = 30 + Math.random() * 70
             const skeletonParam = {
               variant: 'text',
               style: {

@@ -11,10 +11,12 @@ export interface DownloadParam {
   contentType?: string
   //告诉浏览器如何处理文件流，attachment为下载，inline浏览器在线预览，默认下载
   disposition?: 'attachment' | 'inline'
-  //是否压缩显示缩略图
+  //是否压缩显示缩略图，仅图片文件有效
   isScale?: boolean
-  //以最长边缩小到此大小等比例缩放,默认60像素
+  //仅图片文件有效，以最长边缩小到此大小等比例缩放,默认60像素
   scaleWidth?: number
+  // 仅视频文件有效，是可以传入需要预览视频第几帧图片，响应一个视频对应帧的图片流
+  videoFrameNum?: number
 }
 
 /**

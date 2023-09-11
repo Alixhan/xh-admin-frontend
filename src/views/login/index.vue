@@ -1,5 +1,6 @@
 <template>
   <el-scrollbar height="100%" class="login-root">
+    <div class="image-bg" />
     <div
       class="login-view"
       :class="{
@@ -7,6 +8,7 @@
       }"
     >
       <SwitchStyle class="switch-style" />
+      <div class="title-system">{{ title }}</div>
       <div class="card-view">
         <div class="title-view">用户登录</div>
         <el-form @keyup.enter="submit" ref="formRef" :rules="rules" size="large" :model="formData">
@@ -58,6 +60,7 @@
         </el-form>
       </div>
     </div>
+    <icpba />
   </el-scrollbar>
 </template>
 <script setup>
@@ -66,10 +69,13 @@ import { userLogin } from '@/api/system/user'
 import { useSystemStore } from '@/stores/system'
 import { useRouter } from 'vue-router'
 import SwitchStyle from '@/layout/default/action/switchStyle.vue'
+import Icpba from '@/layout/icpba.vue'
 
 defineOptions({
   name: 'SystemLogin',
 })
+
+const title = import.meta.env.VITE_TITLE
 
 const systemStore = useSystemStore()
 const router = useRouter()
@@ -77,8 +83,8 @@ const router = useRouter()
 const loading = ref(false)
 const verificationUrl = ref('')
 const formData = reactive({
-  username: 'admin',
-  password: 'admin123',
+  username: '',
+  password: '',
   captcha: '',
 })
 const rules = reactive({
@@ -112,7 +118,16 @@ function submit() {
 </script>
 <style scoped lang="scss">
 .login-root {
-  background: url('@/assets/bg.jpg') no-repeat;
+  //background: url('@/assets/bg.jpg') no-repeat;
+  .image-bg {
+    position: fixed;
+    width: 90%;
+    height: 90%;
+    background-image: linear-gradient(-45deg, #bd34fe 50%, #1babe0 50%);
+    filter: blur(200px);
+    top: 5%;
+    left: 5%;
+  }
 }
 
 .login-view {
@@ -127,14 +142,27 @@ function submit() {
     margin-right: 20px;
   }
 
+  .title-system{
+    font-size: 50px;
+    font-weight: bold;
+    color: white;
+    z-index: 1;
+    font-family: 华文行楷;
+    position: fixed;
+    text-align: center;
+    left: 15%;
+    top: 20%;
+  }
+
   .card-view {
     border-radius: var(--el-border-radius-base);
-    box-shadow: var(--el-box-shadow);
+    //box-shadow: var(--el-box-shadow);
+    opacity: 0.9;
     padding: 20px;
     position: fixed;
     background-color: var(--layout-left-bg-color);
     width: 350px;
-    bottom: 20%;
+    top: 30%;
     left: 15%;
 
     .title-view {
@@ -169,6 +197,13 @@ function submit() {
     position: relative;
     inset: auto;
     width: auto;
+  }
+
+  .title-system{
+    position: relative;
+    text-align: center;
+    inset: auto;
+    margin: 20px 0;
   }
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div class="m-single-date-picker" :style="{ lineHeight: inputHeight }">
     <el-date-picker v-bind="startParam" :model-value="$props.start" />
-    <el-text style="font-weight: bold">{{ $props.rangeSeparator ?? '-' }}</el-text>
+    <el-text style="font-weight: bold; padding: 0 5px;">{{ $props.rangeSeparator ?? '-' }}</el-text>
     <el-date-picker v-bind="endParam" :model-value="$props.end" />
   </div>
 </template>

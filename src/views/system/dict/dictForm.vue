@@ -93,10 +93,6 @@ if (handleType.value !== 'add') {
   formLoading.value = true
   getDictDetailById(props.modelValue.id).then((res) => {
     formData.value = res.data
-    if (handleType.value === 'copy') {
-      handleType.value = 'add'
-      formData.value.id = ''
-    }
     formLoading.value = false
   })
 }
@@ -157,7 +153,7 @@ function selectedParentDict(rows) {
 
 // 保存方法
 function save() {
-  formRef.value.validate().then(() => {
+  formRef.value.submit().then(() => {
     postSaveDictDetail(formData.value, {
       loadingRef: saveLoading,
       showSuccessMsg: true,

@@ -13,6 +13,17 @@ export default defineConfig({
         // 开启defineModel
         defineModel: true,
       },
+      template: {
+        transformAssetUrls: {
+          video: ['src', 'poster'],
+          source: ['src'],
+          img: ['src'],
+          image: ['xlink:href', 'href'],
+          use: ['xlink:href', 'href'],
+          // 添加对自定义的组件路径别名解析
+          'm-svg-icon': ['src']
+        }
+      }
     }),
     vueJsx(),
     eslint(),

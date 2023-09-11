@@ -298,6 +298,7 @@ async function upload() {
       item.imgRatio = res.data.imgRatio
     } catch (e) {
       item.status = 'fail'
+      throw e
     }
   }
   emitModelValue()

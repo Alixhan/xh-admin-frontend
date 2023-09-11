@@ -108,7 +108,7 @@ watchEffect(() => {
 
 // 保存方法
 function save() {
-  formRef.value.validate().then(() => {
+  formRef.value.submit().then(() => {
     postSaveFile(formData.value, {
       loadingRef: saveLoading,
       showSuccessMsg: true,
