@@ -24,5 +24,5 @@ export function getMenuById(id) {
 
 // 批量删除菜单
 export function delMenuByIds(ids, option?: RequestOption) {
-  return createAxios(option).delete(`${systemBaseUrl}/api/system/menu/del/${ids}`)
+  return createAxios(option).delete(`${systemBaseUrl}/api/system/menu/del`, { params: { ids } })
 }

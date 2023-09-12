@@ -34,5 +34,5 @@ export function getFileById(id) {
 
 // 批量删除文件
 export function delFileByIds(ids, option?: RequestOption) {
-  return createAxios(option).delete(`${fileBaseUrl}/api/file/operation/del/${ids}`)
+  return createAxios(option).delete(`${fileBaseUrl}/api/file/operation/del`, { params: { ids } })
 }

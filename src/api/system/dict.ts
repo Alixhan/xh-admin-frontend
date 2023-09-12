@@ -24,5 +24,5 @@ export function getDictDetailById(id) {
 
 // 批量删除文件
 export function delDictDetailByIds(ids, option?: RequestOption) {
-  return createAxios(option).delete(`${systemBaseUrl}/api/system/dict/detail/del/${ids}`)
+  return createAxios(option).delete(`${systemBaseUrl}/api/system/dict/detail/del`, { params: { ids } })
 }

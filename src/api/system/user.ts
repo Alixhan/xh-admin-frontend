@@ -70,7 +70,7 @@ export function getUserById(id) {
 
 // 批量删除用户
 export function delUserByIds(ids: string, option: RequestOption) {
-  return createAxios(option).delete(`${systemBaseUrl}/api/system/user/del/${ids}`)
+  return createAxios(option).delete(`${systemBaseUrl}/api/system/user/del`, { params: { ids } })
 }
 
 // 用户批量导入

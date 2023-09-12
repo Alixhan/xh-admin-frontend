@@ -24,5 +24,5 @@ export function getOrgById(id) {
 
 // 批量删除机构
 export function delOrgByIds(ids, option?: RequestOption) {
-  return createAxios(option).delete(`${systemBaseUrl}/api/system/org/del/${ids}`)
+  return createAxios(option).delete(`${systemBaseUrl}/api/system/org/del`, { params: { ids } })
 }
