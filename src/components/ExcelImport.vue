@@ -9,14 +9,15 @@
         <el-button :loading="loading" text :icon="tipObj.icon" :style="{ color: tipObj.color }" @click="tipClick">
           <span>{{ tipObj.msg }}</span>
         </el-button>
-        <el-button :loading="downloadLoading" type="primary" icon="download" @click="downloadTemplate()">下载模板 </el-button>
+        <el-button :loading="downloadLoading" type="primary" icon="download" @click="downloadTemplate()"
+          >下载模板
+        </el-button>
         <el-button :loading="loading" type="primary" icon="folderOpened" @click="fileRef.click()">选择文件</el-button>
         <el-button :loading="loading" type="primary" icon="check" @click="subImport">确认导入</el-button>
         <el-button :loading="loading" type="danger" icon="delete" @click="clear">清空</el-button>
       </template>
     </m-table>
-    <el-dialog title="错误信息" v-model="errorVisible" align-center draggable append-to-body
-width="70%">
+    <el-dialog title="错误信息" v-model="errorVisible" align-center draggable append-to-body width="70%">
       <m-table :columns="errorTableColumns" v-model:data="errorData" :cell-style="cellStyle" style="height: 70vh" />
     </el-dialog>
   </div>
@@ -129,7 +130,12 @@ const fileRef = ref()
 const errorTableColumns: TableColumn[] = [
   { type: 'index' },
   { prop: 'num', label: '数据行号', width: 100 },
-  { prop: 'excelNum', label: 'excel行号', width: 100 },
+  {
+    prop: 'excelNum',
+    label: 'excel行号',
+    width: 100,
+    formatter: (row, col, val) => val ?? ((row.num ?? '') + excelTree.$maxPlies ?? 0),
+  },
   { prop: 'error', label: '错误内容' },
 ]
 

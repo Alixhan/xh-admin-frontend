@@ -5,6 +5,16 @@ import { isRef } from 'vue'
 
 axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8'
 
+/**
+ * 通用响应
+ */
+export interface RestResponse<T> {
+  readonly httpCode: number //http状态码
+  readonly status: 'success' | 'error' | 'warning' | 'info' //响应消息状态
+  readonly message?: string //响应的消息内容
+  readonly data: T //响应的数据
+}
+
 export interface RequestOption {
   // 是否显示loading
   showLoading?: boolean

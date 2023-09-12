@@ -5,6 +5,7 @@ declare module '*.vue' {
 }
 
 declare type RequestOption = import('@/utils/request').RequestOption
+declare type RestResponse<T> = import('@/utils/request').RestResponse<T>
 
 declare type ValidRule = import('@/utils/validate').ValidRule
 declare type RuleObject = import('@/utils/validate').RuleObject

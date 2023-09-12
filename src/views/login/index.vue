@@ -13,18 +13,10 @@
         <div class="title-view">用户登录</div>
         <el-form @keyup.enter="submit" ref="formRef" :rules="rules" size="large" :model="formData">
           <el-form-item prop="username">
-            <el-input
-              ref="usernameRef"
-              type="text"
-              clearable
-              v-model="formData.username"
-              placeholder="请输入账号"
-              prefix-icon="User"
-            />
+            <el-input type="text" clearable v-model="formData.username" placeholder="请输入账号" prefix-icon="User" />
           </el-form-item>
           <el-form-item prop="password">
             <el-input
-              ref="passwordRef"
               v-model="formData.password"
               type="password"
               placeholder="请输入密码"
@@ -33,23 +25,17 @@
               prefix-icon="Unlock"
             />
           </el-form-item>
-          <el-form-item v-if="false" prop="captcha">
-            <el-row class="w100" :gutter="15">
-              <el-col :span="16">
-                <el-input
-                  ref="captchaRef"
-                  type="text"
-                  placeholder="请输入图形验证码"
-                  v-model="formData.captcha"
-                  clearable
-                  autocomplete="off"
-                  prefix-icon="Unlock"
-                />
-              </el-col>
-              <el-col :span="8">
+          <el-form-item prop="captchaCode">
+            <el-input
+              v-model="formData.captchaCode"
+              placeholder="请输入图形验证码"
+              clearable
+              :prefix-icon="captchaIcon"
+            >
+              <template #append>
                 <img @click="refresh" class="captcha-img" :src="verificationUrl" alt="" />
-              </el-col>
-            </el-row>
+              </template>
+            </el-input>
           </el-form-item>
           <div class="forget-password-view">
             <el-link type="primary" icon="QuestionFilled"> 忘记密码</el-link>
@@ -64,38 +50,53 @@
   </el-scrollbar>
 </template>
 <script setup>
-import { defineOptions, nextTick, reactive, ref } from 'vue'
-import { userLogin } from '@/api/system/user'
+import { defineOptions, h, nextTick, reactive, ref } from 'vue'
+import { getImageCaptcha, userLogin } from '@/api/system/user'
 import { useSystemStore } from '@/stores/system'
 import { useRouter } from 'vue-router'
 import SwitchStyle from '@/layout/default/action/switchStyle.vue'
 import Icpba from '@/layout/icpba.vue'
+import { v4 as uuidv4 } from 'uuid'
+import MIcon from '@/components/Icon.vue'
 
 defineOptions({
   name: 'SystemLogin',
 })
 
 const title = import.meta.env.VITE_TITLE
-
 const systemStore = useSystemStore()
 const router = useRouter()
 
+const captchaKey = uuidv4().replaceAll('-', '')
+
 const loading = ref(false)
-const verificationUrl = ref('')
 const formData = reactive({
+  captchaKey,
   username: '',
   password: '',
-  captcha: '',
+  captchaCode: '',
 })
+
+const captchaIcon = h(MIcon, { modelValue: 'local|/src/assets/icon/验证码.svg' })
+
+//图形验证码
+const verificationUrl = ref()
+
 const rules = reactive({
   username: [{ required: true, message: '请输入账号' }],
   password: [{ required: true, message: '请输入密码' }],
-  captcha: [{ required: true, message: '请输入图形验证码' }],
+  captchaCode: [{ required: true, message: '请输入图形验证码' }],
 })
 
 const formRef = ref()
 
-function refresh() {}
+refresh()
+
+function refresh() {
+  getImageCaptcha(captchaKey).then((res) => {
+    verificationUrl.value = res.data.imageBase64
+  })
+}
 
 function submit() {
   formRef.value.validate((valid) => {
@@ -142,12 +143,12 @@ function submit() {
     margin-right: 20px;
   }
 
-  .title-system{
+  .title-system {
     font-size: 50px;
     font-weight: bold;
     color: white;
     z-index: 1;
-    font-family: 华文行楷;
+    font-family: 华文行楷, serif;
     position: fixed;
     text-align: center;
     left: 15%;
@@ -179,6 +180,16 @@ function submit() {
       margin-bottom: 20px;
     }
 
+    :deep(.el-input-group__append) {
+      padding: 4px;
+    }
+
+    .captcha-img {
+      width: 100px;
+      height: auto;
+      cursor: pointer;
+    }
+
     .submit-button {
       width: 100%;
     }
@@ -199,7 +210,7 @@ function submit() {
     width: auto;
   }
 
-  .title-system{
+  .title-system {
     position: relative;
     text-align: center;
     inset: auto;

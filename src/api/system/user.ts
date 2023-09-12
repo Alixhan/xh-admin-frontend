@@ -3,6 +3,21 @@ import createAxios from '@/utils/request'
 const systemBaseUrl = import.meta.env.VITE_SYSTEM_BASE_URL
 
 /**
+ * 返回的图形码数据
+ */
+export interface ImageCaptcha {
+  captchaKey: string
+  imageBase64: string
+}
+
+/**
+ * 获取图形验证码
+ */
+export function getImageCaptcha(captchaKey, option?: RequestOption):Promise<RestResponse<ImageCaptcha>> {
+  return createAxios(option).get(`${import.meta.env.VITE_SYSTEM_BASE_URL}/api/system/user/captcha`, { params: {captchaKey} })
+}
+
+/**
  * 系统登录
  */
 export function userLogin(params = {}, option?: RequestOption) {
@@ -56,6 +71,11 @@ export function getUserById(id) {
 // 批量删除用户
 export function delUserByIds(ids: string, option: RequestOption) {
   return createAxios(option).delete(`${systemBaseUrl}/api/system/user/del/${ids}`)
+}
+
+// 用户批量导入
+export function importUsers(params, option?: RequestOption) {
+  return createAxios(option).post(`${systemBaseUrl}/api/system/user/imports`, params)
 }
 
 export interface UserJobsParam {
