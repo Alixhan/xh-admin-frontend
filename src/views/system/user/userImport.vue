@@ -32,9 +32,13 @@ const excelColumns = ref([
 
 // 开始导入数据
 function complete(data, callback) {
-  importUsers(data).then((res) => {
-    callback(res.data)
-  })
+  importUsers(data)
+    .then((res) => {
+      callback(res.data)
+    })
+    .catch((e) => {
+      callback([{ error: e.message ?? '导入失败' }])
+    })
 }
 
 // 打开导入框

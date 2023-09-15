@@ -23,7 +23,6 @@ const projectTitle = import.meta.env.VITE_TITLE
   display: flex;
   align-items: center;
   font-size: 15px;
-  border-bottom: var(--el-border);
 
   .logo-img {
     flex-shrink: 0;

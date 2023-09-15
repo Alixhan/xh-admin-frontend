@@ -8,12 +8,17 @@
       }"
     >
       <SwitchStyle class="switch-style" />
-      <div class="title-system">{{ title }}</div>
       <div class="card-view">
-        <div class="title-view">用户登录</div>
-        <el-form @keyup.enter="submit" ref="formRef" :rules="rules" size="large" :model="formData">
+        <div class="title-system">{{ title }}</div>
+        <el-form class="form-view" @keyup.enter="submit" ref="formRef" :rules="rules" size="large" :model="formData">
           <el-form-item prop="username">
-            <el-input type="text" clearable v-model="formData.username" placeholder="请输入账号" prefix-icon="User" />
+            <el-input
+              type="text"
+              clearable
+              v-model="formData.username"
+              placeholder="请输入账号"
+              prefix-icon="User"
+            />
           </el-form-item>
           <el-form-item prop="password">
             <el-input
@@ -26,31 +31,31 @@
             />
           </el-form-item>
           <el-form-item prop="captchaCode">
-            <el-input
-              v-model="formData.captchaCode"
-              placeholder="请输入图形验证码"
-              clearable
-              :prefix-icon="captchaIcon"
-            >
-              <template #append>
-                <img @click="refresh" class="captcha-img" :src="verificationUrl" alt="" />
-              </template>
-            </el-input>
+            <div style="display: inline-flex; width: 100%;">
+              <el-input
+                v-model="formData.captchaCode"
+                placeholder="请输入图形验证码"
+                clearable
+                :prefix-icon="captchaIcon"
+              >
+              </el-input>
+              <img @click="refresh" class="captcha-img" :src="verificationUrl" alt="" />
+            </div>
           </el-form-item>
-          <div class="forget-password-view">
-            <el-link type="primary" icon="QuestionFilled"> 忘记密码</el-link>
-          </div>
+<!--          <div class="forget-password-view">-->
+<!--            <el-link type="primary" icon="QuestionFilled"> 忘记密码</el-link>-->
+<!--          </div>-->
           <el-button :loading="loading" class="submit-button" round type="primary" size="large" @click="submit">
             登录
           </el-button>
         </el-form>
       </div>
+      <icpba />
     </div>
-    <icpba />
   </el-scrollbar>
 </template>
 <script setup>
-import { defineOptions, h, nextTick, reactive, ref } from 'vue'
+import { createVNode, defineOptions, nextTick, reactive, ref } from 'vue'
 import { getImageCaptcha, userLogin } from '@/api/system/user'
 import { useSystemStore } from '@/stores/system'
 import { useRouter } from 'vue-router'
@@ -77,7 +82,7 @@ const formData = reactive({
   captchaCode: '',
 })
 
-const captchaIcon = h(MIcon, { modelValue: 'local|/src/assets/icon/验证码.svg' })
+const captchaIcon = createVNode(MIcon, { modelValue: 'local|/src/assets/icon/验证码.svg' })
 
 //图形验证码
 const verificationUrl = ref()
@@ -119,15 +124,16 @@ function submit() {
 </script>
 <style scoped lang="scss">
 .login-root {
-  //background: url('@/assets/bg.jpg') no-repeat;
+  height: 100%;
+
   .image-bg {
     position: fixed;
-    width: 90%;
-    height: 90%;
-    background-image: linear-gradient(-45deg, #bd34fe 50%, #1babe0 50%);
-    filter: blur(200px);
-    top: 5%;
-    left: 5%;
+    width: 100%;
+    height: 100%;
+    background-image: url('@/assets/bg.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    opacity: 0.7;
   }
 }
 
@@ -136,6 +142,7 @@ function submit() {
   height: 100%;
   display: flex;
   flex-direction: column;
+  align-items: center;
 
   .switch-style {
     align-self: end;
@@ -144,54 +151,48 @@ function submit() {
   }
 
   .title-system {
-    font-size: 50px;
+    font-size: 35px;
     font-weight: bold;
     color: white;
     z-index: 1;
     font-family: 华文行楷, serif;
-    position: fixed;
     text-align: center;
-    left: 15%;
-    top: 20%;
+    margin: 30px 0 40px 0;
+    text-shadow: 1px 3px 0 #14496e;
   }
 
   .card-view {
-    border-radius: var(--el-border-radius-base);
+    border-radius: 10px;
     //box-shadow: var(--el-box-shadow);
     opacity: 0.9;
     padding: 20px;
-    position: fixed;
-    background-color: var(--layout-left-bg-color);
+    position: relative;
     width: 350px;
-    top: 30%;
-    left: 15%;
+    background: rgba(0, 0, 0, 0.2);
+    margin-top: 12%;
 
-    .title-view {
-      color: var(--el-color-primary);
-      text-align: center;
-      font-size: 1.5em;
-      margin-top: 10px;
-      margin-bottom: 50px;
-    }
+    .form-view {
+      .forget-password-view {
+        font-size: 10px;
+        text-align: right;
+        margin-bottom: 20px;
+      }
 
-    .forget-password-view {
-      font-size: 10px;
-      text-align: right;
-      margin-bottom: 20px;
-    }
+      :deep(.el-input-group__append) {
+        padding: 4px;
+      }
 
-    :deep(.el-input-group__append) {
-      padding: 4px;
-    }
+      .captcha-img {
+        margin: 2px 0 2px 5px;
+        width: 100px;
+        height: auto;
+        cursor: pointer;
+        border-radius: 5px;
+      }
 
-    .captcha-img {
-      width: 100px;
-      height: auto;
-      cursor: pointer;
-    }
-
-    .submit-button {
-      width: 100%;
+      .submit-button {
+        width: 100%;
+      }
     }
   }
 }

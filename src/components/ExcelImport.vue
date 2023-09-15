@@ -134,7 +134,7 @@ const errorTableColumns: TableColumn[] = [
     prop: 'excelNum',
     label: 'excel行号',
     width: 100,
-    formatter: (row, col, val) => val ?? ((row.num ?? '') + excelTree.$maxPlies ?? 0),
+    formatter: (row, col, val) => val ?? (row.num ? row.num + excelTree.$maxPlies ?? 0 : ''),
   },
   { prop: 'error', label: '错误内容' },
 ]

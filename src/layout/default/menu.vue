@@ -59,6 +59,9 @@ export default defineComponent({
     const menuParam = {
       class: 'el-menu',
       collapseTransition: false,
+      // backgroundColor:'var(--layout-left-bg-color)',
+      // textColor:'#cbcbcb',
+      // activeTextColor:'var(--el-color-primary)',
       // 选中菜单
       onSelect(fullPath) {
         // 小屏设备收起菜单

@@ -147,7 +147,7 @@ $transition-time: all 0.2s linear;
 .nav-tabs {
   height: auto;
   display: flex;
-  gap: 10px;
+  gap: 5px;
   font-size: var(--el-font-size-base);
 
   .tab-item {

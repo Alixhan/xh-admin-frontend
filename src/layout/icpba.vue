@@ -1,15 +1,11 @@
 <template>
   <div class="icp-view">
     <div class="icp">
-      <a href="http://beian.miit.gov.cn/" style="text-decoration: none" target="_blank">皖 ICP 备 {{ icpCode }} 号</a>
-      <a
-        target="_blank"
-        :href="`http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=${psbCode}`"
-        style="display: inline-flex; align-items: center; text-decoration: none"
-      >
-        <img src="@/assets/image/jinghui.png" style="float: left; width: 1em; height: 1em; margin: 0 5px" alt="" />
-        皖公网安备 {{psbCode}} 号
-      </a>
+      <el-link href="http://beian.miit.gov.cn/" :underline="false"> 皖 ICP 备 {{ icpCode }} 号 </el-link>
+      <el-link href="http://beian.miit.gov.cn/" :underline="false">
+        <img src="@/assets/image/jinghui.png" style="float: left; width: 1.2em; height: 1.2em; margin: 0 5px" alt="" />
+        皖公网安备 {{ psbCode }} 号
+      </el-link>
     </div>
   </div>
 </template>
@@ -31,11 +27,9 @@ const psbCode = 'XXXXXXXXX'
 
   .icp {
     border-radius: 3px;
-    font-size: 10px;
-    color: #0e0e0e;
-    padding: 2px 10px;
+    font-size: 12px;
+    padding: 2px 5px;
     margin: 0 10px;
-    background-color: rgba(255, 255, 255, 0.3);
     display: inline-flex;
     align-items: center;
     justify-content: center;

@@ -1,14 +1,16 @@
 <template>
-  <div v-loading="loading" style="width: 100%; height: 100%;">
+  <div v-loading="loading" style="width: 100%; height: 100%">
     <iframe class="iframe" :src="src" @load="loading = false" />
   </div>
 </template>
 <script setup>
 import { useSystemStore } from '@/stores/system'
 import { ref } from 'vue'
+import { useRoute } from 'vue-router'
 
 const systemStore = useSystemStore()
-const src = systemStore.menus.find((i) => i.id === systemStore.activeMenuId).outerUrl
+const route = useRoute()
+const src = systemStore.menus.find((i) => i.fullPath === route.fullPath).outerUrl
 const loading = ref(true)
 </script>
 <style lang="scss" scoped>

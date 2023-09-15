@@ -60,6 +60,7 @@ html {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
+    -webkit-column-gap: 10px;
   }
 
   .el-checkbox,
