@@ -26,6 +26,7 @@ export interface Menu {
   component: string
   handleType: string
   path: string
+  icon: string
   children?: Menu[]
 }
 
@@ -58,6 +59,8 @@ interface NavTab {
   cache?: boolean
   // 组件名
   componentName?: string
+  // 图标
+  icon?: string
 }
 
 /**
@@ -72,7 +75,7 @@ export const useSystemStore = defineStore('system', () => {
 
   const layout = reactive({
     // 全局布局大小，可选值<small|default|large>
-    size: useLocalStorage(import.meta.env.VITE_SYS_TOKEN_KEY + '-size', 'default'),
+    size: useLocalStorage('size', 'default'),
     // 是否暗黑模式
     isDark: useDark(),
     // 布局方式，可选值<Default|Classic|Streamline>
@@ -80,13 +83,13 @@ export const useSystemStore = defineStore('system', () => {
     // 主页面切换动画，可选值<slide-right|slide-left|el-fade-in-linear|el-fade-in|el-zoom-in-center|el-zoom-in-top|el-zoom-in-bottom>
     mainAnimation: 'slide-left',
     // 侧边菜单宽度(展开时)，单位px
-    menuWidth: 206,
+    menuWidth: useLocalStorage('menuWidth', 200),
     // 是否水平折叠收起菜单
     menuCollapse: false,
     // 是否只保持一个子菜单的展开(手风琴)
-    menuUniqueOpened: false,
+    menuUniqueOpened: useLocalStorage('menuUniqueOpened', false),
     // 显示菜单栏顶栏(LOGO)
-    showLogo: true,
+    showLogo: useLocalStorage('showLogo', true),
     // 显示菜单栏顶栏(LOGO)
     showNavTabs: true,
     windowWidth: 0,
@@ -95,6 +98,10 @@ export const useSystemStore = defineStore('system', () => {
     widthShrink: false,
     // 高度是否收缩(矮高度设备)
     heightShrink: false,
+    //显示navTab的图标
+    showNavTabIcon: useLocalStorage('showNavTabIcon', true),
+    //设置显示
+    settingVisible: false,
   })
 
   // 监听窗口变化
@@ -212,6 +219,7 @@ export const useSystemStore = defineStore('system', () => {
           fullPath: guard.fullPath,
           componentName: guard.meta.componentName,
           cache: guard.meta.cache,
+          icon: guard.meta.icon,
         })
       )
     // 设置浏览器标题
@@ -308,6 +316,7 @@ export const useSystemStore = defineStore('system', () => {
             title: i.title,
             cache: i.cache,
             component: i.component,
+            icon: i.icon,
             componentName,
           },
         }

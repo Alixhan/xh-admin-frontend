@@ -6,7 +6,7 @@
     }"
   >
     <div class="left-view">
-      <Logo class="logo" />
+      <Logo v-if="systemStore.layout.showLogo" class="logo" />
       <Menu class="menu" />
     </div>
     <div class="right-view">

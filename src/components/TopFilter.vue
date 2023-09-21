@@ -3,6 +3,7 @@ import { createVNode, defineComponent, ref, shallowRef, watchEffect } from 'vue'
 import { generateDynamicColumn, generatePlaceholder, vModelValue } from '@/components/mutils'
 import { useSystemStore } from '@/stores/system'
 import { useElementSize } from '@vueuse/core'
+import QueryIcon from '@/assets/icon/search-list.svg'
 
 /**
  * 筛选框组件
@@ -34,11 +35,11 @@ export default defineComponent({
   emits: ['search'],
   setup(props, { emit, expose }) {
     const systemStore = useSystemStore()
-    const topFilterRef = ref()
+    const topFilterFormRef = ref()
     // 搜索框是否展开
     const expand = ref(false)
 
-    const filterSize = ref(useElementSize(topFilterRef))
+    const filterSize = ref(useElementSize(topFilterFormRef))
     // 搜索列
     const columnsParams = shallowRef([])
     watchEffect(initColumnsParams)
@@ -57,7 +58,7 @@ export default defineComponent({
 
     // 重置
     function reset() {
-      topFilterRef.value.resetFields()
+      topFilterFormRef.value.resetFields()
     }
 
     expose({ reset })
@@ -109,36 +110,36 @@ export default defineComponent({
 
     return () => {
       return (
-        <div class="filter-tabs">
+        <div class={`filter-tabs ${expand.value ? 'expand-filter' : ''}`}>
           <div class="filter-title">
-            <div class="title-logo"></div>
+            <div class="title-logo">
+              <m-svg-icon src={QueryIcon} property={{ fill: 'var(--el-color-primary),currentColor' }} />
+            </div>
             <el-text class="title-text" size="large">
               查询
             </el-text>
-            <div style="flex-grow: 1; width: 0; text-align: right;">
-              <el-button
-                icon={expand.value ? 'ArrowUp' : 'ArrowDown'}
-                text
-                onClick={() => (expand.value = !expand.value)}
-                type="primary"
-                style="padding: 0 5px;"
-              >
-                {expand.value ? '收起' : '展开'}
-              </el-button>
-              <el-button type="primary" icon="search" onClick={search} loading={props.loading}>
-                搜索
-              </el-button>
-              <el-button onClick={reset} icon="refresh">
-                重置
-              </el-button>
-            </div>
           </div>
-          <div class="filter-view" style={`height: ${expand.value ? filterSize.value.height : 0}px;`}>
-            <el-form ref={topFilterRef} model={props.param} labelWidth={props.labelWidth}>
+          <div class="filter-view">
+            <el-form ref={topFilterFormRef} model={props.param} labelWidth={props.labelWidth}>
               <el-scrollbar max-height="45vh">
                 <el-row>{generateFilterColumn()}</el-row>
               </el-scrollbar>
             </el-form>
+          </div>
+          <div class="filter-btn" style="flex-grow: 1; -width: 0; text-align: right;">
+            <el-button
+              icon={expand.value ? 'ArrowUp' : 'ArrowDown'}
+              text
+              onClick={() => (expand.value = !expand.value)}
+              type="primary"
+              style="padding: 0 5px;"
+            >
+              {expand.value ? '收起' : '展开'}
+            </el-button>
+            <el-button type="primary" icon="search" onClick={search} loading={props.loading}>
+              搜索
+            </el-button>
+            <el-button onClick={reset}>重置</el-button>
           </div>
         </div>
       )
@@ -151,36 +152,64 @@ export default defineComponent({
   margin: 5px 0;
 }
 
-.filter-btn {
-  margin: 5px 0;
-  text-align: right;
-}
-
 .filter-tabs {
   background-color: var(--el-bg-color);
-  padding: 10px 15px;
+  padding: 7px 15px 7px 15px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-auto-flow: row dense;
+  grid-gap: 0 10px;
+  transition: all 0.2s ease-in-out;
 
   .filter-title {
     display: flex;
     align-items: center;
-    margin: 5px 0;
 
     .title-logo {
-      width: 7px;
+      line-height: 1em;
+      width: 20px;
       height: 20px;
-      border-radius: 1px;
-      background-color: var(--el-color-primary);
+      //border-radius: 1px;
+      //background-color: var(--el-color-primary);
     }
 
     .title-text {
-      margin-left: 10px;
-      font-weight: bold;
+      margin-left: 5px;
+      //font-weight: bold;
+      //color: var(--el-color-primary);
     }
   }
 
   .filter-view {
-    transition: height 0.2s ease-in-out;
+    //transition: all 0.2s ease-in-out;
+    height: calc(var(--el-component-size) + 10px);
+    justify-items: end;
     overflow: hidden;
+    @media all and (max-width: 500px) {
+      height: 0;
+    }
+  }
+
+
+
+  .filter-btn {
+    margin: 5px 0;
+    text-align: right;
+  }
+}
+
+.expand-filter {
+  grid-template-columns: auto 1fr auto;
+
+  .filter-title {
+    grid-column-start: span 2;
+  }
+
+  .filter-view {
+    //transition: all 0.2s ease-in-out;
+    height: auto;
+    overflow: hidden;
+    grid-column-start: span 3;
   }
 }
 </style>

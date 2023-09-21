@@ -1,64 +1,85 @@
 <template>
   <div class="root">
-    <m-svg-icon src="@/" />
-    <div class="cl1">404</div>
-    <div class="cl2">抱歉！</div>
-    <div class="cl3">当前页面未找到</div>
-    <div class="cl4">请检查地址是否输入正确，或者联系管理员处理。</div>
-    <div style="height: 50px;"></div>
+    <div class="content">
+      <img src="@/assets/image/404.png" alt="Not Found" />
+      <div>
+        <div class="cl2">抱歉！</div>
+        <div class="cl3">当前页面未找到</div>
+        <div class="cl4">可能是无权限访问，请检查地址是否输入正确，或者联系管理员处理。</div>
+      </div>
+    </div>
   </div>
 </template>
-<script setup>
-import MSvgIcon from "@/components/SvgIcon.vue";
-</script>
+<script setup></script>
 
 <style lang="scss" scoped>
 .root {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
+  background-color: var(--el-bg-color);
 
-  > div {
-    opacity: 0;
-    animation-fill-mode: forwards;
-    padding: 7px;
-    animation-name: fadeInFromBottom;
-    animation-duration: 0.8s;
+  .content {
+    vertical-align: middle;
+    display: grid;
+
+    grid-template-columns: auto auto;
+    align-items: center;
+    justify-items: center;
+
+    > img {
+      height: 300px;
+    }
+
+    > div {
+      text-align: center;
+
+      > div {
+        opacity: 0;
+        animation-fill-mode: forwards;
+        animation-name: fadeInFromBottom;
+        animation-duration: 0.5s;
+        margin: 20px;
+      }
+    }
   }
 
-  background-color: var(--el-bg-color);
+  @media screen and (max-width: 600px) {
+    .content {
+      grid-template-columns: auto;
+    }
+  }
 
   .cl1 {
     font-weight: bold;
-    font-size: 40px;
-    animation-delay: 0.5s;
+    width: 200px;
+    height: 200px;
   }
 
   .cl2 {
     color: var(--el-color-primary);
     font-weight: bold;
     font-size: 40px;
-    animation-delay: 0.7s;
+    animation-delay: 0.2s;
   }
 
   .cl3 {
     font-weight: bold;
     font-size: 20px;
-    animation-delay: 0.9s;
+    animation-delay: 0.35s;
   }
 
   .cl4 {
-    font-size: 14px;
-    animation-delay: 1.1s;
-    animation-duration: 1.2s;
+    max-width: 300px;
+    font-size: 13px;
+    animation-delay: 0.6s;
   }
 }
 
 @keyframes fadeInFromBottom {
   0% {
     opacity: 0;
-    transform: translate3d(0, 100%, 0);
+    transform: translate3d(0, min(100%, 60px), 0);
   }
   100% {
     opacity: 1;

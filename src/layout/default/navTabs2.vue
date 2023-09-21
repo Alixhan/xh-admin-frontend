@@ -1,9 +1,9 @@
 <template>
-  <el-scrollbar style="padding-bottom: 10px; margin-bottom: -10px; --el-popover-padding: 0px">
+  <el-scrollbar>
     <div class="nav-tabs">
       <el-tag
         v-for="(tab, index) in navTabs"
-        :key="index"
+        :key="tab.fullPath"
         @contextmenu.prevent="onContextmenu(index)"
         @click="router.push(tab.fullPath)"
         @close="removeTab(tab.fullPath)"
@@ -14,9 +14,13 @@
         class="tab-item"
         :color="route.fullPath === tab.fullPath ? '' : 'var(--layout-bg-color)'"
         :type="route.fullPath === tab.fullPath ? '' : 'info'"
+        :effect="route.fullPath === tab.fullPath ? 'dark' : 'plain'"
       >
         <div class="trigger-view" :ref="(e) => (tabRefs[index] = e)" @click.stop />
-        {{ tab.title }}
+        <div class="tag-content">
+          <m-icon v-if="systemStore.layout.showNavTabIcon && tab.icon" class="tab-icon" :model-value="tab.icon" />
+          {{ tab.title }}
+        </div>
       </el-tag>
     </div>
     <el-popover
@@ -96,9 +100,11 @@ watch(
   () => {
     nextTick(() => {
       const dom = document.getElementsByClassName('active-tab').item(0)
-      dom?.scrollIntoView({
-        behavior: 'smooth',
-      })
+      setTimeout(() => {
+        dom?.scrollIntoView({
+          behavior: 'smooth',
+        })
+      }, 500)
     })
   }
 )
@@ -147,16 +153,26 @@ $transition-time: all 0.2s linear;
 .nav-tabs {
   height: auto;
   display: flex;
-  gap: 5px;
+  gap: 10px;
   font-size: var(--el-font-size-base);
 
   .tab-item {
+    padding: 13px 10px;
     user-select: none;
     position: relative;
     display: inline-flex;
     align-items: center;
     transition: $transition-time;
     cursor: pointer;
+
+    .tag-content {
+      display: flex;
+      align-items: center;
+
+      .tab-icon {
+        margin-right: 0.5em;
+      }
+    }
   }
 }
 

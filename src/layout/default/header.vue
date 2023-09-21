@@ -9,8 +9,13 @@
     <div class="header-top">
       <div class="header-left">
         <div class="nav-view">
-          <el-icon class="collapse-icon" color="var(--el-color-primary)" size="24">
-            <Fold @click="toggleMenuCollapse" :class="{ rotate180: systemStore.layout.menuCollapse }" />
+          <el-icon class="collapse-icon" size="12">
+            <m-svg-icon
+              src="@/assets/icon/fold.svg"
+              @click="toggleMenuCollapse"
+              inherited
+              :class="{ rotate180: systemStore.layout.menuCollapse }"
+            />
           </el-icon>
           <NavTabs v-if="systemStore.layout.heightShrink" key="nav-tabs" class="nav-tabs" />
           <Breadcrumb v-else-if="!systemStore.layout.widthShrink" class="breadcrumb" />
@@ -21,7 +26,7 @@
       </el-link>
       <Action class="action" />
     </div>
-    <NavTabs v-if="!systemStore.layout.heightShrink" key="nav-tabs" class="nav-tabs" style="margin-top: 5px" />
+    <NavTabs v-if="!systemStore.layout.heightShrink" key="nav-tabs" class="nav-tabs" />
   </div>
 </template>
 <script setup>
@@ -33,6 +38,7 @@ import { toRef } from 'vue'
 import { useRoute } from 'vue-router'
 import { useClipboard, usePermission } from '@vueuse/core'
 import { ElMessage } from 'element-plus'
+import MSvgIcon from '@/components/SvgIcon.vue'
 
 const { copy } = useClipboard()
 usePermission('clipboard-write')
@@ -58,14 +64,14 @@ function toggleMenuCollapse() {
 </script>
 <style scoped lang="scss">
 .header-view {
-  padding: 5px 10px 5px 10px;
+  padding: 10px 10px 5px 10px;
 
   .header-top {
     display: flex;
     align-items: center;
 
     .collapse-icon {
-      margin-right: 10px;
+      margin-right: 15px;
       cursor: pointer;
     }
 
@@ -78,7 +84,7 @@ function toggleMenuCollapse() {
       width: 0;
 
       .nav-view {
-        display: flex;
+        display: inline-flex;
         align-items: center;
       }
     }
@@ -86,26 +92,18 @@ function toggleMenuCollapse() {
     .action {
       flex-shrink: 0;
       box-shadow: none;
-
-      box-shadow: none;
     }
+  }
+
+  .nav-tabs {
+    margin-top: 5px;
   }
 }
 
 .width-shrink-layout,
 .height-shrink-layout {
-  padding-top: 0;
-
   .nav-tabs {
-    :deep(.nav-tabs) {
-      font-size: 12px;
-      gap: 7px;
-
-      .tab-item {
-        padding-top: 7px;
-        padding-bottom: 7px;
-      }
-    }
+    font-size: 12px;
   }
 }
 

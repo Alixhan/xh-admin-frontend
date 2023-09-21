@@ -1,5 +1,13 @@
-html,
-body {
+:root {
+  --el-menu-item-height: 40px;
+  --el-font-size-base: 13px;
+
+  --layout-bg-color: var(--el-bg-color-page);
+  --layout-left-bg-color: var(--el-bg-color);
+  --layout-header-bg-color: var(--el-bg-color);
+}
+
+html, body {
   width: 100%;
   height: 100%;
   margin: 0;
@@ -15,10 +23,75 @@ body {
   height: 100%;
 }
 
+
+.el-menu {
+  border-right: none;
+
+  .el-menu-item.is-active{
+    //background-color: var(--el-color-primary-light-3);
+    //color: var(--el-color-white);
+  }
+}
+
+.el-table {
+  //--el-table-border-color: var(--el-border-color);
+  --el-table-header-bg-color: var(--el-color-primary-light-9);
+  --el-table-header-text-color: var(--el-text-color-regular);
+  --el-font-size-base: 12px;
+  font-size: 12px;
+
+  .el-table__cell {
+    padding: 4px 0;
+  }
+
+  thead {
+    font-size: 13px;
+  }
+
+  thead.is-group th.el-table__cell {
+    background: var(--el-table-header-bg-color);
+  }
+}
+
+.el-dialog {
+  min-width: min(350px, 95vw);
+  max-width: 95vw;
+
+  .el-dialog__header {
+    padding-bottom: 0;
+  }
+
+  .el-dialog__body {
+    padding: 20px;
+  }
+}
+
+.el-checkbox-group, .el-radio-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  -webkit-column-gap: 10px;
+}
+
+.el-checkbox, .el-radio {
+  margin-right: 0;
+}
+
+.el-checkbox__label, .el-radio__label {
+  padding-left: 5px;
+}
+
+.el-link {
+  align-items: center;
+
+  .el-icon {
+    margin-right: 5px;
+  }
+}
+
 //表单为明细查看时的样式
 .detail-form {
-  .el-input__wrapper,
-  .el-radio {
+  .el-input__wrapper, .el-radio {
     box-shadow: none;
     outline: 1px dashed var(--el-text-color-disabled);
     outline-offset: -1px;
@@ -62,11 +135,7 @@ body {
   margin-top: 10px;
 }
 
-/* 页面切换动画-s */
-.slide-right-enter-active,
-.slide-right-leave-active,
-.slide-left-enter-active,
-.slide-left-leave-active {
+.slide-right-enter-active, .slide-right-leave-active, .slide-left-enter-active, .slide-left-leave-active {
   will-change: transform;
   transition: all 0.2s ease;
 }
@@ -90,5 +159,3 @@ body {
 .slide-left-leave-to {
   @extend .slide-right-enter-from;
 }
-
-/* 页面切换动画-end */

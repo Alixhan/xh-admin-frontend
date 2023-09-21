@@ -81,6 +81,7 @@ export default defineComponent({
           {...{
             ...menuParam,
             defaultActive: route.fullPath,
+            uniqueOpened: systemStore.layout.menuUniqueOpened,
             collapse: systemStore.layout.menuCollapse,
           }}
         >

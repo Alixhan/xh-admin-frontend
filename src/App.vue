@@ -7,6 +7,7 @@
       </transition>
     </router-view>
   </el-config-provider>
+  <SettingDrawer />
 </template>
 
 <script setup>
@@ -14,6 +15,7 @@ import { computed, reactive } from 'vue'
 import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
 import en from 'element-plus/dist/locale/en.mjs'
 import { useSystemStore } from '@/stores/system'
+import SettingDrawer from '@/layout/settingDrawer.vue'
 
 const systemStore = useSystemStore()
 

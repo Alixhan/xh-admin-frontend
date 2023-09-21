@@ -1,5 +1,11 @@
 <template>
-  <el-scrollbar height="100%" class="login-root">
+  <el-scrollbar
+    height="100%"
+    class="login-root"
+    :class="{
+      dark: systemStore.layout.isDark,
+    }"
+  >
     <div class="image-bg" />
     <div
       class="login-view"
@@ -12,13 +18,7 @@
         <div class="title-system">{{ title }}</div>
         <el-form class="form-view" @keyup.enter="submit" ref="formRef" :rules="rules" size="large" :model="formData">
           <el-form-item prop="username">
-            <el-input
-              type="text"
-              clearable
-              v-model="formData.username"
-              placeholder="请输入账号"
-              prefix-icon="User"
-            />
+            <el-input type="text" clearable v-model="formData.username" placeholder="请输入账号" prefix-icon="User" />
           </el-form-item>
           <el-form-item prop="password">
             <el-input
@@ -31,7 +31,7 @@
             />
           </el-form-item>
           <el-form-item prop="captchaCode">
-            <div style="display: inline-flex; width: 100%;">
+            <div style="display: inline-flex; width: 100%">
               <el-input
                 v-model="formData.captchaCode"
                 placeholder="请输入图形验证码"
@@ -42,9 +42,9 @@
               <img @click="refresh" class="captcha-img" :src="verificationUrl" alt="" />
             </div>
           </el-form-item>
-<!--          <div class="forget-password-view">-->
-<!--            <el-link type="primary" icon="QuestionFilled"> 忘记密码</el-link>-->
-<!--          </div>-->
+          <!--          <div class="forget-password-view">-->
+          <!--            <el-link type="primary" icon="QuestionFilled"> 忘记密码</el-link>-->
+          <!--          </div>-->
           <el-button :loading="loading" class="submit-button" round type="primary" size="large" @click="submit">
             登录
           </el-button>
@@ -133,7 +133,6 @@ function submit() {
     background-image: url('@/assets/bg.jpg');
     background-size: cover;
     background-repeat: no-repeat;
-    opacity: 0.7;
   }
 }
 
@@ -148,6 +147,7 @@ function submit() {
     align-self: end;
     margin-top: 20px;
     margin-right: 20px;
+    z-index: 3;
   }
 
   .title-system {
@@ -168,7 +168,7 @@ function submit() {
     padding: 20px;
     position: relative;
     width: 350px;
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba(0, 0, 0, 0.5);
     margin-top: 12%;
 
     .form-view {
@@ -193,6 +193,21 @@ function submit() {
       .submit-button {
         width: 100%;
       }
+    }
+  }
+}
+
+.dark {
+  .image-bg {
+    opacity: 0.6;
+  }
+
+  .login-view {
+    .title-system {
+    }
+
+    .card-view {
+      background: rgba(0, 0, 0, 0.5);
     }
   }
 }

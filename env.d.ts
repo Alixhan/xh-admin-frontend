@@ -4,6 +4,8 @@ declare module '*.vue' {
   export default Component
 }
 
+declare module 'vite-plugin-eslint'
+
 declare type RequestOption = import('@/utils/request').RequestOption
 declare type RestResponse<T> = import('@/utils/request').RestResponse<T>
 

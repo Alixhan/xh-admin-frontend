@@ -1,10 +1,10 @@
 <template>
   <div class="icp-view">
     <div class="icp">
-      <el-link href="http://beian.miit.gov.cn/" :underline="false"> 皖 ICP 备 {{ icpCode }} 号 </el-link>
-      <el-link href="http://beian.miit.gov.cn/" :underline="false">
+      <el-link href="http://beian.miit.gov.cn/" :underline="false"> {{ icpCode }}</el-link>
+      <el-link v-if="psbCode" href="http://beian.miit.gov.cn/" :underline="false" style="margin-left: 10px;">
         <img src="@/assets/image/jinghui.png" style="float: left; width: 1.2em; height: 1.2em; margin: 0 5px" alt="" />
-        皖公网安备 {{ psbCode }} 号
+        {{ psbCode }}
       </el-link>
     </div>
   </div>
@@ -28,7 +28,7 @@ const psbCode = 'XXXXXXXXX'
   .icp {
     border-radius: 3px;
     font-size: 12px;
-    padding: 2px 5px;
+    padding: 2px 10px;
     margin: 0 10px;
     display: inline-flex;
     align-items: center;

@@ -28,7 +28,8 @@ export const staticRouters = [
         name: 'NotFound',
         component: () => import('@/views/NotFond.vue'),
         meta: {
-          title: '404',
+          title: 'Not Found',
+          icon: 'local|/src/assets/icon/404.svg'
         },
       },
       {
@@ -39,6 +40,7 @@ export const staticRouters = [
           title: '个人中心',
           cache: true,
           componentName: `/${import.meta.env.VITE_LAYOUT_ROUTE_NAME}/personalCenter`,
+          icon: 'el|Avatar'
         },
       },
     ],

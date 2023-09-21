@@ -18,7 +18,7 @@
 .block-loading .block-loading-box-warp .block-loading-box-item {
   width: 33.333333%;
   height: 33.333333%;
-  background: #409eff;
+  background: var(--el-color-primary);
   float: left;
   animation: block-loading-animation 1.2s infinite ease;
   border-radius: 1px;

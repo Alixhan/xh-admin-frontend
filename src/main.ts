@@ -8,6 +8,7 @@ import * as ElementPlusIconsVue from '@element-plus/icons-vue' // element图标
 import MyComponents from '@/components'
 import { AuthDirective } from '@/directive'
 import '@/styles/index.scss' // 样式引入
+import '@/styles/app.scss'
 import { loading } from '@/utils/loading'
 // import 'default-passive-events'
 
