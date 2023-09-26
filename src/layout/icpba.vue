@@ -1,15 +1,15 @@
 <template>
   <div class="icp-view">
     <div class="icp">
-      <el-link @click="windowOpen('http://beian.miit.gov.cn/')" :underline="false"> {{ icpCode }} </el-link>
+      <el-link @click="windowOpen('https://beian.miit.gov.cn/')" :underline="false"> {{ icpCode }} </el-link>
       <el-link
         v-if="psbCode"
-        @click="windowOpen('http://beian.miit.gov.cn/')"
+        @click="windowOpen(`https://www.beian.gov.cn/portal/registerSystemInfo?recordcode=${psbCode}`)"
         :underline="false"
         style="margin-left: 10px"
       >
         <img src="@/assets/image/jinghui.png" style="float: left; width: 1.2em; height: 1.2em; margin: 0 5px" alt="" />
-        {{ psbCode }}
+        {{ icpCode.substring(0, 1) }}公网安备 {{ psbCode }} 号
       </el-link>
     </div>
   </div>
@@ -17,9 +17,9 @@
 
 <script setup>
 //icp备案号
-const icpCode = '皖ICP备XXXXXXXX号-1'
+const icpCode = '皖ICP备XXXXXXXXX号-1'
 //公安备案号
-const psbCode = ''
+const psbCode = 'XXXXXXXXXX'
 
 function windowOpen(url) {
   window.open(url)
