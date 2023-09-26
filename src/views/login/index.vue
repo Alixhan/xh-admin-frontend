@@ -158,17 +158,16 @@ function submit() {
     font-family: 华文行楷, serif;
     text-align: center;
     margin: 30px 0 40px 0;
-    text-shadow: 1px 3px 0 #14496e;
+    text-shadow: 1px 1px 0 #2571c0;
   }
 
   .card-view {
     border-radius: 10px;
     //box-shadow: var(--el-box-shadow);
-    opacity: 0.9;
     padding: 20px;
     position: relative;
     width: 350px;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.2);
     margin-top: 12%;
 
     .form-view {
@@ -199,7 +198,7 @@ function submit() {
 
 .dark {
   .image-bg {
-    opacity: 0.6;
+    opacity: 0.4;
   }
 
   .login-view {
@@ -208,6 +207,12 @@ function submit() {
 
     .card-view {
       background: rgba(0, 0, 0, 0.5);
+    }
+  }
+
+  .width-layout-shrink {
+    .card-view {
+      background-color: inherit;
     }
   }
 }
