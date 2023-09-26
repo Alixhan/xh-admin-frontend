@@ -1,8 +1,13 @@
 <template>
   <div class="icp-view">
     <div class="icp">
-      <el-link href="http://beian.miit.gov.cn/" :underline="false"> {{ icpCode }}</el-link>
-      <el-link v-if="psbCode" href="http://beian.miit.gov.cn/" :underline="false" style="margin-left: 10px;">
+      <el-link @click="windowOpen('http://beian.miit.gov.cn/')" :underline="false"> {{ icpCode }} </el-link>
+      <el-link
+        v-if="psbCode"
+        @click="windowOpen('http://beian.miit.gov.cn/')"
+        :underline="false"
+        style="margin-left: 10px"
+      >
         <img src="@/assets/image/jinghui.png" style="float: left; width: 1.2em; height: 1.2em; margin: 0 5px" alt="" />
         {{ psbCode }}
       </el-link>
@@ -12,9 +17,13 @@
 
 <script setup>
 //icp备案号
-const icpCode = 'XXXXXXXXX'
+const icpCode = '皖ICP备XXXXXXXX号-1'
 //公安备案号
-const psbCode = 'XXXXXXXXX'
+const psbCode = ''
+
+function windowOpen(url) {
+  window.open(url)
+}
 </script>
 
 <style scoped lang="scss">

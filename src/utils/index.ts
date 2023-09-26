@@ -13,9 +13,9 @@ export interface DownloadParam {
   disposition?: 'attachment' | 'inline'
   //是否压缩显示缩略图，仅图片文件有效
   isScale?: boolean
-  //仅图片文件有效，以最长边缩小到此大小等比例缩放,默认60像素
+  //仅图片文件有效，以最长边缩小到此大小等比例缩放,默认60像素，返回图片的缩略图
   scaleWidth?: number
-  // 仅视频文件有效，是可以传入需要预览视频第几帧图片，响应一个视频对应帧的图片流
+  // 仅视频文件有效，可以传入需要预览视频第几帧图片，响应一个视频对应帧的图片流
   videoFrameNum?: number
 }
 
