@@ -85,12 +85,5 @@ function save() {
 </script>
 <style lang="scss" scoped>
 .root {
-  display: flex;
-  flex-direction: column;
-
-  .m-table {
-    flex-grow: 1;
-    height: 0;
-  }
 }
 </style>
