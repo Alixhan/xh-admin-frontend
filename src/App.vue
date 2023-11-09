@@ -12,19 +12,15 @@
 
 <script setup>
 import { computed, reactive } from 'vue'
-import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
-import en from 'element-plus/dist/locale/en.mjs'
 import { useSystemStore } from '@/stores/system'
 import SettingDrawer from '@/layout/settingDrawer.vue'
+import { getLocale } from '@/i18n/index.ts'
 
 const systemStore = useSystemStore()
 
-const localeObj = {
-  'zh-cn': zhCn,
-  en
-}
 // 语言包
-const locale = computed(() => localeObj[systemStore.language])
+const locale = computed(() => getLocale()[systemStore.locale])
+
 const btnConfig = reactive({
   autoInsertSpace: false
 })

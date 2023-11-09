@@ -1,6 +1,7 @@
 <template>
   <div class="root">
     {{ useSystemStore().user?.name }}
+    {{$t('sdfs')}}
     <el-button type="primary" @click="test(1)" style="width: 100px">查询</el-button>
     <el-tree
       :data="data"

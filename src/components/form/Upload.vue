@@ -31,8 +31,8 @@
       </div>
       <div v-else>
         <el-button-group>
-          <el-button type="primary" @click.stop="openFileLib()" icon="search" />
-          <el-button type="primary" v-auth="'system:file'">选择文件</el-button>
+          <el-button type="primary" v-auth="'system:file'" @click.stop="openFileLib()" icon="search" />
+          <el-button type="primary">选择文件</el-button>
         </el-button-group>
       </div>
     </template>

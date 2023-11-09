@@ -12,6 +12,7 @@
       :columns="columns"
       :fetch-data="fetchRoles"
       v-model:data="data"
+      selection="multiple"
       @selection-change="(rows) => (selectRows = rows)"
     >
       <template #left-action>
@@ -60,7 +61,6 @@ const topFilterColumns = shallowRef([
 ])
 
 const columns = ref([
-  { type: 'selection', width: 50 },
   { prop: 'name', label: '角色名称', fixed: false, width: 200 },
   { prop: 'id', label: 'ID', width: 50 },
   { prop: 'enabled', label: '启用', itemList: getDictDetails(1, 'boolean') },

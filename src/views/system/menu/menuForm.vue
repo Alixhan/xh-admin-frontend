@@ -11,7 +11,7 @@
       />
     </el-scrollbar>
     <div class="m-footer">
-      <el-button icon="close" @click="close()">取消</el-button>
+      <el-button icon="close" @click="close()">{{ $t('common.cancel') }}</el-button>
       <el-button
         v-if="['add', 'edit'].includes(handleType)"
         v-auth="['system:menu:add', 'system:menu:edit']"
@@ -20,7 +20,7 @@
         :loading="saveLoading"
         @click="save"
       >
-        保存
+        {{ $t('common.save') }}
       </el-button>
     </div>
   </div>
@@ -29,6 +29,9 @@
 import { ref, toRef, watchEffect } from 'vue'
 import { handleTypeList, menuTypeList, platFormList } from './constant'
 import { queryMenuList, postSaveMenu, getMenuById } from '@/api/system/menu'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const props = defineProps({
   handleType: {
@@ -127,7 +130,7 @@ watchEffect(() => {
   columns.value = [
     {
       prop: 'platform',
-      label: '平台',
+      label: t('system.menu.platform'),
       type: 'radio-group',
       itemList: platFormList,
       // 有上级菜单时，直接继承上级的平台值，不可手动更改
@@ -136,8 +139,8 @@ watchEffect(() => {
     },
     {
       prop: 'parentId',
-      label: '上级菜单',
-      placeholder: '请选择上级菜单',
+      label: t('system.menu.parent'),
+      placeholder: t('system.menu.parentPlaceholder'),
       type: 'select',
       filterable: true,
       itemList: parentMenuList.value,
@@ -147,19 +150,19 @@ watchEffect(() => {
     },
     {
       prop: 'type',
-      label: '菜单类型',
+      label: t('system.menu.type'),
       type: 'radio-group',
       itemList: menuTypeList,
       rules: { required: true, trigger: 'blur' }
     },
     {
       prop: 'title',
-      label: '菜单标题',
+      label: t('system.menu.title'),
       rules: { required: true, trigger: 'blur' }
     },
     {
       prop: 'handleType',
-      label: '处理类型',
+      label: t('system.menu.handleType'),
       // 只有为菜单时才需要选择处理类型
       hidden: formData.value.type !== 'menu',
       type: 'radio-group',
@@ -188,7 +191,7 @@ watchEffect(() => {
     },
     {
       prop: 'path',
-      label: '路由路径',
+      label: t('system.menu.path'),
       // 菜单类型为按钮,或者处理类型是外链，隐藏此项
       hidden: ['btn'].includes(formData.value.type) || formData.value.handleType === 'outer',
       rules: { required: true, trigger: 'blur' },
@@ -201,7 +204,7 @@ watchEffect(() => {
     },
     {
       prop: 'component',
-      label: '组件全路径',
+      label: t('system.menu.component'),
       // 处理类型为iframe时，默认指定固定的组件地址，无需手动填写
       disabled: formData.value.handleType === 'iframe',
       // 菜单类型为目录或按钮,或者处理类型是外链，隐藏此项
@@ -212,33 +215,33 @@ watchEffect(() => {
     // iframe和外链需要填写URL
     {
       prop: 'outerUrl',
-      label: 'URL地址',
+      label: t('system.menu.outerUrl'),
       hidden: !['iframe', 'outer'].includes(formData.value.handleType),
       rules: { required: true }
     },
     {
       prop: 'icon',
-      label: '菜单图标',
+      label: t('system.menu.icon'),
       // 按钮不需要选择图标
       hidden: formData.value.type === 'btn',
       type: 'icon'
     },
     {
       prop: 'order',
-      label: '排序号',
+      label: t('common.order'),
       // 按钮不需要排序号
       hidden: formData.value.type === 'btn',
-      comment: '菜单的排列顺序，小号排在前，大号排在后。'
+      comment: t('system.menu.orderComment')
     },
     {
       prop: 'cache',
-      label: '是否缓存',
+      label: t('common.isEnabled'),
       type: 'switch',
       // 按钮不需要排序号
       hidden: ['dir', 'btn'].includes(formData.value.type),
       comment: '开启后，切换菜单时，导航页签的页面内容将会缓存起来。'
     },
-    { prop: 'enabled', label: '是否启用', type: 'switch' }
+    { prop: 'enabled', label: t('common.isEnabled'), type: 'switch' }
   ]
 })
 
@@ -248,7 +251,7 @@ function save() {
     postSaveMenu(formData.value, {
       loadingRef: saveLoading,
       showSuccessMsg: true,
-      successMsg: '保存成功'
+      successMsg: t('common.saveSuccess')
     }).then(() => close('refresh'))
   })
 }

@@ -167,6 +167,7 @@ function handleFile(e) {
       // @ts-ignore
       await workbook.xlsx.load(reader.result)
       const worksheet = workbook.getWorksheet(1)
+      if(!worksheet) throw new Error('模板不匹配')
       let flag = true // 模板匹配
       excelTree.eachNode((node) => {
         const cell = worksheet.getCell(node.$row, node.$col)

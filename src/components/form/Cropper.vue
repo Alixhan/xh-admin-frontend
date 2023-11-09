@@ -6,7 +6,7 @@
         <div class="item-class" :style="itemStyle" style="background-color: var(--el-border-color)">
           <div style="overflow: hidden; margin: 5px" :style="{ width: previews.w + 'px', height: previews.h + 'px' }">
             <div :style="previews.div" class="preview-view">
-              <img :src="previews.url" :style="previews.img" alt="" />
+              <img :src="previews.url" :style="previews.img" alt="图片预览" />
             </div>
           </div>
         </div>
@@ -26,21 +26,25 @@
     </el-scrollbar>
   </div>
 </template>
-<script setup>
+<script setup lang="ts">
 /**
  * 图片裁剪。
  * sxh 2023-5-16
  */
-import { VueCropper } from 'vue-cropper'
+import * as _vueCropper from 'vue-cropper'
 import 'vue-cropper/dist/index.css'
-import { computed, defineOptions, ref, useAttrs, watchEffect } from 'vue'
+import { computed, ref, useAttrs, watchEffect } from 'vue'
 import { useElementSize } from '@vueuse/core'
+
+const { VueCropper } = _vueCropper
 
 defineOptions({
   name: 'MCropper'
 })
 
-const emit = defineEmits(['cropper'])
+const emit = defineEmits<{
+  (e: 'cropper', data: Blob): void
+}>()
 
 const props = defineProps({
   img: {
@@ -66,7 +70,7 @@ const ctx = computed(() => {
   }
 })
 
-const previews = ref({})
+const previews = ref<any>({})
 
 const formSize = ref(useElementSize(cropperRoot))
 const itemStyle = ref({})

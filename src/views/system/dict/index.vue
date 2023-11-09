@@ -25,6 +25,7 @@
       :columns="columns"
       :fetch-data="queryDictDetailList"
       v-model:data="data"
+      selection="multiple"
       @selection-change="(rows) => (selectRows = rows)"
     >
       <template #right-action>
@@ -131,7 +132,6 @@ const columns = ref([
       },
     ],
   },
-  { type: 'selection' },
   { type: 'index', label: '序', width: 50 },
   { prop: 'id', label: 'ID', width: 50 },
   { prop: 'dictTypeName', label: '字典类型' },

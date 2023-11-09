@@ -60,13 +60,13 @@ router.beforeEach(async (to, from, next) => {
   next(path)
 })
 
-router.afterEach((guard) => {
+router.afterEach((to) => {
   if (window.existLoading) {
     setTimeout(() => loading.hide(), 1000)
   }
   NProgress.done()
   const systemStore = useSystemStore()
-  systemStore.afterEach(guard)
+  systemStore.afterEach(to)
 })
 
 export default router

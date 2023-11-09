@@ -82,7 +82,7 @@ const formData = reactive({
   captchaCode: '',
 })
 
-const captchaIcon = createVNode(MIcon, { modelValue: 'local|/src/assets/icon/验证码.svg' })
+const captchaIcon = createVNode(MIcon, { modelValue: 'local|/src/assets/icon/captcha.svg' })
 
 //图形验证码
 const verificationUrl = ref()
@@ -107,7 +107,9 @@ function submit() {
   formRef.value.validate((valid) => {
     if (valid) {
       systemStore.setToken('')
-      userLogin(formData, {
+      userLogin({
+        ...formData,
+      }, {
         loadingRef: loading, // vue3中的ref,可以动态更新此值
         showSuccessMsg: true,
         successMsg: (res) => '登录成功！欢迎你，尊敬的' + res.data.user.name, // 成功的提示信息

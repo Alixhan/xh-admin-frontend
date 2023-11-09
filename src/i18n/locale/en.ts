@@ -1,0 +1,72 @@
+export default {
+  m: {
+    table: {
+      index: 'Index',
+      unit: '',
+      total: 'Total',
+      selected: 'Selected',
+      colSort: 'Col Sort',
+      operation: 'Operations',
+      allCol: 'All',
+      export: 'Export',
+      fileName: 'Table Data',
+      exportConfirm: 'Confirm export?',
+      exportCurrent: 'Export Current Page',
+      exportAll: 'Export All',
+      exportFail: 'Export failed',
+      exportNoData: 'No data can be exported！',
+    },
+    topFilter: {
+      query: 'Query',
+      search: 'Search',
+      reset: 'Reset',
+      expand: 'Expand',
+      collapse: 'Collapse'
+    },
+    form: {
+      toInput: 'Please input ',
+      toSelect: 'Please select ',
+    }
+  },
+  common: {
+    tip: 'Tip',
+    expand: 'Expand',
+    collapse: 'Collapse',
+    add: 'Add',
+    edit: 'Edit',
+    detail: 'Detail',
+    del: 'Delete',
+    all: 'All',
+    copy: 'Copy',
+    paste: 'Paste',
+    cache: 'Cache',
+    enabled: 'Enabled',
+    isCache: 'Cached',
+    order: 'Order',
+    isEnabled: 'Enabled',
+    createTime: 'Create Time',
+    updateTime: 'Update Time',
+    more: 'More',
+    save: 'Save',
+    cancel: 'Cancel',
+    confirmDelete: 'Are you sure you want to delete it? It cannot be recovered!',
+    saveSuccess: 'Save success.',
+    restoreDefault: 'Restore Default',
+  },
+  system: {
+    menu: {
+      label: 'Menu ',
+      title: 'Menu Title',
+      platform: 'Platform',
+      type: 'Menu Type',
+      icon: 'Menu Icon',
+      parent: 'Parent Menu',
+      parentPlaceholder: 'Please select parent menu',
+      handleType: 'Process Type',
+      orderComment: 'The order of the menu is small first and large second.',
+      path: 'Route Path',
+      component: 'Component Path',
+      outerUrl: 'Link Address',
+    }
+  }
+}

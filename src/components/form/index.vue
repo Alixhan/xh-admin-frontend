@@ -1,8 +1,14 @@
 <script lang="tsx">
-import { createVNode, provide, ref, shallowRef, watchEffect } from 'vue'
+import { createVNode, provide, ref, shallowRef, watchEffect, computed } from 'vue'
 import type { PropType } from 'vue'
 import { ElForm } from 'element-plus'
-import { generateDynamicColumn, generateFormRules, generatePlaceholder, vModelValue } from '@/components/mutils'
+import {
+  generateDynamicColumn,
+  generateFormRules,
+  generateLabelWidth,
+  generatePlaceholder,
+  vModelValue
+} from '@/components/mutils'
 import type { CommonColumnType, CommonColumn } from '@/components/mutils'
 import { useSystemStore } from '@/stores/system'
 import { useElementSize } from '@vueuse/core'
@@ -14,9 +20,9 @@ export declare type FormHandleType = 'add' | 'edit' | 'detail'
  * 表单列类型
  */
 export interface FormColumn extends CommonColumn {
-  type?: CommonColumnType | 'separator'
+  type?: CommonColumnType | 'separator';
   //上传文件的限制数量
-  limit?: number
+  limit?: number;
 }
 
 /**
@@ -31,46 +37,45 @@ export default {
     // 表单处理类型
     handleType: {
       type: String as PropType<FormHandleType>,
-      default: 'add',
+      default: 'add'
     },
     // 跨列数，对应el-col
     colspan: {
-      type: Number,
+      type: Number
     },
     // 表单对象
     model: {
       type: Object,
-      required: true,
+      required: true
     },
     // 表单列定义
     columns: {
       type: Array as PropType<FormColumn[]>,
-      required: true,
+      required: true
     },
     labelWidth: {
-      type: String,
-      default: '9em',
+      type: String
     },
     scrollToError: {
-      default: true,
+      default: true
     },
     scrollIntoViewOptions: {
-      default: { behavior: 'smooth', block: 'center', inline: 'center' },
+      default: { behavior: 'smooth', block: 'center', inline: 'center' }
     },
     //加载状态，为true时展示骨架屏
     loading: {
-      type: Boolean,
-    },
+      type: Boolean
+    }
   },
   emits: [],
   setup(
-    props,
-    {
-      attrs,
-      slots,
-      expose,
-      // emit,
-    }
+      props,
+      {
+        attrs,
+        slots,
+        expose
+        // emit,
+      }
   ) {
     const systemStore = useSystemStore()
 
@@ -82,6 +87,9 @@ export default {
       if (span === 4.8) span = 6
       colspan.value = span
     })
+
+    //计算一下labelWidth，以最长label字符宽度作为form的labelWidth
+    const labelWidth = computed(() => props.labelWidth ?? generateLabelWidth(...props.columns))
 
     const formItemParams = shallowRef<FormColumn[]>([])
     watchEffect(initFormItemParams)
@@ -98,22 +106,22 @@ export default {
     }
 
     expose({
-      clearValidate: function () {
+      clearValidate: function() {
         return formRef.value.clearValidate(...arguments)
       },
-      scrollToField: function () {
+      scrollToField: function() {
         return formRef.value.scrollToField(...arguments)
       },
-      resetFields: function () {
+      resetFields: function() {
         return formRef.value.resetFields(...arguments)
       },
-      validateField: function () {
+      validateField: function() {
         return formRef.value.validateField(...arguments)
       },
-      validate: function () {
+      validate: function() {
         return formRef.value.validate(...arguments)
       },
-      submit,
+      submit
     })
 
     function initFormItemParams() {
@@ -128,9 +136,9 @@ export default {
             label: i.label,
             labelWidth: i.labelWidth,
             required: i.required,
-            rules: generateFormRules(i),
+            rules: generateFormRules(i)
           },
-          renderArgs: generateDynamicColumn(i),
+          renderArgs: generateDynamicColumn(i)
         }
         generatePlaceholder(formItemObj.renderArgs?.param)
         return formItemObj
@@ -144,14 +152,14 @@ export default {
         if (i.hidden) return null
         if (i.columnParam.type === 'separator') {
           return (
-            <el-col span={24}>
-              <el-divider content-position="left">
-                <div class="separator">
-                  <div />
-                  {i.columnParam.label}
-                </div>
-              </el-divider>
-            </el-col>
+              <el-col span={24}>
+                <el-divider content-position="left">
+                  <div class="separator">
+                    <div />
+                    {i.columnParam.label}
+                  </div>
+                </el-divider>
+              </el-col>
           )
         }
         const column = i.columnParam
@@ -161,28 +169,28 @@ export default {
           class: 'form-input',
           ...i.renderArgs.param,
           ...vModelValue(
-            {
-              type: column.type,
-              prop: column.prop,
-              prop2: column.prop2,
-              single: column.single,
-            },
-            props.model
-          ),
+              {
+                type: column.type,
+                prop: column.prop,
+                prop2: column.prop2,
+                single: column.single
+              },
+              props.model
+          )
         }
         const formItemSlots: { [name: string]: Function } = {
           default: () => {
-            if(i.columnParam.render) return i.columnParam.render()
+            if (i.columnParam.render) return i.columnParam.render()
             return createVNode(i.renderArgs.component, param, i.renderArgs.slots)
-          },
+          }
         }
         if (column.comment) {
           formItemSlots.label = () => {
             return (
-              <div class="form-item-label">
-                <div>{column.label}</div>
-                <m-comment label={column.label} comment={column.comment} />
-              </div>
+                <div class="form-item-label">
+                  <div>{column.label}</div>
+                  <m-comment label={column.label} comment={column.comment} />
+                </div>
             )
           }
         }
@@ -191,9 +199,9 @@ export default {
         if (column.cols) span = parseInt(column.cols) * span
         if (span > 24) span = 24
         return (
-          <el-col span={span}>
-            <el-form-item {...i.formItemParams} v-slots={formItemSlots} />
-          </el-col>
+            <el-col span={span}>
+              <el-form-item {...i.formItemParams} v-slots={formItemSlots} />
+            </el-col>
         )
       })
     }
@@ -213,8 +221,8 @@ export default {
               style: {
                 width: `${randomWidth}%`,
                 height: 'var(--el-component-size)',
-                'align-self': 'center',
-              },
+                'align-self': 'center'
+              }
             }
             if (column.type === 'switch') skeletonParam.style.width = '50px'
             if (['upload-img'].includes(column.type)) {
@@ -231,20 +239,20 @@ export default {
                 width: `${column?.label?.length ?? 6}em`,
                 maxWidth: '100%',
                 height: '1em',
-                'align-self': 'center',
-              },
+                'align-self': 'center'
+              }
             }
             return <el-skeleton-item {...skeletonParam} />
-          },
+          }
         }
         let span = column.colspan || props.colspan || colspan.value
         if (systemStore.layout.widthShrink && span < colspan.value) span = colspan.value
         if (column.cols) span = parseInt(column.cols) * span
         if (span > 24) span = 24
         return (
-          <el-col span={span}>
-            <el-form-item {...{ ...i.formItemParams, required: false }} v-slots={formItemSlots} />
-          </el-col>
+            <el-col span={span}>
+              <el-form-item {...{ ...i.formItemParams, required: false }} v-slots={formItemSlots} />
+            </el-col>
         )
       })
     }
@@ -254,6 +262,7 @@ export default {
         ref: formRef,
         ...attrs,
         ...props,
+        labelWidth: labelWidth.value
       }
       // 明细类型需要禁用表单
       if (props.handleType === 'detail') {
@@ -265,19 +274,19 @@ export default {
       }
       const skeletonParam = {
         loading: props.loading ?? false,
-        animated: true,
+        animated: true
       }
       const skeletonSlots = {
         default: () => <el-row>{generateFormColumns()}</el-row>,
-        template: () => <el-row>{generateFormSkeletons()}</el-row>,
+        template: () => <el-row>{generateFormSkeletons()}</el-row>
       }
       return (
-        <el-form {...formParam} v-slots={slots} class={{ 'detail-form': props.handleType === 'detail' }}>
-          <el-skeleton {...skeletonParam} v-slots={skeletonSlots} />
-        </el-form>
+          <el-form {...formParam} v-slots={slots} class={{ 'detail-form': props.handleType === 'detail' }}>
+            <el-skeleton {...skeletonParam} v-slots={skeletonSlots} />
+          </el-form>
       )
     }
-  },
+  }
 }
 </script>
 <style scoped lang="scss">
@@ -285,6 +294,7 @@ export default {
   display: inline-flex;
   align-items: center;
 }
+
 .separator {
   font-size: 14px;
   color: var(--el-text-color);

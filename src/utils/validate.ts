@@ -2,11 +2,12 @@
  * sxh 2020-10-13
  * 验证通用方法
  */
-import { isEmpty } from 'lodash'
+import _ from 'lodash-es'
 import type { CommonItemData, CommonItemList } from '@/components/mutils'
 import type { Ref } from 'vue'
 import { getItemListRef } from '@/components/mutils'
 
+const { isEmpty } = _
 export interface ValidRule {
   label?: string
   type?: string | 'phone' | 'email' | 'username' | 'double' | 'vin' | 'number' | 'idCard' | 'carNum'

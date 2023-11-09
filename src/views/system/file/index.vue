@@ -5,6 +5,7 @@
       ref="tableRef"
       is-filter-table
       row-key="id"
+      selection="multiple"
       :filter-param="filterParam"
       :filter-columns="topFilterColumns"
       :columns="columns"
@@ -66,7 +67,6 @@ const topFilterColumns = shallowRef([
 ])
 
 const columns = ref([
-  { type: 'selection', width: 50 },
   { type: 'index', label: '序', width: 50 },
   { prop: 'id', label: 'ID', width: 50 },
   { prop: 'name', label: '原文件名' },

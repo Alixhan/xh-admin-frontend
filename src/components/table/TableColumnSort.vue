@@ -1,7 +1,7 @@
 <template>
   <el-popover trigger="click" :hideAfter="0" popper-style="min-width: 100px; width: auto;">
     <template #reference>
-      <el-button type="primary" text icon="operation" class="action-btn"> 列排序</el-button>
+      <el-button type="primary" text icon="operation" class="action-btn">{{ $t("m.table.colSort") }}</el-button>
     </template>
     <el-tree
       class="column-sort"
@@ -16,13 +16,25 @@
       :expand-on-click-node="false"
       :allow-drop="allowDrop"
       @check-change="checkChange"
-      @node-drop="nodeDrop"
-    />
+    >
+      <template #default="{ node, data }">
+        <span>{{ node.label }}</span>
+        <span v-if="data._id === 'root'" style="flex-grow: 1; text-align: right; padding-left: 10px">
+          <el-link @click="emits('restoreDefault')" :underline="false" type="primary">
+            {{ $t("common.restoreDefault") }}
+          </el-link>
+        </span>
+      </template>
+    </el-tree>
   </el-popover>
 </template>
 
-<script setup>
-import { ref, toRef } from 'vue'
+<script setup lang="ts">
+import type { PropType } from 'vue'
+import { ref, watchEffect } from 'vue'
+import { useI18n } from 'vue-i18n'
+import type { TableSortColumn } from '@/components/table/index.vue'
+import type Node from 'element-plus/es/components/tree/src/model/node'
 
 /**
  * 通用表格列排序
@@ -30,51 +42,74 @@ import { ref, toRef } from 'vue'
  * 2023-3-24
  */
 
-const emits = defineEmits(['change'])
+const { t } = useI18n()
+
+const emits = defineEmits<{
+  //恢复默认
+  (e: 'restoreDefault'): void
+}>()
+
 const props = defineProps({
   columns: {
-    type: Array,
-    required: true,
-  },
+    type: Array as PropType<TableSortColumn []>,
+    required: true
+  }
 })
 
 const treeRef = ref()
 
-const columns = toRef(props, 'columns')
-
 const defaultProps = {
   children: 'children',
   label: 'label',
+  class: (data: TableSortColumn) => {
+    if (data._id === 'root') {
+      return 'custom-tree-node'
+    }
+  }
 }
 
-const treeData = ref([
-  {
-    _id: 'root',
-    label: '全部列',
-    children: columns.value,
-  },
-])
+const treeData = ref<TableSortColumn []>([])
+
+watchEffect(() => {
+  treeData.value = [
+    {
+      _id: 'root',
+      label: t('m.table.allCol'),
+      children: props.columns
+    }
+  ]
+})
 
 //只允许同级拖拽
 function allowDrop(draggingNode, dropNode, type) {
   return ['prev', 'next'].includes(type) && draggingNode.parent === dropNode.parent
 }
 
-function checkChange(node, checked, halfChecked) {
+function checkChange(node: Node & TableSortColumn, checked: boolean, halfChecked: boolean) {
   if (node._id !== 'root') {
     node.hidden = !(checked || halfChecked)
-    emits('change')
   }
-}
-
-function nodeDrop() {
-  emits('change')
 }
 </script>
 <style scoped lang="scss">
 .column-sort {
   :deep(.el-tree-node__expand-icon) {
     display: none;
+  }
+}
+
+:deep(.custom-tree-node) {
+  > .el-tree-node__content {
+    display: flex;
+    align-items: center;
+    border-bottom: var(--el-border);
+    cursor: default;
+
+    background-color: inherit!important;
+  }
+
+  > .el-tree-node__children {
+    z-index: -1000;
   }
 }
 </style>

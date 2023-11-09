@@ -9,7 +9,7 @@
       <el-dropdown>
         <el-link :underline="false" type="primary">
           <span>
-            更多 <el-icon><Arrow-down /></el-icon>
+            {{ $t('common.more') }} <el-icon><Arrow-down/></el-icon>
           </span>
         </el-link>
         <template #dropdown>
@@ -29,7 +29,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { ref, toRef } from 'vue'
+import { ref, toRef, watch } from 'vue'
 import { auth as auth2 } from '@/directive'
 import { ElDropdown, ElDropdownMenu, ElLink } from 'element-plus'
 import { DefaultMaxCount } from '@/components/constants'
@@ -71,25 +71,34 @@ const props = withDefaults(defineProps<Props>(), {
 const storage = ref(false)
 const arr1 = ref<Array<OperationButton>>([])
 const arr2 = ref<Array<OperationButton>>([])
-const buttons: any[] = toRef(props, 'buttons').value.map((i) => {
-  return {
-    type: 'primary',
-    ...i,
-    onClick: () => i.onClick?.(props.row),
-    disabled: i.disabled instanceof Function ? i.disabled(props.row) : i.disabled,
-  }
-})
-if (props.auth) {
-  buttons.filter((i) => {
-    if (!i.auth) return true
-    return auth2(i.auth, i.authLogic)
+
+init()
+watch(
+  () => props.buttons,
+  () => init()
+)
+
+function init() {
+  const buttons: OperationButton[] = toRef(props, 'buttons').value.map((i) => {
+    return {
+      type: 'primary',
+      ...i,
+      onClick: () => i.onClick?.(props.row),
+      disabled: i.disabled instanceof Function ? i.disabled(props.row) : i.disabled,
+    }
   })
-}
-storage.value = buttons.length > props.maxCount
-arr1.value = buttons
-if (storage.value) {
-  arr1.value = buttons.splice(0, ~~(props.maxCount - 1))
-  arr2.value = buttons
+  if (props.auth) {
+    buttons.filter((i) => {
+      if (!i.auth) return true
+      return auth2(i.auth, i.authLogic)
+    })
+  }
+  storage.value = buttons.length > props.maxCount
+  arr1.value = buttons
+  if (storage.value) {
+    arr1.value = buttons.splice(0, ~~(props.maxCount - 1))
+    arr2.value = buttons
+  }
 }
 </script>
 <style scoped lang="scss">

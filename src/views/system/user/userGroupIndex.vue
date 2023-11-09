@@ -9,6 +9,7 @@
       :filter-columns="topFilterColumns"
       :columns="columns"
       :fetch-data="queryUserGroupList"
+      selection="multiple"
       @selection-change="(rows) => (selectRows = rows)"
       v-model:data="data"
     >
@@ -59,7 +60,6 @@ const filterParam = reactive({})
 const topFilterColumns = shallowRef([{ prop: 'name', label: '用户组名' }])
 
 const columns = ref<TableColumn[]>([
-  { type: 'selection', width: 50 },
   { type: 'index', label: '序', width: 50 },
   { prop: 'id', label: 'ID', width: 50 },
   { prop: 'name', label: '用户组名称', minWidth: 120 },

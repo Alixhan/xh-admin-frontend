@@ -27,6 +27,9 @@ import {
 import SingleDatePicker from '@/components/form/SingleDatePicker.vue'
 import IconSelect from '@/components/form/IconSelect.vue'
 import MUpload from '@/components/form/Upload.vue'
+import i18n, { getCurrentLocales } from '@/i18n'
+
+const {t} = i18n.global
 
 export declare type CommonColumnType =
   | ''
@@ -265,12 +268,12 @@ export function generatePlaceholder(column) {
   if (!Object.prototype.hasOwnProperty.call(column, 'placeholder')) {
     const label = column.label ?? ''
     if (['select', 'cascader', 'year', 'month', 'date', 'dates', 'datetime', 'week', 'icon'].includes(type)) {
-      column.placeholder = '请选择' + label
+      column.placeholder = t('m.form.toSelect') + label
     } else if (['datetimerange', 'daterange', 'monthrange'].includes(type)) {
       column.startPlaceholder = column.startPlaceholder ?? label + '起'
       column.endPlaceholder = column.endPlaceholder ?? label + '止'
     } else if (['input', 'textarea'].includes(type)) {
-      column.placeholder = '请输入' + label
+      column.placeholder = t('m.form.toInput') + label
     }
   }
   return column
@@ -359,8 +362,28 @@ export function generateFormatter(tableColumParams) {
   }
 }
 
+/**
+ * 自动计算一下labelWidth，以最长label字符宽度作为form的labelWidth
+ * 这样就算切换语言也不会导致换行而影响美观
+ */
+export function generateLabelWidth(...columns: CommonColumn []): string| number {
+  const charWidth = getCurrentLocales().charWidth
+  const labelWidth = Math.max(
+      ...columns.map(column => {
+        let width = column.label?.length ?? 0
+        width *= charWidth
+        //有备注疑问的加上额外宽度
+        if(column.comment) width += 18
+        //有必填*的加上额外宽度
+        if(column.required) width += 12
+        return width
+      })
+  ) + 28
+  return labelWidth
+}
+
 // 通过名称获取组件对象
-function getFormComponentByName(compName) {
+function getFormComponentByName(compName: string) {
   let component: any = ElInput
   if (compName === 'el-autocomplete') component = ElAutocomplete
   if (compName === 'el-cascader') component = ElCascader

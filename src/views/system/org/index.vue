@@ -6,7 +6,7 @@
         <el-button style="margin-left: 10px" icon="refresh" type="primary" @click="getOrgTree" />
       </div>
       <el-tree node-key="id" :expand-on-click-node="false" default-expand-all :data="orgData" :props="defaultProps"
-@node-click="handleNodeClick" />
+               @node-click="handleNodeClick" />
     </el-scrollbar>
     <m-table
       class="m-table"
@@ -19,11 +19,14 @@
       :columns="columns"
       :fetch-data="queryOrgList"
       v-model:data="data"
+      selection=""
       @selection-change="(rows) => (selectRows = rows)"
     >
       <template #right-action>
         <el-button v-auth="'system:org:add'" type="primary" icon="plus" @click="openForm('add')"> 新增</el-button>
-        <el-button v-auth="'system:org:del'" type="danger" icon="delete" :disabled="selectRows.length === 0" @click="del(selectRows)"> 删除 </el-button>
+        <el-button v-auth="'system:org:del'" type="danger" icon="delete" :disabled="selectRows.length === 0"
+                   @click="del(selectRows)"> 删除
+        </el-button>
       </template>
     </m-table>
     <el-dialog
@@ -107,17 +110,16 @@ const columns = ref([
       {
         label: '明细',
         auth: 'system:org:detail',
-        onClick: (row) => openForm('detail', row),
+        onClick: (row) => openForm('detail', row)
       },
       {
         label: '删除',
         auth: 'system:org:del',
         type: 'danger',
-        onClick: (row) => del([row]),
-      },
-    ],
+        onClick: (row) => del([row])
+      }
+    ]
   },
-  { type: 'selection' },
   { type: 'index', label: '序', width: 50 },
   { prop: 'id', label: 'ID', width: 50 },
   { prop: 'code', label: '机构代码' },
@@ -139,7 +141,7 @@ function handleNodeClick(node) {
   filterParam.parentName = node.name
   currentNode.value = {
     parentId: node.id,
-    parentName: node.name,
+    parentName: node.name
   }
   if (node.id === 0) {
     filterParam.parentId = ''

@@ -17,7 +17,7 @@
 
 <script setup>
 //icp备案号
-const icpCode = '皖ICP备XXXXXXXXX号-1'
+const icpCode = '皖ICP备2023021987号-1'
 //公安备案号
 const psbCode = 'XXXXXXXXXX'
 

@@ -2,6 +2,7 @@
   <div class="action-view">
     <FullScreenControl class="action-item" />
     <SwitchStyle class="action-item" />
+    <SwitchLocale class="action-item" />
     <UserAvatar class="action-item" />
     <Setting class="action-item" />
   </div>
@@ -11,6 +12,7 @@ import FullScreenControl from '@/layout/default/action/fullScreenControl.vue'
 import UserAvatar from '@/layout/default/action/userAvatar.vue'
 import SwitchStyle from '@/layout/default/action/switchStyle.vue'
 import Setting from '@/layout/default/action/setting.vue'
+import SwitchLocale from '@/layout/default/action/switchLocale.vue'
 </script>
 <style scoped lang="scss">
 .action-view {
@@ -22,7 +24,7 @@ import Setting from '@/layout/default/action/setting.vue'
 
   .action-item {
     height: 30px;
-    padding: 0 10px;
+    padding: 0 8px;
     transition: all 0.2s ease-in-out;
     cursor: pointer;
   }
@@ -30,7 +32,7 @@ import Setting from '@/layout/default/action/setting.vue'
   .action-item:hover {
     background-color: var(--el-color-primary-light-9);
 
-    :deep(> svg) {
+    :deep(svg) {
       animation: bounce-in 0.5s linear forwards;
     }
   }

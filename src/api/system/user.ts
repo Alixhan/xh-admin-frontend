@@ -1,4 +1,6 @@
 import createAxios from '@/utils/request'
+import { getCurrentLocales } from '@/i18n'
+import { useSystemStore } from '@/stores/system'
 
 const systemBaseUrl = import.meta.env.VITE_SYSTEM_BASE_URL
 
@@ -6,21 +8,24 @@ const systemBaseUrl = import.meta.env.VITE_SYSTEM_BASE_URL
  * 返回的图形码数据
  */
 export interface ImageCaptcha {
-  captchaKey: string
-  imageBase64: string
+  captchaKey: string;
+  imageBase64: string;
 }
 
 /**
  * 获取图形验证码
  */
-export function getImageCaptcha(captchaKey, option?: RequestOption):Promise<RestResponse<ImageCaptcha>> {
-  return createAxios(option).get(`${import.meta.env.VITE_SYSTEM_BASE_URL}/api/system/user/captcha`, { params: {captchaKey} })
+export function getImageCaptcha(captchaKey, option?: RequestOption): Promise<RestResponse<ImageCaptcha>> {
+  return createAxios(option).get(`${import.meta.env.VITE_SYSTEM_BASE_URL}/api/system/user/captcha`, { params: { captchaKey } })
 }
 
 /**
  * 系统登录
  */
-export function userLogin(params = {}, option?: RequestOption) {
+export function userLogin(params: any = {}, option?: RequestOption) {
+  //携带上当前语言信息
+  params.locale = useSystemStore().locale
+  params.localeLabel = getCurrentLocales().label
   return createAxios(option).post(`${systemBaseUrl}/api/system/user/login`, params)
 }
 
@@ -29,6 +34,13 @@ export function userLogin(params = {}, option?: RequestOption) {
  */
 export function switchUserRole(params = {}, option?: RequestOption) {
   return createAxios(option).post(`${systemBaseUrl}/api/system/user/switchUserRole`, params)
+}
+
+/**
+ * 语言切换
+ */
+export function switchLocale(params = {}, option?: RequestOption) {
+  return createAxios(option).post(`${systemBaseUrl}/api/system/user/switchLocale`, params)
 }
 
 /**
@@ -80,11 +92,11 @@ export function importUsers(params, option?: RequestOption) {
 
 export interface UserJobsParam {
   //数据类型 1：用户，2：用户组
-  type: 1 | 2
+  type: 1 | 2;
   // 用户id或用户组id
-  userId: number
+  userId: number;
   // 用户岗位信息
-  jobData?: any[]
+  jobData?: any[];
 }
 
 // 获取用户或者用户组的岗位信息

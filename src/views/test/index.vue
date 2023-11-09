@@ -2,7 +2,8 @@
   <div>
     <el-button @click="add">添加数据</el-button>
     <el-input v-model="num" />
-    <el-table :data="data" @row-click="alert(1)">
+    <el-switch v-model="tag" />
+    <el-table :data="data">
       <el-table-column type="index" label="序" />
       <el-table-column label="序">
         <template v-slot="scope">
@@ -12,8 +13,11 @@
           </el-select>
         </template>
       </el-table-column>
-
-      <el-table-column v-for="i in 10" :key="i" label="测试列" prop="b">
+      <el-table-column label="飞飞飞" v-if="tag">
+        <el-table-column label="f1" prop="b" />
+        <el-table-column label="f2" prop="b" />
+      </el-table-column>
+      <el-table-column v-for="i in 4" :key="i" label="测试列" prop="b">
         <template v-slot="scope">
           <el-input v-model="scope.row.b" />
         </template>
@@ -25,13 +29,15 @@
 import { reactive, ref } from 'vue'
 
 const data = ref([])
-const num = ref(20)
+const num = ref(2)
 const formData = reactive({
   a: 'fsdfsdf',
   b: '所经历的副科级塑料袋封口吉林科技'
 })
 
 add()
+
+const tag = ref(true)
 
 function add() {
   for (let i = 0; i < num.value; i++) {

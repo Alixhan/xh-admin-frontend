@@ -2,7 +2,7 @@
   <m-svg-icon
     @click="systemStore.layout.settingVisible = true"
     class="icon-style"
-    src="@/assets/icon/布局配置.svg"
+    src="@/assets/icon/layoutSetting.svg"
     inherited
   />
 </template>

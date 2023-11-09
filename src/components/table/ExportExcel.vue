@@ -1,13 +1,17 @@
 <template>
-  <el-button icon="Download" type="primary" text :loading="loading" @click="exportExcel"> 导出</el-button>
+  <el-button icon="Download" type="primary" text :loading="loading" @click="exportExcel"> {{ $t("m.table.export") }}
+  </el-button>
 </template>
 <script setup lang="ts">
 import { ref, unref } from 'vue'
 import type { PropType } from 'vue'
-import { cloneDeep } from 'lodash'
 import { ElMessageBox, ElNotification } from 'element-plus'
 import { ExcelTree } from '@/utils/excel'
 import type { TableColumn } from '@/components/table/index.vue'
+import _ from 'lodash-es'
+import { useI18n } from 'vue-i18n'
+
+const { cloneDeep } = _
 
 /**
  * 通用表格导出到excel
@@ -17,36 +21,37 @@ import type { TableColumn } from '@/components/table/index.vue'
 const props = defineProps({
   pageQuery: {
     type: Object as PropType<PageQuery>,
-    required: true,
+    required: true
   },
   fetchData: {
-    type: Function,
+    type: Function
   },
   data: {
-    type: Array,
+    type: Array
   },
   columns: {
     type: Array as PropType<Array<TableColumn>>,
-    required: true,
+    required: true
   },
   exportFileName: {
-    type: String,
-    default: '导出数据.xlsx',
-  },
+    type: String
+  }
 })
 
 const loading = ref(false)
 
+const { t } = useI18n()
+
 async function exportExcel() {
-  const pageQuery = cloneDeep(props.pageQuery)
+  const pageQuery = cloneDeep!(props.pageQuery)
   pageQuery.isExport = true // 标识为导出请求
   let data = props.data
   if (props.fetchData) {
     if (props.pageQuery.isPage) {
-      const r = await ElMessageBox.confirm('确认导出?', '提示', {
+      const r = await ElMessageBox.confirm(t('m.table.exportConfirm'), t('common.tip'), {
         distinguishCancelAndClose: true,
-        confirmButtonText: '导出当页',
-        cancelButtonText: '导出全部',
+        confirmButtonText: t('m.table.exportCurrent'),
+        cancelButtonText: t('m.table.exportAll')
       }).catch((e) => {
         pageQuery.isPage = false
         return e
@@ -62,15 +67,15 @@ async function exportExcel() {
     try {
       loading.value = true
       const excelTree = new ExcelTree(unref(props.columns))
-      await excelTree.exportExcel(props.exportFileName, data)
+      await excelTree.exportExcel(props.exportFileName ?? t('m.table.fileName') + '.xlsx', data)
     } finally {
       loading.value = false
     }
   } else {
     ElNotification({
-      title: '导出失败',
-      message: '无数据可以导出！',
-      type: 'error',
+      title: t('m.table.exportFail'),
+      message: t('m.table.exportNoData'),
+      type: 'error'
     })
   }
 }

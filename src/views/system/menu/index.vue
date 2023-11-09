@@ -11,13 +11,18 @@
       :columns="columns"
       :fetch-data="fetchMenus"
       v-model:data="data"
+      selection="multiple"
       @selection-change="(rows) => (selectRows = rows)"
     >
       <template #left-action>
-        <el-button type="success" @click="toggleExpand"> 全部 展开/收起</el-button>
+        <el-button type="success" @click="toggleExpand">{{ $t("common.expand") }}/{{ $t("common.collapse") }}
+          {{ $t("common.all") }}
+        </el-button>
       </template>
       <template #right-action>
-        <el-button v-auth="'system:menu:add'" type="primary" icon="plus" @click="openForm('add')"> 新增</el-button>
+        <el-button v-auth="'system:menu:add'" type="primary" icon="plus" @click="openForm('add')">{{ $t("common.add")
+          }}
+        </el-button>
         <el-button
           v-auth="'system:menu:del'"
           type="danger"
@@ -25,7 +30,7 @@
           :disabled="selectRows.length === 0"
           @click="del(selectRows)"
         >
-          删除
+          {{ $t("common.del") }}
         </el-button>
       </template>
     </m-table>
@@ -44,18 +49,21 @@
   </div>
 </template>
 <script setup lang="jsx">
-import { reactive, ref, shallowRef } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import { delMenuByIds, postSwitchMenuProp, queryMenuList } from '@/api/system/menu'
 import { menuTypeList } from '@/views/system/menu/constant'
 import MenuForm from './menuForm.vue'
 import getDictDetails from '@/utils/dict'
+import { useI18n } from 'vue-i18n'
 
-const formTitle = {
-  copy: '菜单复制',
-  add: '菜单新增',
-  edit: '菜单编辑',
-  detail: '菜单明细',
-}
+const { t } = useI18n()
+
+const formTitle = computed(() => ({
+  copy: `${t('system.menu.label')}${t('common.add')}`,
+  add: `${t('system.menu.label')}${t('common.add')}`,
+  edit: `${t('system.menu.label')}${t('common.edit')}`,
+  detail: `${t('system.menu.label')}${t('common.detail')}`
+}))
 
 const tableRef = ref()
 const data = ref([])
@@ -63,67 +71,61 @@ const selectRows = ref([])
 
 const filterParam = reactive({})
 
-const topFilterColumns = shallowRef([
-  { prop: 'title', label: '菜单标题' },
-  { prop: 'enabled', label: '是否启用', type: 'select', itemList: getDictDetails(1, 'boolean') },
+const topFilterColumns = computed(() => [
+  { prop: 'title', label: t('system.menu.title') },
+  { prop: 'enabled', label: t('common.isEnabled'), type: 'select', itemList: getDictDetails(1, 'boolean') }
 ])
 
-const columns = ref([
-  { type: 'selection', width: 50 },
-  { prop: 'title', label: '菜单标题', fixed: false, width: 200 },
-  { prop: 'id', label: 'ID', width: 50 },
-  { prop: 'platform', label: '平台' },
+const columns = computed(() => [
+  { prop: 'title', label: t('system.menu.title'), fixed: false, minWidth: 200 },
+  { prop: 'id', label: 'ID', width: 70 },
+  { prop: 'platform', label: t('system.menu.platform') },
   { prop: 'name', label: 'name' },
-  { prop: 'type', label: '菜单类型', type: 'select', itemList: menuTypeList },
-  { prop: 'icon', label: '菜单图标', slots: { default: generateMenuIcon } },
+  { prop: 'type', label: t('system.menu.type'), type: 'select', itemList: menuTypeList },
+  { prop: 'icon', label: t('system.menu.icon'), slots: { default: generateMenuIcon } },
   {
     prop: 'cache',
-    label: '缓存',
+    label: t('common.cache'),
     itemList: getDictDetails(1, 'boolean'),
-    slots: { default: switchSlot },
+    slots: { default: switchSlot }
   },
   {
     prop: 'enabled',
-    label: '启用',
+    label: t('common.enabled'),
     itemList: getDictDetails(1, 'boolean'),
-    slots: { default: switchSlot },
+    slots: { default: switchSlot }
   },
-  {
-    prop: 'order',
-    label: '排序号',
-    width: 85,
-    comment: '菜单的排列顺序，小号排在前，大号排在后。',
-  },
-  { prop: 'createTime', label: '创建时间', type: 'datetime', width: 155 },
-  { prop: 'updateTime', label: '修改时间', type: 'datetime', width: 155 },
+  { prop: 'order', label: t('common.order'), comment: t('system.menu.orderComment') },
+  { prop: 'createTime', label: t('common.createTime'), type: 'datetime', minWidth: 155 },
+  { prop: 'updateTime', label: t('common.updateTime'), type: 'datetime', minWidth: 155 },
   {
     type: 'operation',
     fixed: 'right',
     align: 'center',
     buttons: [
-      { label: '编辑', icon: 'edit', auth: 'system:menu:edit', onClick: (row) => openForm('edit', row) },
+      { label: t('common.edit'), icon: 'edit', auth: 'system:menu:edit', onClick: (row) => openForm('edit', row) },
       {
-        label: '明细',
+        label: t('common.detail'),
         icon: 'document',
         auth: 'system:menu:detail',
-        onClick: (row) => openForm('detail', row),
+        onClick: (row) => openForm('detail', row)
       },
       {
-        label: '删除',
+        label: t('common.del'),
         icon: 'delete',
         auth: 'system:menu:del',
         type: 'danger',
-        onClick: (row) => del([row]),
+        onClick: (row) => del([row])
       },
       {
-        label: '复制',
+        label: t('common.copy'),
         type: 'success',
         icon: 'CopyDocument',
         auth: 'system:menu:add',
-        onClick: (row) => openForm('copy', row),
-      },
-    ],
-  },
+        onClick: (row) => openForm('copy', row)
+      }
+    ]
+  }
 ])
 
 const formVisible = ref(false)
@@ -185,7 +187,7 @@ function generateMenuIcon(scope) {
     <m-icon
       {...{
         size: 18,
-        modelValue: menu.icon,
+        modelValue: menu.icon
       }}
     />
   )
@@ -205,7 +207,7 @@ function switchSlot(scope) {
         const requestParam = {
           id: row.id,
           prop,
-          value: !row[prop],
+          value: !row[prop]
         }
         await postSwitchMenuProp(requestParam, { showLoading: true })
         return true
@@ -219,7 +221,7 @@ function del(rows) {
     showLoading: true,
     showBeforeConfirm: true,
     showSuccessMsg: true,
-    confirmMsg: '确认删除吗？删除后不可恢复！',
+    confirmMsg: t('common.confirmDelete')
   }).then(() => {
     tableRef.value.fetchQuery()
   })

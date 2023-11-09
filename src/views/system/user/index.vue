@@ -9,6 +9,7 @@
       :filter-columns="topFilterColumns"
       :columns="columns"
       :fetch-data="queryUserList"
+      selection="multiple"
       @selection-change="(rows) => (selectRows = rows)"
       v-model:data="data"
     >
@@ -49,7 +50,7 @@
     >
       <user-job :model-value="row" @close="formVisible2 = false" :user-id="row.id" :type="1" style="height: 70vh" />
     </el-dialog>
-    <user-import ref="userImportRef" />
+    <user-import ref="userImportRef" @close="close" />
   </div>
 </template>
 <script setup lang="tsx">
@@ -79,7 +80,6 @@ const topFilterColumns = shallowRef([
 ])
 
 const columns: Ref<Array<TableColumn>> = ref([
-  { type: 'selection', width: 50 },
   { type: 'index', label: '序', width: 50 },
   { prop: 'id', label: 'ID', width: 50 },
   { prop: 'code', label: '用户账号' },

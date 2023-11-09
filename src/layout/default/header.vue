@@ -17,7 +17,7 @@
               :class="{ rotate180: systemStore.layout.menuCollapse }"
             />
           </el-icon>
-          <NavTabs v-if="systemStore.layout.heightShrink" key="nav-tabs" class="nav-tabs" />
+          <NavTabs v-if="systemStore.layout.heightShrink && !systemStore.layout.widthShrink" key="nav-tabs" class="nav-tabs" />
           <Breadcrumb v-else-if="!systemStore.layout.widthShrink" class="breadcrumb" />
         </div>
       </div>
@@ -64,7 +64,7 @@ function toggleMenuCollapse() {
 </script>
 <style scoped lang="scss">
 .header-view {
-  padding: 10px 10px 5px 10px;
+  padding: 10px 10px 10px 10px;
 
   .header-top {
     display: flex;

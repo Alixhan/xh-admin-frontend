@@ -12,7 +12,6 @@
           'active-tab': route.fullPath === tab.fullPath,
         }"
         class="tab-item"
-        :color="route.fullPath === tab.fullPath ? '' : 'var(--layout-bg-color)'"
         :type="route.fullPath === tab.fullPath ? '' : 'info'"
         :effect="route.fullPath === tab.fullPath ? 'dark' : 'plain'"
       >

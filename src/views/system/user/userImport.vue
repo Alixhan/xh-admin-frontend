@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     title="用户导入"
-    v-model="visible2"
+    v-model="visible"
     align-center
     draggable
     destroy-on-close
@@ -20,8 +20,15 @@
 import { ref } from 'vue'
 import MExcelImport from '@/components/ExcelImport.vue'
 import { importUsers } from '@/api/system/user'
+import { ElNotification } from 'element-plus'
 
-const visible2 = ref(false)
+declare type CloseType = 'refresh' | undefined
+
+const emits = defineEmits<{
+  (e: 'close', type?: CloseType): void
+}>()
+
+const visible = ref(false)
 
 const excelColumns = ref([
   { prop: 'code', label: '用户账号', rules: [{ required: true }] },
@@ -35,6 +42,14 @@ function complete(data, callback) {
   importUsers(data)
     .then((res) => {
       callback(res.data)
+      if (!res.data) {
+        ElNotification({
+          type: 'success',
+          message: '导入成功',
+          duration: 3000,
+        })
+        close('refresh')
+      }
     })
     .catch((e) => {
       callback([{ error: e.message ?? '导入失败' }])
@@ -43,7 +58,13 @@ function complete(data, callback) {
 
 // 打开导入框
 function open() {
-  visible2.value = true
+  visible.value = true
+}
+
+// 关闭
+function close(type?: CloseType) {
+  visible.value = false
+  type && emits('close', type)
 }
 
 defineExpose({

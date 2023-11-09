@@ -50,7 +50,7 @@
 import { computed, nextTick, ref, shallowRef, watchEffect } from 'vue'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import MIcon from '@/components/Icon.vue'
-import { round } from 'lodash'
+import { round } from 'lodash-es'
 // element图标
 const localSvg = import.meta.glob('@/assets/icon/**/*.svg')
 /**

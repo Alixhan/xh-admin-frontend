@@ -1,9 +1,11 @@
 {
   "extends": "@vue/tsconfig/tsconfig.dom.json",
   "include": [
-    "src/**/*",
+    "src/**/*.tsx",
+    "src/**/*.ts",
+    "src/**/*.mts",
     "src/**/*.vue",
-    "env.d.ts"
+    "types/**/*.d.ts"
   ],
   "exclude": [
     "src/**/__tests__/*",
@@ -26,7 +28,6 @@
     "types": [
       "vite/client",
     ],
-
     "target": "esnext",
     "useDefineForClassFields": true,
     "module": "esnext",

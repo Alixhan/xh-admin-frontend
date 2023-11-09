@@ -9,7 +9,6 @@
     </el-select>
     <m-form
       ref="formRef"
-      label-width="10em"
       :colspan="24"
       :columns="columns"
       :model="formData"

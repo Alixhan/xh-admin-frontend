@@ -1,66 +1,103 @@
 import { defineStore } from 'pinia'
 import { computed, nextTick, reactive, ref } from 'vue'
 import { switchUserRole, userLogin } from '@/api/system/user'
+import type { RouteLocationNormalized } from 'vue-router'
 import { useRoute, useRouter } from 'vue-router'
 import { useDark, useLocalStorage, useTitle } from '@vueuse/core'
-import _ from 'lodash'
+import type { RemovableRef } from '@vueuse/core'
+import _ from 'lodash-es'
 import { devMenus } from '@/router/static'
+import type { LocaleKey } from '@/i18n'
+
 
 export interface User {
-  id?: number
-  code?: string
-  name?: string
-  avatar?: string
-  password?: string
+  id?: number;
+  code?: string;
+  name?: string;
+  avatar?: string;
+  password?: string;
 }
 
 export interface Menu {
-  id: number
-  title: string
-  name: string
-  parentId?: number
-  cache: boolean
-  componentName?: string
-  fullPath: string
-  type: string
-  component: string
-  handleType: string
-  path: string
-  icon: string
-  children?: Menu[]
+  id: number;
+  title: string;
+  name: string;
+  parentId?: number;
+  cache: boolean;
+  componentName?: string;
+  fullPath: string;
+  type: string;
+  component: string;
+  handleType: string;
+  path: string;
+  icon: string;
+  children?: Menu[];
 }
 
 // 用户角色
 export interface OrgRole {
   //数据类型，1：用户，2：用户组
-  type: number
+  type: number;
   //用户id或者用户组的id
-  userId: number
+  userId: number;
   //机构id
-  sysOrgId: number
+  sysOrgId: number;
   //角色id
-  sysRoleId: number
+  sysRoleId: number;
   //机构代码
-  orgCode: string
+  orgCode: string;
   //机构名称
-  orgName: string
+  orgName: string;
   //角色名称
-  roleName: string
+  roleName: string;
   //是否当前使用的角色
-  active: boolean
+  active: boolean;
 }
 
-interface NavTab {
+export interface NavTab {
   //标题
-  title: string
+  title: string;
   //路由全路径
-  fullPath: string
+  fullPath: string;
   //是否缓存
-  cache?: boolean
+  cache?: boolean;
   // 组件名
-  componentName?: string
+  componentName?: string;
   // 图标
-  icon?: string
+  icon?: string;
+}
+
+declare type LayoutSize = 'small' | 'default' | 'large'
+export interface Layout {
+  // 全局布局大小
+  size: LayoutSize ,
+  // 是否暗黑模式
+  isDark: boolean,
+  // 布局方式
+  layoutMode: 'Default',
+  // 主页面切换动画
+  mainAnimation: 'slide-right' | 'slide-left' | 'el-fade-in-linear' | 'el-fade-in' | 'el-zoom-in-center' | 'el-zoom-in-top' | 'el-zoom-in-bottom' // 侧边菜单宽度(展开时)，单位px
+  menuWidth: number,
+  // 是否水平折叠收起菜单
+  menuCollapse: boolean,
+  // 是否只保持一个子菜单的展开(手风琴)
+  menuUniqueOpened: boolean,
+  // 显示菜单栏顶栏(LOGO)
+  showLogo: boolean,
+  // 显示菜单栏顶栏(LOGO)
+  showNavTabs: boolean,
+  //当前窗口宽度
+  windowWidth: number,
+  //当前窗口高度
+  windowHeight: number,
+  // 宽度是否收缩(小宽度设备)
+  widthShrink: boolean,
+  // 高度是否收缩(矮高度设备)
+  heightShrink: boolean,
+  //显示navTab的图标
+  showNavTabIcon: boolean,
+  //布局设置显隐标识
+  settingVisible: boolean
 }
 
 /**
@@ -69,39 +106,26 @@ interface NavTab {
  */
 export const useSystemStore = defineStore('system', () => {
   // 布局根路由名称
-  const layoutRouteName = import.meta.env.VITE_LAYOUT_ROUTE_NAME
+  const layoutRouteName: string = import.meta.env.VITE_LAYOUT_ROUTE_NAME
   // 路由白名单，可以直接跳转
   const whiteList = ['']
-
-  const layout = reactive({
-    // 全局布局大小，可选值<small|default|large>
-    size: useLocalStorage('size', 'default'),
-    // 是否暗黑模式
+  //布局设置
+  const layout: Layout = reactive({
+    size: useLocalStorage<LayoutSize>('size', 'default'),
     isDark: useDark(),
-    // 布局方式，可选值<Default|Classic|Streamline>
     layoutMode: 'Default',
-    // 主页面切换动画，可选值<slide-right|slide-left|el-fade-in-linear|el-fade-in|el-zoom-in-center|el-zoom-in-top|el-zoom-in-bottom>
     mainAnimation: 'slide-left',
-    // 侧边菜单宽度(展开时)，单位px
     menuWidth: useLocalStorage('menuWidth', 200),
-    // 是否水平折叠收起菜单
     menuCollapse: false,
-    // 是否只保持一个子菜单的展开(手风琴)
     menuUniqueOpened: useLocalStorage('menuUniqueOpened', false),
-    // 显示菜单栏顶栏(LOGO)
     showLogo: useLocalStorage('showLogo', true),
-    // 显示菜单栏顶栏(LOGO)
     showNavTabs: true,
     windowWidth: 0,
     windowHeight: 0,
-    // 宽度是否收缩(小宽度设备)
     widthShrink: false,
-    // 高度是否收缩(矮高度设备)
     heightShrink: false,
-    //显示navTab的图标
     showNavTabIcon: useLocalStorage('showNavTabIcon', true),
-    //设置显示
-    settingVisible: false,
+    settingVisible: false
   })
 
   // 监听窗口变化
@@ -119,15 +143,12 @@ export const useSystemStore = defineStore('system', () => {
   // 浏览器title
   useTitle(import.meta.env.VITE_TITLE)
   // 语言，默认为简体中文
-  const language = ref('zh-cn')
+  const locale: RemovableRef<LocaleKey> =useLocalStorage<LocaleKey>('locale', 'zh-cn')
   // 当前登录的token ，持久化到本地储存
   const token = useLocalStorage(import.meta.env.VITE_SYS_TOKEN_KEY, '')
   // 登录状态 success, failed
   const loginStatus = ref<'success' | 'failed'>()
-  /**
-   * 当前登录的用户信息
-   * @type {avatar: string}
-   */
+  //当前登录的用户信息
   const user = ref<User>({})
   //当前用户拥有的角色
   const orgRoles = ref<OrgRole[]>([])
@@ -140,7 +161,7 @@ export const useSystemStore = defineStore('system', () => {
   // 导航路由页签
   const navTabs = ref<NavTab[]>([])
   // 刷新当前页签
-  const refresh = ref()
+  const refresh = ref<boolean>()
   // 缓存的组件名称
   const keepAliveComponentNameList = computed(() => {
     return navTabs.value
@@ -151,8 +172,13 @@ export const useSystemStore = defineStore('system', () => {
       .map((i) => i.componentName)
   })
 
-  function setRefresh(val) {
+  function setRefresh(val: boolean) {
     refresh.value = val
+  }
+  
+  //切换语言
+  function setLocale(val: LocaleKey) {
+    locale.value = val
   }
 
   // 当前激活的菜单组
@@ -166,12 +192,12 @@ export const useSystemStore = defineStore('system', () => {
   const route = useRoute()
 
   // 路由前置守卫，自动登录
-  async function beforeEach(to) {
+  async function beforeEach(to: RouteLocationNormalized) {
     // 白名单直接跳转
     if (whiteList.includes(to.fullPath)) {
       return
     }
-    let path
+    let path: string | undefined
     if (token.value && !loginStatus.value) {
       path = await userLogin()
         .then((res) => {
@@ -208,7 +234,7 @@ export const useSystemStore = defineStore('system', () => {
   }
 
   // 路由跳转成功后钩子，设置当前路由信息，navTabs等，浏览器标题等
-  function afterEach(guard) {
+  function afterEach(guard: RouteLocationNormalized & { meta: NavTab }) {
     const fullPath = guard.fullPath
     const tab = navTabs.value.find((i) => i.fullPath === fullPath)
     // 如果不存在，则添加tab
@@ -219,7 +245,7 @@ export const useSystemStore = defineStore('system', () => {
           fullPath: guard.fullPath,
           componentName: guard.meta.componentName,
           cache: guard.meta.cache,
-          icon: guard.meta.icon,
+          icon: guard.meta.icon
         })
       )
     // 设置浏览器标题
@@ -229,12 +255,12 @@ export const useSystemStore = defineStore('system', () => {
   }
 
   // 设置token
-  function setToken(val) {
+  function setToken(val: string) {
     token.value = val
   }
 
   // 设置登录用户信息
-  function setLoginUserInfo(loginUserInfo) {
+  function setLoginUserInfo(loginUserInfo: any) {
     // 开发环境把开发文档置顶
     if (import.meta.env.DEV) {
       loginUserInfo.menus.unshift(...devMenus)
@@ -267,7 +293,7 @@ export const useSystemStore = defineStore('system', () => {
   }
 
   // 获取菜单id的层级数组
-  function getMenuLevelArr(id) {
+  function getMenuLevelArr(id: number) {
     const arr: Menu[] = []
     let currentMenu = menusObj.value[id]
     while (currentMenu) {
@@ -283,7 +309,7 @@ export const useSystemStore = defineStore('system', () => {
     router.addRoute({
       name: layoutRouteName,
       path: `/${layoutRouteName}`,
-      component: () => import('@/layout/index.vue'),
+      component: () => import('@/layout/index.vue')
     })
     menus.value.forEach((i) => {
       // 路由路径
@@ -309,7 +335,7 @@ export const useSystemStore = defineStore('system', () => {
             if (!component) throw new Error(`${i.component} 文件不存在！`)
             return component().then((comp: any) => ({
               ...comp.default,
-              name: componentName,
+              name: componentName
             }))
           },
           meta: {
@@ -317,8 +343,8 @@ export const useSystemStore = defineStore('system', () => {
             cache: i.cache,
             component: i.component,
             icon: i.icon,
-            componentName,
-          },
+            componentName
+          }
         }
         i.componentName = componentName
         router.addRoute(layoutRouteName, dynamicRoute)
@@ -340,13 +366,13 @@ export const useSystemStore = defineStore('system', () => {
   }
 
   // 通过fullPath移除navTab
-  function removeNavTabByFullPath(fullPath) {
+  function removeNavTabByFullPath(fullPath: string) {
     const index = navTabs.value.findIndex((i) => i.fullPath === fullPath)
     return removeNavTabByIndex(index)
   }
 
   // 通过index移除navTab
-  function removeNavTabByIndex(index) {
+  function removeNavTabByIndex(index: number) {
     const currentMenu = navTabs.value[index]
     navTabs.value.splice(index, 1)
     // 如果删除了当前激活的路由，则需要自动跳转到右边的tab
@@ -357,11 +383,11 @@ export const useSystemStore = defineStore('system', () => {
     }
   }
 
-  // 注销
+  // 切换角色成功
   function switchRole(orgRole: OrgRole) {
     return switchUserRole(orgRole, {
       showSuccessMsg: true,
-      successMsg: '切换角色成功',
+      successMsg: '切换角色成功'
     }).then(() => {
       setTimeout(() => window.location.reload(), 1000)
     })
@@ -374,7 +400,7 @@ export const useSystemStore = defineStore('system', () => {
 
   return {
     layout,
-    language,
+    locale,
     token,
     user,
     treeMenus,
@@ -393,5 +419,6 @@ export const useSystemStore = defineStore('system', () => {
     logout,
     refresh,
     setRefresh,
+    setLocale,
   }
 })

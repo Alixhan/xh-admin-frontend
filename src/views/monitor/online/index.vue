@@ -9,6 +9,7 @@
       :columns="columns"
       :fetch-data="queryOnlineUser"
       v-model:data="data"
+      selection="multiple"
     />
   </div>
 </template>
@@ -29,20 +30,20 @@ const topFilterColumns = shallowRef([
 ])
 
 const columns = ref([
-  { type: 'selection', width: 50 },
-  { type: 'index', label: '序', width: 50 },
+  { type: 'index', label: '序', width: 70 },
   { prop: 'token', label: 'token' },
   { prop: 'userCode', label: '登录账户' },
-  { prop: 'userName', label: '登录账户名称', minWidth: 120 },
+  { prop: 'userName', label: '登录账户名称' },
   { prop: 'loginTime', label: '登录时间', type: 'datetime', minWidth: 150 },
   { prop: 'loginIp', label: 'ip地址', minWidth: 120 },
-  { prop: 'loginAddress', label: '登录地点' },
+  { prop: 'loginAddress', label: '登录地点', minWidth: 150 },
   { prop: 'loginBrowser', label: '浏览器' },
-  { prop: 'browserVersion', label: '浏览器版本', minWidth: 120 },
+  { prop: 'browserVersion', label: '浏览器版本' },
   { prop: 'loginOs', label: '操作系统' },
-  { prop: 'isMobile', label: '是否手机端', minWidth: 120, itemList: getDictDetails(1, 'boolean') },
+  { prop: 'isMobile', label: '是否手机端', itemList: getDictDetails(1, 'boolean') },
   { prop: 'orgName', label: '登录机构' },
   { prop: 'roleName', label: '登录角色' },
+  { prop: 'localeLabel', label: '当前使用语言' },
   {
     type: 'operation',
     fixed: 'right',
