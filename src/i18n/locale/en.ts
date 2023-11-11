@@ -24,8 +24,8 @@ export default {
       collapse: 'Collapse'
     },
     form: {
-      toInput: 'Please input ',
-      toSelect: 'Please select ',
+      toInput: 'Please input {label}',
+      toSelect: 'Please select {label}',
     }
   },
   common: {

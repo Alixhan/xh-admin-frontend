@@ -5,7 +5,7 @@ import type { RouteLocationNormalized } from 'vue-router'
 import { useRoute, useRouter } from 'vue-router'
 import { useDark, useLocalStorage, useTitle } from '@vueuse/core'
 import type { RemovableRef } from '@vueuse/core'
-import _ from 'lodash-es'
+import { camelCase } from 'lodash-es'
 import { devMenus } from '@/router/static'
 import type { LocaleKey } from '@/i18n'
 
@@ -325,7 +325,7 @@ export const useSystemStore = defineStore('system', () => {
           .map((i) => i.name)
           .join('/')
         // 组件name
-        const componentName = _.camelCase(fullPath)
+        const componentName = camelCase(fullPath)
         const dynamicRoute = {
           name,
           path,

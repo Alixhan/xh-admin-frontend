@@ -2,7 +2,6 @@ import { createApp } from 'vue'
 import type { App as VueApp } from 'vue'
 import App from './App.vue'
 import { createPinia } from 'pinia'
-import router from './router'
 import ElementPlus from 'element-plus'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue' // element图标
 import MyComponents from '@/components'
@@ -11,6 +10,7 @@ import I18n from '@/i18n/index'
 import '@/styles/index.scss' // 样式引入
 import '@/styles/app.scss'
 import { loading } from '@/utils/loading'
+import router from '@/router'
 // import 'default-passive-events'
 
 loading.show()

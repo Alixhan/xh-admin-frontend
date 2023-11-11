@@ -24,8 +24,8 @@ export default {
       collapse: '收起'
     },
     form: {
-      toInput: '請輸入',
-      toSelect: '請選擇'
+      toInput: '請輸入{label}',
+      toSelect: '請選擇{label}'
     }
   },
   common: {

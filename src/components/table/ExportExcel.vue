@@ -8,10 +8,8 @@ import type { PropType } from 'vue'
 import { ElMessageBox, ElNotification } from 'element-plus'
 import { ExcelTree } from '@/utils/excel'
 import type { TableColumn } from '@/components/table/index.vue'
-import _ from 'lodash-es'
+import { cloneDeep } from 'lodash-es'
 import { useI18n } from 'vue-i18n'
-
-const { cloneDeep } = _
 
 /**
  * 通用表格导出到excel

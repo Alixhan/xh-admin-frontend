@@ -24,8 +24,8 @@ export default {
       collapse: '収めます'
     },
     form: {
-      toInput: 'どうぞと入力します',
-      toSelect: '選択をお願いします'
+      toInput: 'どうぞと入力します{label}',
+      toSelect: '選択をお願いします{label}'
     }
   },
   common: {

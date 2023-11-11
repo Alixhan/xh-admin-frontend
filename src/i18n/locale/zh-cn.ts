@@ -24,8 +24,14 @@ const locale = {
       collapse: '收起',
     },
     form: {
-      toInput: '请输入',
-      toSelect: '请选择',
+      toInput: '请输入{label}',
+      toSelect: '请选择{label}',
+      refresh: '刷新',
+      enlarge: '放大',
+      reduce: '缩小',
+      clockwise: '顺时针',
+      anticlockwise: '逆时针',
+      cutConfirmation: '确定裁剪'
     }
   },
   common: {

@@ -22,7 +22,7 @@ import Chinese from '@/assets/icon/chinese.svg'
 import ChineseF from '@/assets/icon/chinesef.svg'
 import English from '@/assets/icon/english.svg'
 import Japanese from '@/assets/icon/japanese.svg'
-import { useLocalStorage } from '@vueuse/core/index'
+import { useLocalStorage } from '@vueuse/core'
 
 export declare type LocaleKey = 'zh-cn' | 'zh-tw' | 'en' | 'ja'
 
@@ -61,6 +61,7 @@ export function getCurrentLocales(): Locales {
 }
 
 const i18n = createI18n({
+  globalInjection: true,
   legacy: false,
   locale: useLocalStorage<LocaleKey>('locale', 'zh-cn').value,
   fallbackLocale: 'zh-cn',

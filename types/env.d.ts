@@ -6,6 +6,26 @@ declare module '*.vue' {
 
 declare module 'vite-plugin-eslint'
 
+
+interface ImportMetaEnv {
+  // 系统名称
+  readonly VITE_TITLE: string
+  // token会存放在localstorage,此项配置存放的key
+  readonly VITE_SYS_TOKEN_KEY: string
+  // 路由的前缀
+  readonly VITE_LAYOUT_ROUTE_NAME: string
+  // 请求的前缀
+  readonly VITE_BASE_URL: string
+  // system服务请求前缀
+  readonly VITE_SYSTEM_BASE_URL: string
+  // file服务请求前缀
+  readonly VITE_FILE_BASE_URL: string
+}
+
+interface ImportMeta {
+  readonly env: ImportMetaEnv
+}
+
 declare type RequestOption = import('@/utils/request').RequestOption
 declare type RestResponse<T> = import('@/utils/request').RestResponse<T>
 

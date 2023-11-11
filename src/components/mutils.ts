@@ -268,12 +268,12 @@ export function generatePlaceholder(column) {
   if (!Object.prototype.hasOwnProperty.call(column, 'placeholder')) {
     const label = column.label ?? ''
     if (['select', 'cascader', 'year', 'month', 'date', 'dates', 'datetime', 'week', 'icon'].includes(type)) {
-      column.placeholder = t('m.form.toSelect') + label
+      column.placeholder = t('m.form.toSelect', {label})
     } else if (['datetimerange', 'daterange', 'monthrange'].includes(type)) {
       column.startPlaceholder = column.startPlaceholder ?? label + '起'
       column.endPlaceholder = column.endPlaceholder ?? label + '止'
     } else if (['input', 'textarea'].includes(type)) {
-      column.placeholder = t('m.form.toInput') + label
+      column.placeholder = t('m.form.toInput', {label})
     }
   }
   return column
