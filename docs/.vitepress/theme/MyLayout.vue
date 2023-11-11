@@ -5,10 +5,11 @@ import DefaultTheme from "vitepress/theme";
 <template>
   <DefaultTheme.Layout />
 </template>
-<style>
+<style lang="scss">
 :root {
+  --line-gradient-bg: -webkit-linear-gradient(120deg, #bd34fe, #41d1ff);
   --vp-home-hero-name-color: transparent;
-  --vp-home-hero-name-background: -webkit-linear-gradient(120deg, #bd34fe, #41d1ff);
+  --vp-home-hero-name-background: var(--line-gradient-bg);
 }
 
 .image-bg {
@@ -21,4 +22,30 @@ import DefaultTheme from "vitepress/theme";
   filter: blur(70px) !important;
   transform: translate(-50%, -50%) !important;
 }
+
+.VPLink .text {
+  transition: all .25s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+  transform-origin: 0 50%;
+
+  &:hover {
+    transform: scale(1.1);
+
+  }
+}
+
+.is-active > .item > .VPLink > .text {
+  transform: scale(1.1);
+}
+
+
+h1 { // h1 标签渐变色文本
+  display: inline-block;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: #0000;
+  white-space: nowrap;
+  background-image: var(--line-gradient-bg);
+  margin-bottom: 20px;
+}
+
 </style>

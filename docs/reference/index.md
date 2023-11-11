@@ -1,3 +1,2 @@
 ---
-lastUpdated: true
 ---

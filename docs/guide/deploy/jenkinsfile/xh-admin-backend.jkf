@@ -1,0 +1,104 @@
+#!groovy
+pipeline {
+    agent any
+    //环境变量
+    tools {
+//        jdk 'jdk8_341'
+        maven 'maven3.9.1'
+    }
+
+    //常量参数
+    environment {
+        cred_id = "gitee"
+        git_project_url = "https://gitee.com/sun-xiaohan/xh-admin-backend.git"
+        git_project_branch = "main"
+        //接收参数
+        dir_name = "${dir_name}"
+        service_name = "xh-admin-${dir_name}"
+        mirror_name = "${service_name}:latest"
+        NACOS_SERVER_ADDR="10.0.4.3:8848"
+        NACOS_NAMESPACE="production"
+        NACOS_GROUP="xh-admin"
+        NACOS_USERNAME="nacos"
+        NACOS_PASSWROD="nacos"
+        outer_port = ""
+        inner_port = ""
+        Dockerfile = '''
+            # 基础镜像
+            FROM openjdk:21-ea-17-jdk
+            # author
+            MAINTAINER sxh
+            #设置时区
+            RUN /bin/cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo 'Asia/Shanghai' >/etc/timezone
+            # 创建目录
+            RUN mkdir -p /app
+            # 指定路径
+            WORKDIR /app
+            # 复制jar文件到路径
+            ADD *.jar /app/app.jar
+            # 启动命令，同时设置jvm内存
+            ENTRYPOINT ["java","-jar","-Xms256m","-Xmx256m","app.jar"]
+        '''
+    }
+
+    stages {
+        stage("fetch code") {
+            steps {
+                git credentialsId: cred_id, url: git_project_url, branch: git_project_branch
+            }
+        }
+        stage("build project") {
+            steps {
+                script {
+                    if(dir_name == 'system') {
+                        outer_port = '6002'
+                        inner_port = '6002'
+                    }
+                    if(dir_name == 'file') {
+                        outer_port = '6003'
+                        inner_port = '6003'
+                    }
+                    if(dir_name == 'mvn-install') {
+                        sh "mvn clean -DskipTests=true"
+                        sh "mvn install -DskipTests=true"
+                        return "mvn install 成功咯"
+                    }
+
+                    def buildDir = "build-${dir_name}"
+                    sh "rm -rf ${buildDir} && mkdir ${buildDir}"
+                    sh "mvn package -f ${dir_name}/service/pom.xml -DskipTests=true"
+                    sh "mv ${dir_name}/service/target/*.jar ${buildDir}/app.jar"
+                    //创建Dockerfile
+                    sh "echo '${Dockerfile}' > ${buildDir}/Dockerfile"
+                    sh "cd ${buildDir} && docker build -t ${mirror_name} ."
+                }
+            }
+        }
+        stage("deploy") {
+            steps{
+                script {
+                    if(dir_name == 'mvn-install') {
+                        return "mvn install 不用deploy"
+                    }
+                    sh '''
+                        if !(test -z "$(docker ps -a | grep -w $service_name )") then
+                            docker stop ${service_name}
+                            docker rm ${service_name}
+                        fi
+                    '''
+                    sh "docker run " +
+                        " --network=xh-admin " +
+                        " --name ${service_name} " +
+                        " -p ${outer_port}:${inner_port} " +
+                        " -e NACOS_SERVER_ADDR=${NACOS_SERVER_ADDR} " +
+                        " -e NACOS_NAMESPACE=${NACOS_NAMESPACE} " +
+                        " -e NACOS_GROUP=${NACOS_GROUP} " +
+                        " -e NACOS_USERNAME=${NACOS_USERNAME} " +
+                        " -e NACOS_PASSWROD=${NACOS_PASSWROD} " +
+                        " -e SERVER_PORT=${inner_port} " +
+                        " -d ${mirror_name} "
+                }
+            }
+        }
+    }
+}

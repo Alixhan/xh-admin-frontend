@@ -1,0 +1,115 @@
+#!groovy
+pipeline {
+//    任何节点代理节点，随机分配
+    agent any
+
+//    //可以指定到某类标签代理节点
+//    agent {
+//        label: 'windows'
+//    }
+
+//    //也可以用docker镜像创建容器代理
+//    docker {
+//        image 'maven:3.9'   //镜像地址
+//    }
+
+    options {
+        timeout(time: 2, unit: 'HOURS')  //超时时间2小时
+        retry(1)    //失败后重试次数
+    }
+
+    //使用全局工具
+    tools {
+        //引用之前全局工具配合的NodeJs的name
+        nodejs 'nodejs20.9.0'
+    }
+
+    //参数化构建
+    parameters {
+        //添加一个下拉选项，选择是发布前端项目还是发布文档
+        choice(name: 'DEPLOY_TYPE', choices: ['frontend', 'docs'], description: '发布类型')
+        //获取git仓库分支列表，并选择
+        gitParameter branchFilter: 'origin/(.*)', defaultValue: 'main', name: 'GIT_PROJECT_BRANCH', type: 'PT_BRANCH', description: '选择发布分支'
+    }
+
+    //环境变量
+    environment {
+        //用户密码凭据
+        cred_id = "gitee"
+        project_name = "xh-admin-frontend"
+        //容器名
+        service_name = "${project_name}"
+        //镜像名
+        image = "${service_name}:latest"
+        git_project_url = "https://gitee.com/sun-xiaohan/${project_name}.git"
+        outer_port = "2000"
+        profile = "production"
+        Dockerfile = '''
+            FROM nginx:1.25.3-alpine-slim
+            # 将编译好的静态文件放进nginx根目录
+            COPY dist /usr/share/nginx/html
+        '''
+    }
+
+    stages {
+        stage("拉取代码") {
+            steps {
+                //拉取代码
+                git credentialsId: cred_id, url: git_project_url, branch: GIT_PROJECT_BRANCH
+            }
+        }
+        stage("编译项目") {
+            steps {
+                sh "npm install"
+                script {
+                    //发布前端项目
+                    if(DEPLOY_TYPE == 'frontend') {
+                        sh "npm run build:${profile}"
+                    }else{
+                        //发布文档
+                        sh "npm run docs:build"
+                        //发布文档生成的dist在docs/.vitepress，移到当前目录来
+                        sh "rm -rf dist && mv docs/.vitepress/dist dist"
+                        //把容器名称调整一下
+                        service_name = 'xh-admin-docs'
+                        //把容器名称调整一下
+                        image = service_name + ':latest'
+                        //对外端口号改下
+                        outer_port = '1999'
+                    }
+                }
+            }
+        }
+        stage("构建docker镜像") {
+            steps {
+                //创建Dockerfile
+                sh "echo '${Dockerfile}' > Dockerfile"
+                //构建镜像
+                sh "docker build -t ${image} ."
+            }
+        }
+        stage("容器部署") {
+            steps {
+                sh '''
+                    if !(test -z "$(docker ps -a | grep -w $service_name )") then
+                        docker stop ${service_name}
+                        docker rm ${service_name}
+                    fi
+                    
+                    docker run \
+                        --name ${service_name} \
+                        -p ${outer_port}:80 \
+                        --restart=always \
+                        -d ${image}
+                '''
+            }
+        }
+    }
+
+    post {
+        //失败后会执行到这里，可以写一些发送邮件的逻辑放在这里提醒
+        failure {
+            echo '可以写一些发送邮件的逻辑放在这里提醒!'
+        }
+    }
+}

@@ -1,5 +1,4 @@
 ---
-lastUpdated: true
 ---
 
 # 安装
