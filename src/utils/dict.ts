@@ -1,39 +1,37 @@
 import { queryDictDetailList } from '@/api/system/dict'
+import type { DictDetailValueTypeEnum, DictDetailValueType, DictCache, DictDetail } from '@i/utils/dict'
 
-export interface DictDetail {
-  readonly sysDictTypeId: number
-  readonly parentId: number
-  readonly value: string
-  readonly label: string
-}
-
-export interface Dict {
-  readonly sysDictTypeId: number
-  details?: DictDetail[]
-  fetch?: Promise<DictDetail[]>
-}
-
-const dictMap: Map<number, Dict> = new Map()
+// 数据字典缓存map
+const dictCacheMap: Map<number, DictCache> = new Map()
 
 /**
  * 通过数据字典类型ID获取数据字典明细
- * valueType可以定制value的类型，默认为string
- * sunxh 2023-6-1
+ * valueType 可以定制 value 的类型，默认为 string
+ * sxh 2023-6-1
  */
-export function getDictDetails(dictTypeId: number, valueType?: 'boolean' | 'number'): Promise<DictDetail[]> | undefined {
-  const valueConvert = (res) => {
-    res.forEach((i) => {
+export async function getDictDetails<T extends DictDetailValueType<K>, K extends DictDetailValueTypeEnum>(dictTypeId: number, valueType?: K): Promise<DictDetail<T>[]> {
+  //数据转化方法
+  const valueConvert = (res: DictDetail<string>[]) => {
+    const details: DictDetail<T> [] = res.map((i) => {
+      let value: any = i.value
+      //转为布尔型
       if (valueType === 'boolean') {
-        if (i.value === '0') i.value = false
-        else if (i.value === 'false') i.value = false
-        else i.value = Boolean(i.value)
+        if (value === '0') value = false
+        else if (value === 'false') value = false
+        else value = Boolean(value)
       }
-      if (valueType === 'number') i.value = Number(i.value)
+      //转为数字型
+      if (valueType === 'number') value = Number(value)
+      return {
+        ...i,
+        value: value as T
+      }
     })
-    return res
+    return details
   }
 
-  let dict: Dict | undefined = dictMap.get(dictTypeId)
+  let dict: DictCache | void = dictCacheMap.get(dictTypeId)
+  //如果已缓存直接取缓存数据即可
   if (dict) {
     if (dict.details) return Promise.resolve(dict.details).then(valueConvert)
     if (dict.fetch) return dict.fetch.then(valueConvert)
@@ -50,10 +48,10 @@ export function getDictDetails(dictTypeId: number, valueType?: 'boolean' | 'numb
         delete dict!.fetch
       })
   }
-  dictMap.set(dictTypeId, dict)
+  dictCacheMap.set(dictTypeId, dict)
   return dict.fetch!.then(valueConvert)
 }
 
 export default getDictDetails
 
-export { dictMap }
+export { dictCacheMap }

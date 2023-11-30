@@ -1,5 +1,7 @@
 <template>
-  <m-svg-icon class="icon-style" :src="isFullscreen ? ExitFullScreenSvg : FullScreenSvg" inherited @click="toggle" />
+  <el-icon>
+    <m-svg-icon :src="isFullscreen ? ExitFullScreenSvg : FullScreenSvg" inherited @click="toggle" />
+  </el-icon>
 </template>
 <script setup>
 import { useFullscreen } from '@vueuse/core'
@@ -9,8 +11,4 @@ import ExitFullScreenSvg from '@/assets/icon/exitfullscreen.svg'
 const { isFullscreen, toggle } = useFullscreen()
 </script>
 <style scoped lang="scss">
-.icon-style {
-  width: 16px;
-  height: 16px;
-}
 </style>

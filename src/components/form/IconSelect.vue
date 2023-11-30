@@ -32,7 +32,7 @@
             </el-link>
           </div>
           <div style="margin-left: 20px">
-            <el-input size="small" placeholder="输入内容搜索图标" v-model="searchValue" />
+            <el-input size="small" :placeholder="$t('m.form.iconSearch')" v-model="searchValue" />
           </div>
         </div>
         <el-scrollbar class="icon-scroll" height="250px">
@@ -51,6 +51,7 @@ import { computed, nextTick, ref, shallowRef, watchEffect } from 'vue'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import MIcon from '@/components/Icon.vue'
 import { round } from 'lodash-es'
+import MSvgIcon from '@/components/SvgIcon.vue'
 // element图标
 const localSvg = import.meta.glob('@/assets/icon/**/*.svg')
 /**
@@ -59,7 +60,7 @@ const localSvg = import.meta.glob('@/assets/icon/**/*.svg')
  */
 export default {
   name: 'MIconSelect',
-  components: { MIcon },
+  components: {MSvgIcon, MIcon },
   props: {
     modelValue: {
       type: String

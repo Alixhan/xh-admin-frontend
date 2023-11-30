@@ -54,7 +54,6 @@
   </div>
 </template>
 <script setup lang="tsx">
-import type { Ref } from 'vue'
 import { reactive, ref, shallowRef } from 'vue'
 import { delUserByIds, queryUserList } from '@/api/system/user'
 import { statusList } from '@/views/system/user/constant.js'
@@ -79,7 +78,7 @@ const topFilterColumns = shallowRef([
   { prop: 'name', label: '用户名' },
 ])
 
-const columns: Ref<Array<TableColumn>> = ref([
+const columns= ref<CommonTableColumn []>([
   { type: 'index', label: '序', width: 50 },
   { prop: 'id', label: 'ID', width: 50 },
   { prop: 'code', label: '用户账号' },

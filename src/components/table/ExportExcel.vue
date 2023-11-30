@@ -2,14 +2,15 @@
   <el-button icon="Download" type="primary" text :loading="loading" @click="exportExcel"> {{ $t("m.table.export") }}
   </el-button>
 </template>
-<script setup lang="ts">
-import { ref, unref } from 'vue'
+<script setup lang="ts" generic="T extends object">
 import type { PropType } from 'vue'
+import { ref, unref } from 'vue'
 import { ElMessageBox, ElNotification } from 'element-plus'
 import { ExcelTree } from '@/utils/excel'
-import type { TableColumn } from '@/components/table/index.vue'
 import { cloneDeep } from 'lodash-es'
 import { useI18n } from 'vue-i18n'
+import type { FetchPageDataFun, PageQuery } from '@i/utils/request'
+import type { ExportExcelColumn } from '@i/utils/excel'
 
 /**
  * 通用表格导出到excel
@@ -22,13 +23,13 @@ const props = defineProps({
     required: true
   },
   fetchData: {
-    type: Function
+    type: Function as PropType<FetchPageDataFun<T>>
   },
   data: {
-    type: Array
+    type: Array as PropType<T []>
   },
   columns: {
-    type: Array as PropType<Array<TableColumn>>,
+    type: Array as PropType<ExportExcelColumn<T> []>,
     required: true
   },
   exportFileName: {
@@ -57,7 +58,7 @@ async function exportExcel() {
       if (r === 'close') return
     }
     data = await props.fetchData(pageQuery, { loadingRef: loading }).then((res) => {
-      return res.data.list
+      return res.data!.list
     })
   }
 

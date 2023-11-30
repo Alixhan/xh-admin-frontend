@@ -80,7 +80,7 @@ const columns = computed(() => [
   { prop: 'title', label: t('system.menu.title'), fixed: false, minWidth: 200 },
   { prop: 'id', label: 'ID', width: 70 },
   { prop: 'platform', label: t('system.menu.platform') },
-  { prop: 'name', label: 'name' },
+  { prop: 'name', label: 'Name' },
   { prop: 'type', label: t('system.menu.type'), type: 'select', itemList: menuTypeList },
   { prop: 'icon', label: t('system.menu.icon'), slots: { default: generateMenuIcon } },
   {

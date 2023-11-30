@@ -7,15 +7,11 @@
       <el-table-column type="index" label="序" />
       <el-table-column label="序">
         <template v-slot="scope">
-          <el-select v-model="scope.row.b">
+          <el-select v-model="scope.row.a">
             <el-option label="123" value="1" />
             <el-option label="jhgfd" value="2" />
           </el-select>
         </template>
-      </el-table-column>
-      <el-table-column label="飞飞飞" v-if="tag">
-        <el-table-column label="f1" prop="b" />
-        <el-table-column label="f2" prop="b" />
       </el-table-column>
       <el-table-column v-for="i in 4" :key="i" label="测试列" prop="b">
         <template v-slot="scope">
@@ -25,10 +21,12 @@
     </el-table>
   </div>
 </template>
-<script setup lang="jsx">
+<script setup lang="tsx">
 import { reactive, ref } from 'vue'
+import test from './test.vue'
 
-const data = ref([])
+
+const data = ref<any []>([])
 const num = ref(2)
 const formData = reactive({
   a: 'fsdfsdf',

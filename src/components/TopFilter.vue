@@ -1,10 +1,10 @@
 <script lang="jsx">
-import { computed, createVNode, defineComponent, ref, shallowRef, watchEffect } from 'vue'
-import { generateDynamicColumn, generateLabelWidth, generatePlaceholder, vModelValue } from '@/components/mutils'
-import { useSystemStore } from '@/stores/system'
-import { useElementSize } from '@vueuse/core'
+import {computed, createVNode, defineComponent, ref, shallowRef, watchEffect} from 'vue'
+import {generateDynamicColumn, generateLabelWidth, generatePlaceholder, vModelValue} from '@/components/mutils'
+import {useSystemStore} from '@/stores/system'
+import {useElementSize} from '@vueuse/core'
 import QueryIcon from '@/assets/icon/search-list.svg'
-import { useI18n } from 'vue-i18n'
+import {useI18n} from 'vue-i18n'
 
 /**
  * 筛选框组件
@@ -136,7 +136,7 @@ export default defineComponent({
                   text
                   onClick={() => (expand.value = !expand.value)}
                   type="primary"
-                  style="padding: 0 5px;"
+                  style={{padding: '0 5px'}}
               >
                 {expand.value ? t('m.topFilter.collapse') : t('m.topFilter.expand')}
               </el-button>

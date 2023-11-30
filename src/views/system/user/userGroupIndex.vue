@@ -40,7 +40,8 @@
   </div>
 </template>
 <script setup lang="tsx">
-import { reactive, ref, shallowRef } from 'vue'
+import {reactive, ref, shallowRef} from 'vue'
+import type{Ref} from 'vue'
 import { delUserGroupByIds, queryUserGroupList } from '@/api/system/user'
 import getDictDetails from '@/utils/dict'
 import UserGroupForm from '@/views/system/user/userGroupForm.vue'
@@ -59,7 +60,7 @@ const filterParam = reactive({})
 
 const topFilterColumns = shallowRef([{ prop: 'name', label: '用户组名' }])
 
-const columns = ref<TableColumn[]>([
+const columns: Ref<CommonTableColumn[]> = ref([
   { type: 'index', label: '序', width: 50 },
   { prop: 'id', label: 'ID', width: 50 },
   { prop: 'name', label: '用户组名称', minWidth: 120 },

@@ -1,6 +1,6 @@
-import type { Ref } from 'vue'
-import { createVNode, isRef, ref, toRaw } from 'vue'
-import { ruleValid } from '@/utils/validate'
+import type {Ref} from 'vue'
+import {createVNode, isRef, ref, toRaw} from 'vue'
+import {ruleValid} from '@/utils/validate'
 import {
   ElAutocomplete,
   ElCascader,
@@ -22,97 +22,18 @@ import {
   ElSwitch,
   ElTimePicker,
   ElTimeSelect,
-  ElUpload,
+  ElUpload
 } from 'element-plus'
 import SingleDatePicker from '@/components/form/SingleDatePicker.vue'
 import IconSelect from '@/components/form/IconSelect.vue'
 import MUpload from '@/components/form/Upload.vue'
-import i18n, { getCurrentLocales } from '@/i18n'
+import i18n, {getCurrentLocales} from '@/i18n'
+import type {CommonItemData, CommonModelParam, ItemListColumn} from '@i/components'
+import type {CommonFormColumn} from '@i/components/form'
+import type {CommonTableColumn} from '@i/components/table'
+import type {ValidRule} from '@i/utils/validate'
 
 const {t} = i18n.global
-
-export declare type CommonColumnType =
-  | ''
-  | 'input'
-  | 'text'
-  | 'textarea'
-  | 'password'
-  | 'number'
-  | 'year'
-  | 'month'
-  | 'date'
-  | 'dates'
-  | 'datetime'
-  | 'week'
-  | 'datetimerange'
-  | 'daterange'
-  | 'monthrange'
-  | 'icon'
-  | 'cascader'
-  | 'checkbox'
-  | 'checkbox-button'
-  | 'checkbox-group'
-  | 'color-picker'
-  | 'date-picker'
-  | 'input-number'
-  | 'radio'
-  | 'radio-button'
-  | 'radio-group'
-  | 'rate'
-  | 'select'
-  | 'select-v2'
-  | 'slider'
-  | 'switch'
-  | 'time-picker'
-  | 'time-select'
-  | 'upload'
-  | 'upload-file'
-  | 'upload-img'
-
-/**
- * 通用column类型
- */
-export interface CommonColumn {
-  prop?: string
-  prop2?: string
-  label?: string
-  style?: string
-  valueFormat?: string
-  single?: boolean | 'id' | 'object'
-  itemList?: CommonItemList
-  labelKey?: string | ((item: CommonItemData) => string | number)
-  valueKey?: string | ((item: CommonItemData) => string | number)
-  rules?: import('@/utils/validate').ValidRule | Array<import('@/utils/validate').ValidRule>
-  slots?: {
-    [slotName: string]: (any) => any
-  }
-  itemParam?: {
-    border?: boolean
-  }
-  //定义一个插槽名称，此项可以作为组件的插槽名使用
-  slotName?: string
-  [any: string]: any
-}
-
-export declare type CommonItemList =
-  | CommonItemData[]
-  | Promise<CommonItemData[]>
-  | (() => CommonItemData[] | Promise<CommonItemData[]>)
-
-export interface CommonItemData {
-  value?: number | string
-  label?: number | string
-  // [any: string]: any
-}
-
-export interface CommonModelParam {
-  start?: number | string
-  end?: number | string
-  modelValue?: any
-  'onUpdate:modelValue'?: (val: any) => void
-  'onUpdate:start'?: (val: any) => void
-  'onUpdate:end'?: (val: any) => void
-}
 
 /**
  * 构造表单动态组件参数
@@ -126,7 +47,7 @@ export function generateDynamicColumn(column: FormColumn) {
     ...column,
   }
   if (!['switch', 'radio', 'checkbox'].includes(param.type ?? '')) {
-    param.style = 'width: 100%;' + param.style ?? ''
+    param.style = 'width: 100%;' + (param.style ?? '')
   }
   const slots = {
     ...column.slots,
@@ -215,7 +136,7 @@ export function generateDynamicColumn(column: FormColumn) {
 }
 
 // 生成双向绑定属性值
-export function vModelValue(param: FormColumn & { prop: any; prop2: any }, form) {
+export function vModelValue<T extends object = any>(param: FormColumn & { prop: any; prop2: any }, form: T) {
   const returnParam: CommonModelParam = {}
   // 需要双向绑定
   if (form && param.prop) {
@@ -262,7 +183,7 @@ export function vModelValue(param: FormColumn & { prop: any; prop2: any }, form)
 /**
  * 生成默认的placeholder
  */
-export function generatePlaceholder(column) {
+export function generatePlaceholder<T extends object>(column: CommonFormColumn<T>) {
   if (!column?.prop) return
   const type = column.type ?? 'input'
   if (!Object.prototype.hasOwnProperty.call(column, 'placeholder')) {
@@ -282,9 +203,9 @@ export function generatePlaceholder(column) {
 /**
  * 生成itemListRef数据
  */
-export function getItemListRef(column: CommonColumn): Ref<CommonItemData[]> {
+export function getItemListRef(column: ItemListColumn): Ref<CommonItemData[]> {
   // 生成方法
-  const generateItemList = (data) => {
+  const generateItemList = (data: CommonItemData []) => {
     return data.map((i) => {
       let label = i.label
       let value = i.value
@@ -309,7 +230,7 @@ export function getItemListRef(column: CommonColumn): Ref<CommonItemData[]> {
   if (itemList instanceof Promise) {
     itemList.then((res) => (itemArr.value = generateItemList(res)))
   } else {
-    itemArr.value = generateItemList(itemList)
+    itemArr.value = generateItemList(itemList as CommonItemData [])
   }
   return itemArr
 }
@@ -317,46 +238,44 @@ export function getItemListRef(column: CommonColumn): Ref<CommonItemData[]> {
 /**
  * 增强el-form表单验证
  */
-export function generateFormRules(column, formData?: object) {
-  const rules = setRules(column)
+export function generateFormRules<T extends object>(column: CommonFormColumn<T>, formData: T): ValidRule<T, keyof T> [] | undefined {
+  const rules = getRules(column)
   if (!rules) return
-  column.rules = rules.map((i) => {
+  return rules.map((i) => {
     return {
       required: i.required,
       validator: async (rule, value, callback) => {
-        const errMsg = await ruleValid(i, value, formData, column.prop)
+        const errMsg = await ruleValid({
+          label: column.label,
+          prop: column.prop! as keyof T,
+          rules
+        }, i, value, formData)
         if (errMsg) callback(Error(errMsg?.toString()))
         else callback()
       },
       trigger: i.trigger,
     }
   })
-  return column.rules
 }
 
 /**
  * 设置一下rules
- * @param column
  */
-export function setRules(column) {
+export function getRules<T extends object>(column: CommonFormColumn<T>) {
   if (!column.rules) return
   let rules = column.rules
   if (!(rules instanceof Array)) {
     rules = [rules]
   }
-  rules.forEach((rule) => {
-    rule.label ??= column.label
-  })
-  column.rules = rules
-  return rules
+  return rules as ValidRule<T, keyof T> []
 }
 
 // 生成默认的formatter函数
-export function generateFormatter(tableColumParams) {
+export function generateFormatter<T extends object>(tableColumParams: TableColumn<T>) {
   // itemList需要转化一下显示
   if (tableColumParams.itemList) {
     tableColumParams.formatter ??= (row, column, cellValue) => {
-      const itemList = isRef(tableColumParams.itemList) ? tableColumParams.itemList.value : tableColumParams.itemList
+      const itemList = (isRef(tableColumParams.itemList) ? tableColumParams.itemList.value : tableColumParams.itemList) as CommonItemData []
       return itemList.find((i) => i.value === cellValue)?.label ?? cellValue
     }
   }
@@ -366,20 +285,19 @@ export function generateFormatter(tableColumParams) {
  * 自动计算一下labelWidth，以最长label字符宽度作为form的labelWidth
  * 这样就算切换语言也不会导致换行而影响美观
  */
-export function generateLabelWidth(...columns: CommonColumn []): string| number {
+export function generateLabelWidth<T extends object>(...columns: (CommonFormColumn<T> | CommonTableColumn<T>) []): string| number {
   const charWidth = getCurrentLocales().charWidth
-  const labelWidth = Math.max(
+  return Math.max(
       ...columns.map(column => {
         let width = column.label?.length ?? 0
         width *= charWidth
         //有备注疑问的加上额外宽度
-        if(column.comment) width += 18
+        if (column.comment) width += 18
         //有必填*的加上额外宽度
-        if(column.required) width += 12
+        if (column.required) width += 12
         return width
       })
   ) + 28
-  return labelWidth
 }
 
 // 通过名称获取组件对象

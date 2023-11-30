@@ -1,23 +1,43 @@
 <template>
-  <div>
-    {{ formData }}
-    <m-svg-icon />
-    <el-input v-model="formData.ssd" />
-    <el-pagination
-      v-model:current-page="formData.currentPage1"
-      :page-size="100"
-      :small="false"
-      background
-      layout="total, prev, pager, next"
-      :total="1000"
-    />
+  <div class="root">
+    <m-table class="fff" selection="single" :columns="columns" v-model:data="data" layout="auto" :height="200"/>
   </div>
 </template>
-<script setup>
-import { reactive } from 'vue'
+<script setup lang="ts">
 
-const formData = reactive({
-  currentPage1: 1,
-})
+import {ref} from 'vue'
+import type {CommonTableColumn} from '@i/components/table'
+
+const columns = ref<CommonTableColumn<any> []>([
+  {type: 'index'},
+  {type: 'operation'},
+  {label: '字段1', prop: 'fd'},
+  {label: '字段3', prop: 'gh', editable: true, editParam: {
+      rules: [
+        {required: true}
+      ],
+    }},
+  {
+    label: '字段2', prop: 'fd2', prop2: 'fd22', type: 'daterange', editable: true,
+    required: true,
+    editParam: {
+      single: true
+    }
+  },
+])
+
+const data = ref([
+  {fd: '房东', fd2: '2023-11-08', fd22: '2023-11-09'}
+])
+
 </script>
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.root {
+  background: var(--el-bg-color);
+
+  .fff {
+    padding: 20px;
+  }
+}
+
+</style>

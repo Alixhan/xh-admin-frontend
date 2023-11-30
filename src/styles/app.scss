@@ -20,7 +20,7 @@ html, body {
 }
 
 .root {
-  height: 100%;
+  height: var(--main-height);
 }
 
 
@@ -63,6 +63,18 @@ html, body {
 
   .el-dialog__body {
     padding: 20px;
+  }
+}
+
+.el-drawer {
+  min-width: min(300px, 95vw);
+  max-width: 95vw;
+
+  .el-drawer__header {
+    padding-bottom: 20px;
+    margin-bottom: 0;
+
+    border-bottom: var(--el-border);
   }
 }
 

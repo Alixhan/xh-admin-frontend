@@ -1,5 +1,7 @@
 <template>
-  <m-svg-icon class="icon-style" :src="isDark ? Sun : Moon" inherited @click="isDark = !isDark" />
+  <el-icon class="icon-style">
+    <m-svg-icon :src="isDark ? Sun : Moon" inherited @click="isDark = !isDark" />
+  </el-icon>
 </template>
 <script setup>
 import { toRef } from 'vue'
@@ -12,7 +14,5 @@ const isDark = toRef(useSystemStore().layout, 'isDark')
 <style scoped>
 .icon-style {
   cursor: pointer;
-  width: 16px;
-  height: 16px;
 }
 </style>

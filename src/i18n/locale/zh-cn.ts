@@ -31,8 +31,27 @@ const locale = {
       reduce: '缩小',
       clockwise: '顺时针',
       anticlockwise: '逆时针',
-      cutConfirmation: '确定裁剪'
-    }
+      cutConfirmation: '确定裁剪',
+      iconSearch: '输入内容搜索图标',
+      shortcuts1: '最近一周',
+      shortcuts2: '最近一个月',
+      shortcuts3: '最近三个月',
+      shortcuts4: '最近六个月',
+      shortcuts5: '当月',
+      shortcuts6: '当年',
+      shortcuts7: '上个月',
+      shortcuts8: '去年',
+      lib: '文件库',
+      selectFile: '选择文件',
+      selectFromLib: '从文件库选择',
+      imageCropper: '图片裁剪',
+      beEmpty: '{label}不能为空',
+      wrongFormat: '{label}格式不对',
+      maxlength: '{label}最大字符不超过{maxlength}',
+      minlength: '{label}不得少于{minlength}个字符',
+      valRestriction: '{label}的值只能为{enums}',
+    },
+    comment: '备注',
   },
   common: {
     tip: '提示',
@@ -58,6 +77,12 @@ const locale = {
     confirmDelete: '确认删除吗？删除后不可恢复！',
     saveSuccess: '保存成功！',
     restoreDefault: '恢复默认',
+  },
+  login: {
+    account: '请输入账号',
+    password: '请输入密码',
+    captcha: '请输入图形验证码',
+    login: '登录'
   },
   system: {
     menu: {

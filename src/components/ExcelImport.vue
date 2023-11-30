@@ -22,61 +22,41 @@
     </el-dialog>
   </div>
 </template>
-<script setup lang="ts">
+<script setup lang="ts" generic="T extends object">
 import MTable from '@/components/table/index.vue'
-import { computed, ref, unref, watchEffect } from 'vue'
-import type { ExcelColumn } from '@/utils/excel'
-import { ExcelTree } from '@/utils/excel'
+import {computed, ref, unref, watchEffect} from 'vue'
+import type {Ref} from 'vue'
+import {ExcelTree} from '@/utils/excel'
 import ExcelJS from 'exceljs'
 import dayjs from 'dayjs'
-import { ElMessage } from 'element-plus'
-import type { RuleObject, ValidResult } from '@/utils/validate'
+import {ElMessage} from 'element-plus'
+import type {RuleObject, ValidResult} from '@i/utils/validate'
 import validate from '@/utils/validate'
+import type {TableColumn} from '@i/components/table'
+import type {ExcelError, ExportExcelProps} from '@i/components/excelImport'
 
 defineOptions({
   name: 'MExcelImport',
 })
 
-// excel错误数据类型
-export interface ExcelError {
-  // 数据行号
-  num: number
-  // excel行号
-  excelNum: number
-  // 错误内容
-  error: string
-}
-
-export interface Props {
-  // 导入excel列定义
-  readonly columns: ExcelColumn[]
-  // 下载导出模板文件名称
-  readonly templateFileName?: string
-  /**
-   * 验证通过数据的回调方法
-   * @param {Function} callback 回调函数，可以做服务器验证，将服务器错误返回
-   */
-  readonly onComplete: (data: any[], callback: (err?: ExcelError[]) => void) => void
-}
-
-const props = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<ExportExcelProps<T>>(), {
   templateFileName: '导入模板.xlsx',
 })
 
 // 导入的excel数据
-const importData = ref<any[]>([])
+const importData: Ref<T[]> = ref([])
 // 下载模板loading
 const downloadLoading = ref(false)
 // 下载模板loading
 const loading = ref(false)
 // 验证的错误信息
-const errorData = ref<ExcelError[]>([])
+const errorData: Ref<ExcelError[]> = ref([])
 // error弹框
 const errorVisible = ref(false)
 
-let excelTree: ExcelTree
+let excelTree: ExcelTree<T>
 // 表格列定义
-const tableColumns = ref<TableColumn[]>([])
+const tableColumns: Ref<CommonTableColumn<T>[]> = ref([])
 watchEffect(initTableColumn)
 
 const tip = ref<{
@@ -127,7 +107,7 @@ function initTableColumn() {
 const fileRef = ref()
 
 // 错误信息表格定义
-const errorTableColumns: TableColumn[] = [
+const errorTableColumns: TableColumn<ExcelError>[] = [
   { type: 'index' },
   { prop: 'num', label: '数据行号', width: 100 },
   {
@@ -217,17 +197,21 @@ function handleFile(e) {
  */
 async function validData() {
   const data = importData.value.map((item) => Object.assign({}, item))
-  const ruleObject: RuleObject = excelTree.leafNodes.reduce((a, b) => {
-    b.rules && (a[b.prop!] = b.rules)
+  const ruleObject: RuleObject<T> = excelTree.leafNodes.reduce<RuleObject<T>>((a, b) => {
+    b.rules && (a[b.prop!] = {
+      prop: b.prop as keyof T,
+      label: b.label,
+      rules: b.rules
+    })
     return a
   }, {})
   const dataArr: any[] = [...data]
-  const rowPromiseArr: ValidResult[] = []
+  const rowPromiseArr: ValidResult<T>[] = []
   while (dataArr.length) {
     const row = dataArr.shift()
     rowPromiseArr.push(await validate(row, ruleObject))
   }
-  return Promise.all(rowPromiseArr).then((result: Array<ValidResult>) => {
+  return Promise.all(rowPromiseArr).then((result: Array<ValidResult<T>>) => {
     errorData.value = []
     result.forEach((i, num) => {
       if (i.error) {

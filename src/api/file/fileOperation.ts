@@ -1,5 +1,5 @@
 import createAxios from '@/utils/request'
-import type { AxiosProgressEvent } from 'axios/index'
+import type { AxiosProgressEvent } from 'axios'
 
 const fileBaseUrl = import.meta.env.VITE_FILE_BASE_URL
 
@@ -28,11 +28,11 @@ export function postSaveFile(params = {}, option?: RequestOption) {
 }
 
 // 获取文件详情
-export function getFileById(id) {
+export function getFileById(id: number) {
   return createAxios().get(`${fileBaseUrl}/api/file/operation/get/${id}`)
 }
 
 // 批量删除文件
-export function delFileByIds(ids, option?: RequestOption) {
+export function delFileByIds(ids: string, option?: RequestOption) {
   return createAxios(option).delete(`${fileBaseUrl}/api/file/operation/del`, { params: { ids } })
 }

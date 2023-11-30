@@ -18,11 +18,11 @@ export function postSaveDictDetail(params = {}, option?: RequestOption) {
 }
 
 // 获取数据字典明细详情
-export function getDictDetailById(id) {
-  return createAxios().get(`${systemBaseUrl}/api/system/dict/detail/get/${id}`)
+export function getDictDetailById(id: number) {
+  return createAxios<string>().get(`${systemBaseUrl}/api/system/dict/detail/get/${id}`)
 }
 
-// 批量删除文件
-export function delDictDetailByIds(ids, option?: RequestOption) {
+// 批量删除数据字典明细
+export function delDictDetailByIds(ids: string, option?: RequestOption) {
   return createAxios(option).delete(`${systemBaseUrl}/api/system/dict/detail/del`, { params: { ids } })
 }

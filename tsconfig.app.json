@@ -1,10 +1,8 @@
 {
   "extends": "@vue/tsconfig/tsconfig.dom.json",
   "include": [
-    "src/**/*.tsx",
-    "src/**/*.ts",
-    "src/**/*.mts",
-    "src/**/*.vue",
+    "src/**/*",
+    "interface/**/*",
     "types/**/*.d.ts"
   ],
   "exclude": [
@@ -12,21 +10,23 @@
     "node_modules/**/*.d.ts"
   ],
   "compilerOptions": {
+    "outDir": "dist",
+    "declaration": false,
     "noImplicitAny": false,
     "allowJs": true,
     "strict": true,
     "isolatedModules": true,
     "jsx": "preserve",
+    "jsxImportSource": "vue",
     "composite": true,
     "moduleResolution": "Node",
     "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "./src/*"
-      ]
+      "@/*": ["src/*"],
+      "@i/*": ["interface/*"]
     },
     "types": [
-      "vite/client",
+      "vite/client"
     ],
     "target": "esnext",
     "useDefineForClassFields": true,
@@ -35,6 +35,5 @@
     "sourceMap": false,
     "resolveJsonModule": true,
     "esModuleInterop": true,
-    "lib": ["esnext", "dom"],
   }
 }

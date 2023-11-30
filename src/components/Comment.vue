@@ -1,16 +1,15 @@
 <template>
-  <el-icon class="comment-icon" title="点击查看详细说明" @click.stop="openComment">
-    <QuestionFilled />
+  <el-icon class="comment-icon" :title="$t('m.comment')" @click.stop="openComment">
+    <QuestionFilled/>
   </el-icon>
 </template>
 <script setup>
-import { ElMessageBox } from 'element-plus'
+import {ElMessageBox} from 'element-plus'
 
 /**
  * 疑问说明组件
  * sxh 2023-4-10
  */
-
 defineOptions({
   name: 'MComment',
 })

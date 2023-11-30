@@ -2,11 +2,11 @@
   <div ref="cropperRoot">
     <el-scrollbar class="m-form-scroll">
       <div class="cropperView">
-        <vue-cropper ref="cropper" :style="itemStyle" v-bind="ctx" />
+        <vue-cropper ref="cropper" :style="itemStyle" v-bind="ctx"/>
         <div class="item-class" :style="itemStyle" style="background-color: var(--el-border-color)">
           <div style="overflow: hidden; margin: 5px" :style="{ width: previews.w + 'px', height: previews.h + 'px' }">
             <div :style="previews.div" class="preview-view">
-              <img :src="previews.url" :style="previews.img" alt="" />
+              <img :src="previews.url" :style="previews.img" alt=""/>
             </div>
           </div>
         </div>
@@ -33,13 +33,15 @@
  */
 import * as _vueCropper from 'vue-cropper'
 import 'vue-cropper/dist/index.css'
-import { computed, ref, useAttrs, watchEffect } from 'vue'
-import { useElementSize } from '@vueuse/core'
+import {computed, ref, useAttrs, watchEffect} from 'vue'
+import {useElementSize} from '@vueuse/core'
+import {ElUpload, uploadProps} from 'element-plus'
 
-const { VueCropper } = _vueCropper
+const {VueCropper} = _vueCropper
 
 defineOptions({
-  name: 'MCropper'
+  name: 'MCropper',
+  extends: ElUpload
 })
 
 const emit = defineEmits<{
@@ -47,6 +49,7 @@ const emit = defineEmits<{
 }>()
 
 const props = defineProps({
+  ...uploadProps,
   img: {
     type: String
   },
@@ -90,13 +93,13 @@ function onRealTime(data) {
   previews.value = data
 }
 
-function changeScale(num) {
+function changeScale(num: number) {
   num = num || 1
   cropper.value.changeScale(num)
 }
 
 function sure() {
-  cropper.value.getCropBlob((blob) => {
+  cropper.value.getCropBlob((blob: Blob) => {
     emit('cropper', blob)
   })
 }

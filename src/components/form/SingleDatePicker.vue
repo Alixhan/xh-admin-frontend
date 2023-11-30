@@ -1,143 +1,142 @@
 <template>
   <div class="m-single-date-picker" :style="{ lineHeight: inputHeight }">
-    <el-date-picker v-bind="startParam" :model-value="$props.start" />
-    <el-text style="font-weight: bold; padding: 0 5px;">{{ $props.rangeSeparator ?? '-' }}</el-text>
-    <el-date-picker v-bind="endParam" :model-value="$props.end" />
+    <el-date-picker v-bind="startParam" :model-value="props.start"/>
+    <el-text style="font-weight: bold; padding: 0 5px;">{{ props.rangeSeparator ?? '-' }}</el-text>
+    <el-date-picker v-bind="endParam" :model-value="props.end"/>
   </div>
 </template>
-<script>
-import { defineComponent, toRef } from 'vue'
+<script lang="ts" setup>
+import {toRef, useAttrs} from 'vue'
 import dayjs from 'dayjs'
+import {useI18n} from 'vue-i18n'
+import {singleDatePickerProps} from '@i/components/singleDatePicker'
+
+const {t} = useI18n()
+
+defineOptions({
+  inheritAttrs: false,
+  name: 'MSingleDatePicker',
+})
+
+const attrs = useAttrs()
+const emit = defineEmits(['update:start', 'update:end'])
+const props = defineProps({...singleDatePickerProps})
+const type = toRef(props, 'type').value!.replace('range', '')
+
+const shortcuts = [
+  {
+    text: t('m.form.shortcuts1'),
+    value() {
+      const start = dayjs().subtract(1, 'week').toDate()
+      updateEnd(getFormatDate(new Date()))
+      return start
+    }
+  },
+  {
+    text: t('m.form.shortcuts2'),
+    value() {
+      const start = dayjs().subtract(1, 'month').toDate()
+      updateEnd(getFormatDate(new Date()))
+      return start
+    }
+  },
+  {
+    text: t('m.form.shortcuts3'),
+    value() {
+      const start = dayjs().subtract(3, 'month').toDate()
+      updateEnd(getFormatDate(new Date()))
+      return start
+    }
+  },
+  {
+    text: t('m.form.shortcuts4'),
+    value() {
+      const start = dayjs().subtract(6, 'month').toDate()
+      updateEnd(getFormatDate(new Date()))
+      return start
+    }
+  },
+  {
+    text: t('m.form.shortcuts5'),
+    value() {
+      const start = dayjs().date(1).toDate()
+      updateEnd(getFormatDate(new Date()))
+      return start
+    }
+  },
+  {
+    text: t('m.form.shortcuts6'),
+    value() {
+      const start = dayjs().month(0).date(1).toDate()
+      updateEnd(getFormatDate(new Date()))
+      return start
+    }
+  },
+  {
+    text: t('m.form.shortcuts7'),
+    value() {
+      const start = dayjs().subtract(1, 'month').date(1).toDate()
+      const end = dayjs().date(1).subtract(1, 'day').toDate()
+      updateEnd(getFormatDate(end))
+      return start
+    }
+  },
+  {
+    text: t('m.form.shortcuts8'),
+    value() {
+      const start = dayjs().subtract(1, 'year').month(0).date(1).toDate()
+      const end = dayjs().month(0).date(1).subtract(1, 'day').toDate()
+      updateEnd(getFormatDate(end))
+      return start
+    }
+  }
+]
+
+function getFormatDate(date) {
+  if (props.valueFormat) date = dayjs(date).format(props.valueFormat)
+  return date
+}
+
+function updateStart(val: string) {
+  emit('update:start', val)
+}
+
+function updateEnd(val: string) {
+  emit('update:end', val)
+}
+
+const inputHeight = `var(--el-component-size${attrs.size ? '-' + attrs.size : ''})`
+
+const startParam = {
+  ...attrs,
+  ...props,
+  key: '1',
+  placeholder: toRef(props, 'startPlaceholder').value,
+  className: 'date-picker',
+  type,
+  'onUpdate:modelValue': updateStart,
+  shortcuts,
+  disabledDate(date) {
+    if (props.end) return date.getTime() > new Date(props.end).getTime()
+  }
+}
+const endParam = {
+  ...attrs,
+  ...props,
+  key: '2',
+  placeholder: toRef(props, 'endPlaceholder').value,
+  className: 'date-picker',
+  type,
+  'onUpdate:modelValue': updateEnd,
+  disabledDate(date) {
+    if (props.start) return date.getTime() < new Date(props.start).getTime()
+  }
+}
 
 /**
  * 独立分开的日期区间picker
  * sxh 2023-3-15
  */
-export default defineComponent({
-  inheritAttrs: false,
-  name: 'MSingleDatePicker',
-  props: ['start', 'end', 'valueFormat', 'type', 'startPlaceholder', 'endPlaceholder', 'rangeSeparator'],
-  emits: ['update:start', 'update:end'],
-  setup(props, { attrs, emit }) {
-    const type = toRef(props, 'type').value.replace('range', '')
-
-    const shortcuts = [
-      {
-        text: '最近一周',
-        value() {
-          const start = dayjs().subtract(1, 'week').toDate()
-          updateEnd(getFormatDate(new Date()))
-          return start
-        }
-      },
-      {
-        text: '最近一个月',
-        value() {
-          const start = dayjs().subtract(1, 'month').toDate()
-          updateEnd(getFormatDate(new Date()))
-          return start
-        }
-      },
-      {
-        text: '最近三个月',
-        value() {
-          const start = dayjs().subtract(3, 'month').toDate()
-          updateEnd(getFormatDate(new Date()))
-          return start
-        }
-      },
-      {
-        text: '最近六个月',
-        value() {
-          const start = dayjs().subtract(6, 'month').toDate()
-          updateEnd(getFormatDate(new Date()))
-          return start
-        }
-      },
-      {
-        text: '当月',
-        value() {
-          const start = dayjs().date(1).toDate()
-          updateEnd(getFormatDate(new Date()))
-          return start
-        }
-      },
-      {
-        text: '当年',
-        value() {
-          const start = dayjs().month(0).date(1).toDate()
-          updateEnd(getFormatDate(new Date()))
-          return start
-        }
-      },
-      {
-        text: '上个月',
-        value() {
-          const start = dayjs().subtract(1, 'month').date(1).toDate()
-          const end = dayjs().date(1).subtract(1, 'day').toDate()
-          updateEnd(getFormatDate(end))
-          return start
-        }
-      },
-      {
-        text: '去年',
-        value() {
-          const start = dayjs().subtract(1, 'year').month(0).date(1).toDate()
-          const end = dayjs().month(0).date(1).subtract(1, 'day').toDate()
-          updateEnd(getFormatDate(end))
-          return start
-        }
-      }
-    ]
-
-    function getFormatDate(date) {
-      if (props.valueFormat) date = dayjs(date).format(props.valueFormat)
-      return date
-    }
-
-    function updateStart(val) {
-      emit('update:start', val)
-    }
-
-    function updateEnd(val) {
-      emit('update:end', val)
-    }
-
-    const inputHeight = `var(--el-component-size${attrs.size ? '-' + attrs.size : ''})`
-
-    const startParam = {
-      ...attrs,
-      ...props,
-      key: '1',
-      placeholder: toRef(props, 'startPlaceholder').value,
-      className: 'date-picker',
-      type,
-      'onUpdate:modelValue': updateStart,
-      shortcuts,
-      disabledDate(date) {
-        if (props.end) return date.getTime() > new Date(props.end).getTime()
-      }
-    }
-    const endParam = {
-      ...attrs,
-      ...props,
-      key: '2',
-      placeholder: toRef(props, 'endPlaceholder').value,
-      className: 'date-picker',
-      type,
-      'onUpdate:modelValue': updateEnd,
-      disabledDate(date) {
-        if (props.start) return date.getTime() < new Date(props.start).getTime()
-      }
-    }
-
-    return {
-      inputHeight,
-      startParam,
-      endParam
-    }
-  }
-})
 </script>
 <style scoped lang="scss">
 .m-single-date-picker {

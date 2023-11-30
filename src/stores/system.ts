@@ -114,7 +114,7 @@ export const useSystemStore = defineStore('system', () => {
     size: useLocalStorage<LayoutSize>('size', 'default'),
     isDark: useDark(),
     layoutMode: 'Default',
-    mainAnimation: 'slide-left',
+    mainAnimation: 'el-fade-in',
     menuWidth: useLocalStorage('menuWidth', 200),
     menuCollapse: false,
     menuUniqueOpened: useLocalStorage('menuUniqueOpened', false),
@@ -420,5 +420,6 @@ export const useSystemStore = defineStore('system', () => {
     refresh,
     setRefresh,
     setLocale,
+    loginStatus,
   }
 })

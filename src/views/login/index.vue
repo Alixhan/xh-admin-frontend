@@ -7,24 +7,22 @@
     }"
   >
     <div class="image-bg" />
-    <div
-      class="login-view"
-      :class="{
-        'width-layout-shrink': systemStore.layout.windowWidth < 500,
-      }"
-    >
-      <SwitchStyle class="switch-style" />
+    <div class="login-view">
+      <div class="action-view">
+        <SwitchLocale />
+        <SwitchStyle />
+      </div>
       <div class="card-view">
         <div class="title-system">{{ title }}</div>
         <el-form class="form-view" @keyup.enter="submit" ref="formRef" :rules="rules" size="large" :model="formData">
           <el-form-item prop="username">
-            <el-input type="text" clearable v-model="formData.username" placeholder="请输入账号" prefix-icon="User" />
+            <el-input type="text" clearable v-model="formData.username" :placeholder="$t('login.account')" prefix-icon="User" />
           </el-form-item>
           <el-form-item prop="password">
             <el-input
               v-model="formData.password"
               type="password"
-              placeholder="请输入密码"
+              :placeholder="$t('login.password')"
               show-password
               clearable
               prefix-icon="Unlock"
@@ -34,7 +32,7 @@
             <div style="display: inline-flex; width: 100%">
               <el-input
                 v-model="formData.captchaCode"
-                placeholder="请输入图形验证码"
+                :placeholder="$t('login.captcha')"
                 clearable
                 :prefix-icon="captchaIcon"
               >
@@ -46,11 +44,11 @@
           <!--            <el-link type="primary" icon="QuestionFilled"> 忘记密码</el-link>-->
           <!--          </div>-->
           <el-button :loading="loading" class="submit-button" round type="primary" size="large" @click="submit">
-            登录
+            {{ $t('login.login') }}
           </el-button>
         </el-form>
       </div>
-      <icpba />
+      <icpba class="icp" />
     </div>
   </el-scrollbar>
 </template>
@@ -63,6 +61,7 @@ import SwitchStyle from '@/layout/default/action/switchStyle.vue'
 import Icpba from '@/layout/icpba.vue'
 import { v4 as uuidv4 } from 'uuid'
 import MIcon from '@/components/Icon.vue'
+import SwitchLocale from '@/layout/default/action/switchLocale.vue'
 
 defineOptions({
   name: 'SystemLogin',
@@ -145,11 +144,14 @@ function submit() {
   flex-direction: column;
   align-items: center;
 
-  .switch-style {
+  .action-view {
     align-self: end;
     margin-top: 20px;
     margin-right: 20px;
     z-index: 3;
+    display: flex;
+    align-items: center;
+    gap: 15px;
   }
 
   .title-system {
@@ -168,7 +170,7 @@ function submit() {
     //box-shadow: var(--el-box-shadow);
     padding: 20px;
     position: relative;
-    width: 350px;
+    width: min(350px, 80%);
     background: rgba(0, 0, 0, 0.2);
     margin-top: 12%;
 
@@ -211,12 +213,6 @@ function submit() {
       background: rgba(0, 0, 0, 0.5);
     }
   }
-
-  .width-layout-shrink {
-    .card-view {
-      background-color: inherit;
-    }
-  }
 }
 
 .width-layout-shrink {
@@ -239,5 +235,11 @@ function submit() {
     inset: auto;
     margin: 20px 0;
   }
+}
+.icp {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }
 </style>

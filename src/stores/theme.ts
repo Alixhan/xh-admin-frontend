@@ -98,7 +98,11 @@ export const useThemeStore = defineStore('theme', () => {
   }
 
   const themeList = ref([
-    { id: 'default', label: '默认' },
+    {
+      id: 'default',
+      label: '默认',
+      primary: '#409eff',
+    },
     {
       id: '石板',
       label: '石板',

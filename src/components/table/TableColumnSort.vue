@@ -33,8 +33,8 @@
 import type { PropType } from 'vue'
 import { ref, watchEffect } from 'vue'
 import { useI18n } from 'vue-i18n'
-import type { TableSortColumn } from '@/components/table/index.vue'
 import type Node from 'element-plus/es/components/tree/src/model/node'
+import type { TableSortColumn } from '@i/components/table'
 
 /**
  * 通用表格列排序

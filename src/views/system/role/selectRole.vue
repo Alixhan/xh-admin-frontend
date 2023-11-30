@@ -31,7 +31,6 @@ import { ref, shallowRef } from 'vue'
 import type { PropType } from 'vue'
 import { queryRoleList } from '@/api/system/role'
 import getDictDetails from '@/utils/dict'
-import type { TableSelection } from '@/components/table/index.vue'
 
 defineProps({
   selection: {

@@ -1,6 +1,8 @@
 <template>
   <div class="root">
     <m-table
+        layout="stretch"
+        is-i18n-label
       class="m-table"
       ref="tableRef"
       form-type="add"

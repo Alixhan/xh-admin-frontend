@@ -1,5 +1,5 @@
 <template>
-  <el-dropdown trigger="click" @command="handleCommand" style="padding: 0">
+  <el-dropdown trigger="click" @command="handleCommand">
     <div class="switch-locale-view">
       <component :is="menus[systemStore.locale].icon" />
     </div>
@@ -26,9 +26,7 @@ import { switchLocale } from '@/api/system/user'
 const menus = locales.reduce((obj, i) => {
   obj[i.key] = {
     label: i.label,
-    icon: <el-icon>
-      <m-svg-icon src={i.icon} inherited />
-    </el-icon>
+    icon: <el-icon><m-svg-icon src={i.icon} inherited /></el-icon>
   }
   return obj
 }, {})
@@ -38,23 +36,24 @@ const systemStore = useSystemStore()
 const i18n = useI18n()
 
 //切换语言
-function handleCommand(key) {
+async function handleCommand(key) {
   const locale = locales.find(i => i.key === key)
-  switchLocale({
-    locale: locale.key,
-    localeLabel: locale.label
-  }, {
-    errorMsg: '切换语言失败',
-  }).then(() => {
-    i18n.locale.value = key
-    systemStore.setLocale(key)
-  })
+  if(systemStore.loginStatus === 'success') {
+    await switchLocale({
+      locale: locale.key,
+      localeLabel: locale.label
+    }, {
+      errorMsg: '切换语言失败',
+    })
+  }
+  i18n.locale.value = key
+  systemStore.setLocale(key)
 }
 </script>
 <style scoped lang="scss">
 .switch-locale-view {
   display: flex;
   align-items: center;
-  padding: 0 8px;
+  cursor: pointer;
 }
 </style>

@@ -6,7 +6,7 @@ export const loading = {
     show: () => {
         const bodyE = document.body
         const div = document.createElement('div')
-        div.className = 'block-loading'
+        div.className = 'loading-view'
         div.innerHTML = `
           <div class="dot-view">
             <div class="dot-item dot-item1"></div>
@@ -14,9 +14,15 @@ export const loading = {
             <div class="dot-item dot-item3"></div>
             <div class="dot-item dot-item4"></div>
           </div>
-          <div style="margin-top: 10px; font-size: var(--el-font-size-base)">正在加载..</div>
+          <div class="dot-view shadow-view">
+            <div class="dot-item dot-item1"></div>
+            <div class="dot-item dot-item2"></div>
+            <div class="dot-item dot-item3"></div>
+            <div class="dot-item dot-item4"></div>
+          </div>
+          <div style="margin-top: 10px; font-size: var(--el-font-size-base)">Loading..</div>
           <style>
-            .block-loading {
+            .loading-view {
               position: fixed;
               display: flex;
               flex-direction: column;
@@ -35,6 +41,13 @@ export const loading = {
                 grid-template-columns: repeat(2, 10px);
                 animation: xz 1.5s infinite linear;
             }
+            
+            .shadow-view{
+                margin-top: -12px;
+                >div{
+                filter: blur(4px)
+                }
+            }
 
             .dot-item{
                 background-color: var(--el-color-primary);
@@ -42,23 +55,24 @@ export const loading = {
                 height: 100%;
                 border-radius: 50%;
                 animation: bs 1.5s infinite linear;
+                transform-style: preserve-3d;
             }
             .dot-item2{
-                animation-delay: 0.4s;
+                animation-delay: 0.3s;
             }
             .dot-item3{
-                animation-delay: 0.8s;
+                animation-delay: 0.7s;
             }
             .dot-item4{
-                animation-delay: 1.2s;
+                animation-delay: 1.1s;
             }
 
             @keyframes xz {
                 from {
-                    transform: rotateX(50deg) rotate(0);
+                    transform: perspective(100px) rotateX(55deg) rotate(0);
                 }
                 to {
-                    transform: rotateX(50deg) rotate(360deg);
+                    transform: perspective(100px) rotateX(55deg) rotate(360deg);
                 }
             }
             @keyframes bs {
@@ -76,14 +90,14 @@ export const loading = {
     },
     hide: () => {
         return nextTick(() => {
-            const el = document.querySelector('.block-loading')
+            const el = document.querySelector('.loading-view')
             el && el.parentNode?.removeChild(el)
         })
     },
     delayHide: () => {
         if (isLoading.value) {
             isLoading.value = false
-            setTimeout(() => loading.hide(), 1000)
+            setTimeout(() => loading.hide(), 800)
         }
     }
 }

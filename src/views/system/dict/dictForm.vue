@@ -32,7 +32,7 @@
       destroy-on-close
       align-center
       :close-on-click-modal="false"
-      width="70%"
+      width="1000px"
       append-to-body
     >
       <selectDictType
@@ -50,7 +50,7 @@
       append-to-body
       align-center
       :close-on-click-modal="false"
-      width="70%"
+      width="1000px"
     >
       <selectDictDetail
         selection="single"
@@ -97,6 +97,9 @@ if (handleType.value !== 'add') {
   })
 }
 
+const visible1 = ref(false)
+const visible2 = ref(false)
+
 // 表单字段根据表单数据变化，有所不同
 const columns = ref([])
 watchEffect(() => {
@@ -129,9 +132,6 @@ watchEffect(() => {
     { prop: 'enabled', label: '是否启用', type: 'switch' },
   ]
 })
-
-const visible1 = ref(false)
-const visible2 = ref(false)
 
 // 选择了数据字典类型
 function selectedDictType(rows) {

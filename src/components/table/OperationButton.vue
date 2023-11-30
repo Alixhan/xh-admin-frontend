@@ -2,7 +2,7 @@
   <div class="operation-button">
     <template v-for="(item, index) in arr1" :key="index">
       <el-divider v-if="index !== 0" direction="vertical" />
-      <el-link :underline="false" v-bind="item">{{ item.label }}</el-link>
+      <el-link :underline="false" v-bind="item as any">{{ item.label }}</el-link>
     </template>
     <template v-if="arr2.length">
       <el-divider direction="vertical" />
@@ -28,11 +28,12 @@
     </template>
   </div>
 </template>
-<script lang="ts" setup>
+<script lang="ts" setup generic="T">
 import { ref, toRef, watch } from 'vue'
 import { auth as auth2 } from '@/directive'
 import { ElDropdown, ElDropdownMenu, ElLink } from 'element-plus'
 import { DefaultMaxCount } from '@/components/constants'
+import type { OperationButton, OperationButtonProps } from '@i/components/table'
 
 /**
  * 操作按钮，主要简化表格按钮的控制，超出的按钮归纳在更多的下拉菜单里
@@ -45,41 +46,24 @@ defineOptions({
   name: 'MOperationButton',
 })
 
-export interface OperationButton {
-  type?: 'default' | 'success' | 'warning' | 'info' | 'primary' | 'danger'
-  label: string
-  icon?: string
-  auth?: string | string[]
-  authLogic?: 'and' | 'or'
-  onClick?: any
-  disabled?: ((row: any) => boolean) | any
-}
-
-export interface Props {
-  readonly auth?: boolean
-  readonly row?: object
-  readonly maxCount?: number
-  readonly buttons: OperationButton[]
-}
-
-const props = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<OperationButtonProps<T>>(), {
   auth: false,
   maxCount: DefaultMaxCount,
 })
 
 // 需要收纳
 const storage = ref(false)
-const arr1 = ref<Array<OperationButton>>([])
-const arr2 = ref<Array<OperationButton>>([])
+const arr1 = ref<Array<OperationButton<T>>>([])
+const arr2 = ref<Array<OperationButton<T>>>([])
 
 init()
 watch(
-  () => props.buttons,
+  () => [props.buttons, props.buttons.length],
   () => init()
 )
 
 function init() {
-  const buttons: OperationButton[] = toRef(props, 'buttons').value.map((i) => {
+  const buttons: OperationButton<T>[] = toRef(props, 'buttons').value.map((i) => {
     return {
       type: 'primary',
       ...i,

@@ -106,7 +106,7 @@ watchEffect(() => {
 
 const jobData = ref<any[]>([])
 
-const memberColumns = ref<TableColumn[]>([])
+const memberColumns = ref<CommonTableColumn[]>([])
 watchEffect(() => {
   memberColumns.value = [
     {

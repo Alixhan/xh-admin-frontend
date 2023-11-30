@@ -1,26 +1,27 @@
 <template>
   <div>
     <el-button type="primary">辅导费</el-button>
-    <el-switch v-model="formLoading" />
+    <el-switch v-model="formLoading"/>
     <el-select v-model="handleType" placeholder="handleType">
       <el-option value="add">add</el-option>
       <el-option value="edit">edit</el-option>
       <el-option value="detail">detail</el-option>
     </el-select>
     <m-form
-      ref="formRef"
-      :colspan="24"
-      :columns="columns"
-      :model="formData"
-      label-position="top"
-      :handleType="handleType"
-      :loading="formLoading"
+        ref="formRef"
+        :colspan="24"
+        :columns="columns"
+        :model="formData"
+        label-position="top"
+        :handleType="handleType"
+        :loading="formLoading"
     />
     <el-button type="primary" @click="submit">提交表单</el-button>
   </div>
 </template>
-<script setup lang="jsx" name="FormDemo">
-import { reactive, ref } from 'vue'
+<script setup lang="tsx">
+import {reactive, ref} from 'vue'
+import type {CommonFormColumn} from '@i/components/form'
 
 const formRef = ref()
 const handleType = ref('add')
@@ -29,16 +30,16 @@ const formLoading = ref(false)
 const formData = reactive({})
 
 // 表单列定义
-const columns = ref([
-  { prop: 'input', label: 'input输入框' },
+const columns = ref<CommonFormColumn<any> []>([
+  {prop: 'input', label: 'input输入框'},
   {
     prop: 'select',
     label: 'select选择框',
     type: 'select',
     itemList: [
-      { value: '1', label: '选我发大财' },
-      { value: '2', label: '选我心想事成' },
-      { value: '3', label: '选身体健康' },
+      {value: '1', label: '选我发大财'},
+      {value: '2', label: '选我心想事成'},
+      {value: '3', label: '选我身体健康'},
     ],
   },
   {
@@ -49,9 +50,9 @@ const columns = ref([
     valueKey: 'id',
     labelKey: 'name',
     itemList: [
-      { id: '1', name: '选我发大财' },
-      { id: '2', name: '选我心想事成' },
-      { id: '3', name: '选我身体健康' },
+      {id: '1', name: '选我发大财'},
+      {id: '2', name: '选我心想事成'},
+      {id: '3', name: '选我身体健康'},
     ],
   },
   {
@@ -60,13 +61,13 @@ const columns = ref([
     type: 'autocomplete',
     fetchSuggestions(queryString, callbback) {
       const res = [
-        { value: 'vue', link: 'https://github.com/vuejs/vue' },
-        { value: 'element', link: 'https://github.com/ElemeFE/element' },
-        { value: 'cooking', link: 'https://github.com/ElemeFE/cooking' },
-        { value: 'mint-ui', link: 'https://github.com/ElemeFE/mint-ui' },
-        { value: 'vuex', link: 'https://github.com/vuejs/vuex' },
-        { value: 'vue-router', link: 'https://github.com/vuejs/vue-router' },
-        { value: 'babel', link: 'https://github.com/babel/babel' },
+        {value: 'vue', link: 'https://github.com/vuejs/vue'},
+        {value: 'element', link: 'https://github.com/ElemeFE/element'},
+        {value: 'cooking', link: 'https://github.com/ElemeFE/cooking'},
+        {value: 'mint-ui', link: 'https://github.com/ElemeFE/mint-ui'},
+        {value: 'vuex', link: 'https://github.com/vuejs/vuex'},
+        {value: 'vue-router', link: 'https://github.com/vuejs/vue-router'},
+        {value: 'babel', link: 'https://github.com/babel/babel'},
       ]
       callbback(res.filter((i) => i.value.indexOf(queryString) !== -1))
     },
@@ -241,16 +242,16 @@ const columns = ref([
       console.log(val)
     },
   },
-  { prop: 'checkbox', label: 'checkbox', type: 'checkbox' },
+  {prop: 'checkbox', label: 'checkbox', type: 'checkbox'},
   {
     prop: 'checkboxgroup',
     label: 'checkbox-group多选框组',
     type: 'checkbox-group',
     comment: '可以传入valueKey指定数据对象的value属性，labelKey指定对象的label属性',
     itemList: [
-      { value: '1', label: '选我发大财' },
-      { value: '2', label: '选我心想事成' },
-      { value: '3', label: '选身体健康' },
+      {value: '1', label: '选我发大财'},
+      {value: '2', label: '选我心想事成'},
+      {value: '3', label: '选身体健康'},
     ],
   },
   {
@@ -258,7 +259,7 @@ const columns = ref([
     label: 'color-picker颜色选择器',
     type: 'color-picker',
   },
-  { prop: 'date', label: '日期选择', type: 'date' },
+  {prop: 'date', label: '日期选择', type: 'date'},
   {
     prop: 'datedaterange',
     prop2: 'datedaterange2',
@@ -278,16 +279,16 @@ const columns = ref([
     label: 'Input Number 数字输入框',
     type: 'input-number',
   },
-  { prop: 'radio', label: 'radio', type: 'radio' },
+  {prop: 'radio', label: 'radio', type: 'radio'},
   {
     prop: 'radiogroup',
     label: 'radio-group单选选框组',
     type: 'radio-group',
     comment: '可以传入valueKey指定数据对象的value属性，labelKey指定对象的label属性',
     itemList: [
-      { value: '1', label: '选我发大财' },
-      { value: '2', label: '选我心想事成' },
-      { value: '3', label: '选身体健康' },
+      {value: '1', label: '选我发大财'},
+      {value: '2', label: '选我心想事成'},
+      {value: '3', label: '选身体健康'},
     ],
   },
   {
@@ -295,31 +296,31 @@ const columns = ref([
     label: 'radio-group单选选框组，定制子选项的属性',
     type: 'radio-group',
     comment:
-      '和select一样，可以传入valueKey指定数据对象的value属性，labelKey指定对象的label属性, 还可以设置itemParam的值定制option选项的属性， checkbox同理',
+        '和select一样，可以传入valueKey指定数据对象的value属性，labelKey指定对象的label属性, 还可以设置itemParam的值定制option选项的属性， checkbox同理',
     valueKey: 'id',
     itemList: [
-      { id: '1', label: '选我发大财' },
-      { id: '2', label: '选我心想事成' },
-      { id: '3', label: '选身体健康' },
+      {id: '1', label: '选我发大财'},
+      {id: '2', label: '选我心想事成'},
+      {id: '3', label: '选身体健康'},
     ],
     itemParam: {
       border: false,
     },
   },
-  { prop: 'rate', label: 'rate评分', type: 'rate' },
-  { prop: 'slider', label: 'rate滑块', type: 'slider' },
-  { prop: 'switch', label: 'switch开关', type: 'switch' },
+  {prop: 'rate', label: 'rate评分', type: 'rate'},
+  {prop: 'slider', label: 'rate滑块', type: 'slider'},
+  {prop: 'switch', label: 'switch开关', type: 'switch'},
   {
     prop: 'input2',
     label: '输入框验证',
     comment: '验证在兼容原element验证的基础上进行了增强,如：默认将label拼接至错误消息中，添加了一些常用的验证等， 具体可以查看/utils/validate.js',
-    rules: [{ required: true, type: 'number' }],
+    rules: [{required: true, type: 'number'}],
   },
   {
     prop: 'file',
     label: '图片上传',
     type: 'upload-img',
-    rules: [{ required: true, trigger: 'change' }],
+    rules: [{required: true, trigger: 'change'}],
     multiple: true,
     limit: 5,
   },
@@ -329,7 +330,7 @@ const columns = ref([
     type: 'upload-img',
     limit: 5,
     comment: (
-      <span>
+        <span>
         裁剪功能引用vue-cropper组件，更多裁剪属性定制参考官网文档，
         <a href="https://github.com/xyxiao001/vue-cropper#readme" target="_blank">
           https://github.com/xyxiao001/vue-cropper#readme
@@ -344,7 +345,7 @@ const columns = ref([
     type: 'upload-img',
     limit: 5,
     comment: (
-      <span>
+        <span>
         裁剪功能引用vue-cropper组件，更多裁剪属性定制参考官网文档，
         <a href="https://github.com/xyxiao001/vue-cropper#readme" target="_blank">
           https://github.com/xyxiao001/vue-cropper#readme

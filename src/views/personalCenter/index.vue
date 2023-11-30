@@ -65,7 +65,7 @@ const formLoading = ref(true)
 const saveLoading = ref(false)
 const formRef = ref()
 
-getUserById(systemStore.user.id).then((res) => {
+getUserById(systemStore.user.id!).then((res) => {
   formData.value = res.data
   formData.value.password = ''
   formLoading.value = false
@@ -84,6 +84,4 @@ function save() {
 }
 </script>
 <style lang="scss" scoped>
-.root {
-}
 </style>

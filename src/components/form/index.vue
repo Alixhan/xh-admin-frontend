@@ -1,7 +1,5 @@
 <script lang="tsx">
-import { createVNode, provide, ref, shallowRef, watchEffect, computed } from 'vue'
-import type { PropType } from 'vue'
-import { ElForm } from 'element-plus'
+import {computed, createVNode, provide, ref, shallowRef, watchEffect} from 'vue'
 import {
   generateDynamicColumn,
   generateFormRules,
@@ -9,21 +7,10 @@ import {
   generatePlaceholder,
   vModelValue
 } from '@/components/mutils'
-import type { CommonColumnType, CommonColumn } from '@/components/mutils'
-import { useSystemStore } from '@/stores/system'
-import { useElementSize } from '@vueuse/core'
-import type { UploadCtx } from '@/components/form/Upload.vue'
-
-export declare type FormHandleType = 'add' | 'edit' | 'detail'
-
-/**
- * 表单列类型
- */
-export interface FormColumn extends CommonColumn {
-  type?: CommonColumnType | 'separator';
-  //上传文件的限制数量
-  limit?: number;
-}
+import {useSystemStore} from '@/stores/system'
+import {useElementSize} from '@vueuse/core'
+import type {UploadCtx} from '@/components/form/Upload.vue'
+import {mFormEmits, mFormProps} from '@i/components/form'
 
 /**
  * 通用表单组件
@@ -32,42 +19,8 @@ export interface FormColumn extends CommonColumn {
 export default {
   name: 'MForm',
   inheritAttrs: false,
-  extends: ElForm,
-  props: {
-    // 表单处理类型
-    handleType: {
-      type: String as PropType<FormHandleType>,
-      default: 'add'
-    },
-    // 跨列数，对应el-col
-    colspan: {
-      type: Number
-    },
-    // 表单对象
-    model: {
-      type: Object,
-      required: true
-    },
-    // 表单列定义
-    columns: {
-      type: Array as PropType<FormColumn[]>,
-      required: true
-    },
-    labelWidth: {
-      type: String
-    },
-    scrollToError: {
-      default: true
-    },
-    scrollIntoViewOptions: {
-      default: { behavior: 'smooth', block: 'center', inline: 'center' }
-    },
-    //加载状态，为true时展示骨架屏
-    loading: {
-      type: Boolean
-    }
-  },
-  emits: [],
+  props: {...mFormProps},
+  emits: {...mFormEmits},
   setup(
       props,
       {
@@ -136,7 +89,7 @@ export default {
             label: i.label,
             labelWidth: i.labelWidth,
             required: i.required,
-            rules: generateFormRules(i)
+            rules: generateFormRules(i, props.model)
           },
           renderArgs: generateDynamicColumn(i)
         }
@@ -211,7 +164,7 @@ export default {
       return formItemParams.value.map((i) => {
         // 隐藏的不显示
         if (i.hidden) return null
-        if (i.columnParam.type === 'separator') return <el-skeleton-item style="width: 60%; margin-bottom: 1em;" />
+        if (i.columnParam.type === 'separator') return <el-skeleton-item style={{width: '60%', marginBottom: '1em'}} />
         const column = i.columnParam
         const formItemSlots: { [name: string]: Function } = {
           default: () => {
@@ -258,14 +211,15 @@ export default {
     }
 
     return () => {
-      const formParam = {
+      const isDetail = props.handleType === 'detail'
+      const formParam: any = {
         ref: formRef,
         ...attrs,
         ...props,
         labelWidth: labelWidth.value
       }
       // 明细类型需要禁用表单
-      if (props.handleType === 'detail') {
+      if (isDetail) {
         formParam.disabled = true
       }
       // 小屏设备需要强制改变布局方式（竖屏）
@@ -276,6 +230,7 @@ export default {
         loading: props.loading ?? false,
         animated: true
       }
+
       const skeletonSlots = {
         default: () => <el-row>{generateFormColumns()}</el-row>,
         template: () => <el-row>{generateFormSkeletons()}</el-row>

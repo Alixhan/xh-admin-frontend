@@ -106,7 +106,7 @@ async function initFormData() {
   formLoading.value = true
   if (handleType.value !== 'add') {
     // 查询明细
-    await getRoleById(props.modelValue!.id).then((res) => {
+    await getRoleById(props.modelValue!.id!).then((res) => {
       formData.value = res.data
       checkedMenus.value = formData.value.roleMenus.map(i => i.sysMenuId)
       if (handleType.value === 'copy') {

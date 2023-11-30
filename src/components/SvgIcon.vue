@@ -1,5 +1,6 @@
-<script lang="jsx">
+<script lang="tsx">
 import { defineComponent, ref, watchEffect } from 'vue'
+import type { PropType } from 'vue'
 import binary from '@/utils/binary'
 
 /**
@@ -9,7 +10,10 @@ import binary from '@/utils/binary'
 export default defineComponent({
   name: 'MSvgIcon',
   props: {
-    src: [String, Promise], // 图标路径
+    src: {
+      type: [String, Promise<String>] as PropType<string | Promise<string>>,
+      required: true
+    }, // 图标路径
     property: Object, // 修改svg属性值
     inherited: Boolean // 是否继承当前字体颜色
   },
@@ -18,9 +22,10 @@ export default defineComponent({
     watchEffect(compSvg)
 
     async function compSvg() {
-      let src = props.src
+      let src: string | Promise<string> = props.src
       if (src instanceof Promise) src = await src
-      let svgStr = await binary(src)
+      let svgStr: string | undefined = await binary(src)
+      if(!svgStr) return
       if (props.property) {
         for (const prop in props.property) {
           svgStr = replaceStr(svgStr, prop, props.property[prop])
@@ -33,7 +38,7 @@ export default defineComponent({
       svg.value = svgStr
     }
 
-    function replaceStr(baseStr, prop, newProps) {
+    function replaceStr(baseStr: string, prop: string, newProps: string) {
       const regExp = new RegExp(prop + '="[^"]*"', 'g')
       const strArr = baseStr.split(regExp)
       const oldColorArr = baseStr.match(regExp)

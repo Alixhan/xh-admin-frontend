@@ -183,7 +183,7 @@ watchEffect(() => {
     },
     {
       prop: 'name',
-      label: 'name',
+      label: 'Name',
       // 处理类型是外链，隐藏此项
       hidden: formData.value.handleType === 'outer',
       rules: { required: true, trigger: 'blur' },

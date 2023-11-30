@@ -26,6 +26,30 @@ export default {
     form: {
       toInput: 'Please input {label}',
       toSelect: 'Please select {label}',
+      refresh: 'Refresh',
+      enlarge: 'Enlarge',
+      reduce: 'Reduce',
+      clockwise: 'Clockwise',
+      anticlockwise: 'Anticlockwise',
+      cutConfirmation: 'Confirm',
+      iconSearch: 'Type to search',
+      shortcuts1: 'Within the last week',
+      shortcuts2: 'Within the last month',
+      shortcuts3: 'Last three months',
+      shortcuts4: 'Last six months',
+      shortcuts5: 'This month',
+      shortcuts6: 'This year',
+      shortcuts7: 'Last month',
+      shortcuts8: 'Last year',
+      lib: 'File Lib',
+      selectFile: 'Select File',
+      selectFromLib: 'Select from library',
+      imageCropper: 'Image Cropper',
+      beEmpty: '{label} can not be empty',
+      wrongFormat: '{label} format error',
+      maxlength: '{label} cannot exceed {maxlength} characters',
+      minlength: '{label} cannot be less than {minlength} characters',
+      valRestriction: '{label} can only be enums {enums}',
     }
   },
   common: {
@@ -52,6 +76,12 @@ export default {
     confirmDelete: 'Are you sure you want to delete it? It cannot be recovered!',
     saveSuccess: 'Save success.',
     restoreDefault: 'Restore Default',
+  },
+  login: {
+    account: 'Please input account',
+    password: 'Please input password',
+    captcha: 'Please input captcha',
+    login: 'Login'
   },
   system: {
     menu: {

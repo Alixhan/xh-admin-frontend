@@ -12,7 +12,7 @@
     <div class="right-view">
       <Header class="header" />
       <div class="main">
-        <Main style="height: 100%"/>
+        <Main style="height: 100%; width: 100%"/>
       </div>
       <transition name="el-fade-in" mode="out-in">
         <div v-if="!systemStore.layout.menuCollapse" class="mock-view" @click.stop="systemStore.layout.menuCollapse = true" />

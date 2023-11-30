@@ -19,10 +19,10 @@ import SwitchLocale from '@/layout/default/action/switchLocale.vue'
   display: flex;
   align-items: center;
   height: 30px;
-
   border-radius: var(--el-border-radius-base);
 
   .action-item {
+    min-width: 16px;
     height: 30px;
     padding: 0 8px;
     transition: all 0.2s ease-in-out;

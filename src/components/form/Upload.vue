@@ -26,13 +26,13 @@
     <!--    </template>-->
     <template #trigger>
       <div v-if="type === 'upload-img'" class="el-upload--picture-card">
-        <div class="file-lib-btn" v-auth="'system:file'" @click.stop="openFileLib('image/')">文件库</div>
+        <div class="file-lib-btn" v-auth="'system:file'" @click.stop="openFileLib('image/')">{{ $t('m.form.lib') }}</div>
         <Plus class="icon" />
       </div>
       <div v-else>
         <el-button-group>
           <el-button type="primary" v-auth="'system:file'" @click.stop="openFileLib()" icon="search" />
-          <el-button type="primary">选择文件</el-button>
+          <el-button type="primary">{{ $t('m.form.selectFile') }}</el-button>
         </el-button-group>
       </div>
     </template>
@@ -45,7 +45,7 @@
       @close="previewImageVisible = false"
     />
     <el-dialog
-      title="从文件库选择"
+      :title="$t('m.form.selectFromLib')"
       v-model="visible"
       align-center
       draggable
@@ -64,7 +64,7 @@
       />
     </el-dialog>
     <el-dialog
-      title="图片裁剪"
+      :title="$t('m.form.imageCropper')"
       v-model="visible2"
       draggable
       append-to-body
@@ -86,7 +86,7 @@ import type { PropType } from 'vue'
 import { uploadFile } from '@/api/file/fileOperation'
 import selectSysFile from '@/views/system/file/selectSysFile.vue'
 import { getDownloadFileUrl } from '@/utils'
-import type { DownloadParam } from '@/utils'
+import type { DownloadParam } from '@i/utils'
 import Cropper from './Cropper.vue'
 
 defineOptions({
@@ -201,7 +201,7 @@ function onChange(file, files) {
     visible2.value = true
     cropperOption.value = {
       img: file.url,
-      onCropper(blob) {
+      onCropper(blob: Blob) {
         const fileName = cropperFile.value.name.replace(/\.[0-9a-z]+$/, '') + '.png'
         const file = new File([blob], fileName, { type: blob.type })
         fileList.value.push({

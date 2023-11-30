@@ -1,79 +1,43 @@
 import FileSaver from 'file-saver'
+import type {Border} from 'exceljs'
 import ExcelJS from 'exceljs'
-import { generateFormatter, setRules } from '@/components/mutils'
-import type { ValidRule } from '@/utils/validate'
-import type { Border } from 'exceljs'
-import { toRaw } from 'vue'
-
-// excel列定义
-export interface ExcelColumn {
-  prop?: string
-  // 列标题
-  label?: string
-  // 列的prop
-  key?: string
-  // 列的宽度
-  width?: number
-  // 此列不导出到excel
-  notExport?: boolean
-  // 此列隐藏
-  hidden?: boolean
-  // 遍历时标记已遍历
-  $flag?: boolean
-  // 此节点的叶子节点数量
-  $leafSize?: number
-  // 次节点树的最大层数
-  $maxPlies?: number
-  // 标记excel行号
-  $row?: number
-  // 标记excel列号
-  $col?: number
-  // 当前节点所在树的第几层
-  $plies?: number
-  // 当前节点excel跨行数
-  $rowSpan?: number
-  // 当前节点excel跨列数
-  $colSpan?: number
-  // 子节点
-  children?: ExcelColumn[]
-  // 当前节点数据校验规则
-  rules?: ValidRule | ValidRule[]
-  // excel导出内容格式化函数
-  formatter?: Function
-  // table的序号格式化函数
-  index?: Function
-  [prop: string]: any
-}
+import {generateFormatter, getRules} from '@/components/mutils'
+import {toRaw} from 'vue'
+import type {CommonExcelColumn, ExcelJsWorksheetColumn, ExcelTreeNode} from '@i/utils/excel'
 
 /**
  * excel树,提供遍历方法和导出文件方法
  */
-export class ExcelTree implements ExcelColumn {
+export class ExcelTree<T extends object> implements ExcelTreeNode<T> {
   $row: number = 0
   $col: number = 1
   $plies: number = 0
   $maxPlies: number = 0
-  children: ExcelColumn[]
+  $rowSpan: number = 0
+  $colSpan: number = 0
+  children: ExcelTreeNode<T>[]
   // 所有可用节点集合，前序排列
-  readonly nodes: ExcelColumn[]
-  readonly excelColumns: ExcelColumn[]
-  readonly leafNodes: ExcelColumn[]
+  readonly nodes: ExcelTreeNode<T>[]
+  // 叶子节点
+  readonly leafNodes: ExcelTreeNode<T>[]
+  //exceljs列
+  readonly excelColumns: ExcelJsWorksheetColumn[]
 
   /**
    * 判断无效column，不导出到excel
    */
-  private invalidColumn(column: ExcelColumn) {
-    return column.notExport || column.hidden || ['operation', 'selection'].includes(column.type)
+  private invalidColumn(column: ExcelTreeNode<T>) {
+    return column.notExport || column.hidden || ['operation', 'selection'].includes(column.type ?? '')
   }
 
-  constructor(columns) {
-    this.children = columns.map(clone)
+  constructor(columns: CommonExcelColumn<T> []) {
+    this.children = columns.map(clone<T>)
     this.nodes = [] // 所有可用节点集合，前序排列
-    const stackArray: ExcelColumn[] = [this]
-    const leafNodes: ExcelColumn[] = [] // 叶子节点集合
+    const stackArray: ExcelTreeNode<T>[] = [this]
+    const leafNodes: ExcelTreeNode<T>[] = [] // 叶子节点集合
     while (stackArray.length) {
       const node = stackArray[stackArray.length - 1]
-      setRules(node)
+      if(node.rules) node.rules = getRules(node)
       if (this.invalidColumn(node)) {
         stackArray.pop()
         continue
@@ -107,7 +71,7 @@ export class ExcelTree implements ExcelColumn {
 
     // 深度非递归遍历节点，计算出节点在单元格的位置和单元格合并值
     // 将节点导入excel,生成excel导入模板
-    const stackArray2: ExcelColumn[] = [this]
+    const stackArray2: ExcelTreeNode<T>[] = [this]
     while (stackArray2.length) {
       const column = stackArray2.pop()
       const $plies = column!.$plies!
@@ -133,20 +97,20 @@ export class ExcelTree implements ExcelColumn {
       generateFormatter(i)
       return {
         key: i.prop,
-        width: Math.max(10, ~~((i.label ?? '').length * 1.65) + 4),
+        width: Math.max(10, ~~((i.label ?? '').length * 1.65) + 4)
       }
     })
   }
 
   // 前序遍历方法不包含根
-  public eachNode(callback) {
+  public eachNode(callback: (node: ExcelTreeNode<T>) => void) {
     this.nodes.forEach(callback)
   }
 
   /**
    * 导出为excel文件
    */
-  exportExcel(fileName, data) {
+  async exportExcel(fileName: string, data: any []) {
     const workbook = new ExcelJS.Workbook()
     const worksheet = workbook.addWorksheet('sheet')
     this.eachNode((node) => {
@@ -160,7 +124,7 @@ export class ExcelTree implements ExcelColumn {
       cell.fill = {
         type: 'pattern',
         pattern: 'solid',
-        fgColor: { argb: 'FFB3C2D2' },
+        fgColor: { argb: 'FFB3C2D2' }
       }
       // 标题单元格边框
       const border: Partial<Border> = { style: 'thin', color: { argb: 'FFA8A8A8' } }
@@ -168,7 +132,7 @@ export class ExcelTree implements ExcelColumn {
         top: border,
         left: border,
         bottom: border,
-        right: border,
+        right: border
       }
       // 标题单元格字体
       cell.font = { bold: true, size: 9 }
@@ -179,12 +143,9 @@ export class ExcelTree implements ExcelColumn {
           cell.font.color = { argb: 'FFF0000' }
         }
         // 下拉框标题单元格添加提示批注
-        let itemList = toRaw(i.itemList)
-        if (Array.isArray(itemList)) {
-          itemList = itemList.map((j) => j.label)
-        }
-        if (itemList) {
-          cell.note = `${node.label}值只能为（${Object.values(itemList)}）。`
+        const itemList = toRaw(i.itemList)
+        if (itemList && Array.isArray(itemList)) {
+          cell.note = `${node.label}值只能为（${Object.values(itemList.map((j) => j.label))}）。`
         }
         if (i.dateFormat) {
           cell.note = `${node.label}格式为${i.dateFormat}。`
@@ -195,21 +156,21 @@ export class ExcelTree implements ExcelColumn {
     })
     worksheet.columns = this.excelColumns
     // 添加表格数据
-    if (data) {
+    if (data?.length) {
       const rows: any[] = []
       // 如果是层级数据，则需要平铺层级数据
       const arr = [...data]
       while (arr.length) {
-        const item = arr.shift()
-        if (item.children?.length) arr.unshift(...item.children)
+        const item = arr.shift()!
+        if (item?.children?.length) arr.unshift(...item.children)
         rows.push(
-          this.leafNodes.map((j) => {
+          this.leafNodes.map((j, index) => {
             let val = item[j.prop!]
             if (j.formatter) {
-              val = j.formatter(item, j, val)
+              val = j.formatter(item, j as any, val, index)
             }
             if (j.type === 'index') {
-              val = j.index?.(rows.length) ?? rows.length + 1
+              val = (j.index instanceof Function) ? j.index(rows.length) : rows.length + 1
             }
             return val
           })
@@ -224,10 +185,15 @@ export class ExcelTree implements ExcelColumn {
 }
 
 // 树形数据复制
-function clone(tree) {
-  const obj = { ...tree }
-  if (tree.children?.length) {
-    tree.children = tree.children.map(clone)
+function clone<T extends object>(tree: CommonExcelColumn<T>): ExcelTreeNode<T> {
+  return {
+    $col: 0,
+    $colSpan: 0,
+    $maxPlies: 0,
+    $plies: 0,
+    $row: 0,
+    $rowSpan: 0,
+    ...tree,
+    children: tree.children?.length ? tree.children.map(clone) : undefined
   }
-  return obj
 }

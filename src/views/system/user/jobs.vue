@@ -1,40 +1,40 @@
 <template>
   <m-table
-    ref="jobTableRef"
-    :is-page="false"
-    style="width: 100%"
-    :columns="jobColumns"
-    layout="auto"
-    :data="jobData"
-    row-key="id"
+      ref="jobTableRef"
+      :is-page="false"
+      style="width: 100%"
+      :columns="jobColumns"
+      layout="auto"
+      :data="jobData"
+      row-key="id"
   />
   <el-dialog title="选择机构" v-model="visible1" draggable append-to-body align-center width="80%">
-    <selectOrg selection="single" style="height: calc(90vh - 80px)" @select="selectedOrg" @close="visible1 = false" />
+    <selectOrg selection="single" style="height: calc(90vh - 80px)" @select="selectedOrg" @close="visible1 = false"/>
   </el-dialog>
   <el-dialog title="选择角色" v-model="visible2" draggable append-to-body align-center width="80%">
-    <select-role selection="single" style="height: calc(90vh - 80px)" @select="selectedRole" />
+    <select-role selection="single" style="height: calc(90vh - 80px)" @select="selectedRole"/>
   </el-dialog>
 </template>
 <script setup lang="tsx">
-import { ref, toRef, watchEffect } from 'vue'
-import type { PropType } from 'vue'
+import type {PropType} from 'vue'
+import {ref, toRef, watchEffect} from 'vue'
 import SelectRole from '@/views/system/role/selectRole.vue'
 import SelectOrg from '@/views/system/org/selectOrg.vue'
 import getDictDetails from '@/utils/dict'
 
 const props = defineProps({
   handleType: {
-    type: String as PropType<FormHandleType>,
-  },
+    type: String as PropType<FormHandleType>
+  }
 })
 
 const handleType = toRef(props, 'handleType')
 
 const jobTableRef = ref()
 
-const jobData = defineModel<any[]>({ default: [] })
+const jobData = defineModel<any[]>({default: []})
 
-const jobColumns = ref<TableColumn[]>([])
+const jobColumns = ref<CommonTableColumn[]>([])
 watchEffect(() => {
   jobColumns.value = [
     {
@@ -43,33 +43,33 @@ watchEffect(() => {
       hidden: handleType.value === 'detail',
       slots: {
         header: () => (
-          <el-button onClick={addJob} type="primary" icon="plus">
-            新增
-          </el-button>
+            <el-button onClick={addJob} type="primary" icon="plus">
+              新增
+            </el-button>
         ),
         default: (scope) => (
-          <el-button onClick={() => delJob(scope.$index)} type="danger" icon="delete">
-            删除
-          </el-button>
-        ),
-      },
+            <el-button onClick={() => delJob(scope.$index)} type="danger" icon="delete">
+              删除
+            </el-button>
+        )
+      }
     },
-    { type: 'index' },
+    {type: 'index'},
     {
       minWidth: 200,
       prop: 'orgName',
       label: '机构',
       required: handleType.value !== 'detail',
       editable: handleType.value !== 'detail',
-      editParam: (scope) => {
+      editParam: (row) => {
         return {
           readonly: true,
-          rules: { required: true },
+          rules: {required: true},
           slots: {
-            append: () => <el-button onClick={() => openOrgSelect(scope.row)} icon="search" />,
-          },
+            append: () => <el-button onClick={() => openOrgSelect(row)} icon="search"/>
+          }
         }
-      },
+      }
     },
     {
       minWidth: 200,
@@ -77,29 +77,29 @@ watchEffect(() => {
       label: '角色',
       required: handleType.value !== 'detail',
       editable: handleType.value !== 'detail',
-      editParam: (scope) => {
+      editParam: (row) => {
         return {
           readonly: true,
-          rules: { required: true },
+          rules: {required: true},
           slots: {
-            append: () => <el-button onClick={() => openRoleSelect(scope.row)} icon="search" />,
-          },
+            append: () => <el-button onClick={() => openRoleSelect(row)} icon="search"/>
+          }
         }
-      },
+      }
     },
     {
       prop: 'enabled',
       label: '启用',
       itemList: getDictDetails(1, 'boolean'),
       type: 'switch',
-      editable: handleType.value !== 'detail',
+      editable: handleType.value !== 'detail'
     },
-    { prop: 'createTime', label: '创建时间', type: 'datetime', width: 155 },
+    {prop: 'createTime', label: '创建时间', type: 'datetime', width: 155}
   ]
 })
 
 function addJob() {
-  jobData.value.push({ enabled: true })
+  jobData.value.push({enabled: true})
 }
 
 function delJob(index) {
@@ -117,6 +117,7 @@ function openOrgSelect(row) {
 
 // 选择了机构
 function selectedOrg(rows) {
+  console.info(rows)
   currentRow.sysOrgId = rows[0].id
   currentRow.orgName = rows[0].name
   visible1.value = false
@@ -140,7 +141,7 @@ function validate() {
 }
 
 defineExpose({
-  validate,
+  validate
 })
 </script>
 <style lang="scss" scoped></style>
