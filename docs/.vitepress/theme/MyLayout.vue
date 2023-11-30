@@ -1,9 +1,16 @@
 <script setup>
 import DefaultTheme from "vitepress/theme";
+import Icpba from '@/layout/icpba.vue'
 </script>
 
 <template>
-  <DefaultTheme.Layout />
+  <DefaultTheme.Layout>
+    <template #layout-bottom>
+      <div style="text-align: center">
+        <Icpba/>
+      </div>
+    </template>
+  </DefaultTheme.Layout>
 </template>
 <style lang="scss">
 :root {

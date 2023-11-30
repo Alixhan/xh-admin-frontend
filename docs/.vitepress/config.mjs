@@ -14,7 +14,7 @@ export default defineConfig({
     resolve: {
       alias: {
         "@": fileURLToPath(new URL("../../src", import.meta.url)),
-        "@docs": fileURLToPath(new URL("../../docs", import.meta.url))
+        "@i": fileURLToPath(new URL("../../interface", import.meta.url)),
       },
       extensions: [".mjs", ".js", ".ts", ".mts", ".jsx", ".tsx", ".json", ".vue", ".md"]
     },
@@ -26,6 +26,7 @@ export default defineConfig({
   },
   vue: {},
   title: "XHan Admin",
+  titleTemplate: '晓寒管理系统',
   description: "晓寒管理系统",
   head: [
     ['link', { rel: 'icon', type: 'image/svg+xml', href: '../assets/icon/logo-light.svg' }],
@@ -33,8 +34,8 @@ export default defineConfig({
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     logo: {
-      light: "../assets/icon/logo-light.svg",
-      dark: "../assets/icon/logo-dark.svg"
+      light: "/icon/logo-light.svg",
+      dark: "/icon/logo-dark.svg"
     },
     nav: [
       { text: "开始✨", activeMatch: "/guide", link: "/guide/introduction" },
@@ -94,10 +95,6 @@ export default defineConfig({
     docFooter: {
       prev: "上一节",
       next: "下一节"
-    },
-    footer: {
-      message: "Released under the MIT License.",
-      copyright: "Copyright © 2023-present sxh"
     },
     editLink: {
       pattern: "https://gitee.com/sun-xiaohan/xh-admin-frontend/docs/:path",

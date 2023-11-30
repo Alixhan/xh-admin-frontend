@@ -1,6 +1,6 @@
 #!groovy
 pipeline {
-//    任何节点代理节点，随机分配
+//    任何代理节点执行，随机分配
     agent any
 
 //    //可以指定到某类标签代理节点
@@ -8,7 +8,7 @@ pipeline {
 //        label: 'windows'
 //    }
 
-//    //也可以用docker镜像创建容器代理
+//    //也可以用docker镜像创建容器代理节点
 //    docker {
 //        image 'maven:3.9'   //镜像地址
 //    }
@@ -20,7 +20,7 @@ pipeline {
 
     //使用全局工具
     tools {
-        //引用之前全局工具配合的NodeJs的name
+        //引用之前全局工具配置的NodeJs的name
         nodejs 'nodejs20.9.0'
     }
 
@@ -29,7 +29,12 @@ pipeline {
         //添加一个下拉选项，选择是发布前端项目还是发布文档
         choice(name: 'DEPLOY_TYPE', choices: ['frontend', 'docs'], description: '发布类型')
         //获取git仓库分支列表，并选择
-        gitParameter branchFilter: 'origin/(.*)', defaultValue: 'main', name: 'GIT_PROJECT_BRANCH', type: 'PT_BRANCH', description: '选择发布分支'
+        gitParameter branchFilter: 'origin/(.*)',
+                defaultValue: 'main',
+                name: 'GIT_PROJECT_BRANCH',
+                type: 'PT_BRANCH',
+                description: '选择发布分支',
+                useRepository: 'https://gitee.com/sun-xiaohan/xh-admin-frontend.git'
     }
 
     //环境变量
@@ -41,9 +46,12 @@ pipeline {
         service_name = "${project_name}"
         //镜像名
         image = "${service_name}:latest"
-        git_project_url = "https://gitee.com/sun-xiaohan/${project_name}.git"
+        //容器映射端口
         outer_port = "2000"
+        //环境
         profile = "production"
+        //加入网络
+        network = 'xh_default'
         Dockerfile = '''
             FROM nginx:1.25.3-alpine-slim
             # 将编译好的静态文件放进nginx根目录
@@ -55,7 +63,7 @@ pipeline {
         stage("拉取代码") {
             steps {
                 //拉取代码
-                git credentialsId: cred_id, url: git_project_url, branch: GIT_PROJECT_BRANCH
+                git credentialsId: cred_id, url: 'https://gitee.com/sun-xiaohan/xh-admin-frontend.git', branch: params.GIT_PROJECT_BRANCH
             }
         }
         stage("编译项目") {
@@ -63,9 +71,9 @@ pipeline {
                 sh "npm install"
                 script {
                     //发布前端项目
-                    if(DEPLOY_TYPE == 'frontend') {
+                    if (DEPLOY_TYPE == 'frontend') {
                         sh "npm run build:${profile}"
-                    }else{
+                    } else {
                         //发布文档
                         sh "npm run docs:build"
                         //发布文档生成的dist在docs/.vitepress，移到当前目录来
@@ -90,18 +98,17 @@ pipeline {
         }
         stage("容器部署") {
             steps {
-                sh '''
-                    if !(test -z "$(docker ps -a | grep -w $service_name )") then
-                        docker stop ${service_name}
-                        docker rm ${service_name}
-                    fi
-                    
-                    docker run \
-                        --name ${service_name} \
-                        -p ${outer_port}:80 \
-                        --restart=always \
-                        -d ${image}
-                '''
+                sh 'if !(test -z "$(docker ps -a | grep -w ' + service_name + ' )") then \n' +
+                        '        docker stop ' + service_name +' \n' +
+                        '        docker rm ' + service_name + '\n' +
+                        '    fi'
+
+                sh "docker run " +
+                        " --network=${network} " +
+                        " --name ${service_name} " +
+                        " -p ${outer_port}:80 " +
+                        " --restart=always " +
+                        " -d ${image}"
             }
         }
     }

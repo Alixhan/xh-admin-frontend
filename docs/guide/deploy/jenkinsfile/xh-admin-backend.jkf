@@ -1,28 +1,49 @@
 #!groovy
 pipeline {
     agent any
-    //环境变量
-    tools {
-//        jdk 'jdk8_341'
-        maven 'maven3.9.1'
+
+    options {
+        timeout(time: 2, unit: 'HOURS')  //超时时间2小时
+        retry(1)    //失败后重试次数
     }
 
-    //常量参数
+//    triggers {
+//        //定义一个触发器，每天1点触发构建
+//        cron(* 1 * * *)
+//    }
+
+    //使用全局工具
+    tools {
+        // jenkins已内置jdk17环境
+        // jdk 'jdk17'
+        //需要maven环境打包，之前全局配置的Maven Name
+        maven 'maven3.9.5'
+    }
+
+    //参数化构建
+    parameters {
+        //添加一个发布下拉选项，选择发布哪个服务
+        choice(name: 'DEPLOY_TYPE', choices: ['system', 'file'], description: '发布服务')
+    }
+
+    //环境变量
     environment {
         cred_id = "gitee"
         git_project_url = "https://gitee.com/sun-xiaohan/xh-admin-backend.git"
+        //发布分支
         git_project_branch = "main"
-        //接收参数
-        dir_name = "${dir_name}"
-        service_name = "xh-admin-${dir_name}"
+        //发布服务类型
+        dir_name = "${DEPLOY_TYPE}"
+        service_name = "xh-admin-${DEPLOY_TYPE}"
         mirror_name = "${service_name}:latest"
-        NACOS_SERVER_ADDR="10.0.4.3:8848"
+        NACOS_SERVER_ADDR="nacos:8848"
         NACOS_NAMESPACE="production"
         NACOS_GROUP="xh-admin"
         NACOS_USERNAME="nacos"
         NACOS_PASSWROD="nacos"
         outer_port = ""
         inner_port = ""
+        network = 'xh_default'
         Dockerfile = '''
             # 基础镜像
             FROM openjdk:21-ea-17-jdk
@@ -37,32 +58,31 @@ pipeline {
             # 复制jar文件到路径
             ADD *.jar /app/app.jar
             # 启动命令，同时设置jvm内存
-            ENTRYPOINT ["java","-jar","-Xms256m","-Xmx256m","app.jar"]
+            ENTRYPOINT ["java","-jar","app.jar"]
         '''
     }
 
     stages {
-        stage("fetch code") {
+        stage("拉取代码") {
             steps {
+                //拉取源码
                 git credentialsId: cred_id, url: git_project_url, branch: git_project_branch
             }
         }
-        stage("build project") {
+        stage("打包编译") {
             steps {
                 script {
                     if(dir_name == 'system') {
-                        outer_port = '6002'
-                        inner_port = '6002'
+                        outer_port = '2102'
+                        inner_port = '2102'
                     }
                     if(dir_name == 'file') {
-                        outer_port = '6003'
-                        inner_port = '6003'
+                        outer_port = '2103'
+                        inner_port = '2103'
                     }
-                    if(dir_name == 'mvn-install') {
-                        sh "mvn clean -DskipTests=true"
-                        sh "mvn install -DskipTests=true"
-                        return "mvn install 成功咯"
-                    }
+
+                    sh "mvn clean -DskipTests=true"
+                    sh "mvn install -DskipTests=true"
 
                     def buildDir = "build-${dir_name}"
                     sh "rm -rf ${buildDir} && mkdir ${buildDir}"
@@ -74,12 +94,10 @@ pipeline {
                 }
             }
         }
-        stage("deploy") {
+        stage("服务部署") {
             steps{
                 script {
-                    if(dir_name == 'mvn-install') {
-                        return "mvn install 不用deploy"
-                    }
+                    // 如果容器已存在，则移除容器
                     sh '''
                         if !(test -z "$(docker ps -a | grep -w $service_name )") then
                             docker stop ${service_name}
@@ -87,18 +105,25 @@ pipeline {
                         fi
                     '''
                     sh "docker run " +
-                        " --network=xh-admin " +
-                        " --name ${service_name} " +
-                        " -p ${outer_port}:${inner_port} " +
-                        " -e NACOS_SERVER_ADDR=${NACOS_SERVER_ADDR} " +
-                        " -e NACOS_NAMESPACE=${NACOS_NAMESPACE} " +
-                        " -e NACOS_GROUP=${NACOS_GROUP} " +
-                        " -e NACOS_USERNAME=${NACOS_USERNAME} " +
-                        " -e NACOS_PASSWROD=${NACOS_PASSWROD} " +
-                        " -e SERVER_PORT=${inner_port} " +
-                        " -d ${mirror_name} "
+                            " --network=${network} " +
+                            " --name ${service_name} " +
+                            " -p ${outer_port}:${inner_port} " +
+                            " -e NACOS_SERVER_ADDR=${NACOS_SERVER_ADDR} " +
+                            " -e NACOS_NAMESPACE=${NACOS_NAMESPACE} " +
+                            " -e NACOS_GROUP=${NACOS_GROUP} " +
+                            " -e NACOS_USERNAME=${NACOS_USERNAME} " +
+                            " -e NACOS_PASSWROD=${NACOS_PASSWROD} " +
+                            " -e SERVER_PORT=${inner_port} " +
+                            " -d ${mirror_name} "
                 }
             }
+        }
+    }
+
+    post {
+        //失败后会执行到这里，可以写一些发送邮件的逻辑放在这里提醒下相关人员
+        failure {
+            echo '可以写一些发送邮件的逻辑放在这里提醒!'
         }
     }
 }

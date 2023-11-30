@@ -17,7 +17,7 @@
 
 ## 在线演示
 
-演示地址：   <https://>
+演示地址：   <http://demo.xhansky.cn>
 ::: tip 提示
 作为个人开发者，演示站的条件非常有限，请各位大哥大姐们不要瞎玩，做压测啥的，随便整下这个服务器就崩溃了，我先提前谢谢你们哈🌹🌹
 :::
@@ -42,4 +42,4 @@
 (扫码添加微信好友，备注xhan，拉你进群。)<br>
 `现在项目刚发布，马上进群，你就是元老！ ✨`
 
-<img src="@docs/assets/image/wechat_card.png" style="max-width: 300px; width: 100%;">
+<img src="/image/wechat_card.png" style="max-width: 300px; width: 100%;">

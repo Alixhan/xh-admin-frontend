@@ -1,5 +1,5 @@
 <script setup>
-const previewSrcList = ["img_2.png", "img_3.png", "img_4.png"];
+const previewSrcList = ["/image/img_2.png", "/image/img_3.png", "/image/img_4.png", "/image/img_5.png", "/image/img_6.png", "/image/img_7.png"];
 </script>
 # 部署微服务
 当我们在开发完程序代码后，就需要将程序部署到服务器，不管是演示环境还是生产环境，程序部署都有一个共同的特点：
@@ -111,7 +111,30 @@ Git拉取代码的插件开头社区推荐已经默认安装。
 <<< jenkinsfile/xh-admin-frontend.jkf{groovy}
 
 如下图：
+
 <el-image style="width: 100%;" :src="previewSrcList[2]" :preview-src-list="previewSrcList" fit="cover" :initial-index="2" alt="" />
 点击 `保存`
 
 这样我们前端的构建任务就创建完成了，所有的部署流程均在流程脚本中定义，jenkins管理整个部署流程的生命周期。
+
+点击 `立即` 构建此任务，因为第一次构建需要初始化一些选项，可能会构建失败，第一次初始化以后，后续就可以选择参数化构建。
+
+<el-image style="width: 100%;" :src="previewSrcList[3]" :preview-src-list="previewSrcList" fit="cover" :initial-index="3" alt="" />
+
+构建成功后截图：
+<el-image style="width: 100%;" :src="previewSrcList[4]" :preview-src-list="previewSrcList" fit="cover" :initial-index="4" alt="" />
+
+### 后端服务部署
+创建任务流程同上，脚本内容略有不同：
+
+<<< jenkinsfile/xh-admin-backend.jkf{groovy}
+
+这两个构建任务，分别用来构建前端和后端，并且具有参数选择，前端任务可以选择构建前台项目还是docs，后端任务可以选择具体构建哪一个微服务，我们将需要的都执行一遍。
+等部署任务成功后，去服务器看下容器：
+
+<el-image style="width: 100%;" :src="previewSrcList[5]" :preview-src-list="previewSrcList" fit="cover" :initial-index="5" alt="" />
+可以看到服务都部署成功了，后续我们提交代码后，需要发布程序只需要登录 jenkins 点击构建任务即可。
+
+jenkins 功能非常强大，并且有非常丰富的插件生态，可以实现各种复杂的自动化任务，本教程只是做一个样例做参考学习，更多用法请查阅相关文档学习。
+
+同学们跟着教程走下来，可以对整个部署流程做个大致了解，有些地方不懂没关系，在实际使用中慢慢理解学习，举一反三，必能融会贯通。

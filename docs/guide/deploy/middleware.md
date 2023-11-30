@@ -1,5 +1,6 @@
----
----
+<script setup>
+const previewSrcList = ["/image/img.png", "/image/img_1.png"];
+</script>
 
 # 部署中间件
 
@@ -77,11 +78,6 @@ root 4096 Nov  2 20:34 nginx
 ```sh
 $ docker-compose up -d
 ```
-
-<script setup>
-const previewSrcList = ["img.png", "img_1.png"];
-</script>
-
 会自动下载所有的镜像文件，等待一段时间，咱们中间件的应用就部署好了：
 <el-image style="width: 100%;" :src="previewSrcList[0]" :preview-src-list="previewSrcList" fit="cover" :initial-index="
 0" alt=""/>

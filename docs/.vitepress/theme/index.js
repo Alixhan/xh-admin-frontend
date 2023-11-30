@@ -6,12 +6,13 @@ import { AuthDirective } from '@/directive'
 import '@/styles/index.scss' // 样式引入
 import DefaultTheme from 'vitepress/theme'
 import MyLayout from './MyLayout.vue'
-
+import I18n from '@/i18n/index'
 export default {
   ...DefaultTheme,
   Layout: MyLayout,
   enhanceApp(ctx) {
     const app = ctx.app
+    app.use(I18n)
     app.use(createPinia())
     app.use(ElementPlus)
     for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
