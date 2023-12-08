@@ -21,7 +21,7 @@
           <Breadcrumb v-else-if="!systemStore.layout.widthShrink" class="breadcrumb" />
         </div>
       </div>
-      <el-link v-if="isDev" style="margin-right: 10px" @click="cp">
+      <el-link v-if="isDev" style="margin-right: 10px;" @click="cp">
         {{ route.meta.component }}
       </el-link>
       <Action class="action" />
@@ -73,6 +73,7 @@ function toggleMenuCollapse() {
     .collapse-icon {
       margin-right: 15px;
       cursor: pointer;
+      z-index: 2;
     }
 
     .rotate180 {

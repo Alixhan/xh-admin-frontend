@@ -26,7 +26,7 @@
               v-for="(item, index) in icons"
               :key="index"
               :type="currentTab === item.title ? 'primary' : null"
-              @click="currentTab = item.title"
+              @click="(currentTab = item.title)"
             >
               {{ item.title }}
             </el-link>
@@ -53,7 +53,7 @@ import MIcon from '@/components/Icon.vue'
 import { round } from 'lodash-es'
 import MSvgIcon from '@/components/SvgIcon.vue'
 // element图标
-const localSvg = import.meta.glob('@/assets/icon/**/*.svg')
+const localSvg = import.meta.glob('@/assets/icon/**/*.svg', {as: 'url'})
 /**
  * 图标表单组件
  * 2023-3-29 sunxh
@@ -99,7 +99,7 @@ export default {
       const [type, icon] = (props.modelValue ?? '').split('|')
       iconType.value = type
       if (type === 'local') {
-        src.value = localSvg[icon]?.().then((r) => r.default)
+        src.value = localSvg[icon]?.().then(r => r)
       }
 
       if (type === 'el') {

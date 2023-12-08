@@ -23,7 +23,6 @@
 </template>
 <script setup lang="tsx">
 import { reactive, ref } from 'vue'
-import test from './test.vue'
 
 
 const data = ref<any []>([])

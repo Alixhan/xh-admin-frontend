@@ -39,10 +39,9 @@ export default defineConfig({
   // vite 相关配置
   server: {
     host: true,
-    https: false,
     open: true,
   },
   build: {
-    target: 'es2015'
+    assetsInlineLimit: 0
   }
 })

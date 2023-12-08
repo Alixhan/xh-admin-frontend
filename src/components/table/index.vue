@@ -643,14 +643,14 @@ export default defineComponent(<T extends object, F extends object>(props: MTabl
       .total-view {
         margin-right: 10px;
         white-space: nowrap;
+        //background-color: var(--el-color-primary-light-9);
         border: var(--el-border-width) var(--el-border-style) var(--el-color-primary-light-5);
+        padding: 0 10px;
         border-radius: var(--el-border-radius-base);
         height: var(--el-component-size);
         line-height: var(--el-component-size);
-        padding: 0 10px;
         color: var(--el-color-info-light-3);
         font-size: var(--el-font-size-small);
-        background-color: var(--el-color-primary-light-9);
         display: flex;
         align-items: center;
 

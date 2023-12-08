@@ -114,7 +114,7 @@ const errorTableColumns: TableColumn<ExcelError>[] = [
     prop: 'excelNum',
     label: 'excel行号',
     width: 100,
-    formatter: (row, col, val) => val ?? (row.num ? row.num + excelTree.$maxPlies ?? 0 : ''),
+    formatter: (row, col, val) => val ?? (row.num ? row.num + (excelTree.$maxPlies ?? 0) : ''),
   },
   { prop: 'error', label: '错误内容' },
 ]
@@ -217,7 +217,7 @@ async function validData() {
       if (i.error) {
         errorData.value.push({
           num: num + 1,
-          excelNum: num + excelTree.$maxPlies ?? 0,
+          excelNum: num + (excelTree.$maxPlies ?? 0),
           error: i.errFields.map((i) => i.errMsg).join('；'),
         })
       }

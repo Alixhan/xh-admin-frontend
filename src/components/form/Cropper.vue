@@ -4,7 +4,7 @@
       <div class="cropperView">
         <vue-cropper ref="cropper" :style="itemStyle" v-bind="ctx"/>
         <div class="item-class" :style="itemStyle" style="background-color: var(--el-border-color)">
-          <div style="overflow: hidden; margin: 5px" :style="{ width: previews.w + 'px', height: previews.h + 'px' }">
+          <div style="overflow: hidden;" :style="{ width: previews.w + 'px', height: previews.h + 'px' }">
             <div :style="previews.div" class="preview-view">
               <img :src="previews.url" :style="previews.img" alt=""/>
             </div>

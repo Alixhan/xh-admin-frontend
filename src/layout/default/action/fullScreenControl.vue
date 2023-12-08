@@ -1,6 +1,6 @@
 <template>
-  <el-icon>
-    <m-svg-icon :src="isFullscreen ? ExitFullScreenSvg : FullScreenSvg" inherited @click="toggle" />
+  <el-icon @click="toggle">
+    <m-svg-icon :src="isFullscreen ? ExitFullScreenSvg : FullScreenSvg" inherited />
   </el-icon>
 </template>
 <script setup>

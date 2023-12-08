@@ -114,7 +114,7 @@ export const useSystemStore = defineStore('system', () => {
     size: useLocalStorage<LayoutSize>('size', 'default'),
     isDark: useDark(),
     layoutMode: 'Default',
-    mainAnimation: 'el-fade-in',
+    mainAnimation: 'slide-right',
     menuWidth: useLocalStorage('menuWidth', 200),
     menuCollapse: false,
     menuUniqueOpened: useLocalStorage('menuUniqueOpened', false),

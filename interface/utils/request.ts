@@ -83,13 +83,13 @@ export interface RestResponse<R = any> {
 /**
  * 错误响应类型
  */
-export type ErrorResponse<R = any> = string | RestResponse<R>
+export type ErrorResponse<R = any> = string |(RestResponse<R> & {error?: string})
 
 /**
  * 判断是否是 RestResponse 类型
  * @param val
  */
-export function isRestResponse(val: any): val is RestResponse {
+export function isRestResponse(val: any): val is RestResponse & {error?: string} {
   return (val as RestResponse)?.status !== undefined
 }
 

@@ -151,7 +151,7 @@ function submit() {
     z-index: 3;
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 5px;
   }
 
   .title-system {

@@ -36,7 +36,7 @@ export const loading = {
             
             .dot-view{
                 display: inline-grid;
-                grid-gap: 5px;
+                gap: 5px;
                 grid-template-rows: repeat(2, 10px);
                 grid-template-columns: repeat(2, 10px);
                 animation: xz 1.5s infinite linear;

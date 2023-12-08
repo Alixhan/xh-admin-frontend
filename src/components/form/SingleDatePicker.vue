@@ -92,9 +92,9 @@ const shortcuts = [
   }
 ]
 
-function getFormatDate(date) {
-  if (props.valueFormat) date = dayjs(date).format(props.valueFormat)
-  return date
+function getFormatDate(date: Date) {
+  if (props.valueFormat) return dayjs(date).format(props.valueFormat)
+  return date.toString()
 }
 
 function updateStart(val: string) {
@@ -116,7 +116,7 @@ const startParam = {
   type,
   'onUpdate:modelValue': updateStart,
   shortcuts,
-  disabledDate(date) {
+  disabledDate(date: Date) {
     if (props.end) return date.getTime() > new Date(props.end).getTime()
   }
 }
@@ -128,7 +128,7 @@ const endParam = {
   className: 'date-picker',
   type,
   'onUpdate:modelValue': updateEnd,
-  disabledDate(date) {
+  disabledDate(date: Date) {
     if (props.start) return date.getTime() < new Date(props.start).getTime()
   }
 }

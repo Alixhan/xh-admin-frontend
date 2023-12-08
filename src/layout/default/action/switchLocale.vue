@@ -1,5 +1,5 @@
 <template>
-  <el-dropdown trigger="click" @command="handleCommand">
+  <el-dropdown trigger="click" @command="handleCommand" style="padding: 0">
     <div class="switch-locale-view">
       <component :is="menus[systemStore.locale].icon" />
     </div>
@@ -52,6 +52,8 @@ async function handleCommand(key) {
 </script>
 <style scoped lang="scss">
 .switch-locale-view {
+  min-width: 16px;
+  padding: 0 8px;
   display: flex;
   align-items: center;
   cursor: pointer;

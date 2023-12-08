@@ -33,8 +33,8 @@ export default defineComponent({
     }
   },
   emits: ['search'],
-  setup(props, { emit, expose }) {
-    const { t } = useI18n()
+  setup(props, {emit, expose}) {
+    const {t} = useI18n()
     const systemStore = useSystemStore()
     const topFilterFormRef = ref()
     // 搜索框是否展开
@@ -65,13 +65,13 @@ export default defineComponent({
       topFilterFormRef.value.resetFields()
     }
 
-    expose({ reset })
+    expose({reset})
 
     function initColumnsParams() {
       columnsParams.value = props.columns
           .filter((i) => !i.hidden)
           .map((column) => {
-            const { component, param, slots } = generateDynamicColumn(column)
+            const {component, param, slots} = generateDynamicColumn(column)
             generatePlaceholder(param)
             const formItemParam = {
               ...column,
@@ -87,7 +87,7 @@ export default defineComponent({
                   },
                   props.param
               )
-              return createVNode(component, { ...param, ...vModelParam }, slots)
+              return createVNode(component, {...param, ...vModelParam}, slots)
             }
             return formItemParam
           })
@@ -115,14 +115,14 @@ export default defineComponent({
     return () => {
       return (
           <div class={`filter-tabs ${expand.value ? 'expand-filter' : ''}`}>
-            <div class="filter-title">
+            {systemStore.layout.widthShrink ? <div class="filter-title"/> : (<div class="filter-title">
               <div class="title-logo">
-                <m-svg-icon src={QueryIcon} property={{ fill: 'var(--el-color-primary),currentColor' }} />
+                <m-svg-icon src={QueryIcon} property={{fill: 'var(--el-color-primary),currentColor'}}/>
               </div>
               <el-text class="title-text" size="large">
                 {t('m.topFilter.query')}
               </el-text>
-            </div>
+            </div>)}
             <div class="filter-view">
               <el-form ref={topFilterFormRef} model={props.param} labelWidth={labelWidth.value}>
                 <el-scrollbar max-height="45vh">
@@ -162,7 +162,7 @@ export default defineComponent({
   display: grid;
   grid-template-columns: auto 1fr auto;
   grid-auto-flow: row dense;
-  grid-gap: 0 10px;
+  gap: 0 10px;
   transition: all 0.2s ease-in-out;
 
   .filter-title {

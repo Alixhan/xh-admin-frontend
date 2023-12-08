@@ -1,6 +1,6 @@
 <script lang="tsx">
-import { defineComponent, ref, watchEffect } from 'vue'
-import type { PropType } from 'vue'
+import type {PropType} from 'vue'
+import {defineComponent, ref, watchEffect} from 'vue'
 import binary from '@/utils/binary'
 
 /**

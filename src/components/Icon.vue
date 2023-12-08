@@ -7,7 +7,7 @@
 <script>
 import { ref, shallowRef, watchEffect } from 'vue'
 
-const localSvg = import.meta.glob('@/assets/icon/**/*.svg')
+const localSvg = import.meta.glob('@/assets/icon/**/*.svg', {as: 'url'})
 /**
  * 图标表单组件
  * 2023-3-29 sunxh
@@ -31,7 +31,7 @@ export default {
       const [type, icon] = (props.modelValue ?? '').split('|')
       iconType.value = type
       if (type === 'local') {
-        src.value = localSvg[icon]?.().then((r) => r.default)
+        src.value = localSvg[icon]?.()
       }
 
       if (type === 'el') {
