@@ -1,43 +1,67 @@
 <template>
-  <div class="root">
-    {{ useSystemStore().user?.name }}
-    {{$t('sdfs')}}
-    <el-button type="primary" @click="test(1)" style="width: 100px">查询</el-button>
-    <el-tree
-      :data="data"
-      :props="{
-        children: 'children',
-        label: 'label',
-      }"
-      draggable
-      show-checkbox
-    />
+  <div class="home-view">
+    <top-panel class="desc-view"/>
+    <statistic class="statistic-view"/>
+    <charts/>
+    <todo-list class="todo-list"/>
   </div>
 </template>
-<script lang="jsx" setup>
-import { useSystemStore } from '@/stores/system'
-import { getMenuById } from '@/api/system/menu'
-
-function test(id) {
-  getMenuById(id).then((res) => {
-    console.info(res)
-  })
-}
-
-const data = [
-  { id: 1, label: 'aaa' },
-  { id: 2, label: 'bbb' },
-  { id: 3, label: 'ccc' },
-]
+<script lang="ts" setup>
+import TodoList from './todoList.vue'
+import TopPanel from './topPanel.vue'
+import Statistic from './statistic.vue'
+import Charts from './charts.vue'
 </script>
 <style lang="scss" scoped>
-.root {
-  display: flex;
-  flex-direction: column;
+.home-view {
+  min-height: var(--main-height);
+  border-radius: 5px;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-content: start;
 
-  .m-table {
-    flex-grow: 1;
-    height: 0;
+  > div, :deep(> div) {
+    background-color: var(--el-bg-color);
+    border-radius: 10px;
+    padding: 20px;
+  }
+
+  .desc-view, .statistic-view {
+    grid-column: 1 / -1;
+  }
+
+  .todo-list {
+    grid-column-start: span 2;
+    height: 250px;
+  }
+
+  .statistic-view {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .home-view {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    .statistic-view {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .home-view {
+    grid-template-columns: minmax(0, 1fr);
+
+    .statistic-view {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .todo-list {
+      grid-column-start: span 1;
+    }
   }
 }
 </style>
