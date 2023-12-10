@@ -1,5 +1,6 @@
 <template>
-  <el-button icon="Download" type="primary" text :loading="loading" @click="exportExcel"> {{ $t("m.table.export") }}
+  <el-button icon="Download" type="primary" text :loading="loading" @click="exportExcel">
+    {{ $t('m.table.export') }}
   </el-button>
 </template>
 <script setup lang="ts" generic="T extends object">
@@ -26,10 +27,10 @@ const props = defineProps({
     type: Function as PropType<FetchPageDataFun<T>>
   },
   data: {
-    type: Array as PropType<T []>
+    type: Array as PropType<T[]>
   },
   columns: {
-    type: Array as PropType<ExportExcelColumn<T> []>,
+    type: Array as PropType<ExportExcelColumn<T>[]>,
     required: true
   },
   exportFileName: {

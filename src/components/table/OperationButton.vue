@@ -9,7 +9,7 @@
       <el-dropdown>
         <el-link :underline="false" type="primary">
           <span>
-            {{ $t('common.more') }} <el-icon><Arrow-down/></el-icon>
+            {{ $t('common.more') }} <el-icon><Arrow-down /></el-icon>
           </span>
         </el-link>
         <template #dropdown>
@@ -43,12 +43,12 @@ import type { OperationButton, OperationButtonProps } from '@i/components/table'
 
 defineOptions({
   inheritAttrs: false,
-  name: 'MOperationButton',
+  name: 'MOperationButton'
 })
 
 const props = withDefaults(defineProps<OperationButtonProps<T>>(), {
   auth: false,
-  maxCount: DefaultMaxCount,
+  maxCount: DefaultMaxCount
 })
 
 // 需要收纳
@@ -68,7 +68,7 @@ function init() {
       type: 'primary',
       ...i,
       onClick: () => i.onClick?.(props.row),
-      disabled: i.disabled instanceof Function ? i.disabled(props.row) : i.disabled,
+      disabled: i.disabled instanceof Function ? i.disabled(props.row) : i.disabled
     }
   })
   if (props.auth) {

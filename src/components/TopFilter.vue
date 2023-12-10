@@ -1,10 +1,10 @@
 <script lang="jsx">
-import {computed, createVNode, defineComponent, ref, shallowRef, watchEffect} from 'vue'
-import {generateDynamicColumn, generateLabelWidth, generatePlaceholder, vModelValue} from '@/components/mutils'
-import {useSystemStore} from '@/stores/system'
-import {useElementSize} from '@vueuse/core'
+import { computed, createVNode, defineComponent, ref, shallowRef, watchEffect } from 'vue'
+import { generateDynamicColumn, generateLabelWidth, generatePlaceholder, vModelValue } from '@/components/mutils'
+import { useSystemStore } from '@/stores/system'
+import { useElementSize } from '@vueuse/core'
 import QueryIcon from '@/assets/icon/search-list.svg'
-import {useI18n} from 'vue-i18n'
+import { useI18n } from 'vue-i18n'
 
 /**
  * 筛选框组件
@@ -33,8 +33,8 @@ export default defineComponent({
     }
   },
   emits: ['search'],
-  setup(props, {emit, expose}) {
-    const {t} = useI18n()
+  setup(props, { emit, expose }) {
+    const { t } = useI18n()
     const systemStore = useSystemStore()
     const topFilterFormRef = ref()
     // 搜索框是否展开
@@ -65,32 +65,32 @@ export default defineComponent({
       topFilterFormRef.value.resetFields()
     }
 
-    expose({reset})
+    expose({ reset })
 
     function initColumnsParams() {
       columnsParams.value = props.columns
-          .filter((i) => !i.hidden)
-          .map((column) => {
-            const {component, param, slots} = generateDynamicColumn(column)
-            generatePlaceholder(param)
-            const formItemParam = {
-              ...column,
-              slots: {}
-            }
-            formItemParam.slots.default = () => {
-              const vModelParam = vModelValue(
-                  {
-                    type: column.type,
-                    prop2: column.prop2,
-                    prop: column.prop,
-                    single: column.single
-                  },
-                  props.param
-              )
-              return createVNode(component, {...param, ...vModelParam}, slots)
-            }
-            return formItemParam
-          })
+        .filter((i) => !i.hidden)
+        .map((column) => {
+          const { component, param, slots } = generateDynamicColumn(column)
+          generatePlaceholder(param)
+          const formItemParam = {
+            ...column,
+            slots: {}
+          }
+          formItemParam.slots.default = () => {
+            const vModelParam = vModelValue(
+              {
+                type: column.type,
+                prop2: column.prop2,
+                prop: column.prop,
+                single: column.single
+              },
+              props.param
+            )
+            return createVNode(component, { ...param, ...vModelParam }, slots)
+          }
+          return formItemParam
+        })
     }
 
     // 生成column
@@ -103,49 +103,53 @@ export default defineComponent({
         if (i.cols) span = parseInt(i.cols) * span
         if (span > 24) span = 24
         return (
-            <el-col span={span}>
-              <el-form-item prop={i.prop} label={i.label} labelWidth={i.labelWidth}>
-                {i.slots.default()}
-              </el-form-item>
-            </el-col>
+          <el-col span={span}>
+            <el-form-item prop={i.prop} label={i.label} labelWidth={i.labelWidth}>
+              {i.slots.default()}
+            </el-form-item>
+          </el-col>
         )
       })
     }
 
     return () => {
       return (
-          <div class={`filter-tabs ${expand.value ? 'expand-filter' : ''}`}>
-            {systemStore.layout.widthShrink ? <div class="filter-title"/> : (<div class="filter-title">
+        <div class={`filter-tabs ${expand.value ? 'expand-filter' : ''}`}>
+          {systemStore.layout.widthShrink ? (
+            <div class="filter-title" />
+          ) : (
+            <div class="filter-title">
               <div class="title-logo">
-                <m-svg-icon src={QueryIcon} property={{fill: 'var(--el-color-primary),currentColor'}}/>
+                <m-svg-icon src={QueryIcon} property={{ fill: 'var(--el-color-primary),currentColor' }} />
               </div>
               <el-text class="title-text" size="large">
                 {t('m.topFilter.query')}
               </el-text>
-            </div>)}
-            <div class="filter-view">
-              <el-form ref={topFilterFormRef} model={props.param} labelWidth={labelWidth.value}>
-                <el-scrollbar max-height="45vh">
-                  <el-row>{generateFilterColumn()}</el-row>
-                </el-scrollbar>
-              </el-form>
             </div>
-            <div class="filter-btn" style="flex-grow: 1; -width: 0; text-align: right;">
-              <el-button
-                  icon={expand.value ? 'ArrowUp' : 'ArrowDown'}
-                  text
-                  onClick={() => (expand.value = !expand.value)}
-                  type="primary"
-                  style={{padding: '0 5px'}}
-              >
-                {expand.value ? t('m.topFilter.collapse') : t('m.topFilter.expand')}
-              </el-button>
-              <el-button type="primary" icon="search" onClick={search} loading={props.loading}>
-                {t('m.topFilter.search')}
-              </el-button>
-              <el-button onClick={reset}> {t('m.topFilter.reset')}</el-button>
-            </div>
+          )}
+          <div class="filter-view">
+            <el-form ref={topFilterFormRef} model={props.param} labelWidth={labelWidth.value}>
+              <el-scrollbar max-height="45vh">
+                <el-row>{generateFilterColumn()}</el-row>
+              </el-scrollbar>
+            </el-form>
           </div>
+          <div class="filter-btn" style="flex-grow: 1; -width: 0; text-align: right;">
+            <el-button
+              icon={expand.value ? 'ArrowUp' : 'ArrowDown'}
+              text
+              onClick={() => (expand.value = !expand.value)}
+              type="primary"
+              style={{ padding: '0 5px' }}
+            >
+              {expand.value ? t('m.topFilter.collapse') : t('m.topFilter.expand')}
+            </el-button>
+            <el-button type="primary" icon="search" onClick={search} loading={props.loading}>
+              {t('m.topFilter.search')}
+            </el-button>
+            <el-button onClick={reset}> {t('m.topFilter.reset')}</el-button>
+          </div>
+        </div>
       )
     }
   }
@@ -191,7 +195,6 @@ export default defineComponent({
       height: 0;
     }
   }
-
 
   .filter-btn {
     margin: 5px 0;

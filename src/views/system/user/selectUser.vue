@@ -33,18 +33,18 @@ import { statusList } from '@/views/system/user/constant'
 defineProps({
   selection: {
     type: String,
-    default: 'multiple',
+    default: 'multiple'
   },
   param: {
     type: Object,
-    default: () => ({}),
+    default: () => ({})
   },
   /**
    * 最多可选择行数
    */
   selectionLimit: {
-    type: Number,
-  },
+    type: Number
+  }
 })
 const emit = defineEmits(['select'])
 
@@ -52,7 +52,7 @@ const selectRows = ref([])
 
 const topFilterColumns = shallowRef([
   { prop: 'code', label: '用户账号' },
-  { prop: 'name', label: '用户名' },
+  { prop: 'name', label: '用户名' }
 ])
 
 // 表格列定义
@@ -63,7 +63,7 @@ const columns = ref([
   { prop: 'name', label: '用户名称' },
   { prop: 'status', label: '用户状态', type: 'select', itemList: statusList },
   { prop: 'enabled', label: '是否启用', type: 'select', itemList: getDictDetails(1, 'boolean') },
-  { prop: 'createTime', label: '创建时间', type: 'datetime', width: 155 },
+  { prop: 'createTime', label: '创建时间', type: 'datetime', width: 155 }
 ])
 </script>
 <style lang="scss" scoped>

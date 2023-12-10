@@ -3,7 +3,7 @@
     height="100%"
     class="login-root"
     :class="{
-      dark: systemStore.layout.isDark,
+      dark: systemStore.layout.isDark
     }"
   >
     <div class="image-bg" />
@@ -16,7 +16,13 @@
         <div class="title-system">{{ title }}</div>
         <el-form class="form-view" @keyup.enter="submit" ref="formRef" :rules="rules" size="large" :model="formData">
           <el-form-item prop="username">
-            <el-input type="text" clearable v-model="formData.username" :placeholder="$t('login.account')" prefix-icon="User" />
+            <el-input
+              type="text"
+              clearable
+              v-model="formData.username"
+              :placeholder="$t('login.account')"
+              prefix-icon="User"
+            />
           </el-form-item>
           <el-form-item prop="password">
             <el-input
@@ -48,7 +54,7 @@
           </el-button>
         </el-form>
       </div>
-      <icpba class="icp" />
+      <Footer class="footer" />
     </div>
   </el-scrollbar>
 </template>
@@ -58,13 +64,13 @@ import { getImageCaptcha, userLogin } from '@/api/system/user'
 import { useSystemStore } from '@/stores/system'
 import { useRouter } from 'vue-router'
 import SwitchStyle from '@/layout/default/action/switchStyle.vue'
-import Icpba from '@/layout/icpba.vue'
 import { v4 as uuidv4 } from 'uuid'
 import MIcon from '@/components/Icon.vue'
 import SwitchLocale from '@/layout/default/action/switchLocale.vue'
+import Footer from '@/layout/footer.vue'
 
 defineOptions({
-  name: 'SystemLogin',
+  name: 'SystemLogin'
 })
 
 const title = import.meta.env.VITE_TITLE
@@ -78,7 +84,7 @@ const formData = reactive({
   captchaKey,
   username: '',
   password: '',
-  captchaCode: '',
+  captchaCode: ''
 })
 
 const captchaIcon = createVNode(MIcon, { modelValue: 'local|/src/assets/icon/captcha.svg' })
@@ -89,7 +95,7 @@ const verificationUrl = ref()
 const rules = reactive({
   username: [{ required: true, message: '请输入账号' }],
   password: [{ required: true, message: '请输入密码' }],
-  captchaCode: [{ required: true, message: '请输入图形验证码' }],
+  captchaCode: [{ required: true, message: '请输入图形验证码' }]
 })
 
 const formRef = ref()
@@ -106,14 +112,17 @@ function submit() {
   formRef.value.validate((valid) => {
     if (valid) {
       systemStore.setToken('')
-      userLogin({
-        ...formData,
-      }, {
-        loadingRef: loading, // vue3中的ref,可以动态更新此值
-        showSuccessMsg: true,
-        successMsg: (res) => '登录成功！欢迎你，尊敬的' + res.data.user.name, // 成功的提示信息
-        errorMsg: '登录失败', // 失败的提示信息
-      }).then((res) => {
+      userLogin(
+        {
+          ...formData
+        },
+        {
+          loadingRef: loading, // vue3中的ref,可以动态更新此值
+          showSuccessMsg: true,
+          successMsg: (res) => '登录成功！欢迎你，尊敬的' + res.data.user.name, // 成功的提示信息
+          errorMsg: '登录失败' // 失败的提示信息
+        }
+      ).then((res) => {
         const data = res.data
         systemStore.setLoginUserInfo(data)
         const firstRoute = systemStore.getFirstRoute()
@@ -138,6 +147,8 @@ function submit() {
 }
 
 .login-view {
+  position: relative;
+  min-height: 100vh;
   width: 100%;
   height: 100%;
   display: flex;
@@ -166,6 +177,7 @@ function submit() {
   }
 
   .card-view {
+    z-index: 5;
     border-radius: 10px;
     //box-shadow: var(--el-box-shadow);
     padding: 20px;
@@ -236,10 +248,9 @@ function submit() {
     margin: 20px 0;
   }
 }
-.icp {
+.footer {
+  z-index: 1;
   position: absolute;
   bottom: 0;
-  left: 0;
-  right: 0;
 }
 </style>

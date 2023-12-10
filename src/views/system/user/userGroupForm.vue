@@ -52,11 +52,11 @@ import SelectUser from '@/views/system/user/selectUser.vue'
 const props = defineProps({
   handleType: {
     type: String as PropType<FormHandleType>,
-    default: 'add',
+    default: 'add'
   },
   modelValue: {
-    type: Object as PropType<{ id: number }>,
-  },
+    type: Object as PropType<{ id: number }>
+  }
 })
 const emit = defineEmits(['close'])
 
@@ -68,7 +68,7 @@ const formLoading = ref(false)
 const saveLoading = ref(false)
 const formData = ref({
   enabled: true,
-  memberData: [] as any[],
+  memberData: [] as any[]
 })
 
 if (props.handleType !== 'add') {
@@ -84,7 +84,7 @@ async function init() {
   })
   await getUserJobs({
     type: 2,
-    userId: props.modelValue!.id!,
+    userId: props.modelValue!.id!
   }).then((res) => {
     jobData.value = res.data
   })
@@ -100,7 +100,7 @@ watchEffect(() => {
     { type: 'separator', label: '用户组岗位' },
     { slotName: 'job' },
     { type: 'separator', label: '用户组成员' },
-    { slotName: 'member' },
+    { slotName: 'member' }
   ]
 })
 
@@ -123,13 +123,13 @@ watchEffect(() => {
           <el-button onClick={() => delUser(scope.$index)} type="danger" icon="delete">
             删除
           </el-button>
-        ),
-      },
+        )
+      }
     },
     { type: 'index' },
     { prop: 'userCode', label: '用户账号' },
     { prop: 'userName', label: '用户名称' },
-    { prop: 'createTime', label: '创建时间', type: 'datetime', width: 155 },
+    { prop: 'createTime', label: '创建时间', type: 'datetime', width: 155 }
   ]
 })
 
@@ -151,7 +151,7 @@ function selectedUser(rows) {
       return {
         sysUserId: i.id,
         userCode: i.code,
-        userName: i.name,
+        userName: i.name
       }
     })
   formData.value.memberData.push(...addUser)
@@ -166,7 +166,7 @@ function save() {
       {
         loadingRef: saveLoading,
         showSuccessMsg: true,
-        successMsg: '保存成功',
+        successMsg: '保存成功'
       }
     ).then(() => close('refresh'))
   })

@@ -1,8 +1,8 @@
 <template>
   <div class="root">
     <m-table
-        layout="stretch"
-        is-i18n-label
+      layout="stretch"
+      is-i18n-label
       class="m-table"
       ref="tableRef"
       form-type="add"
@@ -47,14 +47,14 @@ const columns = ref([
   {
     fixed: true,
     label: '序',
-    type: 'index',
+    type: 'index'
   },
   {
     label: 'id',
     children: [
       { prop: 'ff', label: 'hg', notExport: true },
-      { prop: 'ff', label: '鬼地方个' },
-    ],
+      { prop: 'ff', label: '鬼地方个' }
+    ]
   },
   {
     label: '层级',
@@ -63,15 +63,15 @@ const columns = ref([
       {
         prop: 'ff',
         label: '发发撒啊发发发',
-        children: [{ prop: 'ff', label: '开会' }],
-      },
-    ],
+        children: [{ prop: 'ff', label: '开会' }]
+      }
+    ]
   },
   {
     prop: 'a',
     label: '胸衣',
     width: 100,
-    editable: true,
+    editable: true
     // editParam: {
     //   rules: { required: true },
     // }
@@ -79,13 +79,13 @@ const columns = ref([
   {
     prop: 'a',
     label: '女不女',
-    width: 100,
+    width: 100
   },
   {
     prop: 'a',
     label: '存不存v',
-    width: 100,
-  },
+    width: 100
+  }
 ])
 const data = ref([])
 
@@ -109,7 +109,7 @@ function add() {
       a: '123123',
       field3: '123123',
       top8: '123123',
-      top9: '1231231',
+      top9: '1231231'
     })
   }
 }

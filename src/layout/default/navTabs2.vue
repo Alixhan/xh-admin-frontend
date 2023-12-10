@@ -9,7 +9,7 @@
         @close="removeTab(tab.fullPath)"
         :closable="navTabs.length > 1"
         :class="{
-          'active-tab': route.fullPath === tab.fullPath,
+          'active-tab': route.fullPath === tab.fullPath
         }"
         class="tab-item"
         :type="route.fullPath === tab.fullPath ? '' : 'info'"
@@ -69,25 +69,25 @@ function initMenuItems() {
     {
       label: '重新加载',
       icon: 'Refresh',
-      disabled: navTabs[currentIndex.value]?.fullPath !== route.fullPath,
+      disabled: navTabs[currentIndex.value]?.fullPath !== route.fullPath
     },
     {
       label: '关闭此页签',
       icon: 'close',
       disabled: navTabs.length < 2,
-      type: 'default',
+      type: 'default'
     },
     { label: '关闭其他页签', icon: 'Minus', disabled: navTabs.length < 2 },
     {
       label: '关闭左侧页签',
       icon: 'ArrowLeft',
-      disabled: currentIndex.value === 0,
+      disabled: currentIndex.value === 0
     },
     {
       label: '关闭右侧页签',
       icon: 'ArrowRight',
-      disabled: currentIndex.value === navTabs.length - 1,
-    },
+      disabled: currentIndex.value === navTabs.length - 1
+    }
   ]
 }
 
@@ -101,7 +101,7 @@ watch(
       const dom = document.getElementsByClassName('active-tab').item(0)
       setTimeout(() => {
         dom?.scrollIntoView({
-          behavior: 'smooth',
+          behavior: 'smooth'
         })
       }, 500)
     })

@@ -14,7 +14,10 @@
       @selection-change="(rows) => (selectRows = rows)"
     >
       <template #left-action>
-        <el-button :disabled="selectRows.length === 0 || selectRows.length > selectionLimit" type="primary" @click="emit('select', selectRows)"
+        <el-button
+          :disabled="selectRows.length === 0 || selectRows.length > selectionLimit"
+          type="primary"
+          @click="emit('select', selectRows)"
           >选择
         </el-button>
       </template>
@@ -51,7 +54,7 @@ const topFilterColumns = shallowRef([
   { prop: 'dictTypeName', label: '字典类型', readonly: true },
   { prop: 'value', label: '字典值key' },
   { prop: 'label', label: '字典名称' },
-  { prop: 'enabled', label: '是否启用', type: 'select', itemList: getDictDetails(1, 'boolean') },
+  { prop: 'enabled', label: '是否启用', type: 'select', itemList: getDictDetails(1, 'boolean') }
 ])
 
 // 表格列定义
@@ -66,7 +69,7 @@ const columns = ref([
     prop: 'order',
     label: '排序号',
     width: 85,
-    comment: '数据字典的排列顺序，小号排在前，大号排在后。',
+    comment: '数据字典的排列顺序，小号排在前，大号排在后。'
   },
   { prop: 'enabled', label: '是否启用', type: 'select', itemList: getDictDetails(1, 'boolean') },
   { prop: 'createTime', label: '创建时间', type: 'datetime', width: 155 },

@@ -24,23 +24,23 @@
 </template>
 <script setup lang="ts" generic="T extends object">
 import MTable from '@/components/table/index.vue'
-import {computed, ref, unref, watchEffect} from 'vue'
-import type {Ref} from 'vue'
-import {ExcelTree} from '@/utils/excel'
+import { computed, ref, unref, watchEffect } from 'vue'
+import type { Ref } from 'vue'
+import { ExcelTree } from '@/utils/excel'
 import ExcelJS from 'exceljs'
 import dayjs from 'dayjs'
-import {ElMessage} from 'element-plus'
-import type {RuleObject, ValidResult} from '@i/utils/validate'
+import { ElMessage } from 'element-plus'
+import type { RuleObject, ValidResult } from '@i/utils/validate'
 import validate from '@/utils/validate'
-import type {TableColumn} from '@i/components/table'
-import type {ExcelError, ExportExcelProps} from '@i/components/excelImport'
+import type { TableColumn } from '@i/components/table'
+import type { ExcelError, ExportExcelProps } from '@i/components/excelImport'
 
 defineOptions({
-  name: 'MExcelImport',
+  name: 'MExcelImport'
 })
 
 const props = withDefaults(defineProps<ExportExcelProps<T>>(), {
-  templateFileName: '导入模板.xlsx',
+  templateFileName: '导入模板.xlsx'
 })
 
 // 导入的excel数据
@@ -66,7 +66,7 @@ const tip = ref<{
 }>({
   step: '',
   msg: '',
-  status: '',
+  status: ''
 })
 
 const tipObj = computed(() => {
@@ -75,12 +75,12 @@ const tipObj = computed(() => {
     2: { do: '解析excel', error: '解析excel失败', success: '解析excel成功' },
     3: { do: '验证数据中', error: '验证数据有误', success: '验证数据成功' },
     4: { do: '数据导入中', error: '导入失败（服务器校验未通过）', success: '数据导入成功' },
-    5: { do: '清空中', success: '清空成功' },
+    5: { do: '清空中', success: '清空成功' }
   }
   const obj = {
     msg: steps[tip.value.step!]?.[tip.value.status || 'do'] ?? '',
     icon: '',
-    color: '',
+    color: ''
   }
   if (tip.value.status === 'success') {
     obj.icon = 'CircleCheck'
@@ -97,9 +97,9 @@ const tipObj = computed(() => {
 function initTableColumn() {
   tableColumns.value = [
     {
-      type: 'index',
+      type: 'index'
     },
-    ...props.columns,
+    ...props.columns
   ]
   excelTree = new ExcelTree(unref(props.columns))
 }
@@ -114,9 +114,9 @@ const errorTableColumns: TableColumn<ExcelError>[] = [
     prop: 'excelNum',
     label: 'excel行号',
     width: 100,
-    formatter: (row, col, val) => val ?? (row.num ? row.num + (excelTree.$maxPlies ?? 0) : ''),
+    formatter: (row, col, val) => val ?? (row.num ? row.num + (excelTree.$maxPlies ?? 0) : '')
   },
-  { prop: 'error', label: '错误内容' },
+  { prop: 'error', label: '错误内容' }
 ]
 
 /**
@@ -147,7 +147,7 @@ function handleFile(e) {
       // @ts-ignore
       await workbook.xlsx.load(reader.result)
       const worksheet = workbook.getWorksheet(1)
-      if(!worksheet) throw new Error('模板不匹配')
+      if (!worksheet) throw new Error('模板不匹配')
       let flag = true // 模板匹配
       excelTree.eachNode((node) => {
         const cell = worksheet.getCell(node.$row, node.$col)
@@ -198,11 +198,12 @@ function handleFile(e) {
 async function validData() {
   const data = importData.value.map((item) => Object.assign({}, item))
   const ruleObject: RuleObject<T> = excelTree.leafNodes.reduce<RuleObject<T>>((a, b) => {
-    b.rules && (a[b.prop!] = {
-      prop: b.prop as keyof T,
-      label: b.label,
-      rules: b.rules
-    })
+    b.rules &&
+      (a[b.prop!] = {
+        prop: b.prop as keyof T,
+        label: b.label,
+        rules: b.rules
+      })
     return a
   }, {})
   const dataArr: any[] = [...data]
@@ -218,7 +219,7 @@ async function validData() {
         errorData.value.push({
           num: num + 1,
           excelNum: num + (excelTree.$maxPlies ?? 0),
-          error: i.errFields.map((i) => i.errMsg).join('；'),
+          error: i.errFields.map((i) => i.errMsg).join('；')
         })
       }
     })
@@ -260,7 +261,7 @@ function subImport() {
 function cellStyle({ column }) {
   if (column.property === 'error') {
     return {
-      color: 'red',
+      color: 'red'
     }
   }
 }
@@ -280,7 +281,7 @@ function clear() {
 defineExpose({
   downloadTemplate,
   validData,
-  subImport,
+  subImport
 })
 </script>
 <style scoped>

@@ -1,13 +1,13 @@
 <script setup>
-import DefaultTheme from "vitepress/theme";
-import Icpba from '@/layout/icpba.vue'
+import DefaultTheme from 'vitepress/theme'
+import Footer from '@/layout/footer.vue'
 </script>
 
 <template>
   <DefaultTheme.Layout>
     <template #layout-bottom>
       <div style="text-align: center">
-        <Icpba/>
+        <Footer/>
       </div>
     </template>
   </DefaultTheme.Layout>
@@ -47,7 +47,6 @@ import Icpba from '@/layout/icpba.vue'
 
 h1 { // h1 标签渐变色文本
   display: inline-block;
-  -webkit-background-clip: text;
   background-clip: text;
   color: #0000;
   white-space: nowrap;

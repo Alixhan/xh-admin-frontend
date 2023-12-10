@@ -27,22 +27,22 @@ import { useLocalStorage } from '@vueuse/core'
 export declare type LocaleKey = 'zh-cn' | 'zh-tw' | 'en' | 'ja'
 
 export interface Locales {
-  key: LocaleKey,
+  key: LocaleKey
   //语言名称
-  label: string,
+  label: string
   //字符平均宽度 像素
-  charWidth: number,
+  charWidth: number
   //语言包数据
-  locale: object,
+  locale: object
   //语言图标
-  icon: string,
+  icon: string
 }
 
-export const locales: Locales [] = [
-  { key: 'zh-cn', label: '简体中文',charWidth: 15, locale: merge(zhCn, elZhCn), icon: Chinese },
-  { key: 'zh-tw', label: '繁體中文',charWidth: 15, locale: merge(zhTw, elZhTw), icon: ChineseF },
-  { key: 'en', label: 'English',charWidth: 9, locale: merge(en, elEn), icon: English },
-  { key: 'ja', label: '日本語',charWidth: 14, locale: merge(ja, elJa), icon: Japanese },
+export const locales: Locales[] = [
+  { key: 'zh-cn', label: '简体中文', charWidth: 15, locale: merge(zhCn, elZhCn), icon: Chinese },
+  { key: 'zh-tw', label: '繁體中文', charWidth: 15, locale: merge(zhTw, elZhTw), icon: ChineseF },
+  { key: 'en', label: 'English', charWidth: 9, locale: merge(en, elEn), icon: English },
+  { key: 'ja', label: '日本語', charWidth: 14, locale: merge(ja, elJa), icon: Japanese }
 ]
 
 export function getLocale() {
@@ -57,7 +57,7 @@ export function getLocale() {
  */
 export function getCurrentLocales(): Locales {
   const systemStore = useSystemStore()
-  return locales.find(i => i.key === systemStore.locale)!
+  return locales.find((i) => i.key === systemStore.locale)!
 }
 
 const i18n = createI18n({

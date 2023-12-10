@@ -1,21 +1,23 @@
 <template>
   <div
-    class="default-root-view"
-    :class="{
+      class="default-root-view"
+      :class="{
       'menu-expand': !systemStore.layout.menuCollapse
     }"
   >
     <div class="left-view">
-      <Logo v-if="systemStore.layout.showLogo" class="logo" />
-      <Menu class="menu" />
+      <Logo v-if="systemStore.layout.showLogo" class="logo"/>
+      <Menu class="menu"/>
     </div>
     <div class="right-view">
-      <Header class="header" />
-      <div class="main">
-        <Main style="height: 100%; width: 100%"/>
-      </div>
+      <Header class="header"/>
+      <Main class="main"/>
       <transition name="el-fade-in" mode="out-in">
-        <div v-if="!systemStore.layout.menuCollapse" class="mock-view" @click.stop="systemStore.layout.menuCollapse = true" />
+        <div
+            v-if="!systemStore.layout.menuCollapse"
+            class="mock-view"
+            @click.stop="systemStore.layout.menuCollapse = true"
+        />
       </transition>
     </div>
   </div>
@@ -25,8 +27,8 @@ import Logo from './logo'
 import Menu from './menu'
 import Main from '@/layout/main'
 import Header from './header'
-import { computed } from 'vue'
-import { useSystemStore } from '@/stores/system'
+import {computed} from 'vue'
+import {useSystemStore} from '@/stores/system'
 
 /**
  * 默认布局

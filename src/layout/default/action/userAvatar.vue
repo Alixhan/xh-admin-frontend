@@ -44,7 +44,7 @@ const router = useRouter()
 const avatar = computed(() => {
   if (systemStore.user?.avatar)
     return getDownloadFileUrl({
-      object: systemStore.user?.avatar,
+      object: systemStore.user?.avatar
     })
   return defaultAvatar
 })
@@ -61,7 +61,7 @@ function handleCommand(key) {
   if (key === 'logout') {
     userLogout({
       showSuccessMsg: true,
-      successMsg: '注销成功',
+      successMsg: '注销成功'
     }).then(() => {
       setTimeout(systemStore.logout, 1000)
     })

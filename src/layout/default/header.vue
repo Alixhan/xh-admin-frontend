@@ -3,7 +3,7 @@
     class="header-view"
     :class="{
       'width-shrink-layout': systemStore.layout.widthShrink,
-      'height-shrink-layout': systemStore.layout.heightShrink,
+      'height-shrink-layout': systemStore.layout.heightShrink
     }"
   >
     <div class="header-top">
@@ -17,11 +17,15 @@
               :class="{ rotate180: systemStore.layout.menuCollapse }"
             />
           </el-icon>
-          <NavTabs v-if="systemStore.layout.heightShrink && !systemStore.layout.widthShrink" key="nav-tabs" class="nav-tabs" />
+          <NavTabs
+            v-if="systemStore.layout.heightShrink && !systemStore.layout.widthShrink"
+            key="nav-tabs"
+            class="nav-tabs"
+          />
           <Breadcrumb v-else-if="!systemStore.layout.widthShrink" class="breadcrumb" />
         </div>
       </div>
-      <el-link v-if="isDev" style="margin-right: 10px;" @click="cp">
+      <el-link v-if="isDev" style="margin-right: 10px" @click="cp">
         {{ route.meta.component }}
       </el-link>
       <Action class="action" />
@@ -40,6 +44,9 @@ import { useClipboard, usePermission } from '@vueuse/core'
 import { ElMessage } from 'element-plus'
 import MSvgIcon from '@/components/SvgIcon.vue'
 
+defineOptions({
+  name: 'DefaultHeader'
+})
 const { copy } = useClipboard()
 usePermission('clipboard-write')
 
@@ -48,7 +55,7 @@ function cp() {
     console.info('恭喜你！你发现了这个贴心的小功能~👻🏀🐔')
     ElMessage({
       type: 'success',
-      message: '已复制到剪切板',
+      message: '已复制到剪切板'
     })
   })
 }
@@ -64,7 +71,7 @@ function toggleMenuCollapse() {
 </script>
 <style scoped lang="scss">
 .header-view {
-  padding: 10px 10px 10px 10px;
+  padding: 10px;
 
   .header-top {
     display: flex;
@@ -106,9 +113,5 @@ function toggleMenuCollapse() {
   .nav-tabs {
     font-size: 12px;
   }
-}
-
-.height-shrink-layout {
-  padding-bottom: 0;
 }
 </style>

@@ -10,7 +10,9 @@
 </template>
 <script setup>
 import { useSystemStore } from '@/stores/system'
-
+defineOptions({
+  name: 'DefaultBreadcrumb'
+})
 const systemStore = useSystemStore()
 </script>
 <style scoped lang="scss">

@@ -1,5 +1,5 @@
 <script lang="tsx">
-import {computed, createVNode, provide, ref, shallowRef, watchEffect} from 'vue'
+import { computed, createVNode, provide, ref, shallowRef, watchEffect } from 'vue'
 import {
   generateDynamicColumn,
   generateFormRules,
@@ -7,10 +7,10 @@ import {
   generatePlaceholder,
   vModelValue
 } from '@/components/mutils'
-import {useSystemStore} from '@/stores/system'
-import {useElementSize} from '@vueuse/core'
-import type {UploadCtx} from '@/components/form/Upload.vue'
-import {mFormEmits, mFormProps} from '@i/components/form'
+import { useSystemStore } from '@/stores/system'
+import { useElementSize } from '@vueuse/core'
+import type { UploadCtx } from '@/components/form/Upload.vue'
+import { mFormEmits, mFormProps } from '@i/components/form'
 
 /**
  * 通用表单组件
@@ -19,16 +19,16 @@ import {mFormEmits, mFormProps} from '@i/components/form'
 export default {
   name: 'MForm',
   inheritAttrs: false,
-  props: {...mFormProps},
-  emits: {...mFormEmits},
+  props: { ...mFormProps },
+  emits: { ...mFormEmits },
   setup(
-      props,
-      {
-        attrs,
-        slots,
-        expose
-        // emit,
-      }
+    props,
+    {
+      attrs,
+      slots,
+      expose
+      // emit,
+    }
   ) {
     const systemStore = useSystemStore()
 
@@ -59,19 +59,19 @@ export default {
     }
 
     expose({
-      clearValidate: function() {
+      clearValidate: function () {
         return formRef.value.clearValidate(...arguments)
       },
-      scrollToField: function() {
+      scrollToField: function () {
         return formRef.value.scrollToField(...arguments)
       },
-      resetFields: function() {
+      resetFields: function () {
         return formRef.value.resetFields(...arguments)
       },
-      validateField: function() {
+      validateField: function () {
         return formRef.value.validateField(...arguments)
       },
-      validate: function() {
+      validate: function () {
         return formRef.value.validate(...arguments)
       },
       submit
@@ -105,14 +105,14 @@ export default {
         if (i.hidden) return null
         if (i.columnParam.type === 'separator') {
           return (
-              <el-col span={24}>
-                <el-divider content-position="left">
-                  <div class="separator">
-                    <div />
-                    {i.columnParam.label}
-                  </div>
-                </el-divider>
-              </el-col>
+            <el-col span={24}>
+              <el-divider content-position="left">
+                <div class="separator">
+                  <div />
+                  {i.columnParam.label}
+                </div>
+              </el-divider>
+            </el-col>
           )
         }
         const column = i.columnParam
@@ -122,13 +122,13 @@ export default {
           class: 'form-input',
           ...i.renderArgs.param,
           ...vModelValue(
-              {
-                type: column.type,
-                prop: column.prop,
-                prop2: column.prop2,
-                single: column.single
-              },
-              props.model
+            {
+              type: column.type,
+              prop: column.prop,
+              prop2: column.prop2,
+              single: column.single
+            },
+            props.model
           )
         }
         const formItemSlots: { [name: string]: Function } = {
@@ -140,10 +140,10 @@ export default {
         if (column.comment) {
           formItemSlots.label = () => {
             return (
-                <div class="form-item-label">
-                  <div>{column.label}</div>
-                  <m-comment label={column.label} comment={column.comment} />
-                </div>
+              <div class="form-item-label">
+                <div>{column.label}</div>
+                <m-comment label={column.label} comment={column.comment} />
+              </div>
             )
           }
         }
@@ -152,9 +152,9 @@ export default {
         if (column.cols) span = parseInt(column.cols) * span
         if (span > 24) span = 24
         return (
-            <el-col span={span}>
-              <el-form-item {...i.formItemParams} v-slots={formItemSlots} />
-            </el-col>
+          <el-col span={span}>
+            <el-form-item {...i.formItemParams} v-slots={formItemSlots} />
+          </el-col>
         )
       })
     }
@@ -164,7 +164,8 @@ export default {
       return formItemParams.value.map((i) => {
         // 隐藏的不显示
         if (i.hidden) return null
-        if (i.columnParam.type === 'separator') return <el-skeleton-item style={{width: '60%', marginBottom: '1em'}} />
+        if (i.columnParam.type === 'separator')
+          return <el-skeleton-item style={{ width: '60%', marginBottom: '1em' }} />
         const column = i.columnParam
         const formItemSlots: { [name: string]: Function } = {
           default: () => {
@@ -203,9 +204,9 @@ export default {
         if (column.cols) span = parseInt(column.cols) * span
         if (span > 24) span = 24
         return (
-            <el-col span={span}>
-              <el-form-item {...{ ...i.formItemParams, required: false }} v-slots={formItemSlots} />
-            </el-col>
+          <el-col span={span}>
+            <el-form-item {...{ ...i.formItemParams, required: false }} v-slots={formItemSlots} />
+          </el-col>
         )
       })
     }
@@ -236,9 +237,9 @@ export default {
         template: () => <el-row>{generateFormSkeletons()}</el-row>
       }
       return (
-          <el-form {...formParam} v-slots={slots} class={{ 'detail-form': props.handleType === 'detail' }}>
-            <el-skeleton {...skeletonParam} v-slots={skeletonSlots} />
-          </el-form>
+        <el-form {...formParam} v-slots={slots} class={{ 'detail-form': props.handleType === 'detail' }}>
+          <el-skeleton {...skeletonParam} v-slots={skeletonSlots} />
+        </el-form>
       )
     }
   }

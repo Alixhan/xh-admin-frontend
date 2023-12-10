@@ -1,8 +1,14 @@
 <template>
   <div class="form-view">
     <el-scrollbar class="m-form-scroll">
-      <m-form ref="formRef" :colspan="24" :columns="columns" :model="formData" :handleType="props.handleType"
-v-model:loading="saveLoading" />
+      <m-form
+        ref="formRef"
+        :colspan="24"
+        :columns="columns"
+        :model="formData"
+        :handleType="props.handleType"
+        v-model:loading="saveLoading"
+      />
     </el-scrollbar>
     <div class="m-footer">
       <el-button icon="close" @click="close()">取消</el-button>
@@ -51,7 +57,7 @@ watchEffect(() => {
     {
       prop: 'file3',
       label: '文件上传',
-      type: 'upload-file',
+      type: 'upload-file'
     },
     {
       prop: 'path',

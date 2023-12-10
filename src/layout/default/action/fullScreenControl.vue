@@ -10,5 +10,4 @@ import ExitFullScreenSvg from '@/assets/icon/exitfullscreen.svg'
 
 const { isFullscreen, toggle } = useFullscreen()
 </script>
-<style scoped lang="scss">
-</style>
+<style scoped lang="scss"></style>

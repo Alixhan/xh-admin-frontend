@@ -26,7 +26,9 @@
     <!--    </template>-->
     <template #trigger>
       <div v-if="type === 'upload-img'" class="el-upload--picture-card">
-        <div class="file-lib-btn" v-auth="'system:file'" @click.stop="openFileLib('image/')">{{ $t('m.form.lib') }}</div>
+        <div class="file-lib-btn" v-auth="'system:file'" @click.stop="openFileLib('image/')">
+          {{ $t('m.form.lib') }}
+        </div>
         <Plus class="icon" />
       </div>
       <div v-else>
@@ -90,7 +92,7 @@ import type { DownloadParam } from '@i/utils'
 import Cropper from './Cropper.vue'
 
 defineOptions({
-  name: 'MUpload',
+  name: 'MUpload'
 })
 
 const emit = defineEmits(['update:fileList', 'update:modelValue'])
@@ -98,24 +100,24 @@ const emit = defineEmits(['update:fileList', 'update:modelValue'])
 const props = defineProps({
   //设置为单一文件，直接传入文件表ID即可
   single: {
-    type: String as PropType<'id' | 'object'>,
+    type: String as PropType<'id' | 'object'>
   },
   type: {
-    type: String,
+    type: String
   },
   disabled: {
     type: Boolean,
-    default: false,
+    default: false
   },
   modelValue: {
-    required: true,
+    required: true
   },
   cropper: {
-    type: Object,
+    type: Object
   },
   tip: {
-    type: String,
-  },
+    type: String
+  }
 })
 
 const attrs = useAttrs()
@@ -128,7 +130,7 @@ const uploadParam = computed(() => {
     listType?: string
     accept?: string
   } = {
-    autoUpload: false,
+    autoUpload: false
   }
 
   // 上传图片默认参数
@@ -146,7 +148,7 @@ const uploadParam = computed(() => {
     onRemove,
     onPreview,
     // 需要裁剪的图片一次只能选择一张
-    multiple: !props.cropper,
+    multiple: !props.cropper
   }
   //如果是单文件上传，设置limit为1
   if (props.single) {
@@ -169,8 +171,8 @@ watchEffect(() => {
       {
         ...downloadParam,
         status: 'success',
-        url: getDownloadFileUrl(downloadParam),
-      },
+        url: getDownloadFileUrl(downloadParam)
+      }
     ]
   } else {
     fileList.value = (props.modelValue as any[]) ?? []
@@ -183,7 +185,7 @@ const initialIndex = ref(1)
 
 const visible = ref(false)
 const param = ref({
-  type: '',
+  type: ''
 })
 const selection = ref('multiple')
 const selectLimit = computed(() => {
@@ -210,11 +212,11 @@ function onChange(file, files) {
           raw: file,
           size: file.size,
           // @ts-ignore
-          url: (window.createObjectURL || window.URL.createObjectURL)(file),
+          url: (window.createObjectURL || window.URL.createObjectURL)(file)
         })
         visible2.value = false
       },
-      ...props.cropper,
+      ...props.cropper
     }
     cropperFile.value = file
     files.pop()
@@ -268,9 +270,9 @@ function select(rows) {
         size: i.size,
         imgWidth: i.imgWidth,
         imgHeight: i.imgHeight,
-        imgRatio: i.imgRatio,
+        imgRatio: i.imgRatio
       }
-    }),
+    })
   ])
   visible.value = false
 }
@@ -324,7 +326,7 @@ export interface UploadCtx {
 }
 
 const ctx: UploadCtx = {
-  upload,
+  upload
 }
 defineExpose(ctx)
 const uploadInstances: UploadCtx[] = inject('uploadInstances', [])

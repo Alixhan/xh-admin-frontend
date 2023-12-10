@@ -1,9 +1,9 @@
 import FileSaver from 'file-saver'
-import type {Border} from 'exceljs'
+import type { Border } from 'exceljs'
 import ExcelJS from 'exceljs'
-import {generateFormatter, getRules} from '@/components/mutils'
-import {toRaw} from 'vue'
-import type {CommonExcelColumn, ExcelJsWorksheetColumn, ExcelTreeNode} from '@i/utils/excel'
+import { generateFormatter, getRules } from '@/components/mutils'
+import { toRaw } from 'vue'
+import type { CommonExcelColumn, ExcelJsWorksheetColumn, ExcelTreeNode } from '@i/utils/excel'
 
 /**
  * excel树,提供遍历方法和导出文件方法
@@ -30,14 +30,14 @@ export class ExcelTree<T extends object> implements ExcelTreeNode<T> {
     return column.notExport || column.hidden || ['operation', 'selection'].includes(column.type ?? '')
   }
 
-  constructor(columns: CommonExcelColumn<T> []) {
+  constructor(columns: CommonExcelColumn<T>[]) {
     this.children = columns.map(clone<T>)
     this.nodes = [] // 所有可用节点集合，前序排列
     const stackArray: ExcelTreeNode<T>[] = [this]
     const leafNodes: ExcelTreeNode<T>[] = [] // 叶子节点集合
     while (stackArray.length) {
       const node = stackArray[stackArray.length - 1]
-      if(node.rules) node.rules = getRules(node)
+      if (node.rules) node.rules = getRules(node)
       if (this.invalidColumn(node)) {
         stackArray.pop()
         continue
@@ -110,7 +110,7 @@ export class ExcelTree<T extends object> implements ExcelTreeNode<T> {
   /**
    * 导出为excel文件
    */
-  async exportExcel(fileName: string, data: any []) {
+  async exportExcel(fileName: string, data: any[]) {
     const workbook = new ExcelJS.Workbook()
     const worksheet = workbook.addWorksheet('sheet')
     this.eachNode((node) => {
@@ -118,7 +118,12 @@ export class ExcelTree<T extends object> implements ExcelTreeNode<T> {
       cell.value = node.label
       if ((node.$colSpan > 1 || node.$rowSpan > 1) && node.$plies > 0) {
         // 按开始行，开始列，结束行，结束列合并
-        worksheet.mergeCells(node.$row, node.$col, node.$row + (node.$rowSpan || 1) - 1, node.$col + (node.$colSpan || 1) - 1)
+        worksheet.mergeCells(
+          node.$row,
+          node.$col,
+          node.$row + (node.$rowSpan || 1) - 1,
+          node.$col + (node.$colSpan || 1) - 1
+        )
       }
       // 标题单元格背景色
       cell.fill = {
@@ -170,7 +175,7 @@ export class ExcelTree<T extends object> implements ExcelTreeNode<T> {
               val = j.formatter(item, j as any, val, index)
             }
             if (j.type === 'index') {
-              val = (j.index instanceof Function) ? j.index(rows.length) : rows.length + 1
+              val = j.index instanceof Function ? j.index(rows.length) : rows.length + 1
             }
             return val
           })

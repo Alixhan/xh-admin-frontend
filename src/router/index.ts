@@ -9,15 +9,15 @@ import Layout from '@/layout/index.vue'
 export const staticRouters = [
   {
     path: '/',
-    redirect: '/login',
+    redirect: '/login'
   },
   {
     path: '/login',
     name: 'login',
     component: () => import('@/views/login/index.vue'),
     meta: {
-      title: '系统登录',
-    },
+      title: '系统登录'
+    }
   },
   {
     name: '',
@@ -32,7 +32,7 @@ export const staticRouters = [
         meta: {
           title: 'Not Found',
           icon: 'local|/src/assets/icon/404.svg'
-        },
+        }
       },
       {
         path: `/${import.meta.env.VITE_LAYOUT_ROUTE_NAME}/personalCenter`,
@@ -43,15 +43,15 @@ export const staticRouters = [
           cache: true,
           componentName: `/${import.meta.env.VITE_LAYOUT_ROUTE_NAME}/personalCenter`,
           icon: 'el|Avatar'
-        },
-      },
-    ],
-  },
+        }
+      }
+    ]
+  }
 ]
 
 const router = createRouter({
   history: createWebHashHistory(),
-  routes: staticRouters,
+  routes: staticRouters
 })
 
 router.beforeEach(async (to, from, next) => {
@@ -59,7 +59,7 @@ router.beforeEach(async (to, from, next) => {
   NProgress.start()
   const systemStore = useSystemStore()
   const path = await systemStore.beforeEach(to)
-  path ? next(path): next()
+  path ? next(path) : next()
 })
 
 router.afterEach((to) => {

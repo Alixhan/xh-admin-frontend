@@ -1,28 +1,30 @@
 <template>
   <div>
     <el-button type="primary">辅导费</el-button>
-    <el-switch v-model="formLoading"/>
+    <el-switch v-model="formLoading" />
     <el-select v-model="handleType" placeholder="handleType">
       <el-option value="add">add</el-option>
       <el-option value="edit">edit</el-option>
       <el-option value="detail">detail</el-option>
     </el-select>
     <m-form
-        ref="formRef"
-        :colspan="24"
-        :columns="columns"
-        :model="formData"
-        label-position="top"
-        :handleType="handleType"
-        :loading="formLoading"
+      ref="formRef"
+      :colspan="24"
+      :columns="columns"
+      :model="formData"
+      label-position="top"
+      :handleType="handleType"
+      :loading="formLoading"
     />
     <el-button type="primary" @click="submit">提交表单</el-button>
   </div>
 </template>
 <script setup lang="tsx">
-import {reactive, ref} from 'vue'
-import type {CommonFormColumn} from '@i/components/form'
-
+import { reactive, ref } from 'vue'
+import type { CommonFormColumn } from '@i/components/form'
+defineOptions({
+  name: 'DemoForm'
+})
 const formRef = ref()
 const handleType = ref('add')
 const formLoading = ref(false)
@@ -30,17 +32,17 @@ const formLoading = ref(false)
 const formData = reactive({})
 
 // 表单列定义
-const columns = ref<CommonFormColumn<any> []>([
-  {prop: 'input', label: 'input输入框'},
+const columns = ref<CommonFormColumn<any>[]>([
+  { prop: 'input', label: 'input输入框' },
   {
     prop: 'select',
     label: 'select选择框',
     type: 'select',
     itemList: [
-      {value: '1', label: '选我发大财'},
-      {value: '2', label: '选我心想事成'},
-      {value: '3', label: '选我身体健康'},
-    ],
+      { value: '1', label: '选我发大财' },
+      { value: '2', label: '选我心想事成' },
+      { value: '3', label: '选我身体健康' }
+    ]
   },
   {
     prop: 'select',
@@ -50,10 +52,10 @@ const columns = ref<CommonFormColumn<any> []>([
     valueKey: 'id',
     labelKey: 'name',
     itemList: [
-      {id: '1', name: '选我发大财'},
-      {id: '2', name: '选我心想事成'},
-      {id: '3', name: '选我身体健康'},
-    ],
+      { id: '1', name: '选我发大财' },
+      { id: '2', name: '选我心想事成' },
+      { id: '3', name: '选我身体健康' }
+    ]
   },
   {
     prop: 'autocomplete',
@@ -61,19 +63,19 @@ const columns = ref<CommonFormColumn<any> []>([
     type: 'autocomplete',
     fetchSuggestions(queryString, callbback) {
       const res = [
-        {value: 'vue', link: 'https://github.com/vuejs/vue'},
-        {value: 'element', link: 'https://github.com/ElemeFE/element'},
-        {value: 'cooking', link: 'https://github.com/ElemeFE/cooking'},
-        {value: 'mint-ui', link: 'https://github.com/ElemeFE/mint-ui'},
-        {value: 'vuex', link: 'https://github.com/vuejs/vuex'},
-        {value: 'vue-router', link: 'https://github.com/vuejs/vue-router'},
-        {value: 'babel', link: 'https://github.com/babel/babel'},
+        { value: 'vue', link: 'https://github.com/vuejs/vue' },
+        { value: 'element', link: 'https://github.com/ElemeFE/element' },
+        { value: 'cooking', link: 'https://github.com/ElemeFE/cooking' },
+        { value: 'mint-ui', link: 'https://github.com/ElemeFE/mint-ui' },
+        { value: 'vuex', link: 'https://github.com/vuejs/vuex' },
+        { value: 'vue-router', link: 'https://github.com/vuejs/vue-router' },
+        { value: 'babel', link: 'https://github.com/babel/babel' }
       ]
       callbback(res.filter((i) => i.value.indexOf(queryString) !== -1))
     },
     onSelect(item) {
       console.log(item)
-    },
+    }
   },
   {
     prop: 'cascader',
@@ -90,21 +92,21 @@ const columns = ref<CommonFormColumn<any> []>([
             children: [
               {
                 value: 'consistency',
-                label: 'Consistency',
+                label: 'Consistency'
               },
               {
                 value: 'feedback',
-                label: 'Feedback',
+                label: 'Feedback'
               },
               {
                 value: 'efficiency',
-                label: 'Efficiency',
+                label: 'Efficiency'
               },
               {
                 value: 'controllability',
-                label: 'Controllability',
-              },
-            ],
+                label: 'Controllability'
+              }
+            ]
           },
           {
             value: 'navigation',
@@ -112,15 +114,15 @@ const columns = ref<CommonFormColumn<any> []>([
             children: [
               {
                 value: 'side nav',
-                label: 'Side Navigation',
+                label: 'Side Navigation'
               },
               {
                 value: 'top nav',
-                label: 'Top Navigation',
-              },
-            ],
-          },
-        ],
+                label: 'Top Navigation'
+              }
+            ]
+          }
+        ]
       },
       {
         value: 'component',
@@ -132,25 +134,25 @@ const columns = ref<CommonFormColumn<any> []>([
             children: [
               {
                 value: 'layout',
-                label: 'Layout',
+                label: 'Layout'
               },
               {
                 value: 'color',
-                label: 'Color',
+                label: 'Color'
               },
               {
                 value: 'typography',
-                label: 'Typography',
+                label: 'Typography'
               },
               {
                 value: 'icon',
-                label: 'Icon',
+                label: 'Icon'
               },
               {
                 value: 'button',
-                label: 'Button',
-              },
-            ],
+                label: 'Button'
+              }
+            ]
           },
           {
             value: 'form',
@@ -158,63 +160,63 @@ const columns = ref<CommonFormColumn<any> []>([
             children: [
               {
                 value: 'radio',
-                label: 'Radio',
+                label: 'Radio'
               },
               {
                 value: 'checkbox',
-                label: 'Checkbox',
+                label: 'Checkbox'
               },
               {
                 value: 'input',
-                label: 'Input',
+                label: 'Input'
               },
               {
                 value: 'input-number',
-                label: 'InputNumber',
+                label: 'InputNumber'
               },
               {
                 value: 'select',
-                label: 'Select',
+                label: 'Select'
               },
               {
                 value: 'cascader',
-                label: 'Cascader',
+                label: 'Cascader'
               },
               {
                 value: 'switch',
-                label: 'Switch',
+                label: 'Switch'
               },
               {
                 value: 'slider',
-                label: 'Slider',
+                label: 'Slider'
               },
               {
                 value: 'time-picker',
-                label: 'TimePicker',
+                label: 'TimePicker'
               },
               {
                 value: 'date-picker',
-                label: 'DatePicker',
+                label: 'DatePicker'
               },
               {
                 value: 'datetime-picker',
-                label: 'DateTimePicker',
+                label: 'DateTimePicker'
               },
               {
                 value: 'upload',
-                label: 'Upload',
+                label: 'Upload'
               },
               {
                 value: 'rate',
-                label: 'Rate',
+                label: 'Rate'
               },
               {
                 value: 'form',
-                label: 'Form',
-              },
-            ],
-          },
-        ],
+                label: 'Form'
+              }
+            ]
+          }
+        ]
       },
       {
         value: 'resource',
@@ -222,49 +224,49 @@ const columns = ref<CommonFormColumn<any> []>([
         children: [
           {
             value: 'axure',
-            label: 'Axure Components',
+            label: 'Axure Components'
           },
           {
             value: 'sketch',
-            label: 'Sketch Templates',
+            label: 'Sketch Templates'
           },
           {
             value: 'docs',
-            label: 'Design Documentation',
-          },
-        ],
-      },
+            label: 'Design Documentation'
+          }
+        ]
+      }
     ],
     props: {
-      expandTrigger: 'hover',
+      expandTrigger: 'hover'
     },
     onChange(val) {
       console.log(val)
-    },
+    }
   },
-  {prop: 'checkbox', label: 'checkbox', type: 'checkbox'},
+  { prop: 'checkbox', label: 'checkbox', type: 'checkbox' },
   {
     prop: 'checkboxgroup',
     label: 'checkbox-group多选框组',
     type: 'checkbox-group',
     comment: '可以传入valueKey指定数据对象的value属性，labelKey指定对象的label属性',
     itemList: [
-      {value: '1', label: '选我发大财'},
-      {value: '2', label: '选我心想事成'},
-      {value: '3', label: '选身体健康'},
-    ],
+      { value: '1', label: '选我发大财' },
+      { value: '2', label: '选我心想事成' },
+      { value: '3', label: '选身体健康' }
+    ]
   },
   {
     prop: 'colorpicker',
     label: 'color-picker颜色选择器',
-    type: 'color-picker',
+    type: 'color-picker'
   },
-  {prop: 'date', label: '日期选择', type: 'date'},
+  { prop: 'date', label: '日期选择', type: 'date' },
   {
     prop: 'datedaterange',
     prop2: 'datedaterange2',
     label: '日期段选择',
-    type: 'daterange',
+    type: 'daterange'
   },
   {
     prop: 'datedaterange',
@@ -272,57 +274,58 @@ const columns = ref<CommonFormColumn<any> []>([
     label: '日期段独立选择',
     type: 'daterange',
     single: true,
-    comment: '如果需要时间段起止独立选择，则可以设置single为true, 其他时间段选择使用一致，datetimerange, monthrange',
+    comment: '如果需要时间段起止独立选择，则可以设置single为true, 其他时间段选择使用一致，datetimerange, monthrange'
   },
   {
     prop: 'input-number',
     label: 'Input Number 数字输入框',
-    type: 'input-number',
+    type: 'input-number'
   },
-  {prop: 'radio', label: 'radio', type: 'radio'},
+  { prop: 'radio', label: 'radio', type: 'radio' },
   {
     prop: 'radiogroup',
     label: 'radio-group单选选框组',
     type: 'radio-group',
     comment: '可以传入valueKey指定数据对象的value属性，labelKey指定对象的label属性',
     itemList: [
-      {value: '1', label: '选我发大财'},
-      {value: '2', label: '选我心想事成'},
-      {value: '3', label: '选身体健康'},
-    ],
+      { value: '1', label: '选我发大财' },
+      { value: '2', label: '选我心想事成' },
+      { value: '3', label: '选身体健康' }
+    ]
   },
   {
     prop: 'radiogroup',
     label: 'radio-group单选选框组，定制子选项的属性',
     type: 'radio-group',
     comment:
-        '和select一样，可以传入valueKey指定数据对象的value属性，labelKey指定对象的label属性, 还可以设置itemParam的值定制option选项的属性， checkbox同理',
+      '和select一样，可以传入valueKey指定数据对象的value属性，labelKey指定对象的label属性, 还可以设置itemParam的值定制option选项的属性， checkbox同理',
     valueKey: 'id',
     itemList: [
-      {id: '1', label: '选我发大财'},
-      {id: '2', label: '选我心想事成'},
-      {id: '3', label: '选身体健康'},
+      { id: '1', label: '选我发大财' },
+      { id: '2', label: '选我心想事成' },
+      { id: '3', label: '选身体健康' }
     ],
     itemParam: {
-      border: false,
-    },
+      border: false
+    }
   },
-  {prop: 'rate', label: 'rate评分', type: 'rate'},
-  {prop: 'slider', label: 'rate滑块', type: 'slider'},
-  {prop: 'switch', label: 'switch开关', type: 'switch'},
+  { prop: 'rate', label: 'rate评分', type: 'rate' },
+  { prop: 'slider', label: 'rate滑块', type: 'slider' },
+  { prop: 'switch', label: 'switch开关', type: 'switch' },
   {
     prop: 'input2',
     label: '输入框验证',
-    comment: '验证在兼容原element验证的基础上进行了增强,如：默认将label拼接至错误消息中，添加了一些常用的验证等， 具体可以查看/utils/validate.js',
-    rules: [{required: true, type: 'number'}],
+    comment:
+      '验证在兼容原element验证的基础上进行了增强,如：默认将label拼接至错误消息中，添加了一些常用的验证等， 具体可以查看/utils/validate.js',
+    rules: [{ required: true, type: 'number' }]
   },
   {
     prop: 'file',
     label: '图片上传',
     type: 'upload-img',
-    rules: [{required: true, trigger: 'change'}],
+    rules: [{ required: true, trigger: 'change' }],
     multiple: true,
-    limit: 5,
+    limit: 5
   },
   {
     prop: 'file2',
@@ -330,14 +333,14 @@ const columns = ref<CommonFormColumn<any> []>([
     type: 'upload-img',
     limit: 5,
     comment: (
-        <span>
+      <span>
         裁剪功能引用vue-cropper组件，更多裁剪属性定制参考官网文档，
         <a href="https://github.com/xyxiao001/vue-cropper#readme" target="_blank">
           https://github.com/xyxiao001/vue-cropper#readme
         </a>
       </span>
     ),
-    cropper: {},
+    cropper: {}
   },
   {
     prop: 'file4',
@@ -345,7 +348,7 @@ const columns = ref<CommonFormColumn<any> []>([
     type: 'upload-img',
     limit: 5,
     comment: (
-        <span>
+      <span>
         裁剪功能引用vue-cropper组件，更多裁剪属性定制参考官网文档，
         <a href="https://github.com/xyxiao001/vue-cropper#readme" target="_blank">
           https://github.com/xyxiao001/vue-cropper#readme
@@ -356,15 +359,15 @@ const columns = ref<CommonFormColumn<any> []>([
       // 固定比例
       fixed: true,
       // 固定比例
-      fixedNumber: [1, 1],
-    },
+      fixedNumber: [1, 1]
+    }
   },
   {
     prop: 'file3',
     label: '文件上传',
     type: 'upload-file',
-    limit: 5,
-  },
+    limit: 5
+  }
 ])
 
 async function submit() {

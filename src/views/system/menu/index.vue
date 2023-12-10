@@ -15,13 +15,14 @@
       @selection-change="(rows) => (selectRows = rows)"
     >
       <template #left-action>
-        <el-button type="success" @click="toggleExpand">{{ $t("common.expand") }}/{{ $t("common.collapse") }}
-          {{ $t("common.all") }}
+        <el-button type="success" @click="toggleExpand"
+          >{{ $t('common.expand') }}/{{ $t('common.collapse') }}
+          {{ $t('common.all') }}
         </el-button>
       </template>
       <template #right-action>
-        <el-button v-auth="'system:menu:add'" type="primary" icon="plus" @click="openForm('add')">{{ $t("common.add")
-          }}
+        <el-button v-auth="'system:menu:add'" type="primary" icon="plus" @click="openForm('add')"
+          >{{ $t('common.add') }}
         </el-button>
         <el-button
           v-auth="'system:menu:del'"
@@ -30,7 +31,7 @@
           :disabled="selectRows.length === 0"
           @click="del(selectRows)"
         >
-          {{ $t("common.del") }}
+          {{ $t('common.del') }}
         </el-button>
       </template>
     </m-table>

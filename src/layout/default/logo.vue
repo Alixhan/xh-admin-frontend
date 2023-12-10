@@ -13,6 +13,9 @@ import { useSystemStore } from '@/stores/system'
 import logoBlack from '@/assets/icon/logo-black.svg'
 import logoWhite from '@/assets/icon/logo-white.svg'
 
+defineOptions({
+  name: 'DefaultLogo'
+})
 const systemStore = useSystemStore()
 
 const projectTitle = import.meta.env.VITE_TITLE

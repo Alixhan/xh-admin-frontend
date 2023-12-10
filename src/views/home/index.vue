@@ -1,9 +1,9 @@
 <template>
   <div class="home-view">
-    <top-panel class="desc-view"/>
-    <statistic class="statistic-view"/>
-    <charts/>
-    <todo-list class="todo-list"/>
+    <top-panel class="desc-view" />
+    <statistic class="statistic-view" />
+    <charts />
+    <todo-list class="todo-list" />
   </div>
 </template>
 <script lang="ts" setup>
@@ -11,6 +11,9 @@ import TodoList from './todoList.vue'
 import TopPanel from './topPanel.vue'
 import Statistic from './statistic.vue'
 import Charts from './charts.vue'
+defineOptions({
+  name: 'MHome'
+})
 </script>
 <style lang="scss" scoped>
 .home-view {
@@ -21,13 +24,15 @@ import Charts from './charts.vue'
   grid-template-columns: repeat(4, minmax(0, 1fr));
   align-content: start;
 
-  > div, :deep(> div) {
+  > div,
+  :deep(> div) {
     background-color: var(--el-bg-color);
     border-radius: 10px;
     padding: 20px;
   }
 
-  .desc-view, .statistic-view {
+  .desc-view,
+  .statistic-view {
     grid-column: 1 / -1;
   }
 

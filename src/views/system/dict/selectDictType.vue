@@ -14,7 +14,10 @@
       @selection-change="(rows) => (selectRows = rows)"
     >
       <template #left-action>
-        <el-button :disabled="selectRows.length === 0 || selectRows.length > selectionLimit" type="primary" @click="emit('select', selectRows)"
+        <el-button
+          :disabled="selectRows.length === 0 || selectRows.length > selectionLimit"
+          type="primary"
+          @click="emit('select', selectRows)"
           >选择
         </el-button>
       </template>

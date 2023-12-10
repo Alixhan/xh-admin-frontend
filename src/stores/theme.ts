@@ -2,13 +2,25 @@ import { defineStore } from 'pinia'
 import { useCssVar, useLocalStorage } from '@vueuse/core'
 import { useSystemStore } from '@/stores/system'
 import { ref, toRef, watchEffect } from 'vue'
+import type { Ref } from 'vue'
+
+export interface ThemeObj {
+  id: string
+  label: string
+  primary?: '#409eff'
+  theme?: Theme
+}
+
+export interface Theme {
+  [cssVar: string]: { light: string; dark: string }
+}
 
 /**
  * 主题管理
  * sxh 2023-09-17
  */
 export const useThemeStore = defineStore('theme', () => {
-  const defaultTheme = {
+  const defaultTheme: Theme = {
     '--el-color-white': { light: '#ffffff', dark: '#ececec' },
     '--el-color-black': { light: '#02191c', dark: '#1c1c1c' },
     '--el-bg-color-page': { light: '#f5f5f5', dark: '#252525' },
@@ -97,11 +109,11 @@ export const useThemeStore = defineStore('theme', () => {
     // '--el-svg-monochrome-grey': { light: 'var(--el-border-color)', dark: '' },
   }
 
-  const themeList = ref([
+  const themeList: Ref<ThemeObj[]> = ref([
     {
       id: 'default',
       label: '默认',
-      primary: '#409eff',
+      primary: '#409eff'
     },
     {
       id: '石板',

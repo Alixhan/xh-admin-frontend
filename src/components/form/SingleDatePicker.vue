@@ -1,26 +1,26 @@
 <template>
   <div class="m-single-date-picker" :style="{ lineHeight: inputHeight }">
-    <el-date-picker v-bind="startParam" :model-value="props.start"/>
-    <el-text style="font-weight: bold; padding: 0 5px;">{{ props.rangeSeparator ?? '-' }}</el-text>
-    <el-date-picker v-bind="endParam" :model-value="props.end"/>
+    <el-date-picker v-bind="startParam" :model-value="props.start" />
+    <el-text style="font-weight: bold; padding: 0 5px">{{ props.rangeSeparator ?? '-' }}</el-text>
+    <el-date-picker v-bind="endParam" :model-value="props.end" />
   </div>
 </template>
 <script lang="ts" setup>
-import {toRef, useAttrs} from 'vue'
+import { toRef, useAttrs } from 'vue'
 import dayjs from 'dayjs'
-import {useI18n} from 'vue-i18n'
-import {singleDatePickerProps} from '@i/components/singleDatePicker'
+import { useI18n } from 'vue-i18n'
+import { singleDatePickerProps } from '@i/components/singleDatePicker'
 
-const {t} = useI18n()
+const { t } = useI18n()
 
 defineOptions({
   inheritAttrs: false,
-  name: 'MSingleDatePicker',
+  name: 'MSingleDatePicker'
 })
 
 const attrs = useAttrs()
 const emit = defineEmits(['update:start', 'update:end'])
-const props = defineProps({...singleDatePickerProps})
+const props = defineProps({ ...singleDatePickerProps })
 const type = toRef(props, 'type').value!.replace('range', '')
 
 const shortcuts = [

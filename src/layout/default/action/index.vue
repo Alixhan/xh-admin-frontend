@@ -13,6 +13,9 @@ import UserAvatar from '@/layout/default/action/userAvatar.vue'
 import SwitchStyle from '@/layout/default/action/switchStyle.vue'
 import Setting from '@/layout/default/action/setting.vue'
 import SwitchLocale from '@/layout/default/action/switchLocale.vue'
+defineOptions({
+  name: 'DefaultLayout'
+})
 </script>
 <style scoped lang="scss">
 .action-view {
@@ -47,37 +50,35 @@ import SwitchLocale from '@/layout/default/action/switchLocale.vue'
 }
 
 @keyframes bounce-in {
-  0%, 20%, 40%, 60%, 80%, 100% {
-    -webkit-animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+  0%,
+  20%,
+  40%,
+  60%,
+  80%,
+  100% {
     animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
   }
 
   0% {
     opacity: 1;
-    -webkit-transform: scale3d(0.3, 0.3, 0.3);
     transform: scale3d(0.3, 0.3, 0.3);
   }
   20% {
-    -webkit-transform: scale3d(1.4, 1.4, 1.4);
     transform: scale3d(1.4, 1.4, 1.4);
   }
   40% {
     opacity: 1;
-    -webkit-transform: scale3d(0.7, 0.7, 0.7);
     transform: scale3d(0.7, 0.7, 0.7);
   }
   60% {
     opacity: 1;
-    -webkit-transform: scale3d(1.1, 1.1, 1.1);
     transform: scale3d(1.1, 1.1, 1.1);
   }
   80% {
-    -webkit-transform: scale3d(0.87, 0.87, 0.87);
     transform: scale3d(0.87, 0.87, 0.87);
   }
   100% {
     opacity: 1;
-    -webkit-transform: scale3d(1, 1, 1);
     transform: scale3d(1, 1, 1);
   }
 }

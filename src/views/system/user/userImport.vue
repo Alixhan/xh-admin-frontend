@@ -34,7 +34,7 @@ const excelColumns = ref([
   { prop: 'code', label: '用户账号', rules: [{ required: true }] },
   { prop: 'name', label: '用户名', rules: [{ required: true }] },
   { prop: 'telephone', label: '手机号码', rules: [{ type: 'phone' }], note: '11位手机号码' },
-  { prop: 'password', label: '初始密码', rules: [{ required: true }] },
+  { prop: 'password', label: '初始密码', rules: [{ required: true }] }
 ])
 
 // 开始导入数据
@@ -46,7 +46,7 @@ function complete(data, callback) {
         ElNotification({
           type: 'success',
           message: '导入成功',
-          duration: 3000,
+          duration: 3000
         })
         close('refresh')
       }
@@ -68,7 +68,7 @@ function close(type?: CloseType) {
 }
 
 defineExpose({
-  open,
+  open
 })
 </script>
 <style lang="scss" scoped></style>

@@ -15,7 +15,7 @@
     >
       <template #left-action>
         <el-button
-          :disabled="selectRows.length === 0 || (selectionLimit && (selectRows.length > selectionLimit))"
+          :disabled="selectRows.length === 0 || (selectionLimit && selectRows.length > selectionLimit)"
           type="primary"
           @click="emit('select', selectRows)"
         >
@@ -46,7 +46,7 @@ defineProps({
    */
   selectionLimit: {
     type: Number
-  },
+  }
 })
 const emit = defineEmits(['select', 'clear'])
 
@@ -56,7 +56,7 @@ const topFilterColumns = shallowRef([
   { prop: 'parentId', label: '上级角色id', hidden: true },
   { prop: 'parentName', label: '上级角色名称', readonly: true },
   { prop: 'name', label: '角色名称' },
-  { prop: 'enabled', label: '是否启用', type: 'select', itemList: getDictDetails(1, 'boolean') },
+  { prop: 'enabled', label: '是否启用', type: 'select', itemList: getDictDetails(1, 'boolean') }
 ])
 
 // 表格列定义
@@ -66,7 +66,7 @@ const columns: TableColumn[] = [
   { prop: 'name', label: '角色名称' },
   { prop: 'parentName', label: '上级角色' },
   { prop: 'parentId', label: '上级角色ID', width: 100 },
-  { prop: 'createTime', label: '创建时间', type: 'datetime', width: 155 },
+  { prop: 'createTime', label: '创建时间', type: 'datetime', width: 155 }
 ]
 </script>
 <style lang="scss" scoped>

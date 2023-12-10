@@ -9,10 +9,13 @@ const dictCacheMap: Map<number, DictCache> = new Map()
  * valueType 可以定制 value 的类型，默认为 string
  * sxh 2023-6-1
  */
-export async function getDictDetails<T extends DictDetailValueType<K>, K extends DictDetailValueTypeEnum>(dictTypeId: number, valueType?: K): Promise<DictDetail<T>[]> {
+export async function getDictDetails<T extends DictDetailValueType<K>, K extends DictDetailValueTypeEnum>(
+  dictTypeId: number,
+  valueType?: K
+): Promise<DictDetail<T>[]> {
   //数据转化方法
   const valueConvert = (res: DictDetail<string>[]) => {
-    const details: DictDetail<T> [] = res.map((i) => {
+    const details: DictDetail<T>[] = res.map((i) => {
       let value: any = i.value
       //转为布尔型
       if (valueType === 'boolean') {

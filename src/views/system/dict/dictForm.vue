@@ -71,9 +71,9 @@ import selectDictDetail from './selectDictDetail.vue'
 const props = defineProps({
   handleType: {
     type: String,
-    default: 'add',
+    default: 'add'
   },
-  modelValue: {},
+  modelValue: {}
 })
 const emit = defineEmits(['close'])
 
@@ -84,7 +84,7 @@ const saveLoading = ref(false)
 const formData = ref({
   sysDictTypeId: toRef(props, 'modelValue').value.dictTypeId,
   dictTypeName: toRef(props, 'modelValue').value.dictTypeName,
-  enabled: true,
+  enabled: true
 })
 
 const handleType = toRef(props, 'handleType')
@@ -111,8 +111,8 @@ watchEffect(() => {
       slots: {
         append() {
           return <el-button onClick={() => (visible1.value = true)}>选择</el-button>
-        },
-      },
+        }
+      }
     },
     { prop: 'dictTypeName', label: '字典类型名称', readonly: true },
     {
@@ -122,14 +122,14 @@ watchEffect(() => {
       slots: {
         append() {
           return <el-button onClick={() => (visible2.value = true)}>选择</el-button>
-        },
-      },
+        }
+      }
     },
     { prop: 'parentLabel', label: '上级字典名称', readonly: true },
     { prop: 'value', label: '字典值key', rules: { required: true } },
     { prop: 'label', label: '字典名称', rules: { required: true } },
     { prop: 'order', label: '排序号' },
-    { prop: 'enabled', label: '是否启用', type: 'switch' },
+    { prop: 'enabled', label: '是否启用', type: 'switch' }
   ]
 })
 
@@ -157,7 +157,7 @@ function save() {
     postSaveDictDetail(formData.value, {
       loadingRef: saveLoading,
       showSuccessMsg: true,
-      successMsg: '保存成功',
+      successMsg: '保存成功'
     }).then(() => close('refresh'))
   })
 }

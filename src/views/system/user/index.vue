@@ -65,7 +65,7 @@ import UserJob from '@/views/system/user/userJob.vue'
 const formTitle = {
   add: '用户新增',
   edit: '用户编辑',
-  detail: '用户明细',
+  detail: '用户明细'
 }
 const tableRef = ref()
 const data = ref([])
@@ -75,10 +75,10 @@ const filterParam = reactive({})
 
 const topFilterColumns = shallowRef([
   { prop: 'code', label: '用户账号' },
-  { prop: 'name', label: '用户名' },
+  { prop: 'name', label: '用户名' }
 ])
 
-const columns= ref<CommonTableColumn []>([
+const columns = ref<CommonTableColumn[]>([
   { type: 'index', label: '序', width: 50 },
   { prop: 'id', label: 'ID', width: 50 },
   { prop: 'code', label: '用户账号' },
@@ -96,9 +96,9 @@ const columns= ref<CommonTableColumn []>([
       { label: '编辑', auth: 'system:user:edit', icon: 'edit', onClick: (row) => openForm('edit', row) },
       { label: '岗位维护', auth: 'system:user:role', icon: 'stamp', onClick: (row) => openForm('job', row) },
       { label: '明细', auth: 'system:user:detail', icon: 'document', onClick: (row) => openForm('detail', row) },
-      { label: '删除', auth: 'system:user:del', icon: 'delete', type: 'danger', onClick: (row) => del([row]) },
-    ],
-  },
+      { label: '删除', auth: 'system:user:del', icon: 'delete', type: 'danger', onClick: (row) => del([row]) }
+    ]
+  }
 ])
 
 const formVisible = ref(false)
@@ -121,7 +121,7 @@ function del(rows) {
     showLoading: true,
     showBeforeConfirm: true,
     showSuccessMsg: true,
-    confirmMsg: '确认删除吗？删除后不可恢复！',
+    confirmMsg: '确认删除吗？删除后不可恢复！'
   }).then(() => {
     tableRef.value.fetchQuery()
   })

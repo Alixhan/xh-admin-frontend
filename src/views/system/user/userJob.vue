@@ -23,12 +23,12 @@ const props = defineProps({
   //数据类型 1：用户，2：用户组
   type: {
     type: Number as PropType<1 | 2>,
-    required: true,
+    required: true
   },
   userId: {
     type: Number,
-    required: true,
-  },
+    required: true
+  }
 })
 const emit = defineEmits(['close'])
 
@@ -40,7 +40,7 @@ const formData = ref({
   enabled: true,
   contentType: '',
   object: '',
-  name: '',
+  name: ''
 })
 
 init()
@@ -53,7 +53,7 @@ async function init() {
   })
   await getUserJobs({
     type: props.type!,
-    userId: props.userId!,
+    userId: props.userId!
   }).then((res) => {
     jobData.value = res.data
   })
@@ -69,7 +69,7 @@ watchEffect(() => {
     { prop: 'name', label: '用户名', disabled: true },
     { prop: 'enabled', label: '是否启用', type: 'switch', disabled: true },
     { type: 'separator', label: '用户岗位' },
-    { slotName: 'job' },
+    { slotName: 'job' }
   ]
 })
 
@@ -83,12 +83,12 @@ async function save() {
     {
       type: props.type!,
       userId: props.userId!,
-      jobData: jobData.value,
+      jobData: jobData.value
     },
     {
       loadingRef: saveLoading,
       showSuccessMsg: true,
-      successMsg: '岗位保存成功',
+      successMsg: '岗位保存成功'
     }
   ).then(() => close())
 }

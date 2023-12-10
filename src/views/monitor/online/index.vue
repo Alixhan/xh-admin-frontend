@@ -18,6 +18,9 @@ import { reactive, ref, shallowRef } from 'vue'
 import { kickOut, queryOnlineUser } from '@/api/system/user'
 import getDictDetails from '@/utils/dict'
 
+defineOptions({
+  name: 'OnlineUser'
+})
 const tableRef = ref()
 const data = ref([])
 
@@ -26,7 +29,7 @@ const filterParam = reactive({})
 const topFilterColumns = shallowRef([
   { prop: 'userCode', label: '登录账号' },
   { prop: 'userName', label: '账号名称' },
-  { prop: 'ip', label: '登录ip' },
+  { prop: 'ip', label: '登录ip' }
 ])
 
 const columns = ref([
@@ -48,8 +51,8 @@ const columns = ref([
     type: 'operation',
     fixed: 'right',
     align: 'center',
-    buttons: [{ label: '强制下线', onClick: foreOffline }],
-  },
+    buttons: [{ label: '强制下线', onClick: foreOffline }]
+  }
 ])
 
 // 强制下线
@@ -58,7 +61,7 @@ function foreOffline(row) {
     showLoading: true,
     showBeforeConfirm: true,
     showSuccessMsg: true,
-    confirmMsg: '确认踢除此用户下线吗？踢除成功后，该用户需要重新登录！',
+    confirmMsg: '确认踢除此用户下线吗？踢除成功后，该用户需要重新登录！'
   }).then(tableRef.value.fetchQuery)
 }
 </script>

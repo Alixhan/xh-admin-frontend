@@ -3,11 +3,11 @@ import { nextTick, ref } from 'vue'
 const isLoading = ref(false)
 
 export const loading = {
-    show: () => {
-        const bodyE = document.body
-        const div = document.createElement('div')
-        div.className = 'loading-view'
-        div.innerHTML = `
+  show: () => {
+    const bodyE = document.body
+    const div = document.createElement('div')
+    div.className = 'loading-view'
+    div.innerHTML = `
           <div class="dot-view">
             <div class="dot-item dot-item1"></div>
             <div class="dot-item dot-item2"></div>
@@ -85,19 +85,19 @@ export const loading = {
             }
            </style>
         `
-        bodyE.insertBefore(div, bodyE.childNodes[0])
-        isLoading.value = true
-    },
-    hide: () => {
-        return nextTick(() => {
-            const el = document.querySelector('.loading-view')
-            el && el.parentNode?.removeChild(el)
-        })
-    },
-    delayHide: () => {
-        if (isLoading.value) {
-            isLoading.value = false
-            setTimeout(() => loading.hide(), 800)
-        }
+    bodyE.insertBefore(div, bodyE.childNodes[0])
+    isLoading.value = true
+  },
+  hide: () => {
+    return nextTick(() => {
+      const el = document.querySelector('.loading-view')
+      el && el.parentNode?.removeChild(el)
+    })
+  },
+  delayHide: () => {
+    if (isLoading.value) {
+      isLoading.value = false
+      setTimeout(() => loading.hide(), 800)
     }
+  }
 }

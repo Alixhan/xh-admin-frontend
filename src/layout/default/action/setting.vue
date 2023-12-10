@@ -9,6 +9,9 @@
 <script setup>
 import { useSystemStore } from '@/stores/system'
 
+defineOptions({
+  name: 'ActionSetting'
+})
 const systemStore = useSystemStore()
 </script>
 <style scoped lang="scss">

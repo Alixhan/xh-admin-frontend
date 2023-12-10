@@ -1,7 +1,7 @@
 <template>
   <el-popover trigger="click" :hideAfter="0" popper-style="min-width: 100px; width: auto;">
     <template #reference>
-      <el-button type="primary" text icon="operation" class="action-btn">{{ $t("m.table.colSort") }}</el-button>
+      <el-button type="primary" text icon="operation" class="action-btn">{{ $t('m.table.colSort') }}</el-button>
     </template>
     <el-tree
       class="column-sort"
@@ -21,7 +21,7 @@
         <span>{{ node.label }}</span>
         <span v-if="data._id === 'root'" style="flex-grow: 1; text-align: right; padding-left: 10px">
           <el-link @click="emits('restoreDefault')" :underline="false" type="primary">
-            {{ $t("common.restoreDefault") }}
+            {{ $t('common.restoreDefault') }}
           </el-link>
         </span>
       </template>
@@ -51,7 +51,7 @@ const emits = defineEmits<{
 
 const props = defineProps({
   columns: {
-    type: Array as PropType<TableSortColumn []>,
+    type: Array as PropType<TableSortColumn[]>,
     required: true
   }
 })
@@ -68,7 +68,7 @@ const defaultProps = {
   }
 }
 
-const treeData = ref<TableSortColumn []>([])
+const treeData = ref<TableSortColumn[]>([])
 
 watchEffect(() => {
   treeData.value = [
@@ -105,7 +105,7 @@ function checkChange(node: Node & TableSortColumn, checked: boolean, halfChecked
     border-bottom: var(--el-border);
     cursor: default;
 
-    background-color: inherit!important;
+    background-color: inherit !important;
   }
 
   > .el-tree-node__children {

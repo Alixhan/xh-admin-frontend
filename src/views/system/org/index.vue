@@ -5,8 +5,14 @@
         <el-input v-model="orgQueryParam.name" placeholder="机构名称" clearable />
         <el-button style="margin-left: 10px" icon="refresh" type="primary" @click="getOrgTree" />
       </div>
-      <el-tree node-key="id" :expand-on-click-node="false" default-expand-all :data="orgData" :props="defaultProps"
-               @node-click="handleNodeClick" />
+      <el-tree
+        node-key="id"
+        :expand-on-click-node="false"
+        default-expand-all
+        :data="orgData"
+        :props="defaultProps"
+        @node-click="handleNodeClick"
+      />
     </el-scrollbar>
     <m-table
       class="m-table"
@@ -24,8 +30,14 @@
     >
       <template #right-action>
         <el-button v-auth="'system:org:add'" type="primary" icon="plus" @click="openForm('add')"> 新增</el-button>
-        <el-button v-auth="'system:org:del'" type="danger" icon="delete" :disabled="selectRows.length === 0"
-                   @click="del(selectRows)"> 删除
+        <el-button
+          v-auth="'system:org:del'"
+          type="danger"
+          icon="delete"
+          :disabled="selectRows.length === 0"
+          @click="del(selectRows)"
+        >
+          删除
         </el-button>
       </template>
     </m-table>

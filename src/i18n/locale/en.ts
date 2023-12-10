@@ -14,7 +14,7 @@ export default {
       exportCurrent: 'Export Current Page',
       exportAll: 'Export All',
       exportFail: 'Export failed',
-      exportNoData: 'No data can be exported！',
+      exportNoData: 'No data can be exported！'
     },
     topFilter: {
       query: 'Query',
@@ -49,7 +49,7 @@ export default {
       wrongFormat: '{label} format error',
       maxlength: '{label} cannot exceed {maxlength} characters',
       minlength: '{label} cannot be less than {minlength} characters',
-      valRestriction: '{label} can only be enums {enums}',
+      valRestriction: '{label} can only be enums {enums}'
     }
   },
   common: {
@@ -75,7 +75,7 @@ export default {
     cancel: 'Cancel',
     confirmDelete: 'Are you sure you want to delete it? It cannot be recovered!',
     saveSuccess: 'Save success.',
-    restoreDefault: 'Restore Default',
+    restoreDefault: 'Restore Default'
   },
   login: {
     account: 'Please input account',
@@ -96,7 +96,7 @@ export default {
       orderComment: 'The order of the menu is small first and large second.',
       path: 'Route Path',
       component: 'Component Path',
-      outerUrl: 'Link Address',
+      outerUrl: 'Link Address'
     }
   }
 }

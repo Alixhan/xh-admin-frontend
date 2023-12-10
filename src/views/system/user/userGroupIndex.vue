@@ -14,7 +14,9 @@
       v-model:data="data"
     >
       <template #right-action>
-        <el-button v-auth="'system:userGroup:add'" type="primary" icon="plus" @click="openForm('add', null)">新增</el-button>
+        <el-button v-auth="'system:userGroup:add'" type="primary" icon="plus" @click="openForm('add', null)"
+          >新增</el-button
+        >
         <el-button
           v-auth="'system:userGroup:del'"
           type="danger"
@@ -40,8 +42,8 @@
   </div>
 </template>
 <script setup lang="tsx">
-import {reactive, ref, shallowRef} from 'vue'
-import type{Ref} from 'vue'
+import { reactive, ref, shallowRef } from 'vue'
+import type { Ref } from 'vue'
 import { delUserGroupByIds, queryUserGroupList } from '@/api/system/user'
 import getDictDetails from '@/utils/dict'
 import UserGroupForm from '@/views/system/user/userGroupForm.vue'
@@ -49,7 +51,7 @@ import UserGroupForm from '@/views/system/user/userGroupForm.vue'
 const formTitle = {
   add: '用户组新增',
   edit: '用户组编辑',
-  detail: '用户组明细',
+  detail: '用户组明细'
 }
 
 const tableRef2 = ref()
@@ -73,9 +75,9 @@ const columns: Ref<CommonTableColumn[]> = ref([
     buttons: [
       { label: '编辑', auth: 'system:userGroup:edit', icon: 'edit', onClick: (row) => openForm('edit', row) },
       { label: '明细', auth: 'system:userGroup:detail', icon: 'document', onClick: (row) => openForm('detail', row) },
-      { label: '删除', auth: 'system:userGroup:del', icon: 'delete', type: 'danger', onClick: (row) => del([row]) },
-    ],
-  },
+      { label: '删除', auth: 'system:userGroup:del', icon: 'delete', type: 'danger', onClick: (row) => del([row]) }
+    ]
+  }
 ])
 
 const formVisible = ref(false)
@@ -93,7 +95,7 @@ function del(rows) {
     showLoading: true,
     showBeforeConfirm: true,
     showSuccessMsg: true,
-    confirmMsg: '确认删除吗？删除后不可恢复！',
+    confirmMsg: '确认删除吗？删除后不可恢复！'
   }).then(() => {
     tableRef2.value.fetchQuery()
   })

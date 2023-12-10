@@ -41,11 +41,11 @@ import Jobs from '@/views/system/user/jobs.vue'
 const props = defineProps({
   handleType: {
     type: String as PropType<FormHandleType>,
-    default: 'add',
+    default: 'add'
   },
   modelValue: {
-    type: Object as PropType<{ id: number }>,
-  },
+    type: Object as PropType<{ id: number }>
+  }
 })
 const emit = defineEmits(['close'])
 
@@ -54,7 +54,7 @@ const formLoading = ref(false)
 const saveLoading = ref(false)
 const formData = ref({
   enabled: true,
-  password: '',
+  password: ''
 })
 
 const jobData = ref([])
@@ -67,9 +67,9 @@ if (props.handleType !== 'add') {
     getUserById(props.modelValue!.id!),
     getUserJobs({
       type: 1,
-      userId: props.modelValue!.id!,
+      userId: props.modelValue!.id!
     }),
-    getUserGroups(props.modelValue!.id),
+    getUserGroups(props.modelValue!.id)
   ]).then(([a, b, c]) => {
     formData.value = a.data
     formData.value.password = ''
@@ -86,7 +86,7 @@ watchEffect(() => {
     {
       prop: 'code',
       label: '登录账号',
-      rules: [{ required: true }, { pattern: /[a-zA-Z0-9]+/, message: '登录账号只能是大小写字母和数字！' }],
+      rules: [{ required: true }, { pattern: /[a-zA-Z0-9]+/, message: '登录账号只能是大小写字母和数字！' }]
     },
     { prop: 'name', label: '用户名', rules: { required: true } },
     { prop: 'avatar', label: '头像', type: 'upload-img', single: 'object' },
@@ -96,7 +96,7 @@ watchEffect(() => {
     { type: 'separator', label: '用户岗位', hidden: props.handleType !== 'detail' },
     { slotName: 'job', hidden: props.handleType !== 'detail' },
     { type: 'separator', label: '所在用户组', hidden: props.handleType !== 'detail' },
-    { slotName: 'group', hidden: props.handleType !== 'detail' },
+    { slotName: 'group', hidden: props.handleType !== 'detail' }
   ]
 })
 
@@ -104,7 +104,7 @@ const groupColumns: TableColumn[] = [
   { type: 'index', label: '序', width: 50 },
   { prop: 'id', label: 'ID', width: 50 },
   { prop: 'name', label: '用户组名称' },
-  { prop: 'createTime', label: '创建时间', type: 'datetime', width: 155 },
+  { prop: 'createTime', label: '创建时间', type: 'datetime', width: 155 }
 ]
 
 // 保存方法
@@ -113,7 +113,7 @@ function save() {
     postSaveUser(formData.value, {
       loadingRef: saveLoading,
       showSuccessMsg: true,
-      successMsg: '保存成功',
+      successMsg: '保存成功'
     }).then(() => close('refresh'))
   })
 }

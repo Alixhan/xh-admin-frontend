@@ -59,14 +59,11 @@ const parentMenuList = ref([])
 
 async function init() {
   formLoading.value = true
-  await Promise.all([
-    initFormData(),
-    initParentMenuData()
-  ])
+  await Promise.all([initFormData(), initParentMenuData()])
   formLoading.value = false
 }
 
-function initFormData(){
+function initFormData() {
   if (handleType.value !== 'add') {
     // 查询明细
     return getMenuById(props.modelValue.id).then((res) => {
@@ -187,7 +184,8 @@ watchEffect(() => {
       // 处理类型是外链，隐藏此项
       hidden: formData.value.handleType === 'outer',
       rules: { required: true, trigger: 'blur' },
-      comment: '作为后端鉴权使用，建议使用实际意义的英文单词，web平台同时对应vue-router的name属性，鉴权时需要拼接上级name。'
+      comment:
+        '作为后端鉴权使用，建议使用实际意义的英文单词，web平台同时对应vue-router的name属性，鉴权时需要拼接上级name。'
     },
     {
       prop: 'path',

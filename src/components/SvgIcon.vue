@@ -1,6 +1,6 @@
 <script lang="tsx">
-import type {PropType} from 'vue'
-import {defineComponent, ref, watchEffect} from 'vue'
+import type { PropType } from 'vue'
+import { defineComponent, ref, watchEffect } from 'vue'
 import binary from '@/utils/binary'
 
 /**
@@ -25,7 +25,7 @@ export default defineComponent({
       let src: string | Promise<string> = props.src
       if (src instanceof Promise) src = await src
       let svgStr: string | undefined = await binary(src)
-      if(!svgStr) return
+      if (!svgStr) return
       if (props.property) {
         for (const prop in props.property) {
           svgStr = replaceStr(svgStr, prop, props.property[prop])

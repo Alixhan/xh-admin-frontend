@@ -24,11 +24,14 @@ import { useSystemStore } from '@/stores/system'
 import { ref } from 'vue'
 import { getUserById, postSaveUser } from '@/api/system/user'
 
+defineOptions({
+  name: 'PersonalCenter'
+})
 const systemStore = useSystemStore()
 
 const formData = ref({
   ...systemStore.user,
-  password2: '',
+  password2: ''
 })
 
 const columns = [
@@ -41,7 +44,7 @@ const columns = [
     label: '新密码',
     type: 'password',
     autocomplete: 'new-password',
-    placeholder: '如需修改密码请填入新密码',
+    placeholder: '如需修改密码请填入新密码'
   },
   {
     prop: 'password2',
@@ -55,10 +58,10 @@ const columns = [
             return callback(new Error('两次密码输入不一致！'))
           }
           callback()
-        },
-      },
-    ],
-  },
+        }
+      }
+    ]
+  }
 ]
 
 const formLoading = ref(true)
@@ -76,12 +79,11 @@ function save() {
     postSaveUser(formData.value, {
       loadingRef: saveLoading,
       showSuccessMsg: true,
-      successMsg: '保存成功',
+      successMsg: '保存成功'
     }).then((res) => {
       systemStore.user.avatar = res.data.avatar
     })
   })
 }
 </script>
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

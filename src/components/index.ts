@@ -9,7 +9,6 @@ import MComment from './Comment.vue'
 import MUpload from './form/Upload.vue'
 import MOperationButton from './table/OperationButton.vue'
 import type { App } from 'vue'
-// import ElDialog from './Dialog.vue'
 
 export default {
   install(app: App<Element>) {
@@ -18,7 +17,6 @@ export default {
     app.component('MSvgIcon', MSvgIcon)
     app.component('MTopFilter', MTopFilter)
     app.component('MSingleDatePicker', MSingleDatePicker)
-    // app.component('ElDialog', ElDialog)
     app.component('MIcon', MIcon)
     app.component('MIconSelect', MIconSelect)
     app.component('MComment', MComment)

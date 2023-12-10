@@ -1,6 +1,13 @@
 <template>
-  <el-popover ref="popover" placement="bottom" trigger="focus" :hide-after="0" :visible="visible"
-              :width="width" @update:visible="updateVisible">
+  <el-popover
+    ref="popover"
+    placement="bottom"
+    trigger="focus"
+    :hide-after="0"
+    :visible="visible"
+    :width="width"
+    @update:visible="updateVisible"
+  >
     <template #reference>
       <el-input
         :ref="inputRef"
@@ -26,7 +33,7 @@
               v-for="(item, index) in icons"
               :key="index"
               :type="currentTab === item.title ? 'primary' : null"
-              @click="(currentTab = item.title)"
+              @click="currentTab = item.title"
             >
               {{ item.title }}
             </el-link>
@@ -37,7 +44,13 @@
         </div>
         <el-scrollbar class="icon-scroll" height="250px">
           <div class="icon-views">
-            <div v-for="(icon, index) in currentIcons" :title="icon" :key="index" class="icon-item-view" @click="selectIcon(icon)">
+            <div
+              v-for="(icon, index) in currentIcons"
+              :title="icon"
+              :key="index"
+              class="icon-item-view"
+              @click="selectIcon(icon)"
+            >
               <m-icon :size="20" :model-value="`${currentTab}|${icon}`" />
             </div>
           </div>
@@ -53,14 +66,14 @@ import MIcon from '@/components/Icon.vue'
 import { round } from 'lodash-es'
 import MSvgIcon from '@/components/SvgIcon.vue'
 // element图标
-const localSvg = import.meta.glob('@/assets/icon/**/*.svg', {as: 'url'})
+const localSvg = import.meta.glob('@/assets/icon/**/*.svg', { as: 'url' })
 /**
  * 图标表单组件
  * 2023-3-29 sunxh
  */
 export default {
   name: 'MIconSelect',
-  components: {MSvgIcon, MIcon },
+  components: { MSvgIcon, MIcon },
   props: {
     modelValue: {
       type: String
@@ -99,7 +112,7 @@ export default {
       const [type, icon] = (props.modelValue ?? '').split('|')
       iconType.value = type
       if (type === 'local') {
-        src.value = localSvg[icon]?.().then(r => r)
+        src.value = localSvg[icon]?.().then((r) => r)
       }
 
       if (type === 'el') {

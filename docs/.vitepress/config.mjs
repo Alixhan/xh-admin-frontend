@@ -1,6 +1,7 @@
 import { defineConfig } from "vitepress";
 import { fileURLToPath, URL } from "node:url";
 import vueJsx from "@vitejs/plugin-vue-jsx";
+import autoprefixer from 'autoprefixer'
 // import LogoDark from '@/assets/icon/logo-white.svg'
 // import LogoLight from '@/assets/icon/logo-black.svg'
 
@@ -22,6 +23,23 @@ export default defineConfig({
     server: {
       host: true,
       port: 2323
+    },
+    css: {
+      postcss: {
+        plugins: [
+          autoprefixer({
+            // 自动添加前缀
+            overrideBrowserslist: [
+              'Android 4.1',
+              'iOS 7.1',
+              'Chrome > 31',
+              'ff > 31',
+              'not dead',
+            ],
+            grid: true,
+          }),
+        ]
+      }
     }
   },
   vue: {},

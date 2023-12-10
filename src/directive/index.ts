@@ -10,7 +10,7 @@ export const AuthDirective = {
     if (!bool) {
       el.parentNode?.removeChild(el)
     }
-  },
+  }
 }
 
 /**

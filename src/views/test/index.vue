@@ -24,8 +24,7 @@
 <script setup lang="tsx">
 import { reactive, ref } from 'vue'
 
-
-const data = ref<any []>([])
+const data = ref<any[]>([])
 const num = ref(2)
 const formData = reactive({
   a: 'fsdfsdf',

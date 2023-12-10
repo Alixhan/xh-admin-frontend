@@ -14,7 +14,10 @@
       @selection-change="(rows) => (selectRows = rows)"
     >
       <template #left-action>
-        <el-button :disabled="selectRows.length === 0 || selectRows.length > selectionLimit" type="primary" @click="emit('select', selectRows)"
+        <el-button
+          :disabled="selectRows.length === 0 || selectRows.length > selectionLimit"
+          type="primary"
+          @click="emit('select', selectRows)"
           >选择
         </el-button>
       </template>
@@ -29,18 +32,18 @@ import getDictDetails from '@/utils/dict'
 defineProps({
   selection: {
     type: String,
-    default: 'multiple',
+    default: 'multiple'
   },
   param: {
     type: Object,
-    default: () => ({}),
+    default: () => ({})
   },
   /**
    * 最多可选择行数
    */
   selectionLimit: {
-    type: Number,
-  },
+    type: Number
+  }
 })
 const emit = defineEmits(['select'])
 
@@ -51,7 +54,7 @@ const topFilterColumns = shallowRef([
   { prop: 'parentName', label: '上级机构名称', readonly: true },
   { prop: 'code', label: '机构代码' },
   { prop: 'name', label: '机构名称' },
-  { prop: 'enabled', label: '是否启用', type: 'select', itemList: getDictDetails(1, 'boolean') },
+  { prop: 'enabled', label: '是否启用', type: 'select', itemList: getDictDetails(1, 'boolean') }
 ])
 
 // 表格列定义
@@ -62,7 +65,7 @@ const columns = ref([
   { prop: 'name', label: '机构名称' },
   { prop: 'parentName', label: '上级机构' },
   { prop: 'parentId', label: '上级机构ID', width: 100 },
-  { prop: 'createTime', label: '创建时间', type: 'datetime', width: 155 },
+  { prop: 'createTime', label: '创建时间', type: 'datetime', width: 155 }
 ])
 </script>
 <style lang="scss" scoped>

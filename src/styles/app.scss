@@ -7,7 +7,10 @@
   --layout-header-bg-color: var(--el-bg-color);
 }
 
-html, body {
+html,
+body {
+  font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', Arial,
+    sans-serif;
   width: 100%;
   height: 100%;
   margin: 0;
@@ -24,11 +27,10 @@ html, body {
   border-radius: 5px;
 }
 
-
 .el-menu {
   border-right: none;
 
-  .el-menu-item.is-active{
+  .el-menu-item.is-active {
     //background-color: var(--el-color-primary-light-3);
     //color: var(--el-color-white);
   }
@@ -79,18 +81,20 @@ html, body {
   }
 }
 
-.el-checkbox-group, .el-radio-group {
+.el-checkbox-group,
+.el-radio-group {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  -webkit-column-gap: 10px;
 }
 
-.el-checkbox, .el-radio {
+.el-checkbox,
+.el-radio {
   margin-right: 0;
 }
 
-.el-checkbox__label, .el-radio__label {
+.el-checkbox__label,
+.el-radio__label {
   padding-left: 5px;
 }
 
@@ -104,7 +108,8 @@ html, body {
 
 //表单为明细查看时的样式
 .detail-form {
-  .el-input__wrapper, .el-radio {
+  .el-input__wrapper,
+  .el-radio {
     box-shadow: none;
     outline: 1px dashed var(--el-text-color-disabled);
     outline-offset: -1px;
@@ -148,7 +153,10 @@ html, body {
   margin-top: 10px;
 }
 
-.slide-right-enter-active, .slide-right-leave-active, .slide-left-enter-active, .slide-left-leave-active {
+.slide-right-enter-active,
+.slide-right-leave-active,
+.slide-left-enter-active,
+.slide-left-leave-active {
   will-change: transform;
   transition: all 0.2s ease;
 }

@@ -64,7 +64,7 @@ import { useSystemStore } from '@/stores/system'
 const formTitle = {
   add: '数据字典新增',
   edit: '数据字典编辑',
-  detail: '数据字典明细',
+  detail: '数据字典明细'
 }
 
 const systemStore = useSystemStore()
@@ -73,8 +73,8 @@ const dictTypeData = ref([])
 const dictTypeQueryParam = ref({
   isPage: false,
   param: {
-    name: '',
-  },
+    name: ''
+  }
 })
 queryDictType()
 
@@ -87,10 +87,10 @@ function queryDictType() {
         children: res.data.list.map((i) => {
           return {
             ...i,
-            title: `${i.name}  -  ${i.id}`,
+            title: `${i.name}  -  ${i.id}`
           }
-        }),
-      },
+        })
+      }
     ]
   })
 }
@@ -98,7 +98,7 @@ function queryDictType() {
 const tableRef = ref()
 const defaultProps = {
   children: 'children',
-  label: 'title',
+  label: 'title'
 }
 
 const data = ref([])
@@ -110,7 +110,7 @@ const topFilterColumns = shallowRef([
   { prop: 'dictTypeName', label: '字典类型', readonly: true },
   { prop: 'value', label: '字典值key' },
   { prop: 'label', label: '字典名称' },
-  { prop: 'enabled', label: '是否启用', type: 'select', itemList: getDictDetails(1, 'boolean') },
+  { prop: 'enabled', label: '是否启用', type: 'select', itemList: getDictDetails(1, 'boolean') }
 ])
 const columns = ref([
   {
@@ -122,15 +122,15 @@ const columns = ref([
       {
         label: '明细',
         auth: 'system:dict:detail',
-        onClick: (row) => openForm('detail', row),
+        onClick: (row) => openForm('detail', row)
       },
       {
         label: '删除',
         auth: 'system:dict:del',
         type: 'danger',
-        onClick: (row) => del([row]),
-      },
-    ],
+        onClick: (row) => del([row])
+      }
+    ]
   },
   { type: 'index', label: '序', width: 50 },
   { prop: 'id', label: 'ID', width: 50 },
@@ -142,11 +142,11 @@ const columns = ref([
     prop: 'order',
     label: '排序号',
     width: 85,
-    comment: '数据字典的排列顺序，小号排在前，大号排在后。',
+    comment: '数据字典的排列顺序，小号排在前，大号排在后。'
   },
   { prop: 'enabled', label: '是否启用', type: 'select', itemList: getDictDetails(1, 'boolean') },
   { prop: 'createTime', label: '创建时间', type: 'datetime', width: 155 },
-  { prop: 'updateTime', label: '修改时间', type: 'datetime', width: 155 },
+  { prop: 'updateTime', label: '修改时间', type: 'datetime', width: 155 }
 ])
 
 const formVisible = ref(false)
@@ -168,7 +168,7 @@ function openForm(type, r) {
   if (type === 'add') {
     row.value = {
       dictTypeId: filterParam.dictTypeId,
-      dictTypeName: filterParam.dictTypeName,
+      dictTypeName: filterParam.dictTypeName
     }
   }
   formVisible.value = true
@@ -180,7 +180,7 @@ function del(rows) {
     showLoading: true,
     showBeforeConfirm: true,
     showSuccessMsg: true,
-    confirmMsg: '确认删除吗？删除后不可恢复！',
+    confirmMsg: '确认删除吗？删除后不可恢复！'
   }).then(() => {
     tableRef.value.fetchQuery()
   })

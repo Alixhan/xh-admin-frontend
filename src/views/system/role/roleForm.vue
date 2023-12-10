@@ -43,9 +43,13 @@
         </el-button>
       </template>
     </div>
-    <el-dialog title="选择上级角色" v-model="visible" draggable append-to-body align-center
-               width="80%">
-      <select-role selection="single" style="height: calc(90vh - 80px)" @select="selectedParentRole"  @clear="clearParentRole" />
+    <el-dialog title="选择上级角色" v-model="visible" draggable append-to-body align-center width="80%">
+      <select-role
+        selection="single"
+        style="height: calc(90vh - 80px)"
+        @select="selectedParentRole"
+        @clear="clearParentRole"
+      />
     </el-dialog>
   </div>
 </template>
@@ -58,14 +62,14 @@ import SelectRole from '@/views/system/role/selectRole.vue'
 const props = defineProps({
   handleType: {
     type: String,
-    default: 'add',
+    default: 'add'
   },
   modelValue: {
     type: Object as PropType<{
       id?: number
       [prop: string]: any
-    }>,
-  },
+    }>
+  }
 })
 const emit = defineEmits(['close'])
 
@@ -76,7 +80,7 @@ const treeOption = {
     if (data.type === 'menu') {
       return 'menu-node'
     }
-  },
+  }
 }
 
 interface TreeNode {
@@ -91,13 +95,13 @@ const formRef = ref()
 const saveLoading = ref(false)
 const formData = ref<{ [prop: string]: any }>({
   cache: true,
-  enabled: true,
+  enabled: true
 })
 const handleType = toRef(props, 'handleType')
 const menuTreeRef = ref()
 //权限树形结构数据
 const menuTrees = ref<TreeNode[]>([])
-let roleMenus: any [] = []
+let roleMenus: any[] = []
 const checkedMenus = ref([])
 initFormData()
 
@@ -108,7 +112,7 @@ async function initFormData() {
     // 查询明细
     await getRoleById(props.modelValue!.id!).then((res) => {
       formData.value = res.data
-      checkedMenus.value = formData.value.roleMenus.map(i => i.sysMenuId)
+      checkedMenus.value = formData.value.roleMenus.map((i) => i.sysMenuId)
       if (handleType.value === 'copy') {
         handleType.value = 'add'
         formData.value.id = ''
@@ -117,14 +121,14 @@ async function initFormData() {
   }
   await initRoleMenus()
   // 查询所有菜单权限
-  checkedMenus.value = checkedMenus.value.filter(i => {
-    return !(roleMenus.find(j => j.id === i)?.children?.length)
+  checkedMenus.value = checkedMenus.value.filter((i) => {
+    return !roleMenus.find((j) => j.id === i)?.children?.length
   })
   formLoading.value = false
 }
 
 //初始化可选权限菜单数据
-function initRoleMenus(){
+function initRoleMenus() {
   menuTrees.value = []
   return queryRoleMenu({ parentId: formData.value.parentId }).then((res) => {
     roleMenus = res.data
@@ -145,8 +149,8 @@ function initRoleMenus(){
           }
           // parentId不存在的为根元素
           return true
-        }),
-      },
+        })
+      }
     ]
   })
 }
@@ -162,7 +166,7 @@ function selectedParentRole(rows) {
 }
 
 //清空上级角色
-function clearParentRole(){
+function clearParentRole() {
   formData.value.parentId = ''
   formData.value.parentName = ''
   visible.value = false
@@ -182,13 +186,13 @@ watchEffect(() => {
       slots: {
         append() {
           return <el-button onClick={() => (visible.value = true)}>选择</el-button>
-        },
-      },
+        }
+      }
     },
     { prop: 'parentName', label: '上级角色名称', readonly: true },
     { prop: 'name', label: '角色名称', rules: { required: true } },
     { prop: 'enabled', label: '是否启用', type: 'switch' },
-    { slotName: 'permission', label: '权限' },
+    { slotName: 'permission', label: '权限' }
   ]
 })
 
@@ -206,7 +210,7 @@ function save() {
     postSaveRole(formData.value, {
       loadingRef: saveLoading,
       showSuccessMsg: true,
-      successMsg: '保存成功',
+      successMsg: '保存成功'
     }).then(() => close('refresh'))
   })
 }

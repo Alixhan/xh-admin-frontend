@@ -49,7 +49,7 @@ import { getDownloadFileUrl } from '@/utils'
 
 const formTitle = {
   edit: '文件编辑',
-  detail: '文件明细',
+  detail: '文件明细'
 }
 
 const tableRef = ref()
@@ -63,7 +63,7 @@ const topFilterColumns = shallowRef([
   { prop: 'name', label: '文件名称' },
   { prop: 'contentType', label: '文件类型' },
   { prop: 'suffix', label: '文件扩展名' },
-  { prop: 'sha1', label: 'sha1' },
+  { prop: 'sha1', label: 'sha1' }
 ])
 
 const columns = ref([
@@ -75,13 +75,13 @@ const columns = ref([
     prop: 'contentType',
     label: '文件类型',
     comment: '文件的MIME类型',
-    width: 100,
+    width: 100
   },
   { prop: 'suffix', label: '文件后缀扩展名', width: 120 },
   {
     prop: 'size',
     label: '文件大小',
-    formatter: (row, col, val) => filesize(val, { base: 2, standard: 'jedec' }),
+    formatter: (row, col, val) => filesize(val, { base: 2, standard: 'jedec' })
   },
   { prop: 'url', label: '图片预览', slots: { default: previewImage } },
   { prop: 'imgWidth', label: '图片宽度' },
@@ -97,8 +97,8 @@ const columns = ref([
             {statusList.find((i) => i.value === scope.row.status)?.label ?? scope.row.status}
           </el-tag>
         )
-      },
-    },
+      }
+    }
   },
   { prop: 'createTime', label: '上传时间', type: 'datetime', width: 155 },
   {
@@ -111,16 +111,16 @@ const columns = ref([
       {
         label: '明细',
         auth: 'system:file:detail',
-        onClick: (row) => openForm('detail', row),
+        onClick: (row) => openForm('detail', row)
       },
       {
         label: '删除',
         auth: 'system:file:del',
         type: 'danger',
-        onClick: (row) => del([row]),
-      },
-    ],
-  },
+        onClick: (row) => del([row])
+      }
+    ]
+  }
 ])
 
 const formVisible = ref(false)
@@ -138,7 +138,7 @@ function del(rows) {
     showLoading: true,
     showBeforeConfirm: true,
     showSuccessMsg: true,
-    confirmMsg: '确认删除吗？此操作会删除实际文件，删除后不可恢复！',
+    confirmMsg: '确认删除吗？此操作会删除实际文件，删除后不可恢复！'
   }).then(() => {
     tableRef.value.fetchQuery()
   })
@@ -154,7 +154,8 @@ function previewImage(scope) {
   const file = scope.row
   if (file.contentType.startsWith('image')) {
     const src = getDownloadFileUrl({ object: file.object, isScale: true })
-    if(file.suffix === 'svg') return <m-svg-icon inherited={true} style="width: 25px; height: 25px; display: block" src={src} />
+    if (file.suffix === 'svg')
+      return <m-svg-icon inherited={true} style="width: 25px; height: 25px; display: block" src={src} />
     return (
       <el-image
         {...{
@@ -163,7 +164,7 @@ function previewImage(scope) {
           fit: 'cover',
           previewSrcList: [getDownloadFileUrl({ object: file.object })],
           hideOnClickModal: true,
-          previewTeleported: true,
+          previewTeleported: true
         }}
       />
     )
@@ -173,7 +174,7 @@ function previewImage(scope) {
 function cellStyle({ row, column }) {
   if (column.property === 'status' && row.status === 1) {
     return {
-      color: 'green',
+      color: 'green'
     }
   }
 }

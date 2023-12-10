@@ -20,7 +20,15 @@
       </template>
       <template #right-action>
         <el-button v-auth="'system:role:add'" type="primary" icon="plus" @click="openForm('add')"> 新增</el-button>
-        <el-button v-auth="'system:role:del'" type="danger" icon="delete" :disabled="selectRows.length === 0" @click="del(selectRows)"> 删除 </el-button>
+        <el-button
+          v-auth="'system:role:del'"
+          type="danger"
+          icon="delete"
+          :disabled="selectRows.length === 0"
+          @click="del(selectRows)"
+        >
+          删除
+        </el-button>
       </template>
     </m-table>
     <el-dialog
@@ -46,7 +54,7 @@ import getDictDetails from '@/utils/dict'
 const formTitle = {
   add: '角色新增',
   edit: '角色编辑',
-  detail: '角色明细',
+  detail: '角色明细'
 }
 
 const tableRef = ref()
@@ -57,7 +65,7 @@ const filterParam = reactive({})
 
 const topFilterColumns = shallowRef([
   { prop: 'name', label: '角色名称' },
-  { prop: 'enabled', label: '是否启用', type: 'select', itemList: getDictDetails(1, 'boolean') },
+  { prop: 'enabled', label: '是否启用', type: 'select', itemList: getDictDetails(1, 'boolean') }
 ])
 
 const columns = ref([
@@ -73,9 +81,9 @@ const columns = ref([
     buttons: [
       { label: '编辑', icon: 'edit', auth: 'system:role:edit', onClick: (row) => openForm('edit', row) },
       { label: '明细', icon: 'document', auth: 'system:role:detail', onClick: (row) => openForm('detail', row) },
-      { label: '删除', icon: 'delete', auth: 'system:role:del', type: 'danger', onClick: (row) => openForm('', row) },
-    ],
-  },
+      { label: '删除', icon: 'delete', auth: 'system:role:del', type: 'danger', onClick: (row) => openForm('', row) }
+    ]
+  }
 ])
 
 const formVisible = ref(false)
@@ -133,7 +141,7 @@ function del(rows) {
     showLoading: true,
     showBeforeConfirm: true,
     showSuccessMsg: true,
-    confirmMsg: '确认删除吗？删除后不可恢复！',
+    confirmMsg: '确认删除吗？删除后不可恢复！'
   }).then(() => {
     tableRef.value.fetchQuery()
   })

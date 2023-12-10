@@ -12,8 +12,11 @@
             :key="item.id"
             :title="item.label"
             @click="change(item.id)"
-            :style="{backgroundColor: item.theme?.['--el-color-primary']?.[systemStore.layout.isDark ? 'dark' : 'light']??item.primary}"
-            :class="{activeTheme: themeStore.currentTheme === item.id}"
+            :style="{
+              backgroundColor:
+                item.theme?.['--el-color-primary']?.[systemStore.layout.isDark ? 'dark' : 'light'] ?? item.primary
+            }"
+            :class="{ activeTheme: themeStore.currentTheme === item.id }"
           />
         </div>
       </el-form-item>
@@ -82,7 +85,7 @@ function change(val) {
 
   .activeTheme {
     &::after {
-      content: "";
+      content: '';
       width: 3px;
       height: 10px;
       position: absolute;

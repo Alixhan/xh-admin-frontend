@@ -4,25 +4,25 @@ const systemBaseUrl = import.meta.env.VITE_SYSTEM_BASE_URL
 
 // 角色列表查询
 export function queryRoleList(params = {}, option?: RequestOption) {
-    return createAxios(option).post(`${systemBaseUrl}/api/system/role/query`, params)
+  return createAxios(option).post(`${systemBaseUrl}/api/system/role/query`, params)
 }
 
 // 保存系统角色
 export function postSaveRole(params = {}, option?: RequestOption) {
-    return createAxios(option).post(`${systemBaseUrl}/api/system/role/save`, params)
+  return createAxios(option).post(`${systemBaseUrl}/api/system/role/save`, params)
 }
 
 // 获取角色详情
 export function getRoleById(id: number) {
-    return createAxios().get(`${systemBaseUrl}/api/system/role/get/${id}`)
+  return createAxios().get(`${systemBaseUrl}/api/system/role/get/${id}`)
 }
 
 // 批量删除角色
 export function delRoleByIds(ids: string, option?: RequestOption) {
-    return createAxios(option).delete(`${systemBaseUrl}/api/system/role/del`, {params: {ids}})
+  return createAxios(option).delete(`${systemBaseUrl}/api/system/role/del`, { params: { ids } })
 }
 
 // 查询角色可配置的所有权限菜单
 export function queryRoleMenu(params = {}, option?: RequestOption) {
-    return createAxios(option).get(`${systemBaseUrl}/api/system/role/queryRoleMenu`, {params})
+  return createAxios(option).get(`${systemBaseUrl}/api/system/role/queryRoleMenu`, { params })
 }

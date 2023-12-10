@@ -8,7 +8,7 @@ import { useSystemStore } from '@/stores/system'
  * sxh 2023-4-1
  */
 export default defineComponent({
-  name: 'layout',
+  name: 'MLayout',
   setup() {
     const systemStore = useSystemStore()
     const layout = {

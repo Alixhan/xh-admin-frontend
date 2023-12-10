@@ -9,93 +9,99 @@ import { camelCase } from 'lodash-es'
 import { devMenus } from '@/router/static'
 import type { LocaleKey } from '@/i18n'
 
-
 export interface User {
-  id?: number;
-  code?: string;
-  name?: string;
-  avatar?: string;
-  password?: string;
+  id?: number
+  code?: string
+  name?: string
+  avatar?: string
+  password?: string
 }
 
 export interface Menu {
-  id: number;
-  title: string;
-  name: string;
-  parentId?: number;
-  cache: boolean;
-  componentName?: string;
-  fullPath: string;
-  type: string;
-  component: string;
-  handleType: string;
-  path: string;
-  icon: string;
-  children?: Menu[];
+  id: number
+  title: string
+  name: string
+  parentId?: number
+  cache: boolean
+  componentName?: string
+  fullPath: string
+  type: string
+  component: string
+  handleType: string
+  path: string
+  icon: string
+  children?: Menu[]
 }
 
 // 用户角色
 export interface OrgRole {
   //数据类型，1：用户，2：用户组
-  type: number;
+  type: number
   //用户id或者用户组的id
-  userId: number;
+  userId: number
   //机构id
-  sysOrgId: number;
+  sysOrgId: number
   //角色id
-  sysRoleId: number;
+  sysRoleId: number
   //机构代码
-  orgCode: string;
+  orgCode: string
   //机构名称
-  orgName: string;
+  orgName: string
   //角色名称
-  roleName: string;
+  roleName: string
   //是否当前使用的角色
-  active: boolean;
+  active: boolean
 }
 
 export interface NavTab {
   //标题
-  title: string;
+  title: string
   //路由全路径
-  fullPath: string;
+  fullPath: string
   //是否缓存
-  cache?: boolean;
+  cache?: boolean
   // 组件名
-  componentName?: string;
+  componentName?: string
   // 图标
-  icon?: string;
+  icon?: string
 }
 
 declare type LayoutSize = 'small' | 'default' | 'large'
 export interface Layout {
   // 全局布局大小
-  size: LayoutSize ,
+  size: LayoutSize
   // 是否暗黑模式
-  isDark: boolean,
+  isDark: boolean
   // 布局方式
-  layoutMode: 'Default',
+  layoutMode: 'Default'
   // 主页面切换动画
-  mainAnimation: 'slide-right' | 'slide-left' | 'el-fade-in-linear' | 'el-fade-in' | 'el-zoom-in-center' | 'el-zoom-in-top' | 'el-zoom-in-bottom' // 侧边菜单宽度(展开时)，单位px
-  menuWidth: number,
+  mainAnimation:
+    | 'slide-right'
+    | 'slide-left'
+    | 'el-fade-in-linear'
+    | 'el-fade-in'
+    | 'el-zoom-in-center'
+    | 'el-zoom-in-top'
+    | 'el-zoom-in-bottom' // 侧边菜单宽度(展开时)，单位px
+  menuWidth: number
   // 是否水平折叠收起菜单
-  menuCollapse: boolean,
+  menuCollapse: boolean
   // 是否只保持一个子菜单的展开(手风琴)
-  menuUniqueOpened: boolean,
+  menuUniqueOpened: boolean
   // 显示菜单栏顶栏(LOGO)
-  showLogo: boolean,
+  showLogo: boolean
   // 显示菜单栏顶栏(LOGO)
-  showNavTabs: boolean,
+  showNavTabs: boolean
   //当前窗口宽度
-  windowWidth: number,
+  windowWidth: number
   //当前窗口高度
-  windowHeight: number,
+  windowHeight: number
   // 宽度是否收缩(小宽度设备)
-  widthShrink: boolean,
+  widthShrink: boolean
   // 高度是否收缩(矮高度设备)
-  heightShrink: boolean,
+  heightShrink: boolean
   //显示navTab的图标
-  showNavTabIcon: boolean,
+  showNavTabIcon: boolean
   //布局设置显隐标识
   settingVisible: boolean
 }
@@ -143,7 +149,7 @@ export const useSystemStore = defineStore('system', () => {
   // 浏览器title
   useTitle(import.meta.env.VITE_TITLE)
   // 语言，默认为简体中文
-  const locale: RemovableRef<LocaleKey> =useLocalStorage<LocaleKey>('locale', 'zh-cn')
+  const locale: RemovableRef<LocaleKey> = useLocalStorage<LocaleKey>('locale', 'zh-cn')
   // 当前登录的token ，持久化到本地储存
   const token = useLocalStorage(import.meta.env.VITE_SYS_TOKEN_KEY, '')
   // 登录状态 success, failed
@@ -175,7 +181,7 @@ export const useSystemStore = defineStore('system', () => {
   function setRefresh(val: boolean) {
     refresh.value = val
   }
-  
+
   //切换语言
   function setLocale(val: LocaleKey) {
     locale.value = val
@@ -420,6 +426,6 @@ export const useSystemStore = defineStore('system', () => {
     refresh,
     setRefresh,
     setLocale,
-    loginStatus,
+    loginStatus
   }
 })

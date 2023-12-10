@@ -14,14 +14,14 @@ const locale = {
       exportCurrent: '导出当页',
       exportAll: '导出全部',
       exportFail: '导出失败',
-      exportNoData: '无数据可以导出！',
+      exportNoData: '无数据可以导出！'
     },
     topFilter: {
       query: '查询',
       search: '搜索',
       reset: '重置',
       expand: '展开',
-      collapse: '收起',
+      collapse: '收起'
     },
     form: {
       toInput: '请输入{label}',
@@ -49,9 +49,9 @@ const locale = {
       wrongFormat: '{label}格式不对',
       maxlength: '{label}最大字符不超过{maxlength}',
       minlength: '{label}不得少于{minlength}个字符',
-      valRestriction: '{label}的值只能为{enums}',
+      valRestriction: '{label}的值只能为{enums}'
     },
-    comment: '备注',
+    comment: '备注'
   },
   common: {
     tip: '提示',
@@ -76,7 +76,7 @@ const locale = {
     cancel: '取消',
     confirmDelete: '确认删除吗？删除后不可恢复！',
     saveSuccess: '保存成功！',
-    restoreDefault: '恢复默认',
+    restoreDefault: '恢复默认'
   },
   login: {
     account: '请输入账号',
@@ -97,7 +97,7 @@ const locale = {
       orderComment: '菜单的排列顺序，小号排在前，大号排在后。',
       path: '路由路径',
       component: '组件全路径',
-      outerUrl: '外链地址',
+      outerUrl: '外链地址'
     }
   }
 }

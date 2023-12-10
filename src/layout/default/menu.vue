@@ -4,6 +4,7 @@ import { useSystemStore } from '@/stores/system'
 import { useRoute, useRouter } from 'vue-router'
 
 export default defineComponent({
+  name: 'DefaultMenu',
   setup() {
     const systemStore = useSystemStore()
     const router = useRouter()
@@ -37,7 +38,7 @@ export default defineComponent({
               title: () => {
                 return [icon, <span>{menu.title}</span>]
               },
-              default: () => children.map((i) => generateMenu(i)),
+              default: () => children.map((i) => generateMenu(i))
             }}
           />
         )
@@ -49,7 +50,7 @@ export default defineComponent({
               title: () => {
                 return <span>{menu.title}</span>
               },
-              default: () => icon,
+              default: () => icon
             }}
           />
         )
@@ -72,7 +73,7 @@ export default defineComponent({
         } else {
           nextTick(() => router.push(menu.fullPath))
         }
-      },
+      }
     }
 
     return () => (
@@ -82,14 +83,14 @@ export default defineComponent({
             ...menuParam,
             defaultActive: route.fullPath,
             uniqueOpened: systemStore.layout.menuUniqueOpened,
-            collapse: systemStore.layout.menuCollapse,
+            collapse: systemStore.layout.menuCollapse
           }}
         >
           {menus.value}
         </el-menu>
       </el-scrollbar>
     )
-  },
+  }
 })
 </script>
 <style scoped lang="scss">
