@@ -111,7 +111,8 @@ export default {
     confirmMsg: '确认是否继续此操作?',
     loadingText: '操作中',
     successMsg: '操作成功',
-    optFailed: '操作失败'
+    optFailed: '操作失败',
+    noMenus: 'The current role is not assigned menu, please login again!'
   },
   layout: {
     switchLocaleError: '切换语言失败',

@@ -8,6 +8,8 @@ import type { RemovableRef } from '@vueuse/core'
 import { camelCase } from 'lodash-es'
 import { devMenus } from '@/router/static'
 import type { LocaleKey } from '@/i18n'
+import i18n from '@/i18n'
+import { ElNotification } from 'element-plus'
 
 export interface User {
   id?: number
@@ -105,7 +107,7 @@ export interface Layout {
   //布局设置显隐标识
   settingVisible: boolean
 }
-
+const { t } = i18n.global
 /**
  * 系统全局store,主要定义项目布局信息，系统登录， 路由管理，权限管理，浏览器标题管理，注销等
  * sxh 2023-03-31
@@ -267,9 +269,17 @@ export const useSystemStore = defineStore('system', () => {
 
   // 设置登录用户信息
   function setLoginUserInfo(loginUserInfo: any) {
+    loginUserInfo.menus ??= []
     // 开发环境把开发文档置顶
     if (import.meta.env.DEV) {
       loginUserInfo.menus.unshift(...devMenus)
+    }
+    if (!loginUserInfo.menus.length) {
+      ElNotification({
+        type: 'error',
+        message: t('common.noMenus')
+      })
+      throw new Error(t('common.noMenus'))
     }
     loginStatus.value = 'success' // 登录成功
     setToken(loginUserInfo.tokenValue)
@@ -389,11 +399,10 @@ export const useSystemStore = defineStore('system', () => {
     }
   }
 
-  // 切换角色成功
+  // 切换角色
   function switchRole(orgRole: OrgRole) {
     return switchUserRole(orgRole, {
-      showSuccessMsg: true,
-      successMsg: '切换角色成功'
+      showSuccessMsg: true
     }).then(() => {
       setTimeout(() => window.location.reload(), 1000)
     })

@@ -111,13 +111,14 @@ export default {
     confirmMsg: 'Do you want to continue this operation?',
     loadingText: 'Operating',
     successMsg: 'Operate successfully',
-    optFailed: 'Operation failure'
+    optFailed: 'Operation failure',
+    noMenus: '當前角色未分配菜單，請重新登入！'
   },
   layout: {
     switchLocaleError: 'Failed to switch language',
     activeRole: 'Current role',
     personalCenter: 'Personal Center',
-    switchRole: 'Switching roles',
+    switchRole: 'Switch Roles',
     logout: 'Logout',
     logoutSuccess: 'Logout Success'
   },

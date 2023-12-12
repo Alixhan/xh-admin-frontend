@@ -3,7 +3,7 @@ export default {
     comment: '備註',
     table: {
       index: '序',
-      unit: '條',
+      unit: '項',
       total: '總數',
       selected: '已選中',
       export: '導出',
@@ -111,7 +111,8 @@ export default {
     confirmMsg: '確認是否繼續此操作?',
     loadingText: '操作中',
     successMsg: '操作成功',
-    optFailed: '操作失敗'
+    optFailed: '操作失敗',
+    noMenus: '當前角色未分配菜單，請重新登入！'
   },
   layout: {
     switchLocaleError: '切換語言失敗',

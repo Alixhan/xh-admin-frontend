@@ -37,7 +37,9 @@ import defaultAvatar from '@/assets/image/avatar-default.png'
 import { computed, ref } from 'vue'
 import { getDownloadFileUrl } from '@/utils'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
 const systemStore = useSystemStore()
 const router = useRouter()
 
@@ -61,7 +63,7 @@ function handleCommand(key) {
   if (key === 'logout') {
     userLogout({
       showSuccessMsg: true,
-      successMsg: i18n.t('layout.logoutSuccess')
+      successMsg: t('layout.logoutSuccess')
     }).then(() => {
       setTimeout(systemStore.logout, 1000)
     })
