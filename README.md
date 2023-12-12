@@ -50,7 +50,7 @@ gitee 码云代码仓库<br>
 ```bash
 # requirement
 node version 18.x or 20+
-pnpm version 11.x or latest
+pnpm version 8.x or latest
 
 # clone
 git clone https://github.com/Alixhan/xh-admin-frontend
