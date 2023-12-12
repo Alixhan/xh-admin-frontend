@@ -1,13 +1,17 @@
 <template>
-  <div v-for="(domRef, i) in echartsDomRefs" :key="i" :ref="(r) => (domRef.value = r as any)" class="charts-item" />
+  <div v-for="(o, i) in echartsDomRefs" :key="i" :ref="(r) => (o.domRef.value = r as any)" class="charts-item" />
 </template>
 <script lang="ts" setup>
 import type { EChartsOption } from '@/utils'
 import { useEcharts } from '@/utils'
 import type { Ref } from 'vue'
-import { nextTick, ref, toRef, watch } from 'vue'
+import { computed, nextTick, ref, toRef, watch } from 'vue'
 import { useCssVar } from '@vueuse/core'
 import { useThemeStore } from '@/stores/theme'
+import { useI18n } from 'vue-i18n'
+import { useSystemStore } from '@/stores/system'
+
+const { t } = useI18n()
 
 defineOptions({
   name: 'HomeCharts'
@@ -30,10 +34,10 @@ const color = ref({
   ]
 })
 
-const optionArr: EChartsOption[] = [
+const optionArr: Ref<EChartsOption[]> = computed(() => [
   {
     title: {
-      text: '环形图',
+      text: t('home.pie'),
       textStyle: {
         fontSize: 14
       }
@@ -76,7 +80,7 @@ const optionArr: EChartsOption[] = [
   {
     color: color.value,
     title: {
-      text: '折线图',
+      text: t('home.line'),
       textStyle: {
         fontSize: 14
       }
@@ -126,7 +130,7 @@ const optionArr: EChartsOption[] = [
   {
     color: color.value,
     title: {
-      text: '柱状图',
+      text: t('home.bar'),
       textStyle: {
         fontSize: 14
       }
@@ -169,7 +173,7 @@ const optionArr: EChartsOption[] = [
   {
     color: color.value,
     title: {
-      text: '仪表盘',
+      text: t('home.pressure'),
       textStyle: {
         fontSize: 14
       }
@@ -204,17 +208,28 @@ const optionArr: EChartsOption[] = [
       }
     ]
   }
-]
-const echartsDomRefs: Ref<HTMLElement | undefined>[] = optionArr.map((option) => useEcharts(toRef(option)).domRef)
+])
+const echartsDomRefs = optionArr.value.map((option) => {
+  return {
+    ...useEcharts(toRef(option))
+  }
+})
 
 const themeStore = useThemeStore()
 watch(
-  () => themeStore.currentTheme,
+  () => [themeStore.currentTheme],
   () =>
     nextTick(() => {
       color.value.colorStops[0].color = useCssVar('--el-color-primary-light-7').value
       color.value.colorStops[1].color = useCssVar('--el-color-primary').value
     })
+)
+
+watch(
+  () => useSystemStore().locale,
+  () => {
+    echartsDomRefs.forEach((i, index) => i.setOption(optionArr.value[index]))
+  }
 )
 </script>
 <style lang="scss" scoped>

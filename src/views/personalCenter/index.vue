@@ -1,10 +1,6 @@
 <template>
   <div class="root">
     <el-card>
-      <!--      <el-avatar shape="circle" :size="100" fit="cover" :src="avatar" />-->
-      <!--      <el-text size="large" style="font-weight: bold">-->
-      <!--        {{ systemStore.user.name }}-->
-      <!--      </el-text>-->
       <m-form
         ref="formRef"
         :loading="formLoading"
@@ -14,19 +10,23 @@
         :colspan="24"
       ></m-form>
       <div class="m-footer">
-        <el-button icon="check" type="primary" :loading="saveLoading" @click="save"> 保存</el-button>
+        <el-button icon="check" type="primary" :loading="saveLoading" @click="save">{{ $t('common.save') }}</el-button>
       </div>
     </el-card>
   </div>
 </template>
 <script lang="tsx" setup>
 import { useSystemStore } from '@/stores/system'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { getUserById, postSaveUser } from '@/api/system/user'
+import { useI18n } from 'vue-i18n'
 
 defineOptions({
   name: 'PersonalCenter'
 })
+
+const { t } = useI18n()
+
 const systemStore = useSystemStore()
 
 const formData = ref({
@@ -34,35 +34,35 @@ const formData = ref({
   password2: ''
 })
 
-const columns = [
-  { prop: 'code', label: '登录账号', disabled: true },
-  { prop: 'name', label: '用户名', disabled: true },
-  { prop: 'avatar', label: '头像', type: 'upload-img', single: 'object' },
-  { prop: 'telephone', label: '手机号码', rules: { type: 'phone' } },
+const columns = computed(() => [
+  { prop: 'code', label: t('system.user.code'), disabled: true },
+  { prop: 'name', label: t('system.user.name'), disabled: true },
+  { prop: 'avatar', label: t('system.user.avatar'), type: 'upload-img', single: 'object' },
+  { prop: 'telephone', label: t('system.user.telephone'), rules: { type: 'phone' } },
   {
     prop: 'password',
-    label: '新密码',
+    label: t('system.user.newPassword'),
     type: 'password',
     autocomplete: 'new-password',
-    placeholder: '如需修改密码请填入新密码'
+    placeholder: t('system.user.newPasswordH')
   },
   {
     prop: 'password2',
-    label: '重复新密码',
-    placeholder: '重复新密码',
+    label: t('system.user.repeatPassword'),
+    placeholder: t('system.user.repeatPassword'),
     type: 'password',
     rules: [
       {
         validator: (rule, val, callback) => {
           if (formData.value.password && formData.value.password !== val) {
-            return callback(new Error('两次密码输入不一致！'))
+            return callback(new Error(t('system.user.passwordMismatches')))
           }
           callback()
         }
       }
     ]
   }
-]
+])
 
 const formLoading = ref(true)
 const saveLoading = ref(false)
@@ -79,7 +79,7 @@ function save() {
     postSaveUser(formData.value, {
       loadingRef: saveLoading,
       showSuccessMsg: true,
-      successMsg: '保存成功'
+      successMsg: t('common.importSuccess')
     }).then((res) => {
       systemStore.user.avatar = res.data.avatar
     })

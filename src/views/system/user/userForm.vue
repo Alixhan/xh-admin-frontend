@@ -18,7 +18,7 @@
       </m-form>
     </el-scrollbar>
     <div class="m-footer">
-      <el-button icon="close" @click="close()">取消</el-button>
+      <el-button icon="close" @click="close()">{{ $t('common.cancel') }}</el-button>
       <el-button
         v-if="['add', 'edit'].includes(handleType)"
         v-auth="['system:user:add', 'system:user:edit']"
@@ -27,7 +27,7 @@
         :loading="saveLoading"
         @click="save"
       >
-        保存
+        {{ $t('common.save') }}
       </el-button>
     </div>
   </div>
@@ -37,6 +37,7 @@ import type { PropType } from 'vue'
 import { ref, watchEffect } from 'vue'
 import { getUserById, getUserGroups, getUserJobs, postSaveUser } from '@/api/system/user'
 import Jobs from '@/views/system/user/jobs.vue'
+import { useI18n } from 'vue-i18n'
 
 const props = defineProps({
   handleType: {
@@ -47,6 +48,9 @@ const props = defineProps({
     type: Object as PropType<{ id: number }>
   }
 })
+
+const { t } = useI18n()
+
 const emit = defineEmits(['close'])
 
 const formRef = ref()
@@ -85,26 +89,31 @@ watchEffect(() => {
   columns.value = [
     {
       prop: 'code',
-      label: '登录账号',
-      rules: [{ required: true }, { pattern: /[a-zA-Z0-9]+/, message: '登录账号只能是大小写字母和数字！' }]
+      label: t('system.user.code'),
+      rules: [{ required: true }, { pattern: /[a-zA-Z0-9]+/, message: t('system.user.userCodeRule') }]
     },
-    { prop: 'name', label: '用户名', rules: { required: true } },
-    { prop: 'avatar', label: '头像', type: 'upload-img', single: 'object' },
-    { prop: 'telephone', label: '手机号码', rules: { type: 'phone' } },
-    { prop: 'password', label: '初始密码', autocomplete: 'new-password', hidden: props.handleType !== 'add' },
-    { prop: 'enabled', label: '是否启用', type: 'switch' },
-    { type: 'separator', label: '用户岗位', hidden: props.handleType !== 'detail' },
+    { prop: 'name', label: t('system.user.name'), rules: { required: true } },
+    { prop: 'avatar', label: t('system.user.avatar'), type: 'upload-img', single: 'object' },
+    { prop: 'telephone', label: t('system.user.telephone'), rules: { type: 'phone' } },
+    {
+      prop: 'password',
+      label: t('system.user.password'),
+      autocomplete: 'new-password',
+      hidden: props.handleType !== 'add'
+    },
+    { prop: 'enabled', label: t('common.isEnabled'), type: 'switch' },
+    { type: 'separator', label: t('system.user.job'), hidden: props.handleType !== 'detail' },
     { slotName: 'job', hidden: props.handleType !== 'detail' },
-    { type: 'separator', label: '所在用户组', hidden: props.handleType !== 'detail' },
+    { type: 'separator', label: t('system.user.inGroup'), hidden: props.handleType !== 'detail' },
     { slotName: 'group', hidden: props.handleType !== 'detail' }
   ]
 })
 
 const groupColumns: TableColumn[] = [
-  { type: 'index', label: '序', width: 50 },
-  { prop: 'id', label: 'ID', width: 50 },
-  { prop: 'name', label: '用户组名称' },
-  { prop: 'createTime', label: '创建时间', type: 'datetime', width: 155 }
+  { type: 'index', width: 80 },
+  { prop: 'id', label: 'Id', width: 80 },
+  { prop: 'name', label: t('system.user.group.name') },
+  { prop: 'createTime', label: t('common.createTime'), type: 'datetime', width: 155 }
 ]
 
 // 保存方法
@@ -113,7 +122,7 @@ function save() {
     postSaveUser(formData.value, {
       loadingRef: saveLoading,
       showSuccessMsg: true,
-      successMsg: '保存成功'
+      successMsg: t('common.saveSuccess')
     }).then(() => close('refresh'))
   })
 }

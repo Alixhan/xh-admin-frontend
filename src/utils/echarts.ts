@@ -91,6 +91,7 @@ export function useEcharts(option: Ref<EChartsOption>, onInit?: (echart: echarts
   })
 
   return {
-    domRef
+    domRef,
+    setOption
   }
 }

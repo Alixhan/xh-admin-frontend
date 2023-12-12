@@ -50,7 +50,7 @@ async function handleCommand(key) {
         localeLabel: locale.label
       },
       {
-        errorMsg: '切换语言失败'
+        errorMsg: i18n.t('layout.switchLocaleError')
       }
     )
   }

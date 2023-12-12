@@ -18,7 +18,7 @@
           :disabled="selectRows.length === 0 || selectRows.length > selectionLimit"
           type="primary"
           @click="emit('select', selectRows)"
-          >选择
+          >{{ $t('common.select') }}
         </el-button>
       </template>
     </m-table>
@@ -29,6 +29,7 @@ import { ref, shallowRef } from 'vue'
 import getDictDetails from '@/utils/dict'
 import { queryUserList } from '@/api/system/user'
 import { statusList } from '@/views/system/user/constant'
+import { useI18n } from 'vue-i18n'
 
 defineProps({
   selection: {
@@ -48,22 +49,24 @@ defineProps({
 })
 const emit = defineEmits(['select'])
 
+const { t } = useI18n()
+
 const selectRows = ref([])
 
 const topFilterColumns = shallowRef([
-  { prop: 'code', label: '用户账号' },
-  { prop: 'name', label: '用户名' }
+  { prop: 'code', label: t('system.user.code') },
+  { prop: 'name', label: t('system.user.name') }
 ])
 
 // 表格列定义
 const columns = ref([
-  { type: 'index', label: '序', width: 50 },
-  { prop: 'id', label: 'ID', width: 50 },
-  { prop: 'code', label: '用户账号' },
-  { prop: 'name', label: '用户名称' },
-  { prop: 'status', label: '用户状态', type: 'select', itemList: statusList },
-  { prop: 'enabled', label: '是否启用', type: 'select', itemList: getDictDetails(1, 'boolean') },
-  { prop: 'createTime', label: '创建时间', type: 'datetime', width: 155 }
+  { type: 'index', width: 80 },
+  { prop: 'id', label: 'Id', width: 80 },
+  { prop: 'code', label: t('system.user.code') },
+  { prop: 'name', label: t('system.user.name') },
+  { prop: 'status', label: t('system.user.status'), type: 'select', itemList: statusList },
+  { prop: 'enabled', label: t('common.isEnabled'), type: 'select', itemList: getDictDetails(1, 'boolean') },
+  { prop: 'createTime', label: t('common.createTime'), type: 'datetime', width: 155 }
 ])
 </script>
 <style lang="scss" scoped>

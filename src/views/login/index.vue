@@ -59,7 +59,7 @@
   </el-scrollbar>
 </template>
 <script setup>
-import { createVNode, defineOptions, nextTick, reactive, ref } from 'vue'
+import { computed, createVNode, defineOptions, nextTick, reactive, ref } from 'vue'
 import { getImageCaptcha, userLogin } from '@/api/system/user'
 import { useSystemStore } from '@/stores/system'
 import { useRouter } from 'vue-router'
@@ -68,10 +68,13 @@ import { v4 as uuidv4 } from 'uuid'
 import MIcon from '@/components/Icon.vue'
 import SwitchLocale from '@/layout/default/action/switchLocale.vue'
 import Footer from '@/layout/footer.vue'
+import { useI18n } from 'vue-i18n'
 
 defineOptions({
   name: 'SystemLogin'
 })
+
+const { t } = useI18n()
 
 const title = import.meta.env.VITE_TITLE
 const systemStore = useSystemStore()
@@ -92,11 +95,11 @@ const captchaIcon = createVNode(MIcon, { modelValue: 'local|/src/assets/icon/cap
 //图形验证码
 const verificationUrl = ref()
 
-const rules = reactive({
-  username: [{ required: true, message: '请输入账号' }],
-  password: [{ required: true, message: '请输入密码' }],
-  captchaCode: [{ required: true, message: '请输入图形验证码' }]
-})
+const rules = computed(() => ({
+  username: [{ required: true, message: t('login.captcha') }],
+  password: [{ required: true, message: t('login.captcha') }],
+  captchaCode: [{ required: true, message: t('login.captcha') }]
+}))
 
 const formRef = ref()
 
@@ -166,14 +169,12 @@ function submit() {
   }
 
   .title-system {
-    font-size: 35px;
+    font-size: 30px;
     font-weight: bold;
     color: white;
     z-index: 1;
-    font-family: 华文行楷, serif;
     text-align: center;
     margin: 30px 0 40px 0;
-    text-shadow: 1px 1px 0 #2571c0;
   }
 
   .card-view {
@@ -218,9 +219,6 @@ function submit() {
   }
 
   .login-view {
-    .title-system {
-    }
-
     .card-view {
       background: rgba(0, 0, 0, 0.5);
     }
@@ -240,14 +238,8 @@ function submit() {
     inset: auto;
     width: auto;
   }
-
-  .title-system {
-    position: relative;
-    text-align: center;
-    inset: auto;
-    margin: 20px 0;
-  }
 }
+
 .footer {
   z-index: 1;
   position: absolute;

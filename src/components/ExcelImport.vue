@@ -10,22 +10,26 @@
           <span>{{ tipObj.msg }}</span>
         </el-button>
         <el-button :loading="downloadLoading" type="primary" icon="download" @click="downloadTemplate()"
-          >下载模板
+          >{{ $t('m.excelImport.downloadTemplate') }}
         </el-button>
-        <el-button :loading="loading" type="primary" icon="folderOpened" @click="fileRef.click()">选择文件</el-button>
-        <el-button :loading="loading" type="primary" icon="check" @click="subImport">确认导入</el-button>
-        <el-button :loading="loading" type="danger" icon="delete" @click="clear">清空</el-button>
+        <el-button :loading="loading" type="primary" icon="folderOpened" @click="fileRef.click()">
+          {{ $t('m.form.selectFile') }}
+        </el-button>
+        <el-button :loading="loading" type="primary" icon="check" @click="subImport">
+          {{ $t('m.excelImport.confirmImport') }}
+        </el-button>
+        <el-button :loading="loading" type="danger" icon="delete" @click="clear">{{ $t('common.clear') }}</el-button>
       </template>
     </m-table>
-    <el-dialog title="错误信息" v-model="errorVisible" align-center draggable append-to-body width="70%">
+    <el-dialog :title="$t('common.errorMsg')" v-model="errorVisible" align-center draggable append-to-body width="70%">
       <m-table :columns="errorTableColumns" v-model:data="errorData" :cell-style="cellStyle" style="height: 70vh" />
     </el-dialog>
   </div>
 </template>
 <script setup lang="ts" generic="T extends object">
 import MTable from '@/components/table/index.vue'
-import { computed, ref, unref, watchEffect } from 'vue'
 import type { Ref } from 'vue'
+import { computed, ref, unref, watchEffect } from 'vue'
 import { ExcelTree } from '@/utils/excel'
 import ExcelJS from 'exceljs'
 import dayjs from 'dayjs'
@@ -34,14 +38,15 @@ import type { RuleObject, ValidResult } from '@i/utils/validate'
 import validate from '@/utils/validate'
 import type { TableColumn } from '@i/components/table'
 import type { ExcelError, ExportExcelProps } from '@i/components/excelImport'
+import { useI18n } from 'vue-i18n'
 
 defineOptions({
   name: 'MExcelImport'
 })
 
-const props = withDefaults(defineProps<ExportExcelProps<T>>(), {
-  templateFileName: '导入模板.xlsx'
-})
+const { t } = useI18n()
+
+const props = defineProps<ExportExcelProps<T>>()
 
 // 导入的excel数据
 const importData: Ref<T[]> = ref([])
@@ -71,11 +76,23 @@ const tip = ref<{
 
 const tipObj = computed(() => {
   const steps = {
-    1: { do: '导入excel', error: '导入excel文件失败' },
-    2: { do: '解析excel', error: '解析excel失败', success: '解析excel成功' },
-    3: { do: '验证数据中', error: '验证数据有误', success: '验证数据成功' },
-    4: { do: '数据导入中', error: '导入失败（服务器校验未通过）', success: '数据导入成功' },
-    5: { do: '清空中', success: '清空成功' }
+    1: { do: t('m.excelImport.step1Do'), error: t('m.excelImport.step1Error') },
+    2: {
+      do: t('m.excelImport.step2Do'),
+      error: t('m.excelImport.step2Error'),
+      success: t('m.excelImport.step2Success')
+    },
+    3: {
+      do: t('m.excelImport.step3Do'),
+      error: t('m.excelImport.step3Error'),
+      success: t('m.excelImport.step3Success')
+    },
+    4: {
+      do: t('m.excelImport.step4Do'),
+      error: t('m.excelImport.step4Error'),
+      success: t('m.excelImport.step4Success')
+    },
+    5: { do: t('m.excelImport.step5Do'), success: t('m.excelImport.step5Success') }
   }
   const obj = {
     msg: steps[tip.value.step!]?.[tip.value.status || 'do'] ?? '',
@@ -107,17 +124,17 @@ function initTableColumn() {
 const fileRef = ref()
 
 // 错误信息表格定义
-const errorTableColumns: TableColumn<ExcelError>[] = [
+const errorTableColumns: Ref<TableColumn<ExcelError>[]> = computed(() => [
   { type: 'index' },
-  { prop: 'num', label: '数据行号', width: 100 },
+  { prop: 'num', label: t('m.excelImport.num'), width: 100 },
   {
     prop: 'excelNum',
-    label: 'excel行号',
+    label: t('m.excelImport.excelNum'),
     width: 100,
     formatter: (row, col, val) => val ?? (row.num ? row.num + (excelTree.$maxPlies ?? 0) : '')
   },
-  { prop: 'error', label: '错误内容' }
-]
+  { prop: 'error', label: t('common.errorMsg') }
+])
 
 /**
  * 模板下载
@@ -126,7 +143,7 @@ const errorTableColumns: TableColumn<ExcelError>[] = [
 async function downloadTemplate(data = []) {
   try {
     downloadLoading.value = true
-    await excelTree.exportExcel(props.templateFileName, data)
+    await excelTree.exportExcel(props.templateFileName ?? t('m.excelImport.templateFileName'), data)
   } finally {
     downloadLoading.value = false
   }
@@ -147,13 +164,13 @@ function handleFile(e) {
       // @ts-ignore
       await workbook.xlsx.load(reader.result)
       const worksheet = workbook.getWorksheet(1)
-      if (!worksheet) throw new Error('模板不匹配')
+      if (!worksheet) throw new Error(t('m.excelImport.templateMismatch'))
       let flag = true // 模板匹配
       excelTree.eachNode((node) => {
         const cell = worksheet.getCell(node.$row, node.$col)
         if (cell.value !== node.label) flag = false // 模板不匹配
       })
-      if (!flag) throw new Error('模板不匹配')
+      if (!flag) throw new Error(t('m.excelImport.templateMismatch'))
       worksheet.columns = excelTree.excelColumns
       const datas: any[] = []
       worksheet.eachRow((row, rowNumber) => {
@@ -183,7 +200,7 @@ function handleFile(e) {
       tip.value.status = 'success'
     } catch (e: any) {
       tip.value.status = 'error'
-      ElMessage.error(e.message ?? '导入失败')
+      ElMessage.error(e.message ?? t('common.importsFailed'))
     } finally {
       loading.value = false
       e.target.value = ''
@@ -232,7 +249,7 @@ async function validData() {
 
 function subImport() {
   // 确认导入
-  if (importData.value.length < 1) return ElMessage.warning('没有数据可以导入！')
+  if (importData.value.length < 1) return ElMessage.warning(t('m.excelImport.noData'))
   loading.value = true
   tip.value.step = '3'
   tip.value.status = ''

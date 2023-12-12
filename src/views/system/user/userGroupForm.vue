@@ -25,7 +25,7 @@
       </m-form>
     </el-scrollbar>
     <div class="m-footer">
-      <el-button icon="close" @click="close()">取消</el-button>
+      <el-button icon="close" @click="close()">{{ $t('common.cancel') }}</el-button>
       <el-button
         v-if="['add', 'edit'].includes(handleType)"
         v-auth="['system:userGroup:add', 'system:userGroup:edit']"
@@ -34,10 +34,10 @@
         :loading="saveLoading"
         @click="save"
       >
-        保存
+        {{ $t('common.save') }}
       </el-button>
     </div>
-    <el-dialog title="选择用户" v-model="visible1" draggable append-to-body align-center width="80%">
+    <el-dialog :title="$t('system.user.select')" v-model="visible1" draggable append-to-body align-center width="80%">
       <select-user style="height: calc(90vh - 80px)" @select="selectedUser" />
     </el-dialog>
   </div>
@@ -48,6 +48,7 @@ import { ref, toRef, watchEffect } from 'vue'
 import { getUserGroupById, getUserJobs, saveUserGroup } from '@/api/system/user'
 import Jobs from '@/views/system/user/jobs.vue'
 import SelectUser from '@/views/system/user/selectUser.vue'
+import { useI18n } from 'vue-i18n'
 
 const props = defineProps({
   handleType: {
@@ -59,6 +60,8 @@ const props = defineProps({
   }
 })
 const emit = defineEmits(['close'])
+
+const { t } = useI18n()
 
 const handleType = toRef(props, 'handleType')
 
@@ -95,11 +98,11 @@ async function init() {
 const columns = ref<FormColumn[]>([])
 watchEffect(() => {
   columns.value = [
-    { prop: 'name', label: '用户组名称', rules: { required: true } },
-    { prop: 'enabled', label: '是否启用', type: 'switch' },
-    { type: 'separator', label: '用户组岗位' },
+    { prop: 'name', label: t('system.user.group.name'), rules: { required: true } },
+    { prop: 'enabled', label: t('common.isEnabled'), type: 'switch' },
+    { type: 'separator', label: t('system.user.group.job') },
     { slotName: 'job' },
-    { type: 'separator', label: '用户组成员' },
+    { type: 'separator', label: t('system.user.group.user') },
     { slotName: 'member' }
   ]
 })
@@ -116,20 +119,20 @@ watchEffect(() => {
       slots: {
         header: () => (
           <el-button onClick={addUser} type="primary" icon="plus">
-            新增
+            {t('common.add')}
           </el-button>
         ),
         default: (scope) => (
           <el-button onClick={() => delUser(scope.$index)} type="danger" icon="delete">
-            删除
+            {t('common.del')}
           </el-button>
         )
       }
     },
     { type: 'index' },
-    { prop: 'userCode', label: '用户账号' },
-    { prop: 'userName', label: '用户名称' },
-    { prop: 'createTime', label: '创建时间', type: 'datetime', width: 155 }
+    { prop: 'userCode', label: t('system.user.code') },
+    { prop: 'userName', label: t('system.user.name') },
+    { prop: 'createTime', label: t('common.createTime'), type: 'datetime', width: 155 }
   ]
 })
 
@@ -166,7 +169,7 @@ function save() {
       {
         loadingRef: saveLoading,
         showSuccessMsg: true,
-        successMsg: '保存成功'
+        successMsg: t('common.saveSuccess')
       }
     ).then(() => close('refresh'))
   })

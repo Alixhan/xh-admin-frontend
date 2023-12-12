@@ -11,7 +11,7 @@
       />
     </el-scrollbar>
     <div class="m-footer">
-      <el-button icon="close" @click="close()">取消</el-button>
+      <el-button icon="close" @click="close()">{{ $t('common.cancel') }}</el-button>
       <template v-if="!formLoading">
         <el-button
           v-if="['add', 'edit'].includes(handleType)"
@@ -21,12 +21,12 @@
           :loading="saveLoading"
           @click="save"
         >
-          保存
+          {{ $t('common.save') }}
         </el-button>
       </template>
     </div>
     <el-dialog
-      title="选择数据字典类型"
+      :title="$t('system.dict.selectDictType')"
       v-model="visible1"
       draggable
       destroy-on-close
@@ -43,7 +43,7 @@
       />
     </el-dialog>
     <el-dialog
-      title="选择上级字典"
+      :title="$t('system.dict.selectParent')"
       v-model="visible2"
       draggable
       destroy-on-close
@@ -67,6 +67,7 @@ import { ref, toRef, watchEffect } from 'vue'
 import { getDictDetailById, postSaveDictDetail } from '@/api/system/dict'
 import selectDictType from './selectDictType.vue'
 import selectDictDetail from './selectDictDetail.vue'
+import { useI18n } from 'vue-i18n'
 
 const props = defineProps({
   handleType: {
@@ -75,6 +76,8 @@ const props = defineProps({
   },
   modelValue: {}
 })
+
+const { t } = useI18n()
 const emit = defineEmits(['close'])
 
 //初始化加载是否完成
@@ -106,30 +109,30 @@ watchEffect(() => {
   columns.value = [
     {
       prop: 'sysDictTypeId',
-      label: '字典类型ID',
+      label: t('system.dict.dictTypeId'),
       rules: { required: true, trigger: 'change' },
       slots: {
         append() {
-          return <el-button onClick={() => (visible1.value = true)}>选择</el-button>
+          return <el-button onClick={() => (visible1.value = true)}>{t('common.select')}</el-button>
         }
       }
     },
-    { prop: 'dictTypeName', label: '字典类型名称', readonly: true },
+    { prop: 'dictTypeName', label: t('system.dict.dictTypeName'), readonly: true },
     {
       prop: 'parentId',
-      label: '上级id',
+      label: t('system.dict.parent'),
       readonly: true,
       slots: {
         append() {
-          return <el-button onClick={() => (visible2.value = true)}>选择</el-button>
+          return <el-button onClick={() => (visible2.value = true)}>{t('common.select')}</el-button>
         }
       }
     },
-    { prop: 'parentLabel', label: '上级字典名称', readonly: true },
-    { prop: 'value', label: '字典值key', rules: { required: true } },
-    { prop: 'label', label: '字典名称', rules: { required: true } },
-    { prop: 'order', label: '排序号' },
-    { prop: 'enabled', label: '是否启用', type: 'switch' }
+    { prop: 'parentLabel', label: t('system.dict.parentName'), readonly: true },
+    { prop: 'value', label: t('system.dict.value'), rules: { required: true } },
+    { prop: 'label', label: t('system.dict.labelName'), rules: { required: true } },
+    { prop: 'order', label: t('common.order') },
+    { prop: 'enabled', label: t('common.isEnabled'), type: 'switch' }
   ]
 })
 
@@ -157,7 +160,7 @@ function save() {
     postSaveDictDetail(formData.value, {
       loadingRef: saveLoading,
       showSuccessMsg: true,
-      successMsg: '保存成功'
+      successMsg: t('common.saveSuccess')
     }).then(() => close('refresh'))
   })
 }

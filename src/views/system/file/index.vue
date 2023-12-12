@@ -21,12 +21,12 @@
           icon="delete"
           :disabled="selectRows.length === 0"
           @click="del(selectRows)"
-          >删除
+          >{{ $t('common.del') }}
         </el-button>
       </template>
     </m-table>
     <el-dialog
-      :title="formTitle[handleType]"
+      :title="handleType && $t('system.file.' + handleType)"
       v-model="formVisible"
       align-center
       draggable
@@ -40,17 +40,15 @@
   </div>
 </template>
 <script setup lang="jsx">
-import { reactive, ref, shallowRef } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import { delFileByIds, queryFileList } from '@/api/file/fileOperation'
 import { statusList } from '@/views/system/file/constant'
 import FileForm from './fileForm.vue'
 import { filesize } from 'filesize'
 import { getDownloadFileUrl } from '@/utils'
+import { useI18n } from 'vue-i18n'
 
-const formTitle = {
-  edit: '文件编辑',
-  detail: '文件明细'
-}
+const { t } = useI18n()
 
 const tableRef = ref()
 const data = ref([])
@@ -58,38 +56,33 @@ const selectRows = ref([])
 
 const filterParam = reactive({})
 
-const topFilterColumns = shallowRef([
-  { prop: 'object', label: '对象存储key' },
-  { prop: 'name', label: '文件名称' },
-  { prop: 'contentType', label: '文件类型' },
-  { prop: 'suffix', label: '文件扩展名' },
-  { prop: 'sha1', label: 'sha1' }
+const topFilterColumns = computed(() => [
+  { prop: 'object', label: t('system.file.object') },
+  { prop: 'name', label: t('system.file.name') },
+  { prop: 'contentType', label: t('system.file.contentType') },
+  { prop: 'suffix', label: t('system.file.suffix') },
+  { prop: 'sha1', label: t('system.file.sha1') }
 ])
 
-const columns = ref([
-  { type: 'index', label: '序', width: 50 },
-  { prop: 'id', label: 'ID', width: 50 },
-  { prop: 'name', label: '原文件名' },
-  { prop: 'object', label: '对象存储key', width: 150 },
-  {
-    prop: 'contentType',
-    label: '文件类型',
-    comment: '文件的MIME类型',
-    width: 100
-  },
-  { prop: 'suffix', label: '文件后缀扩展名', width: 120 },
+const columns = computed(() => [
+  { type: 'index', width: 80 },
+  { prop: 'id', label: 'Id', width: 80 },
+  { prop: 'name', label: t('system.file.name') },
+  { prop: 'object', label: t('system.file.object') },
+  { prop: 'contentType', label: t('system.file.contentType') },
+  { prop: 'suffix', label: t('system.file.suffix') },
   {
     prop: 'size',
-    label: '文件大小',
-    formatter: (row, col, val) => filesize(val, { base: 2, standard: 'jedec' })
+    label: t('system.file.size'),
+    formatter: (...args) => filesize(args[2], { base: 2, standard: 'jedec' })
   },
-  { prop: 'url', label: '图片预览', slots: { default: previewImage } },
-  { prop: 'imgWidth', label: '图片宽度' },
-  { prop: 'imgHeight', label: '图片高度' },
-  { prop: 'imgRatio', label: '图片宽高比', width: 100 },
+  { prop: 'url', label: t('system.file.preview'), slots: { default: previewImage } },
+  { prop: 'imgWidth', label: t('system.file.imgWidth') },
+  { prop: 'imgHeight', label: t('system.file.imgHeight') },
+  { prop: 'imgRatio', label: t('system.file.imgRatio') },
   {
     prop: 'status',
-    label: '文件状态',
+    label: t('system.file.status'),
     slots: {
       default: (scope) => {
         return (
@@ -100,21 +93,21 @@ const columns = ref([
       }
     }
   },
-  { prop: 'createTime', label: '上传时间', type: 'datetime', width: 155 },
+  { prop: 'createTime', label: t('system.file.createTime'), type: 'datetime', width: 155 },
   {
     type: 'operation',
     fixed: 'right',
     align: 'center',
     buttons: [
-      { label: '下载', onClick: download },
-      { label: '编辑', auth: 'system:file:edit', onClick: (row) => openForm('edit', row) },
+      { label: t('system.file.download'), onClick: download },
+      { label: t('common.edit'), auth: 'system:file:edit', onClick: (row) => openForm('edit', row) },
       {
-        label: '明细',
+        label: t('common.detail'),
         auth: 'system:file:detail',
         onClick: (row) => openForm('detail', row)
       },
       {
-        label: '删除',
+        label: t('common.del'),
         auth: 'system:file:del',
         type: 'danger',
         onClick: (row) => del([row])
@@ -138,7 +131,7 @@ function del(rows) {
     showLoading: true,
     showBeforeConfirm: true,
     showSuccessMsg: true,
-    confirmMsg: '确认删除吗？此操作会删除实际文件，删除后不可恢复！'
+    confirmMsg: t('common.confirmDelete')
   }).then(() => {
     tableRef.value.fetchQuery()
   })

@@ -5,7 +5,7 @@
         <el-icon size="25">
           <m-icon :model-value="statistic.icon" />
         </el-icon>
-        <div>{{ statistic.label }}</div>
+        <div>{{ $t(statistic.label) }}</div>
       </div>
       <div :ref="(countRef) => (statistic.ref.value = countRef)">{{ statistic.count }}</div>
     </div>
@@ -18,28 +18,29 @@ import { ref, toRef } from 'vue'
 defineOptions({
   name: 'HomeStatistic'
 })
+
 const statisticArr: any[] = [
   {
-    label: '总销量',
+    label: 'home.grossSales',
     icon: 'el|ElementPlus',
     color: 'linear-gradient(120deg, rgba(78,175,178,0.6), rgba(78,175,178,0.8))',
     count: ref(65433)
   },
   {
-    label: '总客户',
+    label: 'home.customers',
     icon: 'el|User',
     color: 'linear-gradient(120deg, rgba(182,78,139,0.6), rgba(182,78,139,0.8))',
     count: ref(34555)
   },
   {
-    label: '销售额',
+    label: 'home.grossProfit',
     icon: 'el|Coin',
     color: 'linear-gradient(120deg, rgba(215,131,105,0.6), rgba(215,131,105,0.8))',
     count: ref(775663.75),
     option: { prefix: '￥' }
   },
   {
-    label: '订单数',
+    label: 'home.orders',
     icon: 'el|Postcard',
     color: 'linear-gradient(120deg, rgba(211,179,73,0.6), rgba(211,179,73,0.8))',
     count: ref(75543)

@@ -1,5 +1,6 @@
 export default {
   m: {
+    comment: 'Comment',
     table: {
       index: 'Index',
       unit: '',
@@ -49,7 +50,30 @@ export default {
       wrongFormat: '{label} format error',
       maxlength: '{label} cannot exceed {maxlength} characters',
       minlength: '{label} cannot be less than {minlength} characters',
-      valRestriction: '{label} can only be enums {enums}'
+      valRestriction: '{label} can only be enums {enums}',
+      formatTip: '{label} format is {format}'
+    },
+    excelImport: {
+      downloadTemplate: 'Download Template',
+      confirmImport: 'Confirm Import',
+      templateFileName: 'Excel import template.xlsx',
+      step1Do: 'Importing excel',
+      step1Error: 'Failed to import excel file',
+      step2Do: 'Parsing excel',
+      step2Error: 'Failure to parse excel',
+      step2Success: 'Parsing excel successfully',
+      step3Do: 'Verifying data',
+      step3Error: 'Validation data error',
+      step3Success: 'Verify data successfully',
+      step4Do: 'Importing data',
+      step4Error: 'Import failed (server verification failed)',
+      step4Success: 'Data import succeeded',
+      step5Do: 'Clearing',
+      step5Success: 'Clear successfully',
+      num: 'Data line number',
+      excelNum: 'Excel line number',
+      templateMismatch: 'Template mismatch',
+      noData: 'No data to import!'
     }
   },
   common: {
@@ -75,7 +99,35 @@ export default {
     cancel: 'Cancel',
     confirmDelete: 'Are you sure you want to delete it? It cannot be recovered!',
     saveSuccess: 'Save success.',
-    restoreDefault: 'Restore Default'
+    restoreDefault: 'Restore Default',
+    select: 'Select',
+    clear: 'Clear',
+    imports: 'Imports',
+    switch: 'Switch',
+    importSuccess: 'Import success',
+    importsFailed: 'Import failed',
+    errorMsg: 'Error message',
+    confirm: 'Confirm',
+    confirmMsg: 'Do you want to continue this operation?',
+    loadingText: 'Operating',
+    successMsg: 'Operate successfully',
+    optFailed: 'Operation failure'
+  },
+  layout: {
+    switchLocaleError: 'Failed to switch language',
+    activeRole: 'Current role',
+    personalCenter: 'Personal Center',
+    switchRole: 'Switching roles',
+    logout: 'Logout',
+    logoutSuccess: 'Logout Success'
+  },
+  setting: {
+    layout: 'Layout Setting',
+    theme: 'theme',
+    showLogo: 'Show Logo',
+    menuUnique: 'Menu Unique',
+    showNavTabIcon: 'Tab Icon',
+    menuWidth: 'Menu Width'
   },
   login: {
     account: 'Please input account',
@@ -83,9 +135,57 @@ export default {
     captcha: 'Please input captcha',
     login: 'Login'
   },
+  home: {
+    pie: 'Pie',
+    line: 'Line',
+    bar: 'Bar',
+    pressure: 'Pressure',
+    grossSales: 'Gross Sales',
+    customers: 'Total Customers',
+    grossProfit: 'Gross Profit',
+    orders: 'Total Orders'
+  },
   system: {
+    dict: {
+      label: 'Data Dictionary',
+      add: '@:system.dict.label @:common.add',
+      edit: '@:system.dict.label @:common.edit',
+      detail: '@:system.dict.label @:common.detail',
+      all: 'All',
+      parent: 'Parent id',
+      parentName: 'Parent Dict',
+      dictTypeId: 'Dict Type Id',
+      dictTypeName: 'Dict Type Name',
+      value: 'Dict Value',
+      labelName: 'Dict Name',
+      orderComment: 'The order of the data dictionary, small first, large second.',
+      selectDictType: 'Select @.lower:system.dict.dictTypeName',
+      selectParent: 'Select @.lower:system.dict.parentName'
+    },
+    file: {
+      label: 'File',
+      edit: '@:system.file.label @:common.edit',
+      detail: '@:system.file.label @:common.detail',
+      object: 'Object Key',
+      name: 'File Name',
+      contentType: 'Content Type',
+      suffix: 'Filename Extension',
+      size: 'Size',
+      preview: 'Preview',
+      imgWidth: 'Image Width',
+      imgHeight: 'Image Height',
+      status: 'Status',
+      imgRatio: 'Aspect Ratio',
+      sha1: 'Sha1',
+      sha1Comment: 'The sha1 of the same file is the same, and the same sha1 will not upload files twice.',
+      download: 'Download',
+      createTime: 'Upload Time'
+    },
     menu: {
-      label: 'Menu ',
+      label: 'Menu',
+      add: '@:system.menu.label @:common.add',
+      edit: '@:system.menu.label @:common.edit',
+      detail: '@:system.menu.label @:common.detail',
       title: 'Menu Title',
       platform: 'Platform',
       type: 'Menu Type',
@@ -97,6 +197,83 @@ export default {
       path: 'Route Path',
       component: 'Component Path',
       outerUrl: 'Link Address'
+    },
+    org: {
+      label: 'Organization',
+      add: '@:system.org.label @:common.add',
+      edit: '@:system.org.label @:common.edit',
+      detail: '@:system.org.label @:common.detail',
+      code: 'Organization Code',
+      name: 'Organization Name',
+      parentId: 'Parent Org Id',
+      parentName: 'Parent Org Name',
+      all: 'All',
+      select: 'Select Org',
+      selectParent: 'Select parent org'
+    },
+    role: {
+      label: 'Role',
+      add: '@:system.role.labe l@:common.add',
+      edit: '@:system.role.label @:common.edit',
+      detail: '@:system.role.label @:common.detail',
+      name: 'Role Name',
+      permission: 'permission',
+      parentId: 'Parent Role Id',
+      parentName: 'Parent Role Name',
+      selectParent: 'Select Parent Role',
+      select: 'Select role'
+    },
+    user: {
+      label: 'User',
+      add: '@:system.user.label@:common.add',
+      edit: '@:system.user.label@:common.edit',
+      detail: '@:system.user.label@:common.detail',
+      job: 'User Job',
+      role: 'User Role',
+      inGroup: 'User Group',
+      code: 'User Account',
+      name: 'User Name',
+      avatar: 'Avatar',
+      telephone: 'Telephone',
+      telephoneNote: 'An 11-digit cell phone number',
+      password: 'Password',
+      newPassword: 'New Password',
+      newPasswordH: 'If you need to change your password, please type in the new password.',
+      repeatPassword: 'Repeat new password',
+      passwordMismatches: 'Two different password entries!',
+      status: 'User Status',
+      lockMsg: 'Cause Of Locking',
+      jobMaintain: 'Post Maintenance',
+      userCodeRule: 'Login accounts can only be upper - and lowercase letters and numbers!',
+      select: 'Select User',
+      jobSuccess: 'User post saved successfully.',
+      imports: '@:system.user.label @:common.imports',
+      group: {
+        label: 'User Group',
+        add: '@:system.user.group.label @:common.add',
+        edit: '@:system.user.group.label @:common.edit',
+        detail: '@:system.user.group.label @:common.detail',
+        name: 'User Group Name',
+        job: 'User Group Job',
+        user: 'User Group Member'
+      }
+    }
+  },
+  monitor: {
+    online: {
+      userCode: 'User Code',
+      userName: 'User Name',
+      loginTime: 'Login Time',
+      loginAddress: 'Address',
+      loginBrowser: 'Browser',
+      browserVersion: 'Browser Version',
+      loginOs: 'Login OS',
+      isMobile: 'Is Mobile',
+      orgName: 'Org Name',
+      roleName: 'Role Name',
+      localeLabel: 'Locale Label',
+      forceLogout: 'Force Logout',
+      confirmLogout: 'Reconfirm kicking this user offline? The user will need to log back in after being kicked off！'
     }
   }
 }

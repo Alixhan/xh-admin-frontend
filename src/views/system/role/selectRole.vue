@@ -19,18 +19,19 @@
           type="primary"
           @click="emit('select', selectRows)"
         >
-          选择
+          {{ $t('common.select') }}
         </el-button>
-        <el-button @click="emit('clear')">清空</el-button>
+        <el-button @click="emit('clear')">{{ $t('common.clear') }}</el-button>
       </template>
     </m-table>
   </div>
 </template>
 <script setup lang="tsx">
-import { ref, shallowRef } from 'vue'
 import type { PropType } from 'vue'
+import { ref, shallowRef } from 'vue'
 import { queryRoleList } from '@/api/system/role'
 import getDictDetails from '@/utils/dict'
+import { useI18n } from 'vue-i18n'
 
 defineProps({
   selection: {
@@ -50,23 +51,24 @@ defineProps({
 })
 const emit = defineEmits(['select', 'clear'])
 
+const { t } = useI18n()
 const selectRows = ref([])
 
 const topFilterColumns = shallowRef([
-  { prop: 'parentId', label: '上级角色id', hidden: true },
-  { prop: 'parentName', label: '上级角色名称', readonly: true },
-  { prop: 'name', label: '角色名称' },
-  { prop: 'enabled', label: '是否启用', type: 'select', itemList: getDictDetails(1, 'boolean') }
+  { prop: 'parentId', label: t('system.role.parentId'), hidden: true },
+  { prop: 'parentName', label: t('system.role.parentName'), readonly: true },
+  { prop: 'name', label: t('system.role.name') },
+  { prop: 'enabled', label: t('common.isEnabled'), type: 'select', itemList: getDictDetails(1, 'boolean') }
 ])
 
 // 表格列定义
 const columns: TableColumn[] = [
-  { type: 'index', label: '序', width: 50 },
-  { prop: 'id', label: 'ID', width: 50 },
-  { prop: 'name', label: '角色名称' },
-  { prop: 'parentName', label: '上级角色' },
-  { prop: 'parentId', label: '上级角色ID', width: 100 },
-  { prop: 'createTime', label: '创建时间', type: 'datetime', width: 155 }
+  { type: 'index', width: 80 },
+  { prop: 'id', label: 'Id', width: 80 },
+  { prop: 'name', label: t('system.role.name') },
+  { prop: 'parentName', label: t('system.role.parentName') },
+  { prop: 'parentId', label: t('system.role.parentId'), width: 100 },
+  { prop: 'createTime', label: t('common.createTime'), type: 'datetime', width: 155 }
 ]
 </script>
 <style lang="scss" scoped>

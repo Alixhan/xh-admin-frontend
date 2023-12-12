@@ -7,24 +7,24 @@
         style="min-width: min(90vw, 500px)"
         append-to-body
         v-model="drawerVisible"
-        title="用户角色"
+        :title="$t('system.user.role')"
         direction="rtl"
       >
         <div v-for="(item, i) in systemStore.orgRoles" :key="i" class="role-item">
           <el-text> {{ item.orgName }} -- {{ item.roleName }}</el-text>
           <div>
-            <el-tag v-if="item.active" class="ml-2" type="success">当前角色</el-tag>
-            <el-link v-else type="primary" @click="switchRole(item)">切换</el-link>
+            <el-tag v-if="item.active" class="ml-2" type="success">{{ $t('layout.activeRole') }}</el-tag>
+            <el-link v-else type="primary" @click="switchRole(item)">{{ $t('common.switch') }}</el-link>
           </div>
         </div>
       </el-drawer>
     </div>
     <template #dropdown>
       <el-dropdown-menu>
-        <el-dropdown-item command="user" icon="User"> 个人中心</el-dropdown-item>
-        <el-dropdown-item command="switchRole" icon="Switch"> 切换角色</el-dropdown-item>
+        <el-dropdown-item command="user" icon="User">{{ $t('layout.personalCenter') }}</el-dropdown-item>
+        <el-dropdown-item command="switchRole" icon="Switch">{{ $t('layout.switchRole') }}</el-dropdown-item>
         <el-dropdown-item command="logout" icon="SwitchButton">
-          <span style="color: red">注销登录</span>
+          <span style="color: red">{{ $t('layout.logout') }}</span>
         </el-dropdown-item>
       </el-dropdown-menu>
     </template>
@@ -61,7 +61,7 @@ function handleCommand(key) {
   if (key === 'logout') {
     userLogout({
       showSuccessMsg: true,
-      successMsg: '注销成功'
+      successMsg: i18n.t('layout.logoutSuccess')
     }).then(() => {
       setTimeout(systemStore.logout, 1000)
     })

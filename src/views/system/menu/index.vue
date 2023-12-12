@@ -15,9 +15,8 @@
       @selection-change="(rows) => (selectRows = rows)"
     >
       <template #left-action>
-        <el-button type="success" @click="toggleExpand"
-          >{{ $t('common.expand') }}/{{ $t('common.collapse') }}
-          {{ $t('common.all') }}
+        <el-button type="success" @click="toggleExpand">
+          {{ $t('common.expand') }}/{{ $t('common.collapse') }} {{ $t('common.all') }}
         </el-button>
       </template>
       <template #right-action>
@@ -36,7 +35,7 @@
       </template>
     </m-table>
     <el-dialog
-      :title="formTitle[handleType]"
+      :title="handleType && $t('system.menu.' + handleType)"
       v-model="formVisible"
       align-center
       draggable
@@ -59,13 +58,6 @@ import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
 
-const formTitle = computed(() => ({
-  copy: `${t('system.menu.label')}${t('common.add')}`,
-  add: `${t('system.menu.label')}${t('common.add')}`,
-  edit: `${t('system.menu.label')}${t('common.edit')}`,
-  detail: `${t('system.menu.label')}${t('common.detail')}`
-}))
-
 const tableRef = ref()
 const data = ref([])
 const selectRows = ref([])
@@ -79,7 +71,7 @@ const topFilterColumns = computed(() => [
 
 const columns = computed(() => [
   { prop: 'title', label: t('system.menu.title'), fixed: false, minWidth: 200 },
-  { prop: 'id', label: 'ID', width: 70 },
+  { prop: 'id', label: 'Id', width: 70 },
   { prop: 'platform', label: t('system.menu.platform') },
   { prop: 'name', label: 'Name' },
   { prop: 'type', label: t('system.menu.type'), type: 'select', itemList: menuTypeList },

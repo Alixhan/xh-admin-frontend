@@ -16,10 +16,14 @@
       @selection-change="(rows) => (selectRows = rows)"
     >
       <template #left-action>
-        <el-button type="success" @click="toggleExpand"> 全部 展开/收起</el-button>
+        <el-button type="success" @click="toggleExpand">
+          {{ $t('common.expand') }}/{{ $t('common.collapse') }} {{ $t('common.all') }}
+        </el-button>
       </template>
       <template #right-action>
-        <el-button v-auth="'system:role:add'" type="primary" icon="plus" @click="openForm('add')"> 新增</el-button>
+        <el-button v-auth="'system:role:add'" type="primary" icon="plus" @click="openForm('add')"
+          >{{ $t('common.add') }}
+        </el-button>
         <el-button
           v-auth="'system:role:del'"
           type="danger"
@@ -27,12 +31,12 @@
           :disabled="selectRows.length === 0"
           @click="del(selectRows)"
         >
-          删除
+          {{ $t('common.del') }}
         </el-button>
       </template>
     </m-table>
     <el-dialog
-      :title="formTitle[handleType]"
+      :title="handleType && $t('system.role.' + handleType)"
       v-model="formVisible"
       draggable
       destroy-on-close
@@ -46,42 +50,49 @@
   </div>
 </template>
 <script setup lang="jsx">
-import { reactive, ref, shallowRef } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import { delRoleByIds, queryRoleList } from '@/api/system/role'
 import RoleForm from './roleForm.vue'
 import getDictDetails from '@/utils/dict'
+import { useI18n } from 'vue-i18n'
 
-const formTitle = {
-  add: '角色新增',
-  edit: '角色编辑',
-  detail: '角色明细'
-}
-
+const { t } = useI18n()
 const tableRef = ref()
 const data = ref([])
 const selectRows = ref([])
 
 const filterParam = reactive({})
 
-const topFilterColumns = shallowRef([
-  { prop: 'name', label: '角色名称' },
-  { prop: 'enabled', label: '是否启用', type: 'select', itemList: getDictDetails(1, 'boolean') }
+const topFilterColumns = computed(() => [
+  { prop: 'name', label: t('system.role.name') },
+  { prop: 'enabled', label: t('common.enabled'), type: 'select', itemList: getDictDetails(1, 'boolean') }
 ])
 
-const columns = ref([
-  { prop: 'name', label: '角色名称', fixed: false, width: 200 },
-  { prop: 'id', label: 'ID', width: 50 },
-  { prop: 'enabled', label: '启用', itemList: getDictDetails(1, 'boolean') },
-  { prop: 'createTime', label: '创建时间', type: 'datetime' },
-  { prop: 'updateTime', label: '修改时间', type: 'datetime' },
+const columns = computed(() => [
+  { prop: 'name', label: t('system.role.name'), fixed: false, width: 200 },
+  { prop: 'id', label: 'Id', width: 80 },
+  { prop: 'enabled', label: t('common.enabled'), itemList: getDictDetails(1, 'boolean') },
+  { prop: 'createTime', label: t('common.createTime'), type: 'datetime' },
+  { prop: 'updateTime', label: t('common.updateTime'), type: 'datetime' },
   {
     type: 'operation',
     fixed: 'right',
     align: 'center',
     buttons: [
-      { label: '编辑', icon: 'edit', auth: 'system:role:edit', onClick: (row) => openForm('edit', row) },
-      { label: '明细', icon: 'document', auth: 'system:role:detail', onClick: (row) => openForm('detail', row) },
-      { label: '删除', icon: 'delete', auth: 'system:role:del', type: 'danger', onClick: (row) => openForm('', row) }
+      { label: t('common.edit'), icon: 'edit', auth: 'system:role:edit', onClick: (row) => openForm('edit', row) },
+      {
+        label: t('common.detail'),
+        icon: 'document',
+        auth: 'system:role:detail',
+        onClick: (row) => openForm('detail', row)
+      },
+      {
+        label: t('common.del'),
+        icon: 'delete',
+        auth: 'system:role:del',
+        type: 'danger',
+        onClick: (row) => openForm('', row)
+      }
     ]
   }
 ])
@@ -141,7 +152,7 @@ function del(rows) {
     showLoading: true,
     showBeforeConfirm: true,
     showSuccessMsg: true,
-    confirmMsg: '确认删除吗？删除后不可恢复！'
+    confirmMsg: t('common.confirmDelete')
   }).then(() => {
     tableRef.value.fetchQuery()
   })

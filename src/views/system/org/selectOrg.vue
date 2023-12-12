@@ -18,16 +18,17 @@
           :disabled="selectRows.length === 0 || selectRows.length > selectionLimit"
           type="primary"
           @click="emit('select', selectRows)"
-          >选择
+          >{{ $t('common.select') }}
         </el-button>
       </template>
     </m-table>
   </div>
 </template>
 <script setup lang="jsx">
-import { ref, shallowRef } from 'vue'
+import { computed, ref } from 'vue'
 import { queryOrgList } from '@/api/system/org'
 import getDictDetails from '@/utils/dict'
+import { useI18n } from 'vue-i18n'
 
 defineProps({
   selection: {
@@ -47,25 +48,27 @@ defineProps({
 })
 const emit = defineEmits(['select'])
 
+const { t } = useI18n()
+
 const selectRows = ref([])
 
-const topFilterColumns = shallowRef([
-  { prop: 'parentId', label: '上级机构id', hidden: true },
-  { prop: 'parentName', label: '上级机构名称', readonly: true },
-  { prop: 'code', label: '机构代码' },
-  { prop: 'name', label: '机构名称' },
-  { prop: 'enabled', label: '是否启用', type: 'select', itemList: getDictDetails(1, 'boolean') }
+const topFilterColumns = computed(() => [
+  { prop: 'parentId', label: t('system.org.code'), hidden: true },
+  { prop: 'parentName', label: t('system.org.name'), readonly: true },
+  { prop: 'code', label: t('system.org.parentId') },
+  { prop: 'name', label: t('system.org.parentName') },
+  { prop: 'enabled', label: t('common.isEnabled'), type: 'select', itemList: getDictDetails(1, 'boolean') }
 ])
 
 // 表格列定义
-const columns = ref([
-  { type: 'index', label: '序', width: 50 },
-  { prop: 'id', label: 'ID', width: 50 },
-  { prop: 'code', label: '机构代码' },
-  { prop: 'name', label: '机构名称' },
-  { prop: 'parentName', label: '上级机构' },
-  { prop: 'parentId', label: '上级机构ID', width: 100 },
-  { prop: 'createTime', label: '创建时间', type: 'datetime', width: 155 }
+const columns = computed(() => [
+  { type: 'index', width: 80 },
+  { prop: 'id', label: 'Id', width: 80 },
+  { prop: 'code', label: t('system.org.code') },
+  { prop: 'name', label: t('system.org.name') },
+  { prop: 'parentId', label: t('system.org.parentId'), width: 100 },
+  { prop: 'parentName', label: t('system.org.parentName') },
+  { prop: 'createTime', label: t('common.createTime'), type: 'datetime', width: 155 }
 ])
 </script>
 <style lang="scss" scoped>

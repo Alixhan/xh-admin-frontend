@@ -8,19 +8,21 @@ import type { ErrorResponse, MyAxiosInstance, RequestOption } from '@i/utils/req
 import { isRestResponse } from '@i/utils/request'
 import type { Mutable } from '@vueuse/core'
 
+const { t } = i18n.global
+
 axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8'
 
 const defaultOption: RequestOption = {
   showLoading: false,
   showBeforeConfirm: false,
-  confirmButtonText: '确定',
-  confirmMsg: '确认是否继续此操作?',
-  loadingText: '操作中',
+  confirmButtonText: t('common.confirm'),
+  confirmMsg: t('common.confirmMsg'),
+  loadingText: t('common.loadingText'),
   showSuccessMsg: false,
   successDuration: 3000,
-  successMsg: '操作成功',
+  successMsg: t('common.successMsg'),
   errorDuration: 3000,
-  errorMsg: '操作失败'
+  errorMsg: t('common.optFailed')
 }
 
 // 对请求进行增强处理

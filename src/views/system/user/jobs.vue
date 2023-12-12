@@ -8,10 +8,10 @@
     :data="jobData"
     row-key="id"
   />
-  <el-dialog title="选择机构" v-model="visible1" draggable append-to-body align-center width="80%">
-    <selectOrg selection="single" style="height: calc(90vh - 80px)" @select="selectedOrg" @close="visible1 = false" />
+  <el-dialog :title="$t('system.org.select')" v-model="visible1" draggable append-to-body align-center width="80%">
+    <select-org selection="single" style="height: calc(90vh - 80px)" @select="selectedOrg" @close="visible1 = false" />
   </el-dialog>
-  <el-dialog title="选择角色" v-model="visible2" draggable append-to-body align-center width="80%">
+  <el-dialog :title="$t('system.role.select')" v-model="visible2" draggable append-to-body align-center width="80%">
     <select-role selection="single" style="height: calc(90vh - 80px)" @select="selectedRole" />
   </el-dialog>
 </template>
@@ -21,12 +21,15 @@ import { ref, toRef, watchEffect } from 'vue'
 import SelectRole from '@/views/system/role/selectRole.vue'
 import SelectOrg from '@/views/system/org/selectOrg.vue'
 import getDictDetails from '@/utils/dict'
+import { useI18n } from 'vue-i18n'
 
 const props = defineProps({
   handleType: {
     type: String as PropType<FormHandleType>
   }
 })
+
+const { t } = useI18n()
 
 const handleType = toRef(props, 'handleType')
 
@@ -44,12 +47,12 @@ watchEffect(() => {
       slots: {
         header: () => (
           <el-button onClick={addJob} type="primary" icon="plus">
-            新增
+            {t('common.add')}
           </el-button>
         ),
         default: (scope) => (
           <el-button onClick={() => delJob(scope.$index)} type="danger" icon="delete">
-            删除
+            {t('common.del')}
           </el-button>
         )
       }
@@ -58,7 +61,7 @@ watchEffect(() => {
     {
       minWidth: 200,
       prop: 'orgName',
-      label: '机构',
+      label: t('system.org.label'),
       required: handleType.value !== 'detail',
       editable: handleType.value !== 'detail',
       editParam: (row) => {
@@ -74,7 +77,7 @@ watchEffect(() => {
     {
       minWidth: 200,
       prop: 'roleName',
-      label: '角色',
+      label: t('system.role.label'),
       required: handleType.value !== 'detail',
       editable: handleType.value !== 'detail',
       editParam: (row) => {
@@ -89,12 +92,12 @@ watchEffect(() => {
     },
     {
       prop: 'enabled',
-      label: '启用',
+      label: t('common.enabled'),
       itemList: getDictDetails(1, 'boolean'),
       type: 'switch',
       editable: handleType.value !== 'detail'
     },
-    { prop: 'createTime', label: '创建时间', type: 'datetime', width: 155 }
+    { prop: 'createTime', label: t('common.createTime'), type: 'datetime', width: 155 }
   ]
 })
 
@@ -102,7 +105,7 @@ function addJob() {
   jobData.value.push({ enabled: true })
 }
 
-function delJob(index) {
+function delJob(index: number) {
   jobData.value.splice(index, 1)
 }
 
@@ -117,7 +120,6 @@ function openOrgSelect(row) {
 
 // 选择了机构
 function selectedOrg(rows) {
-  console.info(rows)
   currentRow.sysOrgId = rows[0].id
   currentRow.orgName = rows[0].name
   visible1.value = false

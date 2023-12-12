@@ -14,22 +14,24 @@
       v-model:data="data"
     >
       <template #right-action>
-        <el-button v-auth="'system:user:import'" type="primary" icon="upload" @click="userImportRef.open()"
-          >导入
+        <el-button v-auth="'system:user:import'" type="primary" icon="upload" @click="userImportRef.open()">
+          {{ $t('common.imports') }}
         </el-button>
-        <el-button v-auth="'system:user:add'" type="primary" icon="plus" @click="openForm('add', null)">新增</el-button>
+        <el-button v-auth="'system:user:add'" type="primary" icon="plus" @click="openForm('add', null)">
+          {{ $t('common.add') }}
+        </el-button>
         <el-button
           v-auth="'system:user:del'"
           type="danger"
           icon="delete"
           :disabled="selectRows.length === 0"
           @click="del(selectRows)"
-          >删除
+          >{{ $t('common.del') }}
         </el-button>
       </template>
     </m-table>
     <el-dialog
-      :title="formTitle[handleType]"
+      :title="handleType && $t('system.user.' + handleType)"
       v-model="formVisible"
       draggable
       destroy-on-close
@@ -40,7 +42,7 @@
       <user-form :handle-type="handleType" :model-value="row" @close="close" />
     </el-dialog>
     <el-dialog
-      title="用户岗位"
+      :title="$t('system.user.job')"
       v-model="formVisible2"
       align-center
       draggable
@@ -54,49 +56,57 @@
   </div>
 </template>
 <script setup lang="tsx">
-import { reactive, ref, shallowRef } from 'vue'
+import type { Ref } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import { delUserByIds, queryUserList } from '@/api/system/user'
 import { statusList } from '@/views/system/user/constant.js'
 import UserForm from './userForm.vue'
 import getDictDetails from '@/utils/dict'
 import UserImport from './userImport.vue'
 import UserJob from '@/views/system/user/userJob.vue'
+import { useI18n } from 'vue-i18n'
 
-const formTitle = {
-  add: '用户新增',
-  edit: '用户编辑',
-  detail: '用户明细'
-}
+const { t } = useI18n()
 const tableRef = ref()
 const data = ref([])
 const selectRows = ref([])
 
 const filterParam = reactive({})
 
-const topFilterColumns = shallowRef([
-  { prop: 'code', label: '用户账号' },
-  { prop: 'name', label: '用户名' }
+const topFilterColumns = computed(() => [
+  { prop: 'code', label: t('system.user.code') },
+  { prop: 'name', label: t('system.user.name') }
 ])
 
-const columns = ref<CommonTableColumn[]>([
-  { type: 'index', label: '序', width: 50 },
-  { prop: 'id', label: 'ID', width: 50 },
-  { prop: 'code', label: '用户账号' },
-  { prop: 'name', label: '用户名称' },
-  { prop: 'telephone', label: '手机号码' },
-  { prop: 'status', label: '用户状态', type: 'select', itemList: statusList },
-  { prop: 'lockMsg', label: '锁定原因' },
-  { prop: 'enabled', label: '是否启用', type: 'select', itemList: getDictDetails(1, 'boolean') },
-  { prop: 'createTime', label: '创建时间', type: 'datetime', width: 155 },
+const columns: Ref<CommonTableColumn[]> = computed(() => [
+  { type: 'index', width: 80 },
+  { prop: 'id', label: 'Id', width: 80 },
+  { prop: 'code', label: t('system.user.code') },
+  { prop: 'name', label: t('system.user.name') },
+  { prop: 'telephone', label: t('system.user.telephone') },
+  { prop: 'status', label: t('system.user.status'), type: 'select', itemList: statusList },
+  { prop: 'lockMsg', label: t('system.user.lockMsg') },
+  { prop: 'enabled', label: t('common.isEnabled'), type: 'select', itemList: getDictDetails(1, 'boolean') },
+  { prop: 'createTime', label: t('common.createTime'), type: 'datetime', width: 155 },
   {
     type: 'operation',
     fixed: 'right',
     align: 'center',
     buttons: [
-      { label: '编辑', auth: 'system:user:edit', icon: 'edit', onClick: (row) => openForm('edit', row) },
-      { label: '岗位维护', auth: 'system:user:role', icon: 'stamp', onClick: (row) => openForm('job', row) },
-      { label: '明细', auth: 'system:user:detail', icon: 'document', onClick: (row) => openForm('detail', row) },
-      { label: '删除', auth: 'system:user:del', icon: 'delete', type: 'danger', onClick: (row) => del([row]) }
+      { label: t('common.edit'), auth: 'system:user:edit', icon: 'edit', onClick: (row) => openForm('edit', row) },
+      {
+        label: t('system.user.jobMaintain'),
+        auth: 'system:user:role',
+        icon: 'stamp',
+        onClick: (row) => openForm('job', row)
+      },
+      {
+        label: t('common.detail'),
+        auth: 'system:user:detail',
+        icon: 'document',
+        onClick: (row) => openForm('detail', row)
+      },
+      { label: t('common.del'), auth: 'system:user:del', icon: 'delete', type: 'danger', onClick: (row) => del([row]) }
     ]
   }
 ])
@@ -121,7 +131,7 @@ function del(rows) {
     showLoading: true,
     showBeforeConfirm: true,
     showSuccessMsg: true,
-    confirmMsg: '确认删除吗？删除后不可恢复！'
+    confirmMsg: t('common.confirmDelete')
   }).then(() => {
     tableRef.value.fetchQuery()
   })

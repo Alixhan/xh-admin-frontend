@@ -4,6 +4,9 @@ import ExcelJS from 'exceljs'
 import { generateFormatter, getRules } from '@/components/mutils'
 import { toRaw } from 'vue'
 import type { CommonExcelColumn, ExcelJsWorksheetColumn, ExcelTreeNode } from '@i/utils/excel'
+import i18n from '@/i18n'
+
+const { t } = i18n.global
 
 /**
  * excel树,提供遍历方法和导出文件方法
@@ -150,10 +153,16 @@ export class ExcelTree<T extends object> implements ExcelTreeNode<T> {
         // 下拉框标题单元格添加提示批注
         const itemList = toRaw(i.itemList)
         if (itemList && Array.isArray(itemList)) {
-          cell.note = `${node.label}值只能为（${Object.values(itemList.map((j) => j.label))}）。`
+          cell.note = t('m.form.valRestriction', {
+            label: node.label ?? '',
+            enums: Object.values(itemList.map((j) => j.label))
+          })
         }
         if (i.dateFormat) {
-          cell.note = `${node.label}格式为${i.dateFormat}。`
+          cell.note = t('m.form.formatTip', {
+            label: node.label ?? '',
+            format: i.dateFormat
+          })
         }
       })
       // 单元格标题居中

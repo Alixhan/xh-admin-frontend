@@ -14,44 +14,48 @@
   </div>
 </template>
 <script setup lang="jsx">
-import { reactive, ref, shallowRef } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import { kickOut, queryOnlineUser } from '@/api/system/user'
 import getDictDetails from '@/utils/dict'
+import { useI18n } from 'vue-i18n'
 
 defineOptions({
   name: 'OnlineUser'
 })
+
+const { t } = useI18n()
+
 const tableRef = ref()
 const data = ref([])
 
 const filterParam = reactive({})
 
-const topFilterColumns = shallowRef([
-  { prop: 'userCode', label: '登录账号' },
-  { prop: 'userName', label: '账号名称' },
-  { prop: 'ip', label: '登录ip' }
+const topFilterColumns = computed(() => [
+  { prop: 'userCode', label: t('monitor.online.userCode') },
+  { prop: 'userName', label: t('monitor.online.userName') },
+  { prop: 'ip', label: 'Ip' }
 ])
 
-const columns = ref([
-  { type: 'index', label: '序', width: 70 },
-  { prop: 'token', label: 'token' },
-  { prop: 'userCode', label: '登录账户' },
-  { prop: 'userName', label: '登录账户名称' },
-  { prop: 'loginTime', label: '登录时间', type: 'datetime', minWidth: 150 },
-  { prop: 'loginIp', label: 'ip地址', minWidth: 120 },
-  { prop: 'loginAddress', label: '登录地点', minWidth: 150 },
-  { prop: 'loginBrowser', label: '浏览器' },
-  { prop: 'browserVersion', label: '浏览器版本' },
-  { prop: 'loginOs', label: '操作系统' },
-  { prop: 'isMobile', label: '是否手机端', itemList: getDictDetails(1, 'boolean') },
-  { prop: 'orgName', label: '登录机构' },
-  { prop: 'roleName', label: '登录角色' },
-  { prop: 'localeLabel', label: '当前使用语言' },
+const columns = computed(() => [
+  { type: 'index', width: 70 },
+  { prop: 'token', label: 'Token' },
+  { prop: 'userCode', label: t('monitor.online.userCode') },
+  { prop: 'userName', label: t('monitor.online.userName') },
+  { prop: 'loginTime', label: t('monitor.online.loginTime'), type: 'datetime', minWidth: 150 },
+  { prop: 'loginIp', label: 'Ip', minWidth: 120 },
+  { prop: 'loginAddress', label: t('monitor.online.loginAddress'), minWidth: 150 },
+  { prop: 'loginBrowser', label: t('monitor.online.loginBrowser') },
+  { prop: 'browserVersion', label: t('monitor.online.browserVersion') },
+  { prop: 'loginOs', label: t('monitor.online.loginOs') },
+  { prop: 'isMobile', label: t('monitor.online.isMobile'), itemList: getDictDetails(1, 'boolean') },
+  { prop: 'orgName', label: t('monitor.online.orgName') },
+  { prop: 'roleName', label: t('monitor.online.roleName') },
+  { prop: 'localeLabel', label: t('monitor.online.localeLabel') },
   {
     type: 'operation',
     fixed: 'right',
     align: 'center',
-    buttons: [{ label: '强制下线', onClick: foreOffline }]
+    buttons: [{ label: t('monitor.online.forceLogout'), onClick: foreOffline }]
   }
 ])
 
@@ -61,7 +65,7 @@ function foreOffline(row) {
     showLoading: true,
     showBeforeConfirm: true,
     showSuccessMsg: true,
-    confirmMsg: '确认踢除此用户下线吗？踢除成功后，该用户需要重新登录！'
+    confirmMsg: t('monitor.online.confirmLogout')
   }).then(tableRef.value.fetchQuery)
 }
 </script>

@@ -8,8 +8,8 @@
       </m-form>
     </el-scrollbar>
     <div class="m-footer">
-      <el-button icon="close" @click="close()">取消</el-button>
-      <el-button icon="check" type="primary" :loading="saveLoading" @click="save"> 保存</el-button>
+      <el-button icon="close" @click="close()">{{ $t('common.cancel') }}</el-button>
+      <el-button icon="check" type="primary" :loading="saveLoading" @click="save">{{ $t('common.save') }}</el-button>
     </div>
   </div>
 </template>
@@ -18,6 +18,7 @@ import type { PropType } from 'vue'
 import { ref, watchEffect } from 'vue'
 import { getUserById, getUserJobs, saveUserJobs } from '@/api/system/user'
 import Jobs from '@/views/system/user/jobs.vue'
+import { useI18n } from 'vue-i18n'
 
 const props = defineProps({
   //数据类型 1：用户，2：用户组
@@ -32,6 +33,7 @@ const props = defineProps({
 })
 const emit = defineEmits(['close'])
 
+const { t } = useI18n()
 const formRef = ref()
 const jobTableRef = ref()
 const formLoading = ref(false)
@@ -64,11 +66,11 @@ async function init() {
 const columns = ref<FormColumn[]>([])
 watchEffect(() => {
   columns.value = [
-    { prop: 'avatar', label: '头像', type: 'upload-img', cols: 2, single: 'object', disabled: true },
-    { prop: 'code', label: '登录账号', disabled: true },
-    { prop: 'name', label: '用户名', disabled: true },
-    { prop: 'enabled', label: '是否启用', type: 'switch', disabled: true },
-    { type: 'separator', label: '用户岗位' },
+    { prop: 'avatar', label: t('system.user.avatar'), type: 'upload-img', cols: 2, single: 'object', disabled: true },
+    { prop: 'code', label: t('system.user.code'), disabled: true },
+    { prop: 'name', label: t('system.user.name'), disabled: true },
+    { prop: 'enabled', label: t('common.isEnabled'), type: 'switch', disabled: true },
+    { type: 'separator', label: t('system.user.job') },
     { slotName: 'job' }
   ]
 })
@@ -88,7 +90,7 @@ async function save() {
     {
       loadingRef: saveLoading,
       showSuccessMsg: true,
-      successMsg: '岗位保存成功'
+      successMsg: t('system.user.jobSuccess')
     }
   ).then(() => close())
 }

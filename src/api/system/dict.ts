@@ -19,7 +19,7 @@ export function postSaveDictDetail(params = {}, option?: RequestOption) {
 
 // 获取数据字典明细详情
 export function getDictDetailById(id: number) {
-  return createAxios<string>().get(`${systemBaseUrl}/api/system/dict/detail/get/${id}`)
+  return createAxios().get(`${systemBaseUrl}/api/system/dict/detail/get/${id}`)
 }
 
 // 批量删除数据字典明细

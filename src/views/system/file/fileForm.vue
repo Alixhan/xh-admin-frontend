@@ -11,7 +11,7 @@
       />
     </el-scrollbar>
     <div class="m-footer">
-      <el-button icon="close" @click="close()">取消</el-button>
+      <el-button icon="close" @click="close()">{{ $t('common.cancel') }}</el-button>
       <template v-if="!formLoading">
         <el-button
           v-if="['add', 'edit'].includes(handleType)"
@@ -21,7 +21,7 @@
           :loading="saveLoading"
           @click="save"
         >
-          保存
+          {{ $t('common.save') }}
         </el-button>
       </template>
     </div>
@@ -32,6 +32,7 @@ import { ref, watchEffect } from 'vue'
 import { getFileById, postSaveFile } from '@/api/file/fileOperation'
 import { statusList } from '@/views/system/file/constant'
 import { getDownloadFileUrl } from '@/utils'
+import { useI18n } from 'vue-i18n'
 
 const props = defineProps({
   handleType: {
@@ -40,6 +41,8 @@ const props = defineProps({
   },
   modelValue: {}
 })
+
+const { t } = useI18n()
 const emit = defineEmits(['close'])
 
 const formLoading = ref(false)
@@ -70,39 +73,34 @@ watchEffect(() => {
   columns.value = [
     {
       prop: 'image',
-      label: '图片预览',
+      label: t('system.file.preview'),
       type: 'upload-img',
       cols: 2,
       hidden: !(formData.value.contentType ?? '').startsWith('image'),
       disabled: true
     },
-    { prop: 'object', label: '对象存储key', disabled: true },
-    { prop: 'name', label: '文件名', rules: { required: true } },
-    {
-      prop: 'contentType',
-      label: '文件类型',
-      disabled: true,
-      comment: '文件的MIME类型'
-    },
-    { prop: 'suffix', label: '文件后缀扩展名', disabled: true },
-    { prop: 'size', label: '文件大小', disabled: true },
-    { prop: 'imgWidth', label: '图片宽度', disabled: true },
-    { prop: 'imgHeight', label: '图片高度', disabled: true },
-    { prop: 'imgRatio', label: '图片宽高比', disabled: true },
+    { prop: 'object', label: t('system.file.object'), disabled: true },
+    { prop: 'name', label: t('system.file.name'), rules: { required: true } },
+    { prop: 'contentType', label: t('system.file.contentType'), disabled: true },
+    { prop: 'suffix', label: t('system.file.suffix'), disabled: true },
+    { prop: 'size', label: t('system.file.size'), disabled: true },
+    { prop: 'imgWidth', label: t('system.file.imgWidth'), disabled: true },
+    { prop: 'imgHeight', label: t('system.file.imgHeight'), disabled: true },
+    { prop: 'imgRatio', label: t('system.file.imgRatio'), disabled: true },
     {
       prop: 'status',
-      label: '文件状态',
+      label: t('system.file.status'),
       type: 'select',
       itemList: statusList,
       disabled: true
     },
     {
       prop: 'sha1',
-      label: '文件摘要sha1',
+      label: t('system.file.sha1'),
       disabled: true,
-      comment: '同一个文件的sha1相同，相同sha1不会重复上传文件'
+      comment: t('system.file.sha1Comment')
     },
-    { prop: 'createTime', label: '上传时间', disabled: true }
+    { prop: 'createTime', label: t('system.file.createTime'), disabled: true }
   ]
 })
 
@@ -112,7 +110,7 @@ function save() {
     postSaveFile(formData.value, {
       loadingRef: saveLoading,
       showSuccessMsg: true,
-      successMsg: '保存成功'
+      successMsg: t('common.saveSuccess')
     }).then(() => close('refresh'))
   })
 }

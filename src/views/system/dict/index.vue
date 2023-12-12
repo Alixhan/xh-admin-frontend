@@ -2,7 +2,7 @@
   <div class="root">
     <el-scrollbar class="left-tree-view">
       <div class="tree-filter-view">
-        <el-input v-model="dictTypeQueryParam.param.name" placeholder="字典类型名称" clearable />
+        <el-input v-model="dictTypeQueryParam.param.name" :placeholder="$t('system.dict.dictTypeName')" clearable />
         <el-button style="margin-left: 10px" icon="refresh" type="primary" @click="queryDictType" />
       </div>
       <el-tree
@@ -29,7 +29,9 @@
       @selection-change="(rows) => (selectRows = rows)"
     >
       <template #right-action>
-        <el-button v-auth="'system:dict:add'" type="primary" icon="plus" @click="openForm('add')"> 新增</el-button>
+        <el-button v-auth="'system:dict:add'" type="primary" icon="plus" @click="openForm('add')">{{
+          $t('common.add')
+        }}</el-button>
         <el-button
           v-auth="'system:dict:del'"
           type="danger"
@@ -37,12 +39,12 @@
           :disabled="selectRows.length === 0"
           @click="del(selectRows)"
         >
-          删除
+          {{ $t('common.del') }}
         </el-button>
       </template>
     </m-table>
     <el-dialog
-      :title="formTitle[handleType]"
+      :title="handleType && $t('system.dict.' + handleType)"
       v-model="formVisible"
       draggable
       destroy-on-close
@@ -55,18 +57,14 @@
   </div>
 </template>
 <script setup lang="jsx">
-import { reactive, ref, shallowRef } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import { delDictDetailByIds, queryDictDetailList, queryDictTypeList } from '@/api/system/dict'
 import DictForm from './dictForm.vue'
 import getDictDetails from '@/utils/dict'
 import { useSystemStore } from '@/stores/system'
+import { useI18n } from 'vue-i18n'
 
-const formTitle = {
-  add: '数据字典新增',
-  edit: '数据字典编辑',
-  detail: '数据字典明细'
-}
-
+const { t } = useI18n()
 const systemStore = useSystemStore()
 
 const dictTypeData = ref([])
@@ -83,7 +81,7 @@ function queryDictType() {
     dictTypeData.value = [
       {
         id: 0,
-        title: '全部字典',
+        title: t('system.dict.all'),
         children: res.data.list.map((i) => {
           return {
             ...i,
@@ -105,48 +103,35 @@ const data = ref([])
 const selectRows = ref([])
 const filterParam = reactive({})
 
-const topFilterColumns = shallowRef([
-  { prop: 'dictTypeId', label: '字典类型ID', hidden: true },
-  { prop: 'dictTypeName', label: '字典类型', readonly: true },
-  { prop: 'value', label: '字典值key' },
-  { prop: 'label', label: '字典名称' },
-  { prop: 'enabled', label: '是否启用', type: 'select', itemList: getDictDetails(1, 'boolean') }
+const topFilterColumns = computed(() => [
+  { prop: 'dictTypeId', label: t('system.dict.dictTypeId'), hidden: true },
+  { prop: 'dictTypeName', label: t('system.dict.dictTypeName'), readonly: true },
+  { prop: 'value', label: t('system.dict.value') },
+  { prop: 'label', label: t('system.dict.labelName') },
+  { prop: 'enabled', label: t('common.isEnabled'), type: 'select', itemList: getDictDetails(1, 'boolean') }
 ])
-const columns = ref([
+
+const columns = computed(() => [
   {
     type: 'operation',
     fixed: 'right',
     align: 'center',
     buttons: [
-      { label: '编辑', auth: 'system:dict:edit', onClick: (row) => openForm('edit', row) },
-      {
-        label: '明细',
-        auth: 'system:dict:detail',
-        onClick: (row) => openForm('detail', row)
-      },
-      {
-        label: '删除',
-        auth: 'system:dict:del',
-        type: 'danger',
-        onClick: (row) => del([row])
-      }
+      { label: t('common.edit'), auth: 'system:dict:edit', onClick: (row) => openForm('edit', row) },
+      { label: t('common.detail'), auth: 'system:dict:detail', onClick: (row) => openForm('detail', row) },
+      { label: t('common.del'), auth: 'system:dict:del', type: 'danger', onClick: (row) => del([row]) }
     ]
   },
-  { type: 'index', label: '序', width: 50 },
-  { prop: 'id', label: 'ID', width: 50 },
-  { prop: 'dictTypeName', label: '字典类型' },
-  { prop: 'parentId', label: '上级id' },
-  { prop: 'value', label: '字典key' },
-  { prop: 'label', label: '字典名称' },
-  {
-    prop: 'order',
-    label: '排序号',
-    width: 85,
-    comment: '数据字典的排列顺序，小号排在前，大号排在后。'
-  },
-  { prop: 'enabled', label: '是否启用', type: 'select', itemList: getDictDetails(1, 'boolean') },
-  { prop: 'createTime', label: '创建时间', type: 'datetime', width: 155 },
-  { prop: 'updateTime', label: '修改时间', type: 'datetime', width: 155 }
+  { type: 'index', width: 80 },
+  { prop: 'id', label: 'Id', width: 80 },
+  { prop: 'dictTypeName', label: t('system.dict.dictTypeName') },
+  { prop: 'parentId', label: t('system.dict.parent') },
+  { prop: 'value', label: t('system.dict.value') },
+  { prop: 'label', label: t('system.dict.labelName') },
+  { prop: 'order', label: t('common.order'), width: 85, comment: t('system.dict.orderComment') },
+  { prop: 'enabled', label: t('common.isEnabled'), type: 'select', itemList: getDictDetails(1, 'boolean') },
+  { prop: 'createTime', label: t('common.createTime'), type: 'datetime', width: 155 },
+  { prop: 'updateTime', label: t('common.updateTime'), type: 'datetime', width: 155 }
 ])
 
 const formVisible = ref(false)
@@ -180,7 +165,7 @@ function del(rows) {
     showLoading: true,
     showBeforeConfirm: true,
     showSuccessMsg: true,
-    confirmMsg: '确认删除吗？删除后不可恢复！'
+    confirmMsg: t('common.confirmDelete')
   }).then(() => {
     tableRef.value.fetchQuery()
   })

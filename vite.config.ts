@@ -48,7 +48,7 @@ export default defineConfig({
                         'Chrome > 31',
                         'ff > 31',
                         'not dead',
-                        '> 0.1% in CN',
+                        // '> 0.1% in CN',
                     ],
                     grid: true,
                 }),

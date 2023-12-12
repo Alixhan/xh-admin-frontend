@@ -11,8 +11,7 @@
       >
         <template #permission>
           <el-col :span="24">
-            <el-form-item label="权限">
-              <template #label></template>
+            <el-form-item :label="$t('system.role.permission')">
               <el-tree
                 ref="menuTreeRef"
                 style="width: 100%"
@@ -29,7 +28,7 @@
       </m-form>
     </el-scrollbar>
     <div class="m-footer">
-      <el-button icon="close" @click="close()">取消</el-button>
+      <el-button icon="close" @click="close()">{{ $t('common.cancel') }}</el-button>
       <template v-if="!formLoading">
         <el-button
           v-if="['add', 'edit'].includes(handleType)"
@@ -39,11 +38,18 @@
           :loading="saveLoading"
           @click="save"
         >
-          保存
+          {{ $t('common.save') }}
         </el-button>
       </template>
     </div>
-    <el-dialog title="选择上级角色" v-model="visible" draggable append-to-body align-center width="80%">
+    <el-dialog
+      :title="$t('system.role.selectParent')"
+      v-model="visible"
+      draggable
+      append-to-body
+      align-center
+      width="80%"
+    >
       <select-role
         selection="single"
         style="height: calc(90vh - 80px)"
@@ -54,10 +60,11 @@
   </div>
 </template>
 <script setup lang="tsx">
-import { ref, toRef, watchEffect } from 'vue'
 import type { PropType } from 'vue'
+import { ref, toRef, watchEffect } from 'vue'
 import { getRoleById, postSaveRole, queryRoleMenu } from '@/api/system/role'
 import SelectRole from '@/views/system/role/selectRole.vue'
+import { useI18n } from 'vue-i18n'
 
 const props = defineProps({
   handleType: {
@@ -73,6 +80,7 @@ const props = defineProps({
 })
 const emit = defineEmits(['close'])
 
+const { t } = useI18n()
 const treeOption = {
   children: 'children',
   label: 'title',
@@ -128,7 +136,7 @@ async function initFormData() {
 }
 
 //初始化可选权限菜单数据
-function initRoleMenus() {
+async function initRoleMenus() {
   menuTrees.value = []
   return queryRoleMenu({ parentId: formData.value.parentId }).then((res) => {
     roleMenus = res.data
@@ -140,7 +148,7 @@ function initRoleMenus() {
     menuTrees.value = [
       {
         id: 0,
-        title: '全部',
+        title: t('common.all'),
         children: roleMenus.filter((i) => {
           const parent = obj[i.parentId]
           if (parent) {
@@ -156,6 +164,7 @@ function initRoleMenus() {
 }
 
 const visible = ref(false)
+
 // 选择了上级角色数据
 function selectedParentRole(rows) {
   formData.value.parentId = rows[0].id
@@ -180,19 +189,19 @@ watchEffect(() => {
   columns.value = [
     {
       prop: 'parentId',
-      label: '上级角色id',
+      label: t('system.role.parentId'),
       clearable: true,
       readonly: true,
       slots: {
         append() {
-          return <el-button onClick={() => (visible.value = true)}>选择</el-button>
+          return <el-button onClick={() => (visible.value = true)}>{t('common.select')}</el-button>
         }
       }
     },
-    { prop: 'parentName', label: '上级角色名称', readonly: true },
-    { prop: 'name', label: '角色名称', rules: { required: true } },
-    { prop: 'enabled', label: '是否启用', type: 'switch' },
-    { slotName: 'permission', label: '权限' }
+    { prop: 'parentName', label: t('system.role.parentName'), readonly: true },
+    { prop: 'name', label: t('system.role.parentName'), rules: { required: true } },
+    { prop: 'enabled', label: t('common.isEnabled'), type: 'switch' },
+    { slotName: 'permission', label: t('system.role.permission') }
   ]
 })
 
@@ -210,7 +219,7 @@ function save() {
     postSaveRole(formData.value, {
       loadingRef: saveLoading,
       showSuccessMsg: true,
-      successMsg: '保存成功'
+      successMsg: t('common.saveSuccess')
     }).then(() => close('refresh'))
   })
 }

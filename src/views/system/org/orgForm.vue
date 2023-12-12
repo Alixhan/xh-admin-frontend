@@ -11,7 +11,7 @@
       />
     </el-scrollbar>
     <div class="m-footer">
-      <el-button icon="close" @click="close()">取消</el-button>
+      <el-button icon="close" @click="close()">{{ $t('common.cancel') }}</el-button>
       <el-button
         v-if="['add', 'edit'].includes(handleType)"
         v-auth="['system:org:add', 'system:org:edit']"
@@ -20,10 +20,17 @@
         :loading="saveLoading"
         @click="save"
       >
-        保存
+        {{ $t('common.save') }}
       </el-button>
     </div>
-    <el-dialog title="选择上级机构" v-model="visible" draggable append-to-body align-center width="80%">
+    <el-dialog
+      :title="$t('system.org.selectParent')"
+      v-model="visible"
+      draggable
+      append-to-body
+      align-center
+      width="80%"
+    >
       <selectOrg
         selection="single"
         style="height: calc(90vh - 80px)"
@@ -37,6 +44,7 @@
 import { ref, toRef, toRefs, watchEffect } from 'vue'
 import { getOrgById, postSaveOrg } from '@/api/system/org'
 import selectOrg from './selectOrg.vue'
+import { useI18n } from 'vue-i18n'
 
 const props = defineProps({
   handleType: {
@@ -46,6 +54,8 @@ const props = defineProps({
   modelValue: {}
 })
 const emit = defineEmits(['close'])
+
+const { t } = useI18n()
 
 const formRef = ref()
 //初始化加载状态
@@ -74,18 +84,18 @@ watchEffect(() => {
   columns.value = [
     {
       prop: 'parentId',
-      label: '上级机构id',
+      label: t('system.org.parentId'),
       readonly: true,
       slots: {
         append() {
-          return <el-button onClick={() => (visible.value = true)}>选择</el-button>
+          return <el-button onClick={() => (visible.value = true)}>{t('common.select')}</el-button>
         }
       }
     },
-    { prop: 'parentName', label: '上级机构名称', readonly: true },
-    { prop: 'code', label: '机构代码', rules: { required: true } },
-    { prop: 'name', label: '机构名称', rules: { required: true } },
-    { prop: 'enabled', label: '是否启用', type: 'switch' }
+    { prop: 'parentName', label: t('system.org.parentName'), readonly: true },
+    { prop: 'code', label: t('system.org.code'), rules: { required: true } },
+    { prop: 'name', label: t('system.org.name'), rules: { required: true } },
+    { prop: 'enabled', label: t('common.isEnabled'), type: 'switch' }
   ]
 })
 
@@ -104,7 +114,7 @@ function save() {
     postSaveOrg(formData.value, {
       loadingRef: saveLoading,
       showSuccessMsg: true,
-      successMsg: '保存成功'
+      successMsg: t('common.saveSuccess')
     }).then(() => close('refresh'))
   })
 }

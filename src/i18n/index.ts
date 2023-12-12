@@ -41,7 +41,7 @@ export interface Locales {
 export const locales: Locales[] = [
   { key: 'zh-cn', label: '简体中文', charWidth: 15, locale: merge(zhCn, elZhCn), icon: Chinese },
   { key: 'zh-tw', label: '繁體中文', charWidth: 15, locale: merge(zhTw, elZhTw), icon: ChineseF },
-  { key: 'en', label: 'English', charWidth: 9, locale: merge(en, elEn), icon: English },
+  { key: 'en', label: 'English', charWidth: 8, locale: merge(en, elEn), icon: English },
   { key: 'ja', label: '日本語', charWidth: 14, locale: merge(ja, elJa), icon: Japanese }
 ]
 

@@ -2,7 +2,7 @@
   <div class="root">
     <el-scrollbar class="left-tree-view">
       <div class="tree-filter-view">
-        <el-input v-model="orgQueryParam.name" placeholder="机构名称" clearable />
+        <el-input v-model="orgQueryParam.name" :placeholder="$t('system.org.name')" clearable />
         <el-button style="margin-left: 10px" icon="refresh" type="primary" @click="getOrgTree" />
       </div>
       <el-tree
@@ -29,7 +29,9 @@
       @selection-change="(rows) => (selectRows = rows)"
     >
       <template #right-action>
-        <el-button v-auth="'system:org:add'" type="primary" icon="plus" @click="openForm('add')"> 新增</el-button>
+        <el-button v-auth="'system:org:add'" type="primary" icon="plus" @click="openForm('add')">{{
+          $t('common.add')
+        }}</el-button>
         <el-button
           v-auth="'system:org:del'"
           type="danger"
@@ -37,12 +39,12 @@
           :disabled="selectRows.length === 0"
           @click="del(selectRows)"
         >
-          删除
+          {{ $t('common.del') }}
         </el-button>
       </template>
     </m-table>
     <el-dialog
-      :title="formTitle[handleType]"
+      :title="handleType && $t('system.org.' + handleType)"
       v-model="formVisible"
       draggable
       destroy-on-close
@@ -55,18 +57,14 @@
   </div>
 </template>
 <script setup lang="jsx">
-import { reactive, ref, shallowRef } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import { delOrgByIds, queryOrgList, queryOrgTree } from '@/api/system/org'
 import OrgForm from './orgForm.vue'
 import getDictDetails from '@/utils/dict'
 import { useSystemStore } from '@/stores/system'
+import { useI18n } from 'vue-i18n'
 
-const formTitle = {
-  add: '机构新增',
-  edit: '机构编辑',
-  detail: '机构明细'
-}
-
+const { t } = useI18n()
 const systemStore = useSystemStore()
 const orgData = ref([])
 const orgQueryParam = ref({
@@ -91,7 +89,7 @@ function getOrgTree() {
       // parentId不存在的为根元素
       return true
     })
-    orgData.value = [{ id: 0, name: '全部机构', children: data }]
+    orgData.value = [{ id: 0, name: t('system.org.all'), children: data }]
   })
 }
 
@@ -105,42 +103,43 @@ const data = ref([])
 const selectRows = ref([])
 const filterParam = reactive({})
 
-const topFilterColumns = shallowRef([
-  { prop: 'code', label: '机构代码' },
-  { prop: 'name', label: '机构名称' },
-  { prop: 'parentId', label: '上级机构ID' },
-  { prop: 'parentName', label: '上级机构名称' },
-  { prop: 'enabled', label: '是否启用', type: 'select', itemList: getDictDetails(1, 'boolean') }
+const topFilterColumns = computed(() => [
+  { prop: 'code', label: t('system.org.code') },
+  { prop: 'name', label: t('system.org.name') },
+  { prop: 'parentId', label: t('system.org.parentId') },
+  { prop: 'parentName', label: t('system.org.parentName') },
+  { prop: 'enabled', label: t('common.isEnabled'), type: 'select', itemList: getDictDetails(1, 'boolean') }
 ])
-const columns = ref([
+
+const columns = computed(() => [
   {
     type: 'operation',
     fixed: 'right',
     align: 'center',
     buttons: [
-      { label: '编辑', auth: 'system:org:edit', onClick: (row) => openForm('edit', row) },
+      { label: t('common.edit'), auth: 'system:org:edit', onClick: (row) => openForm('edit', row) },
       {
-        label: '明细',
+        label: t('common.detail'),
         auth: 'system:org:detail',
         onClick: (row) => openForm('detail', row)
       },
       {
-        label: '删除',
+        label: t('common.del'),
         auth: 'system:org:del',
         type: 'danger',
         onClick: (row) => del([row])
       }
     ]
   },
-  { type: 'index', label: '序', width: 50 },
-  { prop: 'id', label: 'ID', width: 50 },
-  { prop: 'code', label: '机构代码' },
-  { prop: 'name', label: '机构名称' },
-  { prop: 'parentId', label: '上级机构ID', width: 100 },
-  { prop: 'parentName', label: '上级机构名称', width: 120 },
-  { prop: 'enabled', label: '是否启用', type: 'select', itemList: getDictDetails(1, 'boolean') },
-  { prop: 'createTime', label: '创建时间', type: 'datetime', width: 155 },
-  { prop: 'updateTime', label: '修改时间', type: 'datetime', width: 155 }
+  { type: 'index', width: 80 },
+  { prop: 'id', label: 'Id' },
+  { prop: 'code', label: t('system.org.code') },
+  { prop: 'name', label: t('system.org.name') },
+  { prop: 'parentId', label: t('system.org.parentId') },
+  { prop: 'parentName', label: t('system.org.parentName') },
+  { prop: 'enabled', label: t('common.isEnabled'), type: 'select', itemList: getDictDetails(1, 'boolean') },
+  { prop: 'createTime', label: t('common.createTime'), type: 'datetime', width: 155 },
+  { prop: 'updateTime', label: t('common.updateTime'), type: 'datetime', width: 155 }
 ])
 
 const formVisible = ref(false)
@@ -180,7 +179,7 @@ function del(rows) {
     showLoading: true,
     showBeforeConfirm: true,
     showSuccessMsg: true,
-    confirmMsg: '确认删除吗？删除后不可恢复！'
+    confirmMsg: t('common.confirmDelete')
   }).then(() => {
     tableRef.value.fetchQuery()
   })

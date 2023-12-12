@@ -18,15 +18,16 @@
           :disabled="selectRows.length === 0 || selectRows.length > selectionLimit"
           type="primary"
           @click="emit('select', selectRows)"
-          >选择
+          >{{ $t('common.select') }}
         </el-button>
       </template>
     </m-table>
   </div>
 </template>
 <script setup lang="jsx">
-import { ref, shallowRef } from 'vue'
+import { computed, ref } from 'vue'
 import { queryDictTypeList } from '@/api/system/dict'
+import { useI18n } from 'vue-i18n'
 
 defineProps({
   selection: {
@@ -44,18 +45,21 @@ defineProps({
     type: Number
   }
 })
+
+const { t } = useI18n()
+
 const emit = defineEmits(['select'])
 
 const selectRows = ref([])
 
-const topFilterColumns = shallowRef([{ prop: 'name', label: '字典类型名称' }])
+const topFilterColumns = computed(() => [{ prop: 'name', label: t('system.dict.dictTypeName') }])
 
 // 表格列定义
-const columns = ref([
-  { type: 'index', label: '序', width: 50 },
-  { prop: 'id', label: 'id' },
-  { prop: 'name', label: '数据字典类型名称' },
-  { prop: 'createTime', label: '创建时间', disabled: true }
+const columns = computed(() => [
+  { type: 'index', width: 80 },
+  { prop: 'id', label: 'Id' },
+  { prop: 'name', label: t('system.dict.dictTypeName') },
+  { prop: 'createTime', label: t('common.createTime'), disabled: true }
 ])
 </script>
 <style lang="scss" scoped>

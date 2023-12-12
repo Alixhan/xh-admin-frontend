@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    title="用户导入"
+    :title="$t('system.user.imports')"
     v-model="visible"
     align-center
     draggable
@@ -9,18 +9,15 @@
     :close-on-click-modal="false"
     width="80%"
   >
-    <m-excel-import :columns="excelColumns" :on-complete="complete" style="height: 75vh">
-      <template #tip>
-        <div style="color: red">用户登录账户名不能重复</div>
-      </template>
-    </m-excel-import>
+    <m-excel-import :columns="excelColumns" :on-complete="complete" style="height: 75vh" />
   </el-dialog>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import MExcelImport from '@/components/ExcelImport.vue'
 import { importUsers } from '@/api/system/user'
 import { ElNotification } from 'element-plus'
+import { useI18n } from 'vue-i18n'
 
 declare type CloseType = 'refresh' | undefined
 
@@ -28,13 +25,20 @@ const emits = defineEmits<{
   (e: 'close', type?: CloseType): void
 }>()
 
+const { t } = useI18n()
+
 const visible = ref(false)
 
-const excelColumns = ref([
-  { prop: 'code', label: '用户账号', rules: [{ required: true }] },
-  { prop: 'name', label: '用户名', rules: [{ required: true }] },
-  { prop: 'telephone', label: '手机号码', rules: [{ type: 'phone' }], note: '11位手机号码' },
-  { prop: 'password', label: '初始密码', rules: [{ required: true }] }
+const excelColumns = computed(() => [
+  { prop: 'code', label: t('system.user.code'), rules: [{ required: true }] },
+  { prop: 'name', label: t('system.user.name'), rules: [{ required: true }] },
+  {
+    prop: 'telephone',
+    label: t('system.user.telephone'),
+    rules: [{ type: 'phone' }],
+    note: t('system.user.telephoneNote')
+  },
+  { prop: 'password', label: t('system.user.password'), rules: [{ required: true }] }
 ])
 
 // 开始导入数据
@@ -45,14 +49,14 @@ function complete(data, callback) {
       if (!res.data) {
         ElNotification({
           type: 'success',
-          message: '导入成功',
+          message: t('common.importSuccess'),
           duration: 3000
         })
         close('refresh')
       }
     })
     .catch((e) => {
-      callback([{ error: e.message ?? '导入失败' }])
+      callback([{ error: e.message ?? t('common.importsFailed') }])
     })
 }
 

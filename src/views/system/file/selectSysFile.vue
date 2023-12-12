@@ -18,7 +18,7 @@
           :disabled="selectRows.length === 0 || selectRows.length > selectionLimit"
           type="primary"
           @click="emit('select', selectRows)"
-          >选择
+          >{{ $t('common.select') }}
         </el-button>
       </template>
     </m-table>
@@ -30,6 +30,7 @@ import { queryFileList } from '@/api/file/fileOperation'
 import { statusList } from '@/views/system/file/constant'
 import { getDownloadFileUrl } from '@/utils'
 import { filesize } from 'filesize'
+import { useI18n } from 'vue-i18n'
 
 defineProps({
   selection: {
@@ -47,46 +48,38 @@ defineProps({
     type: [Number, undefined]
   }
 })
+
+const { t } = useI18n()
 const emit = defineEmits(['close', 'select'])
 
 const selectRows = ref([])
 
 const topFilterColumns = shallowRef([
-  { prop: 'object', label: '对象存储key' },
-  { prop: 'name', label: '文件名称' },
-  { prop: 'contentType', label: '文件类型' },
-  { prop: 'suffix', label: '文件扩展名' },
-  { prop: 'sha1', label: 'sha1' }
+  { prop: 'object', label: t('system.file.object') },
+  { prop: 'name', label: t('system.file.name') },
+  { prop: 'contentType', label: t('system.file.contentType') },
+  { prop: 'suffix', label: t('system.file.suffix') },
+  { prop: 'sha1', label: t('system.file.sha1') }
 ])
 
 // 表格列定义
 const columns = ref([
-  { prop: 'object', label: '对象存储key', width: 120 },
-  { prop: 'name', label: '文件名' },
-  {
-    prop: 'contentType',
-    label: '文件类型',
-    comment: '文件的MIME类型',
-    width: 100
-  },
-  { prop: 'suffix', label: '文件后缀扩展名', width: 120 },
+  { prop: 'object', label: t('system.file.object') },
+  { prop: 'name', label: t('system.file.name') },
+  { prop: 'contentType', label: t('system.file.contentType') },
+  { prop: 'suffix', label: t('system.file.suffix') },
   {
     prop: 'size',
-    label: '文件大小',
-    formatter: (row, col, val) => filesize(val, { base: 2, standard: 'jedec' })
+    label: t('system.file.suffix'),
+    formatter: (...args) => filesize(args[2], { base: 2, standard: 'jedec' })
   },
-  { prop: 'preview', label: '图片预览', slots: { default: previewImage } },
-  { prop: 'imgWidth', label: '图片宽度' },
-  { prop: 'imgHeight', label: '图片高度' },
-  { prop: 'imgRatio', label: '图片宽高比', width: 100 },
-  { prop: 'status', label: '文件状态', type: 'select', itemList: statusList },
-  {
-    prop: 'sha1',
-    label: '文件摘要sha1',
-    width: 130,
-    comment: '同一个文件的sha1相同，相同sha1不会重复上传文件'
-  },
-  { prop: 'createTime', label: '上传时间', width: 160 }
+  { prop: 'preview', label: t('system.file.preview'), slots: { default: previewImage } },
+  { prop: 'imgWidth', label: t('system.file.imgWidth') },
+  { prop: 'imgHeight', label: t('system.file.imgHeight') },
+  { prop: 'imgRatio', label: t('system.file.imgRatio') },
+  { prop: 'status', label: t('system.file.status'), type: 'select', itemList: statusList },
+  { prop: 'sha1', label: t('system.file.suffix'), comment: t('system.file.sha1Comment') },
+  { prop: 'createTime', label: t('system.file.createTime'), width: 160 }
 ])
 
 // 图片文件预览
