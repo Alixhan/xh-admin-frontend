@@ -31,3 +31,4 @@ dist-ssr
 /tsconfig.app.tsbuildinfo
 /docs/.vitepress/cache/
 /docs/.vitepress/dist/
+/docs/.vitepress/.temp
