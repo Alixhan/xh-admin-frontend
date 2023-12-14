@@ -71,7 +71,7 @@ const topFilterColumns = computed(() => [
 
 const columns = computed(() => [
   { prop: 'title', label: t('system.menu.title'), fixed: false, minWidth: 200 },
-  { prop: 'id', label: 'Id', width: 70 },
+  { prop: 'id', label: 'Id', width: 90 },
   { prop: 'platform', label: t('system.menu.platform') },
   { prop: 'name', label: 'Name' },
   { prop: 'type', label: t('system.menu.type'), type: 'select', itemList: menuTypeList },

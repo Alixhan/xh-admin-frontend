@@ -56,7 +56,7 @@ const topFilterColumns = computed(() => [{ prop: 'name', label: t('system.dict.d
 
 // 表格列定义
 const columns = computed(() => [
-  { type: 'index', width: 80 },
+  { type: 'index', width: 90 },
   { prop: 'id', label: 'Id' },
   { prop: 'name', label: t('system.dict.dictTypeName') },
   { prop: 'createTime', label: t('common.createTime'), disabled: true }

@@ -6,8 +6,8 @@
         <component :is="Component" />
       </transition>
     </router-view>
+    <SettingDrawer />
   </el-config-provider>
-  <SettingDrawer />
 </template>
 
 <script setup>

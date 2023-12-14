@@ -131,7 +131,7 @@ const columns = computed(() => [
       }
     ]
   },
-  { type: 'index', width: 80 },
+  { type: 'index', width: 90 },
   { prop: 'id', label: 'Id' },
   { prop: 'code', label: t('system.org.code') },
   { prop: 'name', label: t('system.org.name') },

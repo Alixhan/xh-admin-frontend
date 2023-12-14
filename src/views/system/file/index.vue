@@ -65,8 +65,8 @@ const topFilterColumns = computed(() => [
 ])
 
 const columns = computed(() => [
-  { type: 'index', width: 80 },
-  { prop: 'id', label: 'Id', width: 80 },
+  { type: 'index', width: 90 },
+  { prop: 'id', label: 'Id', width: 90 },
   { prop: 'name', label: t('system.file.name') },
   { prop: 'object', label: t('system.file.object') },
   { prop: 'contentType', label: t('system.file.contentType') },

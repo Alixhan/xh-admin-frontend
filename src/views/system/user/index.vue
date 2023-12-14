@@ -39,7 +39,7 @@
       :close-on-click-modal="false"
       width="50%"
     >
-      <user-form :handle-type="handleType" :model-value="row" @close="close" />
+      <user-form :handle-type="handleType" :model-value="row" @close="close" style="height: 60vh"/>
     </el-dialog>
     <el-dialog
       :title="$t('system.user.job')"
@@ -79,8 +79,8 @@ const topFilterColumns = computed(() => [
 ])
 
 const columns: Ref<CommonTableColumn[]> = computed(() => [
-  { type: 'index', width: 80 },
-  { prop: 'id', label: 'Id', width: 80 },
+  { type: 'index', width: 90 },
+  { prop: 'id', label: 'Id', width: 90 },
   { prop: 'code', label: t('system.user.code') },
   { prop: 'name', label: t('system.user.name') },
   { prop: 'telephone', label: t('system.user.telephone') },

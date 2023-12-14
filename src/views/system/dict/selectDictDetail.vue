@@ -63,8 +63,8 @@ const topFilterColumns = computed(() => [
 
 // 表格列定义
 const columns = computed(() => [
-  { type: 'index', width: 80 },
-  { prop: 'id', label: 'Id', width: 80 },
+  { type: 'index', width: 90 },
+  { prop: 'id', label: 'Id', width: 90 },
   { prop: 'dictTypeName', label: t('system.dict.dictTypeName') },
   { prop: 'parentId', label: t('system.dict.parentName') },
   { prop: 'value', label: t('system.dict.value') },

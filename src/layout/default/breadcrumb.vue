@@ -17,7 +17,7 @@ const systemStore = useSystemStore()
 </script>
 <style scoped lang="scss">
 .tag-content {
-  display: inline-flex;
+  display: flex;
   align-items: center;
 
   .tab-icon {

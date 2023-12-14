@@ -8,9 +8,10 @@
       <el-divider direction="vertical" />
       <el-dropdown>
         <el-link :underline="false" type="primary">
-          <span>
-            {{ $t('common.more') }} <el-icon><Arrow-down /></el-icon>
-          </span>
+          <div style="display: inline-flex; align-items: center">
+            {{ $t('common.more') }}
+            <el-icon><Arrow-down /></el-icon>
+          </div>
         </el-link>
         <template #dropdown>
           <el-dropdown-menu>

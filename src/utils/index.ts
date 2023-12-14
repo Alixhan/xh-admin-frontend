@@ -1,3 +1,7 @@
+import { computed, effectScope, onScopeDispose } from 'vue'
+import { useSystemStore } from '@/stores/system'
+import type { DownloadParam } from '@i/utils'
+
 export * from './countup'
 export * from './dict'
 export * from './echarts'
@@ -5,8 +9,6 @@ export * from './excel'
 export * from './loading'
 export * from './request'
 export * from './validate'
-import { useSystemStore } from '@/stores/system'
-import type { DownloadParam } from '@i/utils'
 
 /**
  * 获取文件下载url
@@ -24,4 +26,23 @@ export function getDownloadFileUrl(param: DownloadParam): string {
     },
     `${fileBaseUrl}/api/file/operation/download?${import.meta.env.VITE_SYS_TOKEN_KEY}=${systemStore.token}`
   )
+}
+
+/**
+ * 获取当前elementComponent的css变量
+ */
+export function useElComponentSizeCssVar() {
+  const systemStore = useSystemStore()
+  const scope = effectScope()
+  const state = scope.run(() => {
+    return computed(() => {
+      let str = '--el-component-size'
+      if (['small', 'large'].includes(systemStore.layout.size)) {
+        str += '-' + systemStore.layout.size
+      }
+      return `var(${str})`
+    })
+  })
+  onScopeDispose(() => scope.stop())
+  return state!
 }

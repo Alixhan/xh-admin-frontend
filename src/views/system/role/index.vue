@@ -70,10 +70,10 @@ const topFilterColumns = computed(() => [
 
 const columns = computed(() => [
   { prop: 'name', label: t('system.role.name'), fixed: false, width: 200 },
-  { prop: 'id', label: 'Id', width: 80 },
+  { prop: 'id', label: 'Id', width: 90 },
   { prop: 'enabled', label: t('common.enabled'), itemList: getDictDetails(1, 'boolean') },
-  { prop: 'createTime', label: t('common.createTime'), type: 'datetime' },
-  { prop: 'updateTime', label: t('common.updateTime'), type: 'datetime' },
+  { prop: 'createTime', label: t('common.createTime'), type: 'datetime', width: 155 },
+  { prop: 'updateTime', label: t('common.updateTime'), type: 'datetime', width: 155 },
   {
     type: 'operation',
     fixed: 'right',

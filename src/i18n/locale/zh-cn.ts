@@ -128,7 +128,18 @@ export default {
     showLogo: '显示logo',
     menuUnique: '手风琴菜单',
     showNavTabIcon: '页签图标',
-    menuWidth: '菜单宽度'
+    menuWidth: '菜单宽度',
+    tabStyle: {
+      label: '页签风格',
+      square: '方正',
+      mellow: '圆润',
+    },
+    size: {
+      label: '组件大小',
+      small: '小',
+      default: '中',
+      large: '大',
+    },
   },
   login: {
     account: '请输入账号',
@@ -187,6 +198,7 @@ export default {
       add: '@:system.menu.label@:common.add',
       edit: '@:system.menu.label@:common.edit',
       detail: '@:system.menu.label@:common.detail',
+      copy: '@:system.menu.label@:common.copy',
       title: '菜单标题',
       platform: '平台',
       type: '菜单类型',

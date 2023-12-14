@@ -1,10 +1,10 @@
 import { defineStore } from 'pinia'
-import { computed, nextTick, reactive, ref } from 'vue'
+import { computed, nextTick, reactive, ref, watchEffect } from 'vue'
 import { switchUserRole, userLogin } from '@/api/system/user'
 import type { RouteLocationNormalized } from 'vue-router'
 import { useRoute, useRouter } from 'vue-router'
-import { useDark, useLocalStorage, useTitle } from '@vueuse/core'
 import type { RemovableRef } from '@vueuse/core'
+import { useCssVar, useDark, useLocalStorage, useTitle } from '@vueuse/core'
 import { camelCase } from 'lodash-es'
 import { devMenus } from '@/router/static'
 import type { LocaleKey } from '@/i18n'
@@ -69,6 +69,8 @@ export interface NavTab {
 }
 
 declare type LayoutSize = 'small' | 'default' | 'large'
+declare type TabStyle = 'square' | 'mellow'
+
 export interface Layout {
   // 全局布局大小
   size: LayoutSize
@@ -106,7 +108,10 @@ export interface Layout {
   showNavTabIcon: boolean
   //布局设置显隐标识
   settingVisible: boolean
+  //页签的风格
+  tabStyle: TabStyle
 }
+
 const { t } = i18n.global
 /**
  * 系统全局store,主要定义项目布局信息，系统登录， 路由管理，权限管理，浏览器标题管理，注销等
@@ -133,8 +138,28 @@ export const useSystemStore = defineStore('system', () => {
     widthShrink: false,
     heightShrink: false,
     showNavTabIcon: useLocalStorage('showNavTabIcon', true),
-    settingVisible: false
+    settingVisible: false,
+    tabStyle: useLocalStorage<TabStyle>('tabStyle', 'square')
   })
+
+  const elFontSizeBase = useCssVar('--el-font-size-base')
+  const elMenuItemHeight = useCssVar('--el-menu-item-height')
+  watchEffect(resizeFontSizeBase)
+
+  function resizeFontSizeBase() {
+    const sizeObj = {
+      small: '12px',
+      default: '13px',
+      large: '14px'
+    }
+    const menuHeightObj = {
+      small: '34px',
+      default: '40px',
+      large: '46px'
+    }
+    elFontSizeBase.value = sizeObj[layout.size]
+    elMenuItemHeight.value = menuHeightObj[layout.size]
+  }
 
   // 监听窗口变化
   window.addEventListener('resize', onResize)

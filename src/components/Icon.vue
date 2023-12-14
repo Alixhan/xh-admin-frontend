@@ -47,8 +47,4 @@ export default {
 }
 </script>
 <style scoped lang="scss">
-.icon {
-  display: flex;
-  align-items: center;
-}
 </style>

@@ -130,7 +130,7 @@ export default defineComponent(
 
     initTableColumnParamFun()
 
-    watch(() => [props.columns], initTableColumnParamFun, { deep: true })
+    watch(() => [props.columns, systemStore.layout.size], initTableColumnParamFun, { deep: true })
 
     //选中行的数据
     const selectionRows: Ref<T[]> = ref([])
@@ -175,21 +175,22 @@ export default defineComponent(
 
     //调用初始化表格列的参数
     function initTableColumnParamFun(): void {
-      tableColumnsParamsObj.value = {}
-      const columns = props.columns
+      const columns: CommonTableColumn<T>[] = []
       if (props.selection) {
-        columns.unshift({
+        columns.push({
           type: 'selection',
           selection: props.selection
         })
       }
+      columns.push(...props.columns)
+      tableColumnsParamsObj.value = {}
       tableColumnsParams.value = initTableColumnParam(columns)
       initSortColumnFun()
     }
 
     //初始化表格列的参数
     function initTableColumnParam(cols: TableColumn<T>[], parentId = '') {
-      const charWidth = getCurrentLocales().charWidth
+      const charWidth = getCurrentLocales().getCharWidth()
       return cols
         .map((column, i) => {
           // el-table序号列，自动添加标题，标题居中
@@ -203,7 +204,7 @@ export default defineComponent(
 
           // 没有设置宽度则根据label字数自动设定宽度，这样可以避免标题换行，影响美观
           if (!(r.width ?? r.minWidth) && r.label) {
-            r.minWidth = generateLabelWidth(r)
+            r.minWidth = generateLabelWidth(r) + 30
           }
 
           // 如果是操作列需要生成操作按钮
@@ -228,13 +229,14 @@ export default defineComponent(
             if (buttons.length < i.buttons?.length) {
               buttons[buttons.length - 1] = { icon: 'el|more', label: t('common.more') }
             }
-            i.width ??= Math.max(
-              buttons.reduce(
-                (size, item) => size + (item.label?.length ?? 0) * charWidth + (item.icon ? 16 : 0),
-                26 + (buttons.length - 1) * 1.5 * charWidth
-              ),
-              charWidth * i.label!.length + 32
-            )
+            i.width ??=
+              Math.max(
+                buttons.reduce(
+                  (size, item) => size + (item.label?.length ?? 0) * charWidth + (item.icon ? 16 : 0),
+                  16 + (buttons.length - 1) * 1.5 * charWidth
+                ),
+                charWidth * i.label!.length + 32
+              ) + 30
             return i.buttons?.length
           }
           return true
@@ -464,7 +466,11 @@ export default defineComponent(
             </span>
           )
         }
-        return <div class="total-view">{content}</div>
+        return (
+          <el-button class="total-view" type="primary" plain>
+            {content}
+          </el-button>
+        )
       }
     }
 
@@ -557,7 +563,7 @@ export default defineComponent(
               <el-pagination
                 {...pagination.value}
                 total={Math.max(pagination.value.total ?? 0, data.value.length)}
-                small={systemStore.layout.widthShrink}
+                small={systemStore.layout.widthShrink || systemStore.layout.size === 'small'}
                 layout={pagination.value.layout
                   .split(',')
                   .filter((i) => i !== 'total')
@@ -648,16 +654,12 @@ export default defineComponent(
       .total-view {
         margin-right: 10px;
         white-space: nowrap;
-        //background-color: var(--el-color-primary-light-9);
-        border: var(--el-border-width) var(--el-border-style) var(--el-color-primary-light-5);
-        padding: 0 10px;
-        border-radius: var(--el-border-radius-base);
-        height: var(--el-component-size);
-        line-height: var(--el-component-size);
+        background-color: transparent;
         color: var(--el-color-info-light-3);
-        font-size: var(--el-font-size-small);
         display: flex;
         align-items: center;
+        user-select: text;
+        cursor: default;
 
         .total-icon {
           color: var(--el-color-primary);
@@ -684,10 +686,6 @@ export default defineComponent(
     }
 
     .table-form {
-      --el-component-size: 25px;
-      //--el-component-size-large: 40px;
-      //--el-component-size-small: 24px;
-
       flex-grow: 1;
       height: 0;
 

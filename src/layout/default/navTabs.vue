@@ -1,23 +1,24 @@
 <template>
   <el-scrollbar style="padding-bottom: 10px; margin-bottom: -10px; --el-popover-padding: 0px">
     <div class="nav-tabs">
-      <div
+      <el-text
         v-for="(tab, index) in navTabs"
         :key="index"
         @contextmenu.prevent="onContextmenu(index)"
-        @click="systemStore.activeMenuId = tab.id"
+        @click="router.push(tab.fullPath)"
         :class="{
-          'active-tab': systemStore.activeMenuId === tab.id,
+          'active-tab': route.fullPath === tab.fullPath,
           'disable-tab': navTabs.length < 2
         }"
         class="tab-item"
       >
         <div class="trigger-view" :ref="(e) => (tabRefs[index] = e)" @click.stop />
+        <m-icon v-if="systemStore.layout.showNavTabIcon && tab.icon" class="tab-icon" :model-value="tab.icon" />
         <div class="tab-title">{{ tab.title }}</div>
-        <el-icon class="tab-icon" size="12">
-          <Close @click.stop="removeTab(tab.id)" />
+        <el-icon class="close-icon" size="12">
+          <Close @click.stop="removeTab(tab.fullPath)" />
         </el-icon>
-      </div>
+      </el-text>
     </div>
     <el-popover
       style="padding: 0"
@@ -47,7 +48,10 @@
 <script setup>
 import { useSystemStore } from '@/stores/system'
 import { nextTick, ref, watch, watchEffect } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 
+const route = useRoute()
+const router = useRouter()
 const systemStore = useSystemStore()
 const navTabs = systemStore.navTabs
 const visible = ref(false)
@@ -88,23 +92,25 @@ function initMenuItems() {
  * 当前菜单变化或者增加菜单项需将当前菜单页签滚动至可视区域
  */
 watch(
-  () => [systemStore.activeMenuId, navTabs.length],
+  () => [route.fullPath, navTabs.length],
   () => {
     nextTick(() => {
       const dom = document.getElementsByClassName('active-tab').item(0)
-      dom?.scrollIntoView({
-        behavior: 'smooth'
-      })
+      setTimeout(() => {
+        dom?.scrollIntoView({
+          behavior: 'smooth'
+        })
+      }, 500)
     })
   }
 )
 
 /**
- * 根据menuId移除一个导航tab
- * @param menuId
+ * 根据fullPath移除一个导航tab
+ * @param fullPath
  */
-function removeTab(menuId) {
-  systemStore.removeNavTabByMenuId(menuId)
+function removeTab(fullPath) {
+  systemStore.removeNavTabByFullPath(fullPath)
   tabRefs.value.pop()
 }
 
@@ -148,6 +154,7 @@ $transition-time: all 0.2s linear;
   font-size: var(--el-font-size-base);
 
   .tab-item {
+    box-sizing: border-box;
     user-select: none;
     position: relative;
     display: inline-flex;
@@ -159,12 +166,16 @@ $transition-time: all 0.2s linear;
     transition: $transition-time;
     cursor: pointer;
 
+    .tab-icon {
+      margin-right: 0.5em;
+    }
+
     .tab-title {
       margin-right: 5px;
       white-space: nowrap;
     }
 
-    .tab-icon {
+    .close-icon {
       transition: $transition-time;
       border-radius: 50%;
       display: flex;
@@ -183,7 +194,7 @@ $transition-time: all 0.2s linear;
       padding-left: 9px;
       padding-right: 9px;
 
-      .tab-icon {
+      .close-icon {
         width: 12px;
         height: 12px;
       }

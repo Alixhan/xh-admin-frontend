@@ -37,7 +37,7 @@ const topFilterColumns = computed(() => [
 ])
 
 const columns = computed(() => [
-  { type: 'index', width: 70 },
+  { type: 'index', width: 90 },
   { prop: 'token', label: 'Token' },
   { prop: 'userCode', label: t('monitor.online.userCode') },
   { prop: 'userName', label: t('monitor.online.userName') },

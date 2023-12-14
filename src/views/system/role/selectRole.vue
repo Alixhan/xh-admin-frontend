@@ -63,8 +63,8 @@ const topFilterColumns = shallowRef([
 
 // 表格列定义
 const columns: TableColumn[] = [
-  { type: 'index', width: 80 },
-  { prop: 'id', label: 'Id', width: 80 },
+  { type: 'index', width: 90 },
+  { prop: 'id', label: 'Id', width: 90 },
   { prop: 'name', label: t('system.role.name') },
   { prop: 'parentName', label: t('system.role.parentName') },
   { prop: 'parentId', label: t('system.role.parentId'), width: 100 },

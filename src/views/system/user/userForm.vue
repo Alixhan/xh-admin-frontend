@@ -1,6 +1,6 @@
 <template>
   <div class="form-view">
-    <el-scrollbar class="m-form-scroll" :style="handleType === 'detail' && 'height: 65vh;'">
+    <el-scrollbar class="m-form-scroll">
       <m-form
         ref="formRef"
         :colspan="handleType === 'detail' ? 12 : 24"
@@ -110,8 +110,8 @@ watchEffect(() => {
 })
 
 const groupColumns: TableColumn[] = [
-  { type: 'index', width: 80 },
-  { prop: 'id', label: 'Id', width: 80 },
+  { type: 'index', width: 90 },
+  { prop: 'id', label: 'Id', width: 90 },
   { prop: 'name', label: t('system.user.group.name') },
   { prop: 'createTime', label: t('common.createTime'), type: 'datetime', width: 155 }
 ]
@@ -142,10 +142,5 @@ function close(type?: any) {
     padding-right: 10px;
     margin-right: -10px;
   }
-}
-
-.m-form-scroll {
-  flex-grow: 0;
-  height: auto;
 }
 </style>

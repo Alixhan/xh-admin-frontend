@@ -60,9 +60,9 @@ const filterParam = reactive({})
 const topFilterColumns = computed(() => [{ prop: 'name', label: t('system.user.group.name') }])
 
 const columns: Ref<CommonTableColumn[]> = computed(() => [
-  { type: 'index', width: 80 },
-  { prop: 'id', label: 'Id', width: 80 },
-  { prop: 'name', label: t('system.user.group.name'), minWidth: 120 },
+  { type: 'index', width: 90 },
+  { prop: 'id', label: 'Id', width: 90 },
+  { prop: 'name', label: t('system.user.group.name') },
   { prop: 'enabled', label: t('common.isEnabled'), type: 'select', itemList: getDictDetails(1, 'boolean') },
   { prop: 'createTime', label: t('common.createTime'), type: 'datetime', width: 155 },
   {

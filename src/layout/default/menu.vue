@@ -27,7 +27,7 @@ export default defineComponent({
       // 只有目录和菜单渲染，其他类型不渲染
       if (!['dir', 'menu'].includes(menu.type)) return
       // 生成菜单图标
-      const icon = <m-icon v-model={menu.icon} />
+      const icon = <m-icon class="menu-icon" v-model={menu.icon} />
       // 子项包含目录和菜单才视为菜单目录
       const children = menu.children?.filter((i) => ['dir', 'menu'].includes(i.type))
       if (children && children.length) {
@@ -60,9 +60,6 @@ export default defineComponent({
     const menuParam = {
       class: 'el-menu',
       collapseTransition: false,
-      // backgroundColor:'var(--layout-left-bg-color)',
-      // textColor:'#cbcbcb',
-      // activeTextColor:'var(--el-color-primary)',
       // 选中菜单
       onSelect(fullPath) {
         // 小屏设备收起菜单
@@ -96,5 +93,9 @@ export default defineComponent({
 <style scoped lang="scss">
 .el-menu {
   width: 100%;
+}
+.menu-icon{
+  width: 1.2em;
+  height: 1.2em;
 }
 </style>

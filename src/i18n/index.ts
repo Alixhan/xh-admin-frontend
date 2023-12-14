@@ -26,23 +26,44 @@ import { useLocalStorage } from '@vueuse/core'
 
 export declare type LocaleKey = 'zh-cn' | 'zh-tw' | 'en' | 'ja'
 
-export interface Locales {
+export class Locales {
   key: LocaleKey
   //语言名称
   label: string
-  //字符平均宽度 像素
-  charWidth: number
+  //字符预制宽度 像素
+  charWidth: number[]
   //语言包数据
   locale: object
   //语言图标
   icon: string
+
+  constructor(key: LocaleKey, label: string, charWidth: number[], locale: object, icon: string) {
+    this.key = key
+    this.label = label
+    this.charWidth = charWidth
+    this.locale = locale
+    this.icon = icon
+  }
+
+  /**
+   * 获取当前字符平均宽度，注意只是平均宽度，随当前字体大小调整
+   */
+  getCharWidth(): number {
+    const charWidth = this.charWidth
+    let width: number
+    const systemStore = useSystemStore()
+    if (systemStore.layout.size === 'small') width = charWidth[0]
+    if (systemStore.layout.size === 'default') width = charWidth[1]
+    if (systemStore.layout.size === 'large') width = charWidth[2]
+    return width!
+  }
 }
 
 export const locales: Locales[] = [
-  { key: 'zh-cn', label: '简体中文', charWidth: 15, locale: merge(zhCn, elZhCn), icon: Chinese },
-  { key: 'zh-tw', label: '繁體中文', charWidth: 15, locale: merge(zhTw, elZhTw), icon: ChineseF },
-  { key: 'en', label: 'English', charWidth: 8, locale: merge(en, elEn), icon: English },
-  { key: 'ja', label: '日本語', charWidth: 14, locale: merge(ja, elJa), icon: Japanese }
+  new Locales('zh-cn', '简体中文', [10, 13, 15], merge(zhCn, elZhCn), Chinese),
+  new Locales('zh-tw', '繁體中文', [10, 13, 15], merge(zhTw, elZhTw), ChineseF),
+  new Locales('en', 'English', [6, 7.5, 9], merge(en, elEn), English),
+  new Locales('ja', '日本語', [10.3, 13, 15], merge(ja, elJa), Japanese)
 ]
 
 export function getLocale() {
@@ -53,7 +74,7 @@ export function getLocale() {
 }
 
 /**
- * 获取当前单个字符的平均宽度，注意这只是字符平均宽度
+ * 获取当前国际化配置
  */
 export function getCurrentLocales(): Locales {
   const systemStore = useSystemStore()

@@ -122,13 +122,13 @@ const columns = computed(() => [
       { label: t('common.del'), auth: 'system:dict:del', type: 'danger', onClick: (row) => del([row]) }
     ]
   },
-  { type: 'index', width: 80 },
-  { prop: 'id', label: 'Id', width: 80 },
+  { type: 'index', width: 90 },
+  { prop: 'id', label: 'Id', width: 90 },
   { prop: 'dictTypeName', label: t('system.dict.dictTypeName') },
   { prop: 'parentId', label: t('system.dict.parent') },
   { prop: 'value', label: t('system.dict.value') },
   { prop: 'label', label: t('system.dict.labelName') },
-  { prop: 'order', label: t('common.order'), width: 85, comment: t('system.dict.orderComment') },
+  { prop: 'order', label: t('common.order'), comment: t('system.dict.orderComment') },
   { prop: 'enabled', label: t('common.isEnabled'), type: 'select', itemList: getDictDetails(1, 'boolean') },
   { prop: 'createTime', label: t('common.createTime'), type: 'datetime', width: 155 },
   { prop: 'updateTime', label: t('common.updateTime'), type: 'datetime', width: 155 }

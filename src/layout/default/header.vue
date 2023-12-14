@@ -9,7 +9,7 @@
     <div class="header-top">
       <div class="header-left">
         <div class="nav-view">
-          <el-icon class="collapse-icon" size="12">
+          <el-icon class="collapse-icon" size="14">
             <m-svg-icon
               src="@/assets/icon/fold.svg"
               @click="toggleMenuCollapse"
@@ -17,9 +17,11 @@
               :class="{ rotate180: systemStore.layout.menuCollapse }"
             />
           </el-icon>
-          <NavTabs
+          <component
+            :is="tabStyleComp[systemStore.layout.tabStyle]"
             v-if="systemStore.layout.heightShrink && !systemStore.layout.widthShrink"
             key="nav-tabs"
+            style="width: 0; flex-grow: 1"
             class="nav-tabs"
           />
           <Breadcrumb v-else-if="!systemStore.layout.widthShrink" class="breadcrumb" />
@@ -30,12 +32,18 @@
       </el-link>
       <Action class="action" />
     </div>
-    <NavTabs v-if="!systemStore.layout.heightShrink" key="nav-tabs" class="nav-tabs" />
+    <component
+        :is="tabStyleComp[systemStore.layout.tabStyle]"
+        v-if="!systemStore.layout.heightShrink"
+        key="nav-tabs"
+        class="nav-tabs"
+    />
   </div>
 </template>
 <script setup>
 import Action from '@/layout/default/action'
-import NavTabs from './navTabs2'
+import NavTabs from './navTabs'
+import NavTabs2 from './navTabs2'
 import Breadcrumb from './breadcrumb'
 import { useSystemStore } from '@/stores/system'
 import { toRef } from 'vue'
@@ -49,6 +57,11 @@ defineOptions({
 })
 const { copy } = useClipboard()
 usePermission('clipboard-write')
+
+const tabStyleComp = {
+  square: NavTabs,
+  mellow: NavTabs2
+}
 
 function cp() {
   copy(route.meta.component).then(() => {

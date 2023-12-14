@@ -8,17 +8,31 @@
       <el-form-item :label="$t('setting.theme')" :span="24">
         <div class="theme-view">
           <div
-            v-for="item in themeList"
-            :key="item.id"
-            :title="item.label"
-            @click="change(item.id)"
-            :style="{
+              v-for="item in themeList"
+              :key="item.id"
+              :title="item.label"
+              @click="change(item.id)"
+              :style="{
               backgroundColor:
                 item.theme?.['--el-color-primary']?.[systemStore.layout.isDark ? 'dark' : 'light'] ?? item.primary
             }"
-            :class="{ activeTheme: themeStore.currentTheme === item.id }"
+              :class="{ activeTheme: themeStore.currentTheme === item.id }"
           />
         </div>
+      </el-form-item>
+      <el-form-item :label="$t('setting.size.label')" :span="24">
+        <el-radio-group v-model="systemStore.layout.size">
+          <el-radio v-for="i in sizes" :key="i" :label="i">
+            {{ $t('setting.size.'+i) }}
+          </el-radio>
+        </el-radio-group>
+      </el-form-item>
+      <el-form-item :label="$t('setting.tabStyle.label')" :span="24">
+        <el-radio-group v-model="systemStore.layout.tabStyle">
+          <el-radio v-for="i in tabStyles" :key="i" :label="i">
+            {{ $t('setting.tabStyle.'+i) }}
+          </el-radio>
+        </el-radio-group>
       </el-form-item>
       <el-form-item :label="$t('setting.showLogo')" :span="24">
         <el-switch v-model="systemStore.layout.showLogo" />
@@ -43,6 +57,9 @@ const systemStore = useSystemStore()
 const themeStore = useThemeStore()
 const themeList = themeStore.themeList
 
+const tabStyles = ['square', 'mellow']
+const sizes = ['small', 'default', 'large']
+
 function change(val) {
   themeStore.changeThemeId(val)
 }
@@ -65,7 +82,7 @@ function change(val) {
 }
 
 .theme-view {
-  margin-bottom: 5px;
+  margin: 5px 0;
   width: 100%;
   display: grid;
   gap: 10px;
@@ -98,5 +115,9 @@ function change(val) {
       transform: rotate(45deg);
     }
   }
+}
+
+:deep(.el-radio-group) {
+  justify-content: flex-end;
 }
 </style>

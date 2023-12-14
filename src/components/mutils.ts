@@ -297,8 +297,8 @@ export function generateFormatter<T extends object>(tableColumParams: TableColum
  */
 export function generateLabelWidth<T extends object>(
   ...columns: (CommonFormColumn<T> | CommonTableColumn<T>)[]
-): string | number {
-  const charWidth = getCurrentLocales().charWidth
+): number {
+  const charWidth = getCurrentLocales().getCharWidth()
   return (
     Math.max(
       ...columns.map((column) => {

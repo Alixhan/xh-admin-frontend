@@ -79,7 +79,7 @@ function save() {
     postSaveUser(formData.value, {
       loadingRef: saveLoading,
       showSuccessMsg: true,
-      successMsg: t('common.importSuccess')
+      successMsg: t('common.saveSuccess')
     }).then((res) => {
       systemStore.user.avatar = res.data.avatar
     })

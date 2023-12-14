@@ -11,6 +11,7 @@ import { useSystemStore } from '@/stores/system'
 import { useElementSize } from '@vueuse/core'
 import type { UploadCtx } from '@/components/form/Upload.vue'
 import { mFormEmits, mFormProps } from '@i/components/form'
+import { useElComponentSizeCssVar } from '@/utils'
 
 /**
  * 通用表单组件
@@ -50,6 +51,8 @@ export default {
     const uploadInstances = ref<UploadCtx[]>([])
 
     provide('uploadInstances', uploadInstances.value)
+
+    const elComponentSizeCssVar = useElComponentSizeCssVar()
 
     // 表单提交，表单验证，通过后统一上传文件
     async function submit() {
@@ -174,7 +177,7 @@ export default {
               variant: 'text',
               style: {
                 width: `${randomWidth}%`,
-                height: 'var(--el-component-size)',
+                height: elComponentSizeCssVar.value,
                 'align-self': 'center'
               }
             }

@@ -124,11 +124,22 @@ export default {
   },
   setting: {
     layout: 'Layout Setting',
-    theme: 'theme',
+    theme: 'Theme',
     showLogo: 'Show Logo',
     menuUnique: 'Menu Unique',
     showNavTabIcon: 'Tab Icon',
-    menuWidth: 'Menu Width'
+    menuWidth: 'Menu Width',
+    tabStyle: {
+      label: 'Tab Style',
+      square: 'Square',
+      mellow: 'Mellow',
+    },
+    size: {
+      label: 'Size',
+      small: 'Small',
+      default: 'Default',
+      large: 'Large',
+    },
   },
   login: {
     account: 'Please input account',
@@ -170,7 +181,7 @@ export default {
       object: 'Object Key',
       name: 'File Name',
       contentType: 'Content Type',
-      suffix: 'Filename Extension',
+      suffix: 'Extension',
       size: 'Size',
       preview: 'Preview',
       imgWidth: 'Image Width',
@@ -187,6 +198,7 @@ export default {
       add: '@:system.menu.label @:common.add',
       edit: '@:system.menu.label @:common.edit',
       detail: '@:system.menu.label @:common.detail',
+      copy: '@:system.menu.label @:common.copy',
       title: 'Menu Title',
       platform: 'Platform',
       type: 'Menu Type',

@@ -5,6 +5,7 @@ import { useSystemStore } from '@/stores/system'
 import { useElementSize } from '@vueuse/core'
 import QueryIcon from '@/assets/icon/search-list.svg'
 import { useI18n } from 'vue-i18n'
+import { useElComponentSizeCssVar } from '@/utils'
 
 /**
  * 筛选框组件
@@ -49,9 +50,12 @@ export default defineComponent({
     const labelWidth = computed(() => props.labelWidth ?? generateLabelWidth(...props.columns))
 
     const colspan = ref(0)
+
+    const elComponentSizeCssVar = useElComponentSizeCssVar()
+
     watchEffect(() => {
-      let span = 24 / (Number(Math.floor(filterSize.value.width / 300)) || 1)
-      if (span === 4.8) span = 6
+      const width = systemStore.layout.size === 'small' ? 220 : 300
+      let span = 24 / (Number(Math.floor(filterSize.value.width / width)) || 1)
       colspan.value = span
     })
 
@@ -118,16 +122,12 @@ export default defineComponent({
           {systemStore.layout.widthShrink ? (
             <div class="filter-title" />
           ) : (
-            <div class="filter-title">
-              <div class="title-logo">
-                <m-svg-icon src={QueryIcon} property={{ fill: 'var(--el-color-primary),currentColor' }} />
-              </div>
-              <el-text class="title-text" size="large">
-                {t('m.topFilter.query')}
-              </el-text>
-            </div>
+            <el-text class="filter-title">
+              <m-svg-icon class="title-logo" src={QueryIcon} property={{ fill: 'var(--el-color-primary)' }} />
+              {t('m.topFilter.query')}
+            </el-text>
           )}
-          <div class="filter-view">
+          <div class="filter-view" style={!expand.value && `height: ${elComponentSizeCssVar.value};`}>
             <el-form ref={topFilterFormRef} model={props.param} labelWidth={labelWidth.value}>
               <el-scrollbar max-height="45vh">
                 <el-row>{generateFilterColumn()}</el-row>
@@ -156,8 +156,8 @@ export default defineComponent({
 })
 </script>
 <style scoped lang="scss">
-:deep(.el-form-item--default) {
-  margin: 5px 0;
+:deep(.el-form-item--small) {
+    margin-bottom: 10px!important;
 }
 
 .filter-tabs {
@@ -166,29 +166,24 @@ export default defineComponent({
   display: grid;
   grid-template-columns: auto 1fr auto;
   grid-auto-flow: row dense;
-  gap: 0 10px;
+  gap: 10px;
   transition: all 0.2s ease-in-out;
+  align-items: center;
 
   .filter-title {
     display: flex;
     align-items: center;
+    color: var(--el-color-primary);
 
     .title-logo {
+      margin-right: 0.4em;
       line-height: 1em;
-      width: 20px;
-      height: 20px;
-    }
-
-    .title-text {
-      margin-left: 5px;
-      //font-weight: bold;
-      color: var(--el-color-primary);
+      width: 1.5em;
+      height: 1.5em;
     }
   }
 
   .filter-view {
-    //transition: all 0.2s ease-in-out;
-    height: calc(var(--el-component-size) + 10px);
     justify-items: end;
     overflow: hidden;
     @media all and (max-width: 500px) {
@@ -210,7 +205,6 @@ export default defineComponent({
   }
 
   .filter-view {
-    //transition: all 0.2s ease-in-out;
     height: auto;
     overflow: hidden;
     grid-column-start: span 3;

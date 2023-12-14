@@ -128,7 +128,18 @@ export default {
     showLogo: '顯示logo',
     menuUnique: '手風琴菜單',
     showNavTabIcon: '頁簽圖示',
-    menuWidth: '菜單寬度'
+    menuWidth: '菜單寬度',
+    tabStyle: {
+      label: '頁簽風格',
+      square: '方正',
+      mellow: '圓潤',
+    },
+    size: {
+      label: '組件大小',
+      small: '小',
+      default: '中',
+      large: '大',
+    },
   },
   login: {
     account: '請輸入賬號',
@@ -187,6 +198,7 @@ export default {
       add: '@:system.menu.label@:common.add',
       edit: '@:system.menu.label@:common.edit',
       detail: '@:system.menu.label@:common.detail',
+      copy: '@:system.menu.label@:common.copy',
       title: '菜單標題',
       platform: '平臺',
       type: '菜單類型',
