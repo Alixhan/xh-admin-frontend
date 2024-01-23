@@ -67,7 +67,7 @@ const columns: TableColumn[] = [
   { prop: 'id', label: 'Id', width: 90 },
   { prop: 'name', label: t('system.role.name') },
   { prop: 'parentName', label: t('system.role.parentName') },
-  { prop: 'parentId', label: t('system.role.parentId'), width: 100 },
+  { prop: 'parentId', label: t('system.role.parentId') },
   { prop: 'createTime', label: t('common.createTime'), type: 'datetime', width: 155 }
 ]
 </script>

@@ -7,7 +7,7 @@ import type {ValidRule} from '@i/utils/validate'
 import type {CommonColumnType, SlotsObj} from '@i/components/index'
 import type {FormProps} from 'element-plus'
 import type {PropType} from 'vue'
-import {formEmits, formProps} from 'element-plus/es/components/form/src/form.mjs'
+import {formEmits, formProps} from 'element-plus'
 
 /**
  * 表单列类型

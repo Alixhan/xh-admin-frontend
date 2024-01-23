@@ -43,7 +43,7 @@ export default {
     })
 
     //计算一下labelWidth，以最长label字符宽度作为form的labelWidth
-    const labelWidth = computed(() => props.labelWidth ?? generateLabelWidth(...props.columns))
+    const labelWidth = computed(() => props.labelWidth ?? (generateLabelWidth(...props.columns)) + 10)
 
     const formItemParams = shallowRef<FormColumn[]>([])
     watchEffect(initFormItemParams)

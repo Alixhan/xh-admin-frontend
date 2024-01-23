@@ -204,7 +204,7 @@ export default defineComponent(
 
           // 没有设置宽度则根据label字数自动设定宽度，这样可以避免标题换行，影响美观
           if (!(r.width ?? r.minWidth) && r.label) {
-            r.minWidth = generateLabelWidth(r) + 30
+            r.minWidth = generateLabelWidth(r) + 24
           }
 
           // 如果是操作列需要生成操作按钮
@@ -234,9 +234,9 @@ export default defineComponent(
                 buttons.reduce(
                   (size, item) => size + (item.label?.length ?? 0) * charWidth + (item.icon ? 16 : 0),
                   16 + (buttons.length - 1) * 1.5 * charWidth
-                ),
+                ) + 30,
                 charWidth * i.label!.length + 32
-              ) + 30
+              )
             return i.buttons?.length
           }
           return true
@@ -694,30 +694,12 @@ export default defineComponent(
         max-height: 100%;
       }
 
-      :deep(.el-switch) {
-        height: var(--el-input-height);
-      }
-
-      :slotted(.el-switch) {
-        height: var(--el-input-height);
-      }
-
       :deep(.el-form-item__error--inline) {
         margin-left: 0;
       }
 
       :deep(.el-zoom-in-top-leave-active) {
         transition: none;
-      }
-
-      :deep(.el-button) {
-        height: var(--el-component-size) !important;
-        line-height: var(--el-component-size) !important;
-        display: inline-flex;
-
-        > span {
-          line-height: normal;
-        }
       }
     }
   }

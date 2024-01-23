@@ -66,7 +66,7 @@ const columns = computed(() => [
   { prop: 'id', label: 'Id', width: 90 },
   { prop: 'code', label: t('system.org.code') },
   { prop: 'name', label: t('system.org.name') },
-  { prop: 'parentId', label: t('system.org.parentId'), width: 100 },
+  { prop: 'parentId', label: t('system.org.parentId') },
   { prop: 'parentName', label: t('system.org.parentName') },
   { prop: 'createTime', label: t('common.createTime'), type: 'datetime', width: 155 }
 ])

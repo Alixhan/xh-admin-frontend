@@ -16,7 +16,7 @@
   </el-dialog>
 </template>
 <script setup lang="tsx">
-import type { PropType } from 'vue'
+import type {PropType, Ref} from 'vue'
 import { ref, toRef, watchEffect } from 'vue'
 import SelectRole from '@/views/system/role/selectRole.vue'
 import SelectOrg from '@/views/system/org/selectOrg.vue'
@@ -37,7 +37,7 @@ const jobTableRef = ref()
 
 const jobData = defineModel<any[]>({ default: [] })
 
-const jobColumns = ref<CommonTableColumn[]>([])
+const jobColumns: Ref<CommonTableColumn[]> = ref([])
 watchEffect(() => {
   jobColumns.value = [
     {
