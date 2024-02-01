@@ -16,7 +16,7 @@
   </el-dialog>
 </template>
 <script setup lang="tsx">
-import type {PropType, Ref} from 'vue'
+import type { PropType, Ref } from 'vue'
 import { ref, toRef, watchEffect } from 'vue'
 import SelectRole from '@/views/system/role/selectRole.vue'
 import SelectOrg from '@/views/system/org/selectOrg.vue'

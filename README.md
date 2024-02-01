@@ -28,7 +28,7 @@ gitee 码云代码仓库<br>
 ## ❤️ Generate electricity with love
 
 - **完全免费**：觉得不错的话，点个star吧 !!!
-- **最新技术栈**：vue3,vite5,typescript5,element-plus, jdk21, springboot3.2
+- **最新技术栈**：vue3,vite5,typescript5,element-plus, jdk17, springboot3.2
 - **完全响应式布局**：各端均做了响应性布局适配，移动端也可以愉快的使用。
 - **通用组件**: 统一的组件封装，保证样式功能统一，开发更规范，效率更高，包括表格组件，表单组件，excel导入组件，图片统一上传管理，裁剪组件等
 - **纯净的代码**: 从零用最新技术栈逐行搭建，意味着无任何历史包袱，只包含核心纯净的代码。
@@ -111,11 +111,13 @@ pnpm test
 
 提交PR，提交issue，帮我点点star,或者直接打赏我，哈哈哈~~~
 
-## 交流群
+[//]: # (## 交流群)
 
-不玩qq了，扫码加我微信（备注：xh），邀请你进微信交流群
+[//]: # ()
+[//]: # (不玩qq了，扫码加我微信（备注：xh），邀请你进微信交流群)
 
-![wechat.png](docs/public/image/wechat.png)
+[//]: # ()
+[//]: # (![wechat.png]&#40;docs/public/image/wechat.png&#41;)
 
 ## 📄 License
 

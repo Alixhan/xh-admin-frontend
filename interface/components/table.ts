@@ -106,6 +106,8 @@ export type MTableProps<T extends object, F extends object> = ExtractPropTypes<t
 export interface TableColumn<T extends object> extends Partial<Omit<TableColumnCtx<T>, 'children'>> {
     //绑定行的属性
     prop?: string;
+    //prop属性别名
+    alias?: string;
     prop2?: string;
     single?: string;
     type?: string
@@ -272,4 +274,36 @@ export interface OperationButtonProps<T> {
     readonly maxCount?: number
     readonly row?: T
     readonly buttons: OperationButton<T>[]
+}
+
+export interface FilterRow {
+    type?: string
+    logic: 'and' | 'or'
+    checked: boolean
+    prop?: string
+    condition: 'ct' | 'nct' | 'eq' |  'ne' | 'gt' | 'ge' | 'lt' | 'le' | 'in' | 'bt',
+    value1: any
+    value2?: any
+    children?: FilterRow []
+}
+
+export interface QueryFilterProps {
+    //是否递归搜索条件
+    recursive?: boolean
+}
+
+export interface QueryFilter {
+    recursive: boolean
+    filters: FilterRow []
+    enabledFilters: FilterRow []
+    addRow: (parent?: FilterRow) => void
+    removeRow: (index: number, parent?: FilterRow) => void
+}
+
+
+export interface PreviewType extends Omit<FilterRow, 'children'>{
+  alias?: string
+    enabled: boolean
+    str: string
+    children?: PreviewType []
 }

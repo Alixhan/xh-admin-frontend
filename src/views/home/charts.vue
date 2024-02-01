@@ -219,10 +219,11 @@ const themeStore = useThemeStore()
 const systemStore = useSystemStore()
 watch(
   () => [themeStore.currentTheme, systemStore.layout.isDark],
-  () => nextTick(() => {
-    color.value.colorStops[0].color = useCssVar('--el-color-primary-light-7').value
-    color.value.colorStops[1].color = useCssVar('--el-color-primary').value
-  })
+  () =>
+    nextTick(() => {
+      color.value.colorStops[0].color = useCssVar('--el-color-primary-light-7').value
+      color.value.colorStops[1].color = useCssVar('--el-color-primary').value
+    })
 )
 
 watch(

@@ -19,7 +19,7 @@
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.1",
     "@vueuse/core": "^10.7.2",
-    "axios": "^1.6.5",
+    "axios": "^1.6.7",
     "countup.js": "^2.8.0",
     "dayjs": "^1.11.10",
     "echarts": "^5.4.3",
@@ -38,11 +38,11 @@
     "vuedraggable": "^4.1.0"
   },
   "devDependencies": {
-    "@rushstack/eslint-patch": "^1.7.0",
+    "@rushstack/eslint-patch": "^1.7.2",
     "@tsconfig/node20": "^20.1.2",
     "@types/file-saver": "^2.0.7",
     "@types/lodash-es": "^4.17.12",
-    "@types/node": "^20.11.5",
+    "@types/node": "^20.11.13",
     "@types/nprogress": "^0.2.3",
     "@vitejs/plugin-vue": "^5.0.3",
     "@vitejs/plugin-vue-jsx": "^3.1.0",
@@ -52,7 +52,7 @@
     "autoprefixer": "^10.4.17",
     "eslint": "^8.56.0",
     "eslint-config-standard": "^17.1.0",
-    "eslint-plugin-vue": "^9.20.1",
+    "eslint-plugin-vue": "^9.21.0",
     "npm-run-all2": "^6.1.1",
     "prettier": "^3.2.4",
     "sass": "^1.70.0",

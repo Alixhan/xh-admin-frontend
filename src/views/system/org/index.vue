@@ -19,6 +19,7 @@
       ref="tableRef"
       :layout="systemStore.layout.widthShrink ? 'auto' : undefined"
       is-filter-table
+      is-complex-filter
       row-key="id"
       :filter-param="filterParam"
       :filter-columns="topFilterColumns"

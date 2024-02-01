@@ -56,7 +56,7 @@ export default defineComponent({
     watchEffect(() => {
       const width = systemStore.layout.size === 'small' ? 220 : 300
       let span = 24 / (Number(Math.floor(filterSize.value.width / width)) || 1)
-      colspan.value = span
+      colspan.value = Math.floor(span)
     })
 
     function search() {
@@ -157,7 +157,7 @@ export default defineComponent({
 </script>
 <style scoped lang="scss">
 :deep(.el-form-item--small) {
-    margin-bottom: 10px!important;
+  margin-bottom: 10px !important;
 }
 
 .filter-tabs {

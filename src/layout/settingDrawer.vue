@@ -8,29 +8,29 @@
       <el-form-item :label="$t('setting.theme')" :span="24">
         <div class="theme-view">
           <div
-              v-for="item in themeList"
-              :key="item.id"
-              :title="item.label"
-              @click="change(item.id)"
-              :style="{
+            v-for="item in themeList"
+            :key="item.id"
+            :title="item.label"
+            @click="change(item.id)"
+            :style="{
               backgroundColor:
                 item.theme?.['--el-color-primary']?.[systemStore.layout.isDark ? 'dark' : 'light'] ?? item.primary
             }"
-              :class="{ activeTheme: themeStore.currentTheme === item.id }"
+            :class="{ activeTheme: themeStore.currentTheme === item.id }"
           />
         </div>
       </el-form-item>
       <el-form-item :label="$t('setting.size.label')" :span="24">
         <el-radio-group v-model="systemStore.layout.size">
           <el-radio v-for="i in sizes" :key="i" :label="i">
-            {{ $t('setting.size.'+i) }}
+            {{ $t('setting.size.' + i) }}
           </el-radio>
         </el-radio-group>
       </el-form-item>
       <el-form-item :label="$t('setting.tabStyle.label')" :span="24">
         <el-radio-group v-model="systemStore.layout.tabStyle">
           <el-radio v-for="i in tabStyles" :key="i" :label="i">
-            {{ $t('setting.tabStyle.'+i) }}
+            {{ $t('setting.tabStyle.' + i) }}
           </el-radio>
         </el-radio-group>
       </el-form-item>

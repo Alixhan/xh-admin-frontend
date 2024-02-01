@@ -1,5 +1,5 @@
 <script lang="tsx">
-import type { Ref, VNode } from 'vue'
+import { provide, type Ref, type VNode } from 'vue'
 import { computed, createVNode, defineComponent, nextTick, ref, shallowRef, toRef, watch } from 'vue'
 import {
   generateDynamicColumn,
@@ -10,6 +10,7 @@ import {
   vModelValue
 } from '@/components/mutils'
 import TopFilter from '@/components/TopFilter.vue'
+import QueryFilter from '@/components/table/queryFilter/index.vue'
 import ExportExcel from './ExportExcel.vue'
 import MOperationButton from './OperationButton.vue'
 import TableColumnSort from './TableColumnSort.vue'
@@ -101,21 +102,30 @@ export default defineComponent(
     // 向后端请求表格数据
     function fetchQuery() {
       if (props.fetchData) {
-        props.fetchData(pageQuery.value, { loadingRef }).then((res: RestResponse<PageResult<T>>) => {
-          const resData = res.data!
-          if (props.data) {
-            emit('update:data', resData.list)
-          } else {
-            data.value = resData.list
-          }
-          pagination.value.total = resData.total
-          selectionChange([])
-        })
+        props
+          .fetchData(
+            {
+              ...pageQuery.value,
+              filters: queryFilterRef.value?.enabledFilters
+            },
+            { loadingRef }
+          )
+          .then((res: RestResponse<PageResult<T>>) => {
+            const resData = res.data!
+            if (props.data) {
+              emit('update:data', resData.list)
+            } else {
+              data.value = resData.list
+            }
+            pagination.value.total = resData.total
+            selectionChange([])
+          })
       }
     }
 
     // 默认启动就查询
     props.defaultQuery && nextTick(fetchQuery)
+    const queryFilterRef = ref()
     const formRef = ref()
     const tableRef = ref()
 
@@ -127,6 +137,11 @@ export default defineComponent(
 
     //排序筛选列定义
     const sortColumns: Ref<TableSortColumn[]> = ref([])
+
+    //叶子节点列
+    const leafColumns: Ref<CommonTableColumn<T>[]> = ref([])
+
+    provide('leafColumns', leafColumns.value)
 
     initTableColumnParamFun()
 
@@ -184,6 +199,7 @@ export default defineComponent(
       }
       columns.push(...props.columns)
       tableColumnsParamsObj.value = {}
+      leafColumns.value.splice(0, leafColumns.value.length)
       tableColumnsParams.value = initTableColumnParam(columns)
       initSortColumnFun()
     }
@@ -229,14 +245,13 @@ export default defineComponent(
             if (buttons.length < i.buttons?.length) {
               buttons[buttons.length - 1] = { icon: 'el|more', label: t('common.more') }
             }
-            i.width ??=
-              Math.max(
-                buttons.reduce(
-                  (size, item) => size + (item.label?.length ?? 0) * charWidth + (item.icon ? 16 : 0),
-                  16 + (buttons.length - 1) * 1.5 * charWidth
-                ) + 30,
-                charWidth * i.label!.length + 32
-              )
+            i.width ??= Math.max(
+              buttons.reduce(
+                (size, item) => size + (item.label?.length ?? 0) * charWidth + (item.icon ? 16 : 0),
+                16 + (buttons.length - 1) * 1.5 * charWidth
+              ) + 30,
+              charWidth * i.label!.length + 32
+            )
             return i.buttons?.length
           }
           return true
@@ -320,6 +335,10 @@ export default defineComponent(
           // 生成可编辑表格插槽
           initEditFormItemParam(tableColumParams)
           tableColumnsParamsObj.value[tableColumParams._id!] = tableColumParams
+          //叶子节点
+          if (!tableColumParams?.children?.length && tableColumParams.prop && tableColumParams.label) {
+            leafColumns.value.push(tableColumParams)
+          }
           return tableColumParams
         })
     }
@@ -523,9 +542,7 @@ export default defineComponent(
                   />
                 )}
                 {props.isComplexFilter && (
-                  <el-button icon="Operation" type="primary" text class="action-btn">
-                    高级筛选
-                  </el-button>
+                  <QueryFilter ref={queryFilterRef} v-model={pageQuery.value.filters} onSearch={fetchQuery} />
                 )}
                 {props.isSortColumn && (
                   <TableColumnSort
@@ -654,7 +671,7 @@ export default defineComponent(
       .total-view {
         margin-right: 10px;
         white-space: nowrap;
-        background-color: transparent;
+        background-color: var(--el-color-primary-light-9);
         color: var(--el-color-info-light-3);
         display: flex;
         align-items: center;

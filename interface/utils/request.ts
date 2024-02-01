@@ -7,6 +7,7 @@ import type {
   AxiosInterceptorOptions,
   AxiosError
 } from 'axios'
+import type {FilterRow} from '@i/components/table'
 
 /**
  * axios实例重载定义
@@ -108,7 +109,7 @@ export interface PageQuery<T = any> {
   // 其他查询参数
   param?: T;
   // 高级筛选条件
-  filters?: Array<any>;
+  filters?: Array<FilterRow>;
 }
 
 /**

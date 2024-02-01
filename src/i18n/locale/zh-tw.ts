@@ -132,14 +132,14 @@ export default {
     tabStyle: {
       label: '頁簽風格',
       square: '方正',
-      mellow: '圓潤',
+      mellow: '圓潤'
     },
     size: {
       label: '組件大小',
       small: '小',
       default: '中',
-      large: '大',
-    },
+      large: '大'
+    }
   },
   login: {
     account: '請輸入賬號',

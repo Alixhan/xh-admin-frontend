@@ -10,12 +10,25 @@ export default {
       operation: 'Operations',
       allCol: 'All',
       export: 'Export',
+      complexFilter: 'Complex Filter',
       fileName: 'Table Data',
       exportConfirm: 'Confirm export?',
       exportCurrent: 'Export Current Page',
       exportAll: 'Export All',
       exportFail: 'Export failed',
-      exportNoData: 'No data can be exported！'
+      exportNoData: 'No data can be exported！',
+      and: 'and',
+      or: 'or',
+      ct: 'contain',
+      nct: 'not contain',
+      eq: 'equal',
+      ne: 'not equal',
+      gt: 'greater than',
+      ge: 'greater equal',
+      lt: 'less than',
+      le: 'less equal',
+      in: 'contain in',
+      bt: 'between'
     },
     topFilter: {
       query: 'Query',
@@ -132,14 +145,14 @@ export default {
     tabStyle: {
       label: 'Tab Style',
       square: 'Square',
-      mellow: 'Mellow',
+      mellow: 'Mellow'
     },
     size: {
       label: 'Size',
       small: 'Small',
       default: 'Default',
-      large: 'Large',
-    },
+      large: 'Large'
+    }
   },
   login: {
     account: 'Please input account',

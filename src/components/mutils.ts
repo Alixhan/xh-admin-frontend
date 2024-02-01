@@ -136,7 +136,10 @@ export function generateDynamicColumn(column: FormColumn) {
 }
 
 // 生成双向绑定属性值
-export function vModelValue<T extends object = any>(param: FormColumn & { prop: any; prop2: any }, form: T) {
+export function vModelValue<T extends object = any>(
+  param: FormColumn & { prop: any; prop2: any },
+  form: T | undefined
+) {
   const returnParam: CommonModelParam = {}
   // 需要双向绑定
   if (form && param.prop) {

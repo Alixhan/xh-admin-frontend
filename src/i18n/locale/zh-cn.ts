@@ -7,6 +7,7 @@ export default {
       total: '总数',
       selected: '已选中',
       export: '导出',
+      complexFilter: '高级筛选',
       colSort: '列排序',
       operation: '操作',
       allCol: '全部列',
@@ -15,7 +16,19 @@ export default {
       exportCurrent: '导出当页',
       exportAll: '导出全部',
       exportFail: '导出失败',
-      exportNoData: '无数据可以导出！'
+      exportNoData: '无数据可以导出！',
+      and: '并',
+      or: '或',
+      ct: '包含',
+      nct: '不包含',
+      eq: '等于',
+      ne: '不等于',
+      gt: '大于',
+      ge: '大于等于',
+      lt: '小于',
+      le: '小于等于',
+      in: '包含在',
+      bt: '介于'
     },
     topFilter: {
       query: '查询',
@@ -132,14 +145,14 @@ export default {
     tabStyle: {
       label: '页签风格',
       square: '方正',
-      mellow: '圆润',
+      mellow: '圆润'
     },
     size: {
       label: '组件大小',
       small: '小',
       default: '中',
-      large: '大',
-    },
+      large: '大'
+    }
   },
   login: {
     account: '请输入账号',

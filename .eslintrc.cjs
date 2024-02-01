@@ -18,5 +18,6 @@ module.exports = {
     },
     rules: {
         'vue/multi-word-component-names': 'off',
+            'quotes': ['error', 'single', {'allowTemplateLiterals': true}]
     }
 }

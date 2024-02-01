@@ -4,6 +4,7 @@
       class="m-table"
       ref="tableRef"
       is-filter-table
+      is-complex-filter
       row-key="id"
       :is-page="false"
       :filter-param="filterParam"
@@ -41,7 +42,7 @@
       draggable
       destroy-on-close
       :close-on-click-modal="false"
-      width="70%"
+      width="800px"
       append-to-body
     >
       <menu-form :handle-type="handleType" :model-value="row" style="height: 75vh" @close="close" />

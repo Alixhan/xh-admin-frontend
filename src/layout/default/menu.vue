@@ -94,7 +94,7 @@ export default defineComponent({
 .el-menu {
   width: 100%;
 }
-.menu-icon{
+.menu-icon {
   width: 1.2em;
   height: 1.2em;
 }

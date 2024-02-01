@@ -4,6 +4,7 @@
       class="m-table"
       ref="tableRef"
       is-filter-table
+      is-complex-filter
       default-expand-all
       row-key="id"
       :is-page="false"

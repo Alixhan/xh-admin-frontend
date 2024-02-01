@@ -33,10 +33,10 @@
       <Action class="action" />
     </div>
     <component
-        :is="tabStyleComp[systemStore.layout.tabStyle]"
-        v-if="!systemStore.layout.heightShrink"
-        key="nav-tabs"
-        class="nav-tabs"
+      :is="tabStyleComp[systemStore.layout.tabStyle]"
+      v-if="!systemStore.layout.heightShrink"
+      key="nav-tabs"
+      class="nav-tabs"
     />
   </div>
 </template>

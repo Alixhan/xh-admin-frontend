@@ -4,6 +4,7 @@
       class="m-table"
       ref="tableRef"
       is-filter-table
+      is-complex-filter
       row-key="id"
       :filter-param="filterParam"
       :filter-columns="topFilterColumns"
@@ -39,7 +40,7 @@
       :close-on-click-modal="false"
       width="50%"
     >
-      <user-form :handle-type="handleType" :model-value="row" @close="close" style="height: 60vh"/>
+      <user-form :handle-type="handleType" :model-value="row" @close="close" style="height: 60vh" />
     </el-dialog>
     <el-dialog
       :title="$t('system.user.job')"

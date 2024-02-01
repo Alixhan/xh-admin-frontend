@@ -4,6 +4,7 @@
       class="m-table"
       ref="tableRef"
       is-filter-table
+      is-complex-filter
       row-key="id"
       selection="multiple"
       :filter-param="filterParam"

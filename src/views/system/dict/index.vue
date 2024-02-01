@@ -27,6 +27,7 @@
       v-model:data="data"
       selection="multiple"
       @selection-change="(rows) => (selectRows = rows)"
+      is-complex-filter
     >
       <template #right-action>
         <el-button v-auth="'system:dict:add'" type="primary" icon="plus" @click="openForm('add')">{{
