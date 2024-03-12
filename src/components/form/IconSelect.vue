@@ -66,7 +66,7 @@ import MIcon from '@/components/Icon.vue'
 import { round } from 'lodash-es'
 import MSvgIcon from '@/components/SvgIcon.vue'
 // element图标
-const localSvg = import.meta.glob('@/assets/icon/**/*.svg', { as: 'url' })
+const localSvg = import.meta.glob('@/assets/icon/**/*.svg', { query: '?url', import: 'default' })
 /**
  * 图标表单组件
  * 2023-3-29 sunxh

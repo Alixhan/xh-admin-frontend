@@ -12,7 +12,7 @@
           'active-tab': route.fullPath === tab.fullPath
         }"
         class="tab-item"
-        :type="route.fullPath === tab.fullPath ? '' : 'info'"
+        :type="route.fullPath === tab.fullPath ? 'primary' : 'info'"
         :effect="route.fullPath === tab.fullPath ? 'dark' : 'plain'"
       >
         <div class="trigger-view" :ref="(e) => (tabRefs[index] = e)" @click.stop />

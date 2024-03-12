@@ -7,7 +7,7 @@
 <script>
 import { ref, shallowRef, watchEffect } from 'vue'
 
-const localSvg = import.meta.glob('@/assets/icon/**/*.svg', { as: 'url' })
+const localSvg = import.meta.glob('@/assets/icon/**/*.svg', { query: '?url', import: 'default' })
 /**
  * 图标表单组件
  * 2023-3-29 sunxh
