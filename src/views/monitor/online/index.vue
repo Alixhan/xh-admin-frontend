@@ -18,6 +18,9 @@ import { computed, reactive, ref } from 'vue'
 import { kickOut, queryOnlineUser } from '@/api/system/user'
 import getDictDetails from '@/utils/dict'
 import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
+import { useSystemStore } from '@/stores/system'
+import { ElNotification } from 'element-plus'
 
 defineOptions({
   name: 'OnlineUser'
@@ -55,7 +58,10 @@ const columns = computed(() => [
     type: 'operation',
     fixed: 'right',
     align: 'center',
-    buttons: [{ label: t('monitor.online.forceLogout'), onClick: foreOffline }]
+    buttons: [
+      { label: t('monitor.online.forceLogout'), onClick: foreOffline },
+      { label: '查询日志', auth: 'system:log', onClick: toLog }
+    ]
   }
 ])
 
@@ -67,6 +73,28 @@ function foreOffline(row) {
     showSuccessMsg: true,
     confirmMsg: t('monitor.online.confirmLogout')
   }).then(tableRef.value.fetchQuery)
+}
+
+const router = useRouter()
+const systemStore = useSystemStore()
+
+function toLog(row) {
+  const logMenu = systemStore.menus.find((i) => 'system:log' === i.name)
+
+  console.info(logMenu)
+  if (!logMenu) {
+    return ElNotification({
+      type: 'error',
+      message: '无日志菜单权限',
+      duration: 3000
+    })
+  }
+  router.push({
+    path: logMenu.fullPath,
+    query: {
+      token: row.token
+    }
+  })
 }
 </script>
 <style lang="scss" scoped>

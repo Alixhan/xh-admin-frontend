@@ -97,6 +97,13 @@ export default defineComponent({
         })
     }
 
+    function keyup(e){
+      if (e.key === 'Enter') {
+        // 回车事件处理逻辑
+        search()
+      }
+    }
+
     // 生成column
     function generateFilterColumn() {
       return columnsParams.value.map((i) => {
@@ -128,7 +135,7 @@ export default defineComponent({
             </el-text>
           )}
           <div class="filter-view" style={!expand.value && `height: ${elComponentSizeCssVar.value};`}>
-            <el-form ref={topFilterFormRef} model={props.param} labelWidth={labelWidth.value}>
+            <el-form ref={topFilterFormRef} model={props.param} labelWidth={labelWidth.value} onKeyup={keyup}>
               <el-scrollbar max-height="45vh">
                 <el-row>{generateFilterColumn()}</el-row>
               </el-scrollbar>

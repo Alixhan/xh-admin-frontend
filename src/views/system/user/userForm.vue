@@ -51,12 +51,17 @@ const props = defineProps({
 
 const { t } = useI18n()
 
-const emit = defineEmits(['close'])
+const emit = defineEmits<{
+  //恢复默认
+  (e: 'close', type: 'refresh' | string): void
+}>()
 
 const formRef = ref()
 const formLoading = ref(false)
 const saveLoading = ref(false)
 const formData = ref({
+  allowRepeat: true,
+  autoRenewal: false,
   enabled: true,
   password: ''
 })
@@ -100,6 +105,18 @@ watchEffect(() => {
       label: t('system.user.password'),
       autocomplete: 'new-password',
       hidden: props.handleType !== 'add'
+    },
+    {
+      prop: 'allowRepeat',
+      label: t('system.user.allowRepeat'),
+      type: 'switch',
+      comment: '开启后，账号可以重复登录，已登录的账号不会被挤下线。'
+    },
+    {
+      prop: 'autoRenewal',
+      label: t('system.user.autoRenewal'),
+      type: 'switch',
+      comment: '开启后，请求将自动续签超时时间，这样只要账号一直在使用中，就不会登录超时。'
     },
     { prop: 'enabled', label: t('common.isEnabled'), type: 'switch' },
     { type: 'separator', label: t('system.user.job'), hidden: props.handleType !== 'detail' },

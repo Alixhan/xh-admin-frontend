@@ -8,10 +8,10 @@
     :data="jobData"
     row-key="id"
   />
-  <el-dialog :title="$t('system.org.select')" v-model="visible1" draggable append-to-body align-center width="80%">
+  <el-dialog :title="$t('system.org.select')" v-model="visible1" draggable destroy-on-close append-to-body align-center width="80%">
     <select-org selection="single" style="height: calc(90vh - 80px)" @select="selectedOrg" @close="visible1 = false" />
   </el-dialog>
-  <el-dialog :title="$t('system.role.select')" v-model="visible2" draggable append-to-body align-center width="80%">
+  <el-dialog :title="$t('system.role.select')" v-model="visible2" draggable destroy-on-close append-to-body align-center width="80%">
     <select-role selection="single" style="height: calc(90vh - 80px)" @select="selectedRole" />
   </el-dialog>
 </template>

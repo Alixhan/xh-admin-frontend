@@ -125,7 +125,7 @@ export default {
     loadingText: 'Operating',
     successMsg: 'Operate successfully',
     optFailed: 'Operation failure',
-    noMenus: '當前角色未分配菜單，請重新登入！'
+    noMenus: 'The current role is not assigned menu, please login again!'
   },
   layout: {
     switchLocaleError: 'Failed to switch language',
@@ -261,6 +261,8 @@ export default {
       name: 'User Name',
       avatar: 'Avatar',
       telephone: 'Telephone',
+      allowRepeat: 'Allow Repeat',
+      autoRenewal: 'Auto Renewal',
       telephoneNote: 'An 11-digit cell phone number',
       password: 'Password',
       newPassword: 'New Password',

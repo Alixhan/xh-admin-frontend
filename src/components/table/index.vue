@@ -1,6 +1,17 @@
 <script lang="tsx">
-import { provide, type Ref, type VNode } from 'vue'
-import { computed, createVNode, defineComponent, nextTick, ref, shallowRef, toRef, watch } from 'vue'
+import {
+  computed,
+  createVNode,
+  defineComponent,
+  nextTick,
+  provide,
+  type Ref,
+  ref,
+  shallowRef,
+  toRef,
+  type VNode,
+  watch
+} from 'vue'
 import {
   generateDynamicColumn,
   generateFormatter,
@@ -32,6 +43,7 @@ import type {
   TableSortColumn
 } from '@i/components/table'
 import { mTableProps } from '@i/components/table'
+import ContextMenu from '@/components/ContextMenu.vue'
 
 /**
  * 通用表格组件
@@ -188,6 +200,46 @@ export default defineComponent(
       return true
     }
 
+    //后端排序
+    function onSortChange({ prop, order }) {
+      pageQuery.value.orderProp = leafColumns.value.find((i) => i.prop === prop)?.alias ?? prop
+      const orderDirectionMap = { ascending: 'asc', descending: 'desc' }
+      pageQuery.value.orderDirection = orderDirectionMap[order]
+      fetchQuery()
+    }
+
+    const contextMenuRef = ref()
+
+    //列表头右击
+    function onHeaderContextmenu(column: any, e: PointerEvent) {
+      console.info(column.getColumnIndex())
+      if (column.property) {
+        e.preventDefault()
+        contextMenuRef.value.show(e, [
+          { id: 1, prop: column.property, label: t('m.table.complexFilter'), icon: 'Filter' },
+          { id: 2, prop: column.property, label: t('m.table.ascending'), icon: 'ArrowUp' },
+          { id: 3, prop: column.property, label: t('m.table.descending'), icon: 'ArrowDown' },
+          // { id: 4, prop: column.property, label: t('common.hide'), icon: 'Hide' }
+        ])
+      }
+    }
+
+    function clickMenu(menu: any) {
+      if (menu.id === 1) {
+        queryFilterRef.value.addRow(menu.prop)
+      }
+      if (menu.id === 2) {
+        tableRef.value.sort(menu.prop, 'ascending')
+      }
+      if (menu.id === 3) {
+        tableRef.value.sort(menu.prop, 'descending')
+      }
+      // if (menu.id === 4) {
+      //   sortColumns.value.find(i => )
+      //   tableRef.value.sort(menu.prop, 'descending')
+      // }
+    }
+
     //调用初始化表格列的参数
     function initTableColumnParamFun(): void {
       const columns: CommonTableColumn<T>[] = []
@@ -218,6 +270,8 @@ export default defineComponent(
             r.showOverflowTooltip ??= false
           }
 
+          r.prop && (r.sortable ??= props.fetchData ? 'custom' : true) // 默认后端排序
+
           // 没有设置宽度则根据label字数自动设定宽度，这样可以避免标题换行，影响美观
           if (!(r.width ?? r.minWidth) && r.label) {
             r.minWidth = generateLabelWidth(r) + 24
@@ -229,6 +283,7 @@ export default defineComponent(
             r.label ??= t('m.table.operation')
             r.showOverflowTooltip ??= false
           }
+
           if (r.itemList) r.itemList = getItemListRef(r)
           return r
         })
@@ -285,7 +340,7 @@ export default defineComponent(
           if ((tableColumParams.required || tableColumParams.comment) && !tableColumParams.slots.header) {
             tableColumParams.slots.header ??= () => {
               return (
-                <div style="display: flex; align-items: center;">
+                <div style="display: inline-flex; align-items: center;">
                   {tableColumParams.required ? <span style="color: red">*</span> : null}
                   {tableColumParams.label}
                   {tableColumParams.comment ? (
@@ -295,6 +350,7 @@ export default defineComponent(
               )
             }
           }
+
           // el-table序号列，自动添加标题，标题居中
           if (tableColumParams.type === 'index') {
             // 默认实现后端分页页码
@@ -495,7 +551,9 @@ export default defineComponent(
 
     // 生成table
     function generateTableView() {
+      console.info(1)
       const tableParam = {
+        onSortChange,
         ...attrs,
         ...props,
         ref: tableRef,
@@ -558,6 +616,7 @@ export default defineComponent(
             <el-table
               {...tableParam}
               v-slots={slots}
+              onHeaderContextmenu={onHeaderContextmenu}
               // v-loading={loadingRef.value} 发现此处加入loading会导致内存泄漏。。。。
               class={{ 'el-table-view': true, 'radio-selection': props.selection === 'single' }}
             >
@@ -599,6 +658,7 @@ export default defineComponent(
     return () => {
       return (
         <div style={props.style}>
+          <ContextMenu ref={contextMenuRef} onClick={clickMenu} />
           <div class={`m-table layout-${props.layout ?? 'default'}`}>
             {generateTopFilter()}
             {generateTableView()}

@@ -37,7 +37,7 @@
         {{ $t('common.save') }}
       </el-button>
     </div>
-    <el-dialog :title="$t('system.user.select')" v-model="visible1" draggable append-to-body align-center width="80%">
+    <el-dialog :title="$t('system.user.select')" v-model="visible1" draggable destroy-on-close append-to-body align-center width="80%">
       <select-user style="height: calc(90vh - 80px)" @select="selectedUser" />
     </el-dialog>
   </div>

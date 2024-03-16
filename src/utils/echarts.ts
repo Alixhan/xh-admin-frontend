@@ -17,7 +17,7 @@ import type {
   TooltipComponentOption
 } from 'echarts'
 import { useSystemStore } from '@/stores/system'
-import { useElementSize } from '@vueuse/core'
+import { useDebounceFn, useElementSize } from '@vueuse/core'
 
 echarts.use([
   BarChart,
@@ -77,7 +77,7 @@ export function useEcharts(option: Ref<EChartsOption>, onInit?: (echart: echarts
 
     watch(
       () => [width.value, height.value],
-      () => echartsInstance?.resize()
+        useDebounceFn(() => echartsInstance?.resize(), 200)
     )
 
     watch(() => [systemStore.layout.isDark], initEcharts)

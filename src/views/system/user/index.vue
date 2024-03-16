@@ -127,7 +127,7 @@ function openForm(type: FormHandleType | 'job', r) {
   handleType.value = type
 }
 
-function del(rows) {
+function del(rows: any []) {
   delUserByIds(rows.map((i) => i.id).join(','), {
     showLoading: true,
     showBeforeConfirm: true,

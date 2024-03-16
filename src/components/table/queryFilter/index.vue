@@ -1,12 +1,12 @@
 <template>
   <el-popover
-    :teleported="true"
-    placement="left-start"
+    placement="bottom"
     trigger="click"
     :visible="popoverVisible"
-    popper-style="width: auto; z-index: 999"
+    popper-style="width: auto;"
+    append-to-body
   >
-    <div class="query-filter-view">
+    <div class="query-filter-view" @keyup.enter="search">
       <div class="title-view">
         <el-text size="large">{{ $t('m.table.complexFilter') }}</el-text>
         <el-icon @click="popoverVisible = false" size="16" class="close-icon">
@@ -15,7 +15,7 @@
       </div>
       <Preview />
       <div class="opt-btn">
-        <el-icon @click="addRow()" size="16" color="var(--el-color-primary)" style="cursor: pointer">
+        <el-icon @click="addRow('')" size="16" color="var(--el-color-primary)" style="cursor: pointer">
           <CirclePlus />
         </el-icon>
         <div>
@@ -37,7 +37,7 @@
         :type="modelValue?.length ? 'danger' : 'primary'"
         text
         class="action-btn"
-        @click="popoverVisible = true"
+        @click="open"
       >
         {{ $t('m.table.complexFilter') }}
       </el-button>
@@ -70,11 +70,11 @@ const enabledFilters = ref<FilterRow[]>([])
 
 onDeactivated(() => (popoverVisible.value = false))
 
-function addRow(parent?: FilterRow) {
+function addRow(prop: string, parent?: FilterRow) {
   const filterRow: FilterRow = {
+    prop,
     logic: 'and',
     checked: true,
-    condition: 'ct',
     value1: '',
     value2: '',
     children: undefined
@@ -88,6 +88,7 @@ function addRow(parent?: FilterRow) {
   } else {
     modelValue.value.push(filterRow)
   }
+  open()
 }
 
 function removeRow(index: number, parent?: FilterRow) {
@@ -99,6 +100,10 @@ function removeRow(index: number, parent?: FilterRow) {
   } else {
     modelValue.value.splice(index, 1)
   }
+}
+
+function open() {
+  popoverVisible.value = true
 }
 
 function search() {
@@ -119,7 +124,9 @@ provide<QueryFilter>('queryFilter', {
 })
 
 defineExpose({
-  enabledFilters: enabledFilters.value
+  enabledFilters: enabledFilters.value,
+  open,
+  addRow
 })
 </script>
 <style scoped lang="scss">

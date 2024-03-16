@@ -30,7 +30,7 @@ export class Locales {
   key: LocaleKey
   //语言名称
   label: string
-  //字符预制宽度 像素
+  //字符预制宽度 像素,只是平均的大致宽度
   charWidth: number[]
   //语言包数据
   locale: object
@@ -62,7 +62,7 @@ export class Locales {
 export const locales: Locales[] = [
   new Locales('zh-cn', '简体中文', [10, 13, 15], merge(zhCn, elZhCn), Chinese),
   new Locales('zh-tw', '繁體中文', [10, 13, 15], merge(zhTw, elZhTw), ChineseF),
-  new Locales('en', 'English', [5.2, 7, 9], merge(en, elEn), English),
+  new Locales('en', 'English', [6, 7.2, 8.5], merge(en, elEn), English),
   new Locales('ja', '日本語', [10.3, 13, 15], merge(ja, elJa), Japanese)
 ]
 

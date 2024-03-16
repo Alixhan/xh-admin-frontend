@@ -1,18 +1,20 @@
 <template>
-  <div>
-    <el-button type="primary">辅导费</el-button>
+  <div style="position: relative; padding: 20px; background-color: var(--el-bg-color)">
+    <el-button @contextmenu.prevent="cl">sdlfkslfjk</el-button>
+    <ContextMenu ref="contextMenuRef">
+      <div v-for="i in 20" :key="i">收到浪费快结束了副科级拉萨科技大</div>
+    </ContextMenu>
     <el-switch v-model="formLoading" />
-    <el-select v-model="handleType" placeholder="handleType">
+    <el-select v-model="handleType" placeholder="handleType" style="width: 100px">
       <el-option value="add">add</el-option>
       <el-option value="edit">edit</el-option>
       <el-option value="detail">detail</el-option>
     </el-select>
     <m-form
       ref="formRef"
-      :colspan="24"
+      :colspan="12"
       :columns="columns"
       :model="formData"
-      label-position="top"
       :handleType="handleType"
       :loading="formLoading"
     />
@@ -22,14 +24,20 @@
 <script setup lang="tsx">
 import { reactive, ref } from 'vue'
 import type { CommonFormColumn } from '@i/components/form'
+import ContextMenu from '@/components/ContextMenu.vue'
 defineOptions({
   name: 'DemoForm'
 })
+const contextMenuRef = ref()
 const formRef = ref()
 const handleType = ref('add')
 const formLoading = ref(false)
 
 const formData = reactive({})
+
+function cl(e) {
+  contextMenuRef.value.show(e)
+}
 
 // 表单列定义
 const columns = ref<CommonFormColumn<any>[]>([
@@ -46,7 +54,7 @@ const columns = ref<CommonFormColumn<any>[]>([
   },
   {
     prop: 'select',
-    label: 'select选择框定义valueKey和labelKey',
+    label: '定义valueKey和labelKey',
     type: 'select',
     comment: '可以传入valueKey指定数据对象的value属性，labelKey指定对象的label属性',
     valueKey: 'id',
@@ -59,7 +67,7 @@ const columns = ref<CommonFormColumn<any>[]>([
   },
   {
     prop: 'autocomplete',
-    label: 'autocomplete自动补全输入框',
+    label: '自动补全输入框',
     type: 'autocomplete',
     fetchSuggestions(queryString, callbback) {
       const res = [
@@ -295,7 +303,7 @@ const columns = ref<CommonFormColumn<any>[]>([
   },
   {
     prop: 'radiogroup',
-    label: 'radio-group单选选框组，定制子选项的属性',
+    label: 'radio-group定制子选项的属性',
     type: 'radio-group',
     comment:
       '和select一样，可以传入valueKey指定数据对象的value属性，labelKey指定对象的label属性, 还可以设置itemParam的值定制option选项的属性， checkbox同理',

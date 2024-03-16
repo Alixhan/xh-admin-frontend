@@ -1,5 +1,5 @@
 <template>
-  <el-icon class="comment-icon" :title="$t('m.comment')" @click.stop="openComment">
+  <el-icon class="comment-icon" :title="$t('m.comment')" @click.prevent.stop="openComment">
     <QuestionFilled />
   </el-icon>
 </template>

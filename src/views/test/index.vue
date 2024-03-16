@@ -4,8 +4,8 @@
     <el-input v-model="num" />
     <el-switch v-model="tag" />
     <el-table :data="data">
-      <el-table-column type="index" label="序" />
-      <el-table-column label="序">
+      <el-table-column type="index" label="序" width="100" />
+      <el-table-column label="序" width="100">
         <template v-slot="scope">
           <el-select v-model="scope.row.a">
             <el-option label="123" value="1" />
@@ -13,11 +13,7 @@
           </el-select>
         </template>
       </el-table-column>
-      <el-table-column v-for="i in 4" :key="i" label="测试列" prop="b">
-        <template v-slot="scope">
-          <el-input v-model="scope.row.b" />
-        </template>
-      </el-table-column>
+      <el-table-column v-for="i in 4" :key="i" label="测试列" prop="b" width="100"/>
     </el-table>
   </div>
 </template>

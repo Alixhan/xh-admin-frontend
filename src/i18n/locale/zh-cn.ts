@@ -9,6 +9,8 @@ export default {
       export: '导出',
       complexFilter: '高级筛选',
       colSort: '列排序',
+      ascending: '升序排序',
+      descending: '降序排序',
       operation: '操作',
       allCol: '全部列',
       fileName: '表格数据',
@@ -125,7 +127,8 @@ export default {
     loadingText: '操作中',
     successMsg: '操作成功',
     optFailed: '操作失败',
-    noMenus: 'The current role is not assigned menu, please login again!'
+    noMenus: '当前角色未分配菜单，请重新登录！',
+    hide: '隐藏'
   },
   layout: {
     switchLocaleError: '切换语言失败',
@@ -263,6 +266,8 @@ export default {
       telephone: '手机号码',
       telephoneNote: '11位手机号码',
       password: '初始密码',
+      allowRepeat: '允许重复登录',
+      autoRenewal: '自动续签',
       newPassword: '新密码',
       newPasswordH: '如需修改密码请填入新密码',
       repeatPassword: '重复新密码',
@@ -283,6 +288,10 @@ export default {
         job: '用户组岗位',
         user: '用户组成员'
       }
+    },
+    log: {
+      label: '日志',
+      detail: '@:system.log.label@:common.detail',
     }
   },
   monitor: {

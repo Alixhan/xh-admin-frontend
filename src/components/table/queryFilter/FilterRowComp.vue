@@ -119,8 +119,11 @@ watch(
   }
 )
 
+//初始化一下关联条件
+changeProp()
+
 function changeProp() {
-  if (!comparators.value.includes(modelValue.value.condition)) {
+  if (!comparators.value.includes(modelValue.value.condition ?? '')) {
     modelValue.value.condition = comparators.value[0] as any
   }
 }
@@ -143,7 +146,7 @@ function initChecked() {
 
 //添加子行
 function addChildRow() {
-  queryFilter!.addRow(modelValue.value)
+  queryFilter!.addRow('', modelValue.value)
 }
 
 function handleRemove(index: number) {

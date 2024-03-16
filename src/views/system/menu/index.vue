@@ -90,8 +90,8 @@ const columns = computed(() => [
     slots: { default: switchSlot }
   },
   { prop: 'order', label: t('common.order'), comment: t('system.menu.orderComment') },
-  { prop: 'createTime', label: t('common.createTime'), type: 'datetime', minWidth: 155 },
-  { prop: 'updateTime', label: t('common.updateTime'), type: 'datetime', minWidth: 155 },
+  { prop: 'createTime', label: t('common.createTime'), type: 'datetime', minWidth: 165 },
+  { prop: 'updateTime', label: t('common.updateTime'), type: 'datetime', minWidth: 165 },
   {
     type: 'operation',
     fixed: 'right',

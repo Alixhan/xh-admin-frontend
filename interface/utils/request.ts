@@ -110,6 +110,10 @@ export interface PageQuery<T = any> {
   param?: T;
   // 高级筛选条件
   filters?: Array<FilterRow>;
+  // 排序字段
+  orderProp?: string;
+  // 排序方向
+  orderDirection?: 'asc' | 'desc';
 }
 
 /**

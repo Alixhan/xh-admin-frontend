@@ -1,7 +1,6 @@
 /**
  * 数据字典工具类类型定义
  */
-
 interface TypeMap {
   string: string;
   number: number;

@@ -44,6 +44,7 @@ export function generateDynamicColumn(column: FormColumn) {
   if (!column.prop) return
   const param = {
     clearable: true,
+    ariaLabel: column.label,
     ...column
   }
   if (!['switch', 'radio', 'checkbox'].includes(param.type ?? '')) {
@@ -75,8 +76,8 @@ export function generateDynamicColumn(column: FormColumn) {
       // 构造单选框选项
       slots.default = () => {
         return itemArr.value.map((i) => {
-          const optionParam = { ...itemParam, label: i.value }
-          return createVNode(ElRadio, optionParam, () => i.label)
+          const optionParam = { ...itemParam, ...i }
+          return createVNode(ElRadio, optionParam)
         })
       }
     }
@@ -88,8 +89,8 @@ export function generateDynamicColumn(column: FormColumn) {
       // 构造多选框子选项
       slots.default = () => {
         return itemArr.value.map((i) => {
-          const optionParam = { ...itemParam, label: i.value }
-          return createVNode(ElCheckbox, optionParam, () => i.label)
+          const optionParam = { ...itemParam, ...i }
+          return createVNode(ElCheckbox, optionParam)
         })
       }
     }
@@ -118,6 +119,9 @@ export function generateDynamicColumn(column: FormColumn) {
   } else {
     type = 'el-' + type
   }
+
+  // 删除label使用ariaLabel，否则控制台会告警
+  delete param.label
 
   // 日期区间需要单独处理
   if (['daterange', 'datetimerange', 'monthrange'].includes(param.type ?? '')) {
@@ -304,13 +308,16 @@ export function generateLabelWidth<T extends object>(
   const charWidth = getCurrentLocales().getCharWidth()
   return (
     Math.max(
-      ...columns.map((column) => {
+      ...columns.filter(i => !i.hidden)
+          .map((column) => {
         let width = column.label?.length ?? 0
         width *= charWidth
         //有备注疑问的加上额外宽度
         if (column.comment) width += 18
         //有必填*的加上额外宽度
         if (column.required) width += 12
+        //有排序的加上额外宽度
+        if (column.sortable) width += 24
         return width
       })
     ) + 28
