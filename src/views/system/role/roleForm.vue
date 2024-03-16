@@ -199,7 +199,7 @@ watchEffect(() => {
       }
     },
     { prop: 'parentName', label: t('system.role.parentName'), readonly: true },
-    { prop: 'name', label: t('system.role.parentName'), rules: { required: true } },
+    { prop: 'name', label: t('system.role.name'), rules: { required: true } },
     { prop: 'enabled', label: t('common.isEnabled'), type: 'switch' },
     { slotName: 'permission', label: t('system.role.permission') }
   ]

@@ -85,8 +85,8 @@ const captchaKey = uuidv4().replaceAll('-', '')
 const loading = ref(false)
 const formData = reactive({
   captchaKey,
-  username: 'admin',
-  password: 'admin123',
+  username: '',
+  password: '',
   captchaCode: ''
 })
 
