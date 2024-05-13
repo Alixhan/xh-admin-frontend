@@ -41,7 +41,7 @@ export const staticRouters = [
         meta: {
           title: '个人中心',
           cache: true,
-          componentName: `/${import.meta.env.VITE_LAYOUT_ROUTE_NAME}/personalCenter`,
+          componentName: `PersonalCenter`,
           icon: 'el|Avatar'
         }
       }

@@ -18,7 +18,7 @@
 <script lang="tsx" setup>
 import { useSystemStore } from '@/stores/system'
 import { computed, ref } from 'vue'
-import { getUserById, postSaveUser } from '@/api/system/user'
+import { getPersonalCenterDetail, personalCenterSave } from '@/api/system/user'
 import { useI18n } from 'vue-i18n'
 
 defineOptions({
@@ -30,13 +30,13 @@ const { t } = useI18n()
 const systemStore = useSystemStore()
 
 const formData = ref({
-  ...systemStore.user,
+  password: '',
   password2: ''
 })
 
 const columns = computed(() => [
   { prop: 'code', label: t('system.user.code'), disabled: true },
-  { prop: 'name', label: t('system.user.name'), disabled: true },
+  { prop: 'name', label: t('system.user.name') },
   { prop: 'avatar', label: t('system.user.avatar'), type: 'upload-img', single: 'object' },
   { prop: 'telephone', label: t('system.user.telephone'), rules: { type: 'phone' } },
   {
@@ -67,8 +67,7 @@ const columns = computed(() => [
 const formLoading = ref(true)
 const saveLoading = ref(false)
 const formRef = ref()
-
-getUserById(systemStore.user.id!).then((res) => {
+getPersonalCenterDetail().then((res) => {
   formData.value = res.data
   formData.value.password = ''
   formLoading.value = false
@@ -76,7 +75,7 @@ getUserById(systemStore.user.id!).then((res) => {
 
 function save() {
   formRef.value.submit().then(() => {
-    postSaveUser(formData.value, {
+    personalCenterSave(formData.value, {
       loadingRef: saveLoading,
       showSuccessMsg: true,
       successMsg: t('common.saveSuccess')

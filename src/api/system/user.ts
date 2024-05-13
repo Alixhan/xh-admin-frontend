@@ -60,6 +60,17 @@ export function kickOut(params = {}, option?: RequestOption) {
   return createAxios(option).post(`${systemBaseUrl}/api/system/user/kickOut`, params)
 }
 
+// 保存系统用户
+export function personalCenterSave(params = {}, option?: RequestOption) {
+  return createAxios(option).post(`${systemBaseUrl}/api/system/user/personalCenterSave`, params)
+}
+
+// 获取用户详情
+export function getPersonalCenterDetail() {
+  return createAxios().get(`${systemBaseUrl}/api/system/user/getPersonalCenterDetail`)
+}
+
+
 // 用户列表查询
 export function queryUserList(params = {}, option?: RequestOption) {
   return createAxios(option).post(`${systemBaseUrl}/api/system/user/query`, params)

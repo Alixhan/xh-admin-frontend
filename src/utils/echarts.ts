@@ -77,7 +77,7 @@ export function useEcharts(option: Ref<EChartsOption>, onInit?: (echart: echarts
 
     watch(
       () => [width.value, height.value],
-        useDebounceFn(() => echartsInstance?.resize(), 200)
+        useDebounceFn(() => echartsInstance?.resize(), 40)
     )
 
     watch(() => [systemStore.layout.isDark], initEcharts)
