@@ -27,8 +27,8 @@
 </template>
 <script setup lang="jsx">
 import { ref, toRef, watchEffect } from 'vue'
-import { handleTypeList, menuTypeList, platFormList } from './constant'
-import { queryMenuList, postSaveMenu, getMenuById } from '@/api/system/menu'
+import { generateTreeMenu, handleTypeList, menuTypeList, platFormList } from './constant'
+import { getMenuById, postSaveMenu, queryMenuList } from '@/api/system/menu'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
@@ -79,45 +79,11 @@ function initFormData() {
 
 //初始化上级菜单数据
 function initParentMenuData() {
-  return queryMenuList({ isPage: false, param: { flag: 'selectParentMenu' } }).then((res) => {
-    let list = res.data.list.reverse()
-    const menus = []
-    let currentMenu
-    while (list.length) {
-      // 排列，符合的排到末尾等待取出
-      const leftArr = []
-      const rightArr = []
-      list.forEach((a) => {
-        if (currentMenu) {
-          if (a.parentId === currentMenu.id) rightArr.push(a)
-          else leftArr.push(a)
-        } else {
-          if (a.parentId) leftArr.push(a)
-          else rightArr.push(a)
-        }
-      })
-      // 匹配数据第一个的标记当前子项最后一个
-      if (rightArr.length) rightArr[0].isLastChid = true
-      // 标记匹配项的层级
-      rightArr.forEach((i) => {
-        i.level = currentMenu ? currentMenu.level + 1 : 0
-      })
-      list = [...leftArr, ...rightArr]
-      // 取出最后一项
-      currentMenu = list.pop()
-      let prefix = ''
-      if (currentMenu.level) {
-        let level = currentMenu.level
-        while (level--) prefix += '****'
-        prefix += currentMenu.isLastChid ? '└ ' : '├ '
-      }
-      menus.push({
-        platform: currentMenu.platform,
-        value: currentMenu.id,
-        label: prefix + currentMenu.title
-      })
-    }
-    parentMenuList.value = menus
+  return queryMenuList({
+    isPage: false,
+    param: { flag: 'selectParentMenu' }
+  }).then((res) => {
+    parentMenuList.value = generateTreeMenu(res.data.list)
   })
 }
 
@@ -138,9 +104,11 @@ watchEffect(() => {
       prop: 'parentId',
       label: t('system.menu.parent'),
       placeholder: t('system.menu.parentPlaceholder'),
-      type: 'select',
-      filterable: true,
-      itemList: parentMenuList.value,
+      type: 'cascader',
+      options: parentMenuList.value,
+      props: {
+        checkStrictly: true
+      },
       onChange(val) {
         formData.value.platform = parentMenuList.value.find((i) => i.value === val)?.platform
       }

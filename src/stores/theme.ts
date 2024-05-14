@@ -197,7 +197,7 @@ export const useThemeStore = defineStore('theme', () => {
         '--el-color-primary-light-5': { light: '#f87171', dark: '#9E1A1A' },
         '--el-color-primary-light-7': { light: '#fca5a5', dark: '#881616' },
         '--el-color-primary-light-8': { light: '#fecaca', dark: '#611010' },
-        '--el-color-primary-light-9': { light: '#fee2e2', dark: '#350909' }
+        '--el-color-primary-light-9': { light: '#fee2e2', dark: '#2e2121' }
       }
     },
     {
@@ -211,10 +211,10 @@ export const useThemeStore = defineStore('theme', () => {
         '--el-color-primary-dark-2': { light: '#E56306', dark: '#FBA365' },
         '--el-color-primary': { light: '#F97316', dark: '#FA8633' },
         '--el-color-primary-light-3': { light: '#FB9E5B', dark: '#F46906' },
-        '--el-color-primary-light-5': { light: '#FCBE92', dark: '#C25405' },
+        '--el-color-primary-light-5': { light: '#FCBE92', dark: '#bd835e' },
         '--el-color-primary-light-7': { light: '#FDD6B9', dark: '#8B3C03' },
         '--el-color-primary-light-8': { light: '#FEEADC', dark: '#5A2702' },
-        '--el-color-primary-light-9': { light: '#FFF6F0', dark: '#281101' }
+        '--el-color-primary-light-9': { light: '#FFF6F0', dark: '#33281f' }
       }
     },
     {
@@ -231,7 +231,7 @@ export const useThemeStore = defineStore('theme', () => {
         '--el-color-primary-light-5': { light: '#FACD80', dark: '#8E5C06' },
         '--el-color-primary-light-7': { light: '#FCE2B6', dark: '#6C4604' },
         '--el-color-primary-light-8': { light: '#FEF2DD', dark: '#452C03' },
-        '--el-color-primary-light-9': { light: '#FEF7EB', dark: '#221601' }
+        '--el-color-primary-light-9': { light: '#FEF7EB', dark: '#302d24' }
       }
     },
     {
@@ -280,7 +280,7 @@ export const useThemeStore = defineStore('theme', () => {
         '--el-color-primary-light-5': { light: '#40DE7A', dark: '#199044' },
         '--el-color-primary-light-7': { light: '#6FE69B', dark: '#157A3A' },
         '--el-color-primary-light-8': { light: '#9FEFBC', dark: '#0F5729' },
-        '--el-color-primary-light-9': { light: '#CFF7DE', dark: '#0A391B' }
+        '--el-color-primary-light-9': { light: '#CFF7DE', dark: '#1d2720' }
       }
     },
     {
@@ -297,7 +297,7 @@ export const useThemeStore = defineStore('theme', () => {
         '--el-color-primary-light-5': { light: '#30F8B9', dark: '#046D4B' },
         '--el-color-primary-light-7': { light: '#75FAD0', dark: '#035E41' },
         '--el-color-primary-light-8': { light: '#BAFDE8', dark: '#02402D' },
-        '--el-color-primary-light-9': { light: '#DCFEF3', dark: '#012C1F' }
+        '--el-color-primary-light-9': { light: '#DCFEF3', dark: '#222c28' }
       }
     },
     {
@@ -360,12 +360,12 @@ export const useThemeStore = defineStore('theme', () => {
         '--el-bg-color-overlay': { light: '#ffffff', dark: '#1d1e1f' },
 
         '--el-color-primary-dark-2': { light: '#2326EB', dark: '#A7A7C3' },
-        '--el-color-primary': { light: '#6366F1', dark: '#8282b6' },
+        '--el-color-primary': { light: '#6366F1', dark: '#6d6dba' },
         '--el-color-primary-light-3': { light: '#8183F4', dark: '#8888AF' },
         '--el-color-primary-light-5': { light: '#A1A3F7', dark: '#7979A5' },
         '--el-color-primary-light-7': { light: '#C2C3FA', dark: '#60608F' },
         '--el-color-primary-light-8': { light: '#DEDFFC', dark: '#424262' },
-        '--el-color-primary-light-9': { light: '#F1F1FE', dark: '#2F2F46' }
+        '--el-color-primary-light-9': { light: '#F1F1FE', dark: '#2b2b35' }
       }
     },
     {
@@ -397,7 +397,7 @@ export const useThemeStore = defineStore('theme', () => {
         '--el-color-primary-light-5': { light: '#F0A8C8', dark: '#951951' },
         '--el-color-primary-light-7': { light: '#F6CBDE', dark: '#6D123B' },
         '--el-color-primary-light-8': { light: '#FBE9F1', dark: '#4A0C28' },
-        '--el-color-primary-light-9': { light: '#FDF2F7', dark: '#230613' }
+        '--el-color-primary-light-9': { light: '#FDF2F7', dark: '#292021' }
       }
     },
     {
@@ -413,7 +413,7 @@ export const useThemeStore = defineStore('theme', () => {
         '--el-color-primary-light-5': { light: '#FDABB7', dark: '#B3051F' },
         '--el-color-primary-light-7': { light: '#FDC8D0', dark: '#770315' },
         '--el-color-primary-light-8': { light: '#FEE1E6', dark: '#3C020A' },
-        '--el-color-primary-light-9': { light: '#FFF0F2', dark: '#1E0105' }
+        '--el-color-primary-light-9': { light: '#FFF0F2', dark: '#2b2323' }
       }
     }
   ])

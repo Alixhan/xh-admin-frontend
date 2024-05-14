@@ -61,19 +61,13 @@ const filterParam = reactive({
 })
 
 const topFilterColumns = computed(() => [
-  { prop: 'token', label: 'token' },
   { prop: 'url', label: '请求路径' },
-  { prop: 'method', label: '请求方法' },
   { prop: 'tag', label: '模块' },
   { prop: 'operation', label: '操作' },
   { prop: 'ip', label: 'ip地址' },
-  { prop: 'ipAddress', label: 'ip属地' },
-  { prop: 'time', label: '耗时ms', type: 'number' },
   { prop: 'status', label: '响应状态' },
+  { prop: 'token', label: 'token' },
   { prop: 'name', label: '操作用户' },
-  { prop: 'localeLabel', label: '使用语言' },
-  { prop: 'orgName', label: '使用机构' },
-  { prop: 'roleName', label: '使用角色' }
 ])
 
 const columns = computed(() => [

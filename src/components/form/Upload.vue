@@ -1,5 +1,5 @@
 <template>
-  <el-upload v-bind="uploadParam" ref="uploadRef" :class="{ 'select-limit': selectLimit && selectLimit <= 0 }">
+  <el-upload v-bind="uploadParam" ref="uploadRef" :class="{ 'select-limit': selectLimit !== undefined && selectLimit <= 0 }">
     <template v-for="name in Object.keys($slots)" #[name]="ctx">
       <slot :name="name" v-bind="ctx" />
     </template>

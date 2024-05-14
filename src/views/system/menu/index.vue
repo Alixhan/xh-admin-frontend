@@ -52,7 +52,7 @@
 <script setup lang="jsx">
 import { computed, reactive, ref } from 'vue'
 import { delMenuByIds, postSwitchMenuProp, queryMenuList } from '@/api/system/menu'
-import { menuTypeList } from '@/views/system/menu/constant'
+import {generateTreeMenu, menuTypeList} from '@/views/system/menu/constant'
 import MenuForm from './menuForm.vue'
 import getDictDetails from '@/utils/dict'
 import { useI18n } from 'vue-i18n'
@@ -132,21 +132,7 @@ const row = ref()
 function fetchMenus(pageQuery, option) {
   // 转为树形结构
   return queryMenuList(pageQuery, option).then((res) => {
-    const list = res.data.list
-    const obj = {}
-    list.forEach((i) => {
-      i.children = []
-      obj[i.id] = i
-    })
-    res.data.list = list.filter((i) => {
-      const parent = obj[i.parentId]
-      if (parent) {
-        parent.children.push(i)
-        return false
-      }
-      // parentId不存在的为根元素
-      return true
-    })
+    res.data.list = generateTreeMenu(res.data.list)
     return res
   })
 }
