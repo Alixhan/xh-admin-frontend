@@ -92,7 +92,7 @@ const columns = computed(() => [
         icon: 'delete',
         auth: 'system:role:del',
         type: 'danger',
-        onClick: (row) => openForm('', row)
+        onClick: (row) => del([row])
       }
     ]
   }

@@ -54,7 +54,7 @@ export default defineComponent(
   <T extends object, F extends object>(props: MTableProps<T, F>, { attrs, emit, slots, expose }) => {
     const { t } = useI18n()
     const systemStore = useSystemStore()
-    const pageQuery: Ref<PageQuery> = ref({
+    const pageQuery: Ref<PageQuery<F>> = ref({
       isExport: false,
       isPage: toRef(props, 'isPage').value ?? false, // 是否分页
       currentPage: 1, // 页码
@@ -551,7 +551,6 @@ export default defineComponent(
 
     // 生成table
     function generateTableView() {
-      console.info(1)
       const tableParam = {
         onSortChange,
         ...attrs,

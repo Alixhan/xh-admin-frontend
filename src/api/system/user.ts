@@ -70,7 +70,6 @@ export function getPersonalCenterDetail() {
   return createAxios().get(`${systemBaseUrl}/api/system/user/getPersonalCenterDetail`)
 }
 
-
 // 用户列表查询
 export function queryUserList(params = {}, option?: RequestOption) {
   return createAxios(option).post(`${systemBaseUrl}/api/system/user/query`, params)
@@ -132,7 +131,7 @@ export function getUserGroupById(id: number) {
 
 // ids批量删除用户组
 export function delUserGroupByIds(ids: string, option: RequestOption) {
-  return createAxios(option).delete(`${systemBaseUrl}/api/system/user/delUserGroup/${ids}`)
+  return createAxios(option).delete(`${systemBaseUrl}/api/system/user/delUserGroup`, { params: { ids } })
 }
 
 // 用户id获取用户所在的所有用户组信息

@@ -1,11 +1,12 @@
 <template>
   <el-icon class="icon">
     <component v-if="iconType === 'el' && src" :is="src" />
-    <m-svg-icon v-if="iconType === 'local' && src" :src="src" inherited />
+    <svg-icon v-if="iconType === 'local' && src" :src="src" inherited />
   </el-icon>
 </template>
 <script>
 import { ref, shallowRef, watchEffect } from 'vue'
+import SvgIcon from '@/components/SvgIcon.vue'
 
 const localSvg = import.meta.glob('@/assets/icon/**/*.svg', { query: '?url', import: 'default' })
 /**
@@ -14,6 +15,7 @@ const localSvg = import.meta.glob('@/assets/icon/**/*.svg', { query: '?url', imp
  */
 export default {
   name: 'MIcon',
+  components: { SvgIcon },
   props: {
     modelValue: {
       type: String

@@ -53,6 +53,11 @@
             {{ $t('login.login') }}
           </el-button>
         </el-form>
+        <div style="margin-top: 1em; text-align: right">
+          <el-button :loading="loading" class="submit-button" type="primary" size="small" @click="demoLogin">
+            演示账号登录
+          </el-button>
+        </div>
       </div>
       <Footer class="footer" />
     </div>
@@ -133,6 +138,12 @@ function submit() {
       })
     }
   })
+}
+
+function demoLogin() {
+  formData.username = 'admin'
+  formData.password = 'admin123'
+  if (!loading.value) submit()
 }
 </script>
 <style scoped lang="scss">

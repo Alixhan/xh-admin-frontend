@@ -26,7 +26,7 @@
       :columns="columns"
       :fetch-data="queryOrgList"
       v-model:data="data"
-      selection=""
+      selection="multiple"
       @selection-change="(rows) => (selectRows = rows)"
     >
       <template #right-action>

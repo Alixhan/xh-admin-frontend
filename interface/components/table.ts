@@ -81,7 +81,7 @@ export const mTableProps = {
   data: {
     type: Array as PropType<any[]>
   },
-  // 分页对象
+  // 是否分页
   isPage: {
     type: Boolean,
     default: true

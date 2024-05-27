@@ -11,17 +11,36 @@
 
         如果觉得不错的话，点个 star ❤️，给点支持鼓励🌹。代码仓库：
         <el-link type="primary" @click="open('https://gitee.com/sun-xiaohan/xh-admin-frontend')">gitee</el-link>&nbsp;
-        <el-link type="primary">github</el-link>&nbsp;
-        <!--        ， 官网文档地址：-->
-        <!--        <el-link type="primary" @click="open('http://www.xhansky.cn')">https://www.xhansky.cn</el-link>&nbsp;，-->
+        <el-link type="primary">github</el-link>&nbsp; <br />
+        官网文档地址：
+        <el-link type="primary" @click="open('http://www.xhansky.cn')">https://www.xhansky.cn</el-link>&nbsp;
       </el-text>
     </div>
   </div>
 </template>
 <script lang="ts" setup>
 import { useSystemStore } from '@/stores/system'
+import { useLocalStorage } from '@vueuse/core'
+import { ElMessageBox } from 'element-plus'
 
 const systemStore = useSystemStore()
+
+const firstVisit = useLocalStorage('firstVisit', true)
+
+if (firstVisit.value) {
+  setTimeout(async () => {
+    await ElMessageBox.confirm('如果觉得还可以的话，可以帮忙 star 点个小⭐⭐吗？感激不敬！', '小小请求', {
+      confirmButtonText: '马上去',
+      cancelButtonText: '我就不！',
+      closeOnClickModal: false
+    })
+      .then(() => {
+        open('https://gitee.com/sun-xiaohan/xh-admin-frontend')
+      })
+      .catch(() => {})
+    firstVisit.value = false
+  }, 5000)
+}
 
 function open(url: string) {
   window.open(url)
