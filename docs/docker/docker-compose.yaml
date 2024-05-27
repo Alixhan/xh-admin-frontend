@@ -37,7 +37,7 @@ services:
       - ./minio/data:/data
     command: server /data --console-address ":9001"
     environment:
-      MINIO_ROOT_USER: root
+      MINIO_ROOT_USER: ${MINIO_USER}
       MINIO_ROOT_PASSWORD: ${MINIO_PASSWORD}
     restart: always
   jenkins:
