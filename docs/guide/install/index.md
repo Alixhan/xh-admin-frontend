@@ -60,7 +60,7 @@ $ pnpm dev
 [vue-tsc] Found 0 errors. Watching for file changes.
 
 ```
-打开浏览器，访问 http://localhost:5173 <br>
+打开浏览器，访问 `http://localhost:5173` <br>
 如出现登录页，恭喜你，前端项目已经启动成功！
 
 
