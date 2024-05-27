@@ -7,7 +7,7 @@ const previewSrcList = ["/image/img.png", "/image/img_1.png"];
 :::info 提示
 `docker-compose` 结构化的yaml文档可以清晰的了解整个系统容器，所有中间件均采用 `docker-compose` 工具部署。
 
-为方便快速搭建环境，我已经将相关部署配置文件放在 [docs/docker/](https://gitee.com/sun-xiaohan/xh-admin-frontend/docs/docker)
+为方便快速搭建环境，我已经将相关部署配置文件放在 [docs/docker/](https://gitee.com/sun-xiaohan/xh-admin-frontend/tree/main/docs/docker)
 目录下，直接拷贝至服务器运行即可完成所需中间件的部署。
 :::
 
@@ -31,8 +31,8 @@ docker
 ├─ mysql                               
 │  ├─ docker-entrypoint-initdb.d       // 需要初始化的sql放在此目录
 │  │  ├─ init_nacos_config.sql        // nacos配置初始化sql
-│  │  ├─ init_xh_db.sql               // 晓寒系统初始化sql
-│  │  └─ init_xxljob.sql              // xxl-job配置初始化sql
+│  │  ├─ init_xh_admin.sql               // 晓寒系统初始化sql
+│  │  └─ init_xxl_job.sql              // xxl-job配置初始化sql
 │  └─ my.cnf                          // mysql配置文件
 ├─ nginx                               
 │  └─ nginx.conf                       // nginx配置文件
