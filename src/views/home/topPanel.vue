@@ -9,7 +9,9 @@
         <!--        <el-tag>完全开源免费</el-tag>-->
         <br />
 
-        如果觉得不错的话，点个 star ❤️，给点支持鼓励🌹。代码仓库：
+        如果觉得不错的话，点个
+        <el-link type="primary" @click="open('https://gitee.com/sun-xiaohan/xh-admin-frontend')">star</el-link>&nbsp;
+        ❤️，给点支持鼓励🌹。代码仓库：
         <el-link type="primary" @click="open('https://gitee.com/sun-xiaohan/xh-admin-frontend')">gitee</el-link>&nbsp;
         <el-link type="primary">github</el-link>&nbsp; <br />
         官网文档地址：
@@ -29,7 +31,7 @@ const firstVisit = useLocalStorage('firstVisit', true)
 
 if (firstVisit.value) {
   setTimeout(async () => {
-    await ElMessageBox.confirm('如果觉得还可以的话，可以帮忙 star 点个小⭐⭐吗？感激不敬！', '小小请求', {
+    await ElMessageBox.confirm('觉得不错的话，可以帮忙 star 点个小⭐⭐吗？感激不敬！', '小小请求', {
       confirmButtonText: '马上去',
       cancelButtonText: '我就不！',
       closeOnClickModal: false
