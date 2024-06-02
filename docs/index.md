@@ -8,7 +8,7 @@ hero:
   text: "晓寒开源管理系统"
   image:
     src: /icon/logo-light.svg
-    alt: 晓寒管理系统
+    alt: 晓寒开源管理系统
   tagline: 一个适合现代的，高开发效率的，前后端分离管理系统基础框架
   actions:
     - theme: brand

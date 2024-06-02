@@ -1,13 +1,13 @@
 <div align="center">
   <img alt="XHan Admin" width="120" height="120" src="public/favicon.svg">
   <h1>XHan Admin</h1>
-  XHan Admin（晓寒管理系统） 前端代码库
+  XHan Admin（晓寒开源管理系统） 前端代码库
 </div>
 
 ## ⚡ 介绍
 
-XHan Admin（晓寒管理系统）是一个开源免费（前后端分离）中后台管理系统基础解决方案, 无专业版收费，所有功能毫无保留的贡献给开源社区。
-前端技术栈： Vue3, TypeScript, Element Plus, Pinia and Vite等
+XHan Admin（晓寒开源管理系统）是一个开源免费（前后端分离）中后台管理系统基础解决方案, 无专业版收费，所有功能毫无保留的贡献给开源社区。
+前端技术栈： Vue3, TypeScript, Element Plus, Vite, Pinia等
 后端技术栈： jdk21, springboot3, spring-cloud, spring-cloud-alibaba, SaToken等
 
 前端代码库: [xh-admin-frontend](https://github.com/Alixhan/xh-admin-frontend)<br>
@@ -28,10 +28,10 @@ gitee 码云代码仓库<br>
 ## ❤️ Generate electricity with love
 
 - **完全免费**：觉得不错的话，点个star吧，感谢感谢，star是作者唯一的动力！
-- **最新技术栈**：vue3,vite5,typescript5,element-plus, jdk17, springboot3.2
+- **最新技术栈**：体验最新技术栈带来的开发效率和开发体验的巨大提升
 - **完全响应式布局**：各端均做了响应性布局适配，移动端也可以愉快的使用。
 - **通用组件**: 统一的组件封装，保证样式功能统一，开发更规范，效率更高，包括表格组件，表单组件，excel导入组件，图片统一上传管理，裁剪组件等
-- **纯净的代码**: 从零用最新技术栈逐行搭建，意味着无任何历史包袱，只包含核心纯净的代码。
+- **纯净的代码**: 从零用最新技术栈全新搭建，无任何历史包袱，只包含核心纯净的代码。
 - **漂亮的样式**: 漂亮的样式设计，赶快试试吧。
 - **丰富的主题**: 内置各种颜色主题，支持暗黑模式。
 
