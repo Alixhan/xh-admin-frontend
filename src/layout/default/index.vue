@@ -42,7 +42,6 @@ const systemStore = useSystemStore()
 const menuWidth = computed(() => systemStore.layout.menuWidth + 'px')
 </script>
 <style scoped lang="scss">
-$transition: width 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
 .default-root-view {
   position: relative;
   width: 100%;
@@ -53,7 +52,7 @@ $transition: width 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
 
   .left-view {
     overflow: hidden;
-    transition: $transition;
+    transition: width 0.3s ease-in-out;
     display: flex;
     flex-direction: column;
     flex-shrink: 0;

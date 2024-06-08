@@ -41,7 +41,7 @@ if (firstVisit.value) {
       })
       .catch(() => {})
     firstVisit.value = false
-  }, 5000)
+  }, 60000)
 }
 
 function open(url: string) {

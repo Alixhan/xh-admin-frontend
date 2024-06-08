@@ -1,5 +1,6 @@
 <template>
   <el-drawer
+    destroy-on-close
     style="min-width: min(90vw, 340px); max-width: 320px"
     v-model="systemStore.layout.settingVisible"
     :title="$t('setting.layout')"
