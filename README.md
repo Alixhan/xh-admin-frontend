@@ -112,13 +112,12 @@ pnpm test
 
 提交PR，提交issue，点个star，或者直接打赏我，哈哈哈~~~
 
-[//]: # (## 交流群)
+## 交流群
+欢迎加入微信交流群
 
-[//]: # ()
-[//]: # (扫码加我微信（备注：xh），邀请你进微信交流群)
+扫码加我微信（备注：xhan），邀请您加入微信交流群
 
-[//]: # ()
-[//]: # (![wechat.png]&#40;docs/public/image/wechat.png&#41;)
+<img src="docs/public/image/wechat.png" width=200 />
 
 ## 📄 License
 
