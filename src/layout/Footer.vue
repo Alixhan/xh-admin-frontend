@@ -37,9 +37,7 @@ function windowOpen(url) {
 
 .footer-view {
   text-align: center;
-  font-size: 10px;
-  padding: 10px 10px;
-  font-size: 12px !important;
+  font-size: 12px;
 
   .footer {
     border-radius: 3px;

@@ -1,5 +1,5 @@
-import { createApp } from 'vue'
 import type { App as VueApp } from 'vue'
+import { createApp } from 'vue'
 import App from './App.vue'
 import { createPinia } from 'pinia'
 import ElementPlus from 'element-plus'

@@ -220,3 +220,18 @@ body {
 .slide-left-leave-to {
   @extend .slide-right-enter-from;
 }
+
+/* nprogress color */
+#nprogress  {
+  .bar {
+    background: var(--el-color-primary);
+  }
+  .peg {
+    box-shadow: 0 0 10px var(--el-color-primary), 0 0 5px var(--el-color-primary);
+  }
+  .spinner-icon {
+    border-top-color: var(--el-color-primary);
+    border-left-color: var(--el-color-primary);
+  }
+
+}

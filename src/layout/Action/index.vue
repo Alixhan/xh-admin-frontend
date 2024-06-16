@@ -8,11 +8,11 @@
   </div>
 </template>
 <script setup>
-import FullScreenControl from '@/layout/default/action/fullScreenControl.vue'
-import UserAvatar from '@/layout/default/action/userAvatar.vue'
-import SwitchStyle from '@/layout/default/action/switchStyle.vue'
-import Setting from '@/layout/default/action/setting.vue'
-import SwitchLocale from '@/layout/default/action/switchLocale.vue'
+import FullScreenControl from './FullScreenControl.vue'
+import UserAvatar from './UserAvatar.vue'
+import SwitchStyle from './SwitchStyle.vue'
+import Setting from './Setting.vue'
+import SwitchLocale from './SwitchLocale.vue'
 defineOptions({
   name: 'DefaultLayout'
 })

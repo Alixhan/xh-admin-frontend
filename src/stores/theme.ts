@@ -119,8 +119,8 @@ export const useThemeStore = defineStore('theme', () => {
       id: '石板',
       label: '石板',
       theme: {
-        '--el-bg-color-page': { light: '#f5f5f5', dark: '#2f2f2f' },
-        '--el-bg-color': { light: '#ffffff', dark: '#252525' },
+        '--el-bg-color-page': { light: '#f5f5f5', dark: '#252525' },
+        '--el-bg-color': { light: '#ffffff', dark: '#1e1e1e' },
         '--el-bg-color-overlay': { light: '#ffffff', dark: '#1d1e1f' },
 
         '--el-color-primary-dark-2': { light: '#475569', dark: '#5D6F89' },
@@ -136,8 +136,8 @@ export const useThemeStore = defineStore('theme', () => {
       id: '灰色',
       label: '灰色',
       theme: {
-        '--el-bg-color-page': { light: '#f5f5f5', dark: '#2f2f2f' },
-        '--el-bg-color': { light: '#ffffff', dark: '#252525' },
+        '--el-bg-color-page': { light: '#f5f5f5', dark: '#252525' },
+        '--el-bg-color': { light: '#ffffff', dark: '#1e1e1e' },
         '--el-bg-color-overlay': { light: '#ffffff', dark: '#1d1e1f' },
 
         '--el-color-primary-dark-2': { light: '#5F6572', dark: '#9096A2' },
@@ -153,8 +153,8 @@ export const useThemeStore = defineStore('theme', () => {
       id: '锌',
       label: '锌',
       theme: {
-        '--el-bg-color-page': { light: '#f5f5f5', dark: '#2f2f2f' },
-        '--el-bg-color': { light: '#ffffff', dark: '#252525' },
+        '--el-bg-color-page': { light: '#f5f5f5', dark: '#252525' },
+        '--el-bg-color': { light: '#ffffff', dark: '#1e1e1e' },
         '--el-bg-color-overlay': { light: '#ffffff', dark: '#1d1e1f' },
 
         '--el-color-primary-dark-2': { light: '#5B5B62', dark: '#71717A' },
@@ -170,8 +170,8 @@ export const useThemeStore = defineStore('theme', () => {
       id: '石头',
       label: '石头',
       theme: {
-        '--el-bg-color-page': { light: '#f5f5f5', dark: '#2f2f2f' },
-        '--el-bg-color': { light: '#ffffff', dark: '#252525' },
+        '--el-bg-color-page': { light: '#f5f5f5', dark: '#252525' },
+        '--el-bg-color': { light: '#ffffff', dark: '#1e1e1e' },
         '--el-bg-color-overlay': { light: '#ffffff', dark: '#1d1e1f' },
 
         '--el-color-primary-dark-2': { light: '#615B57', dark: '#78716C' },
@@ -187,8 +187,8 @@ export const useThemeStore = defineStore('theme', () => {
       id: '红',
       label: '红',
       theme: {
-        '--el-bg-color-page': { light: '#f5f5f5', dark: '#2f2f2f' },
-        '--el-bg-color': { light: '#ffffff', dark: '#252525' },
+        '--el-bg-color-page': { light: '#f5f5f5', dark: '#252525' },
+        '--el-bg-color': { light: '#ffffff', dark: '#1e1e1e' },
         '--el-bg-color-overlay': { light: '#ffffff', dark: '#1d1e1f' },
 
         '--el-color-primary-dark-2': { light: '#b91c1c', dark: '#DC2626' },
@@ -204,8 +204,8 @@ export const useThemeStore = defineStore('theme', () => {
       id: '橙',
       label: '橙',
       theme: {
-        '--el-bg-color-page': { light: '#f5f5f5', dark: '#2f2f2f' },
-        '--el-bg-color': { light: '#ffffff', dark: '#252525' },
+        '--el-bg-color-page': { light: '#f5f5f5', dark: '#252525' },
+        '--el-bg-color': { light: '#ffffff', dark: '#1e1e1e' },
         '--el-bg-color-overlay': { light: '#ffffff', dark: '#1d1e1f' },
 
         '--el-color-primary-dark-2': { light: '#E56306', dark: '#FBA365' },
@@ -221,8 +221,8 @@ export const useThemeStore = defineStore('theme', () => {
       id: '琥珀',
       label: '琥珀',
       theme: {
-        '--el-bg-color-page': { light: '#f5f5f5', dark: '#2f2f2f' },
-        '--el-bg-color': { light: '#ffffff', dark: '#252525' },
+        '--el-bg-color-page': { light: '#f5f5f5', dark: '#252525' },
+        '--el-bg-color': { light: '#ffffff', dark: '#1e1e1e' },
         '--el-bg-color-overlay': { light: '#ffffff', dark: '#1d1e1f' },
 
         '--el-color-primary-dark-2': { light: '#DC8F09', dark: '#F59E0B' },
@@ -238,8 +238,8 @@ export const useThemeStore = defineStore('theme', () => {
       id: '黄色',
       label: '黄色',
       theme: {
-        '--el-bg-color-page': { light: '#f5f5f5', dark: '#2f2f2f' },
-        '--el-bg-color': { light: '#ffffff', dark: '#252525' },
+        '--el-bg-color-page': { light: '#f5f5f5', dark: '#252525' },
+        '--el-bg-color': { light: '#ffffff', dark: '#1e1e1e' },
         '--el-bg-color-overlay': { light: '#ffffff', dark: '#1d1e1f' },
 
         '--el-color-primary-dark-2': { light: '#BB8E06', dark: '#EAB308' },
@@ -255,8 +255,8 @@ export const useThemeStore = defineStore('theme', () => {
       id: '碧绿',
       label: '碧绿',
       theme: {
-        '--el-bg-color-page': { light: '#f5f5f5', dark: '#2f2f2f' },
-        '--el-bg-color': { light: '#ffffff', dark: '#252525' },
+        '--el-bg-color-page': { light: '#f5f5f5', dark: '#252525' },
+        '--el-bg-color': { light: '#ffffff', dark: '#1e1e1e' },
         '--el-bg-color-overlay': { light: '#ffffff', dark: '#1d1e1f' },
         '--el-color-primary-dark-2': { light: '#68A111', dark: '#84CC16' },
         '--el-color-primary': { light: '#84CC16', dark: '#79BD14' },
@@ -271,8 +271,8 @@ export const useThemeStore = defineStore('theme', () => {
       id: '绿',
       label: '绿',
       theme: {
-        '--el-bg-color-page': { light: '#f5f5f5', dark: '#2d2d2d' },
-        '--el-bg-color': { light: '#ffffff', dark: '#212121' },
+        '--el-bg-color-page': { light: '#f5f5f5', dark: '#252525' },
+        '--el-bg-color': { light: '#ffffff', dark: '#1e1e1e' },
         '--el-bg-color-overlay': { light: '#ffffff', dark: '#1d1e1f' },
         '--el-color-primary-dark-2': { light: '#147538', dark: '#22C55E' },
         '--el-color-primary': { light: '#1B9D4B', dark: '#1FB757' },
@@ -287,8 +287,8 @@ export const useThemeStore = defineStore('theme', () => {
       id: '绿宝石',
       label: '绿宝石',
       theme: {
-        '--el-bg-color-page': { light: '#f5f5f5', dark: '#2d2d2d' },
-        '--el-bg-color': { light: '#ffffff', dark: '#212121' },
+        '--el-bg-color-page': { light: '#f5f5f5', dark: '#252525' },
+        '--el-bg-color': { light: '#ffffff', dark: '#1e1e1e' },
         '--el-bg-color-overlay': { light: '#ffffff', dark: '#1d1e1f' },
 
         '--el-color-primary-dark-2': { light: '#047652', dark: '#059669' },
@@ -304,8 +304,8 @@ export const useThemeStore = defineStore('theme', () => {
       id: '水鸭',
       label: '水鸭',
       theme: {
-        '--el-bg-color-page': { light: '#f5f5f5', dark: '#2d2d2d' },
-        '--el-bg-color': { light: '#ffffff', dark: '#212121' },
+        '--el-bg-color-page': { light: '#f5f5f5', dark: '#252525' },
+        '--el-bg-color': { light: '#ffffff', dark: '#1e1e1e' },
         '--el-bg-color-overlay': { light: '#ffffff', dark: '#1d1e1f' },
 
         '--el-color-primary-dark-2': { light: '#0A756C', dark: '#0D9488' },
@@ -321,8 +321,8 @@ export const useThemeStore = defineStore('theme', () => {
       id: '青色',
       label: '青色',
       theme: {
-        '--el-bg-color-page': { light: '#f5f5f5', dark: '#2d2d2d' },
-        '--el-bg-color': { light: '#ffffff', dark: '#212121' },
+        '--el-bg-color-page': { light: '#f5f5f5', dark: '#252525' },
+        '--el-bg-color': { light: '#ffffff', dark: '#1e1e1e' },
         '--el-bg-color-overlay': { light: '#ffffff', dark: '#1d1e1f' },
 
         '--el-color-primary-dark-2': { light: '#0590A9', dark: '#06B6D4' },
@@ -338,8 +338,8 @@ export const useThemeStore = defineStore('theme', () => {
       id: '天空',
       label: '天空',
       theme: {
-        '--el-bg-color-page': { light: '#f5f5f5', dark: '#2d2d2d' },
-        '--el-bg-color': { light: '#ffffff', dark: '#212121' },
+        '--el-bg-color-page': { light: '#f5f5f5', dark: '#252525' },
+        '--el-bg-color': { light: '#ffffff', dark: '#1e1e1e' },
         '--el-bg-color-overlay': { light: '#ffffff', dark: '#1d1e1f' },
 
         '--el-color-primary-dark-2': { light: '#0B84BC', dark: '#0EA5E9' },
@@ -355,8 +355,8 @@ export const useThemeStore = defineStore('theme', () => {
       id: '靛',
       label: '靛',
       theme: {
-        '--el-bg-color-page': { light: '#f5f5f5', dark: '#2d2d2d' },
-        '--el-bg-color': { light: '#ffffff', dark: '#212121' },
+        '--el-bg-color-page': { light: '#f5f5f5', dark: '#252525' },
+        '--el-bg-color': { light: '#ffffff', dark: '#1e1e1e' },
         '--el-bg-color-overlay': { light: '#ffffff', dark: '#1d1e1f' },
 
         '--el-color-primary-dark-2': { light: '#2326EB', dark: '#A7A7C3' },
@@ -372,8 +372,8 @@ export const useThemeStore = defineStore('theme', () => {
       id: '紫',
       label: '紫',
       theme: {
-        '--el-bg-color-page': { light: '#f5f5f5', dark: '#1c1c19' },
-        '--el-bg-color': { light: '#ffffff', dark: '#151513' },
+        '--el-bg-color-page': { light: '#f5f5f5', dark: '#252525' },
+        '--el-bg-color': { light: '#ffffff', dark: '#1e1e1e' },
         '--el-bg-color-overlay': { light: '#ffffff', dark: '#1d1e1f' },
         '--el-color-primary-dark-2': { light: '#7F4CF5', dark: '#a786ff' },
         '--el-color-primary': { light: '#8B5CF6', dark: '#997ee1' },
@@ -388,8 +388,8 @@ export const useThemeStore = defineStore('theme', () => {
       id: '粉红',
       label: '粉红',
       theme: {
-        '--el-bg-color-page': { light: '#f5f5f5', dark: '#2d2d2d' },
-        '--el-bg-color': { light: '#ffffff', dark: '#212121' },
+        '--el-bg-color-page': { light: '#f5f5f5', dark: '#252525' },
+        '--el-bg-color': { light: '#ffffff', dark: '#1e1e1e' },
         '--el-bg-color-overlay': { light: '#ffffff', dark: '#1d1e1f' },
         '--el-color-primary-dark-2': { light: '#C5216B', dark: '#E878AA' },
         '--el-color-primary': { light: '#DB2777', dark: '#DB2777' },
@@ -404,8 +404,8 @@ export const useThemeStore = defineStore('theme', () => {
       id: '玫瑰红',
       label: '玫瑰红',
       theme: {
-        '--el-bg-color-page': { light: '#f5f5f5', dark: '#21211d' },
-        '--el-bg-color': { light: '#ffffff', dark: '#1c1c19' },
+        '--el-bg-color-page': { light: '#f5f5f5', dark: '#252525' },
+        '--el-bg-color': { light: '#ffffff', dark: '#1e1e1e' },
         '--el-bg-color-overlay': { light: '#ffffff', dark: '#1d1e1f' },
         '--el-color-primary-dark-2': { light: '#F92A49', dark: '#FB7185' },
         '--el-color-primary': { light: '#FB7185', dark: '#F93956' },
@@ -417,7 +417,7 @@ export const useThemeStore = defineStore('theme', () => {
       }
     }
   ])
-  const currentTheme = useLocalStorage('currentTheme', 'default')
+  const currentTheme = useLocalStorage('currentTheme', '紫')
   //监听主题和明暗，动态调整主题颜色
   watchEffect(switchTheme)
 

@@ -1,6 +1,5 @@
 <template>
   <el-drawer
-    destroy-on-close
     style="min-width: min(90vw, 340px); max-width: 320px"
     v-model="systemStore.layout.settingVisible"
     :title="$t('setting.layout')"
@@ -46,6 +45,9 @@
       </el-form-item>
       <el-form-item :label="$t('setting.menuWidth')" :span="24">
         <el-input-number v-model="systemStore.layout.menuWidth" :min="150" :max="350" />
+      </el-form-item>
+      <el-form-item :label="$t('setting.showFooter')" :span="24">
+        <el-switch v-model="systemStore.layout.showFooter" />
       </el-form-item>
     </el-form>
   </el-drawer>

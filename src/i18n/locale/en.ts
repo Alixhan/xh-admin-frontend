@@ -139,6 +139,7 @@ export default {
     layout: 'Layout Setting',
     theme: 'Theme',
     showLogo: 'Show Logo',
+    showFooter: 'Show Footer',
     menuUnique: 'Menu Unique',
     showNavTabIcon: 'Tab Icon',
     menuWidth: 'Menu Width',

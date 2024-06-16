@@ -1,11 +1,7 @@
 <template>
   <!-- 全局主题，国际化等配置 -->
   <el-config-provider :locale="locale" :size="systemStore.layout.size" :button="btnConfig">
-    <router-view :class="rootClass" v-slot="{ Component }">
-      <transition :name="systemStore.layout.mainAnimation" mode="out-in">
-        <component :is="Component" />
-      </transition>
-    </router-view>
+    <router-view :class="rootClass" />
     <SettingDrawer />
   </el-config-provider>
 </template>
@@ -13,7 +9,7 @@
 <script setup>
 import { computed, reactive } from 'vue'
 import { useSystemStore } from '@/stores/system'
-import SettingDrawer from '@/layout/settingDrawer.vue'
+import SettingDrawer from '@/layout/SettingDrawer.vue'
 import { getLocale } from '@/i18n/index.ts'
 
 const systemStore = useSystemStore()

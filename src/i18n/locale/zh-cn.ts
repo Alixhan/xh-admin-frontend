@@ -141,7 +141,8 @@ export default {
   setting: {
     layout: '布局配置',
     theme: '主题',
-    showLogo: '显示logo',
+    showLogo: '显示Logo',
+    showFooter: '显示Footer',
     menuUnique: '手风琴菜单',
     showNavTabIcon: '页签图标',
     menuWidth: '菜单宽度',

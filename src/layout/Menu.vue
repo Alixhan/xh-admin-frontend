@@ -1,5 +1,5 @@
 <script lang="jsx">
-import { defineComponent, nextTick, shallowRef, watchEffect } from 'vue'
+import { defineComponent, shallowRef, watchEffect } from 'vue'
 import { useSystemStore } from '@/stores/system'
 import { useRoute, useRouter } from 'vue-router'
 
@@ -67,9 +67,7 @@ export default defineComponent({
         const menu = systemStore.menus.find((i) => i.fullPath === fullPath)
         if (menu.handleType === 'outer') {
           window.open(menu.outerUrl)
-        } else {
-          nextTick(() => router.push(menu.fullPath))
-        }
+        } else router.push(menu.fullPath)
       }
     }
 

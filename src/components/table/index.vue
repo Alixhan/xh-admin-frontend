@@ -43,7 +43,7 @@ import type {
   TableSortColumn
 } from '@i/components/table'
 import { mTableProps } from '@i/components/table'
-import ContextMenu from '@/components/ContextMenu.vue'
+import ContextMenu, {type ContextMenuItem} from '@/components/ContextMenu.vue'
 
 /**
  * 通用表格组件
@@ -224,7 +224,7 @@ export default defineComponent(
       }
     }
 
-    function clickMenu(menu: any) {
+    function clickMenu(menu: ContextMenuItem) {
       if (menu.id === 1) {
         queryFilterRef.value.addRow(menu.prop)
       }
@@ -416,7 +416,7 @@ export default defineComponent(
         valueKey: column.valueKey,
         labelKey: column.labelKey
       }
-      let renderArgsC
+      let renderArgsC: any
       if (!(column.editParam instanceof Function)) {
         renderArgsC = generateDynamicColumn({
           ...columnParam,
@@ -425,7 +425,7 @@ export default defineComponent(
       }
       column.slots.default = (scope: CI<T>) => {
         const prop = `[${scope.$index}].${column.prop}`
-        let renderArgs
+        let renderArgs: any
         let editParam = column.editParam
         if (editParam instanceof Function) {
           editParam = editParam(scope.row, column)

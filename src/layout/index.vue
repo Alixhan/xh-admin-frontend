@@ -1,6 +1,6 @@
 <script>
 import { defineComponent, createVNode } from 'vue'
-import Default from './default'
+import Default from './DefaultLayout/index.vue'
 import { useSystemStore } from '@/stores/system'
 
 /**

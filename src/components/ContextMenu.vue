@@ -39,20 +39,21 @@ defineOptions({
   name: 'ContextMenu'
 })
 
-export interface ContextMenu {
+export interface ContextMenuItem {
   label: string
   icon?: any
   disabled?: boolean
-  type?: 'default' | 'success' | 'warning' | 'info' | 'primary' | 'danger'
+  type?: 'default' | 'success' | 'warning' | 'info' | 'primary' | 'danger',
+  [prop: string]: any
 }
 
 const visible = defineModel<boolean>({ default: false })
 
 const emit = defineEmits<{
-  (e: 'click', data: ContextMenu): void
+  (e: 'click', data: ContextMenuItem): void
 }>()
 
-const menuItems = ref<ContextMenu []>([])
+const menuItems = ref<ContextMenuItem []>([])
 const top = ref<any>(0)
 const left = ref<any>(0)
 
@@ -70,14 +71,14 @@ const triggerRef = ref({
   }
 })
 
-function show(el: PointerEvent, menus: ContextMenu []) {
+function show(el: PointerEvent, menus: ContextMenuItem []) {
   menuItems.value = menus
   left.value = el.clientX
   top.value = el.clientY + 10
   visible.value = true
 }
 
-function clickMenu(menu: ContextMenu) {
+function clickMenu(menu: ContextMenuItem) {
   emit('click', menu)
   visible.value = false
 }

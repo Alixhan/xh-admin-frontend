@@ -64,15 +64,15 @@
   </el-scrollbar>
 </template>
 <script setup>
-import { computed, createVNode, defineOptions, nextTick, reactive, ref } from 'vue'
+import { computed, createVNode, defineOptions, reactive, ref } from 'vue'
 import { getImageCaptcha, userLogin } from '@/api/system/user'
 import { useSystemStore } from '@/stores/system'
 import { useRouter } from 'vue-router'
-import SwitchStyle from '@/layout/default/action/switchStyle.vue'
+import SwitchStyle from '@/layout/Action/SwitchStyle.vue'
 import { v4 as uuidv4 } from 'uuid'
 import MIcon from '@/components/Icon.vue'
-import SwitchLocale from '@/layout/default/action/switchLocale.vue'
-import Footer from '@/layout/footer.vue'
+import SwitchLocale from '@/layout/Action/SwitchLocale.vue'
+import Footer from '@/layout/Footer.vue'
 import { useI18n } from 'vue-i18n'
 
 defineOptions({
@@ -134,7 +134,7 @@ function submit() {
         const data = res.data
         systemStore.setLoginUserInfo(data)
         const firstRoute = systemStore.getFirstRoute()
-        nextTick(() => router.replace(firstRoute.fullPath))
+        router.replace(firstRoute.fullPath)
       })
     }
   })
@@ -255,5 +255,6 @@ function demoLogin() {
   z-index: 1;
   position: absolute;
   bottom: 0;
+  padding: 10px 10px;
 }
 </style>

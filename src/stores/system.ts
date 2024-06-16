@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { computed, nextTick, reactive, ref, watchEffect } from 'vue'
+import { computed, reactive, ref, watchEffect } from 'vue'
 import { switchUserRole, userLogin } from '@/api/system/user'
 import type { RouteLocationNormalized } from 'vue-router'
 import { useRoute, useRouter } from 'vue-router'
@@ -32,6 +32,7 @@ export interface Menu {
   handleType: string
   path: string
   icon: string
+  outerUrl: string
   children?: Menu[]
 }
 
@@ -96,6 +97,8 @@ export interface Layout {
   showLogo: boolean
   // 显示菜单栏顶栏(LOGO)
   showNavTabs: boolean
+  // 显示Footer
+  showFooter: boolean
   //当前窗口宽度
   windowWidth: number
   //当前窗口高度
@@ -133,6 +136,7 @@ export const useSystemStore = defineStore('system', () => {
     menuUniqueOpened: useLocalStorage('menuUniqueOpened', false),
     showLogo: useLocalStorage('showLogo', true),
     showNavTabs: true,
+    showFooter: useLocalStorage('showFooter', false),
     windowWidth: 0,
     windowHeight: 0,
     widthShrink: false,
@@ -272,15 +276,13 @@ export const useSystemStore = defineStore('system', () => {
     const tab = navTabs.value.find((i) => i.fullPath === fullPath)
     // 如果不存在，则添加tab
     if (!tab && guard.fullPath.startsWith(`/${import.meta.env.VITE_LAYOUT_ROUTE_NAME}/`))
-      nextTick().then(() =>
-        navTabs.value.push({
-          title: guard.meta.title,
-          fullPath: guard.fullPath,
-          componentName: guard.meta.componentName,
-          cache: guard.meta.cache,
-          icon: guard.meta.icon
-        })
-      )
+      navTabs.value.push({
+        title: guard.meta.title,
+        fullPath: guard.fullPath,
+        componentName: guard.meta.componentName,
+        cache: guard.meta.cache,
+        icon: guard.meta.icon
+      })
     // 设置浏览器标题
     let tit = import.meta.env.VITE_TITLE
     if (guard.meta.title) tit = guard.meta.title + '-' + tit
@@ -371,7 +373,7 @@ export const useSystemStore = defineStore('system', () => {
           name,
           path,
           fullPath,
-          component: () => {
+          component: async () => {
             const component = viewsComponent[i.component]
             if (!component) throw new Error(`${i.component} 文件不存在！`)
             return component().then((comp: any) => ({
@@ -425,7 +427,7 @@ export const useSystemStore = defineStore('system', () => {
   }
 
   // 切换角色
-  function switchRole(orgRole: OrgRole) {
+  async function switchRole(orgRole: OrgRole) {
     return switchUserRole(orgRole, {
       showSuccessMsg: true
     }).then(() => {
@@ -454,6 +456,7 @@ export const useSystemStore = defineStore('system', () => {
     afterEach,
     setToken,
     setLoginUserInfo,
+    removeNavTabByIndex,
     removeNavTabByFullPath,
     switchRole,
     logout,
