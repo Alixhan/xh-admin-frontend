@@ -1,6 +1,6 @@
 <script setup>
 import DefaultTheme from 'vitepress/theme'
-import Footer from '@/layout/footer.vue'
+import Footer from '@/layout/Footer.vue'
 </script>
 
 <template>
