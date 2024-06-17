@@ -9,7 +9,7 @@ import { useSystemStore } from '@/stores/system'
 
 const systemStore = useSystemStore()
 const sideWidth = computed(() => {
-  if (!systemStore.layout.menuCollapse) return '200px'
+  if (!systemStore.layout.menuCollapse) return systemStore.layout.menuWidth + 'px'
   if (systemStore.layout.widthShrink) return '0'
   return '66px'
 })

@@ -84,7 +84,7 @@ provide('navTab', {
 </script>
 
 <template>
-  <div class="nav-tabs-view">
+  <div class="nav-tabs-view" v-if="!systemStore.layout.heightShrink">
     <component :is="tabStyleComp[systemStore.layout.tabStyle]" />
   </div>
   <ContextMenu ref="contextMenuRef" @click="clickMenu" />
