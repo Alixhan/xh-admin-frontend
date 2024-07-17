@@ -1,21 +1,23 @@
 import { queryDictDetailList } from '@/api/system/dict'
-import type { DictDetailValueTypeEnum, DictDetailValueType, DictCache, DictDetail } from '@i/utils/dict'
+import type { DictCache, DictDetail, DictDetailValueType, DictDetailValueTypeEnum } from '@i/utils/dict'
+import type { Ref } from 'vue'
+import { ref } from 'vue'
 
 // 数据字典缓存map
-const dictCacheMap: Map<number, DictCache> = new Map()
+export const dictCacheMap: Map<number, DictCache> = new Map()
 
 /**
  * 通过数据字典类型ID获取数据字典明细
  * valueType 可以定制 value 的类型，默认为 string
  * sxh 2023-6-1
  */
-export async function getDictDetails<T extends DictDetailValueType<K>, K extends DictDetailValueTypeEnum>(
+export default function useDictDetails<T extends DictDetailValueType<K>, K extends DictDetailValueTypeEnum>(
   dictTypeId: number,
   valueType?: K
-): Promise<DictDetail<T>[]> {
+) {
   //数据转化方法
-  const valueConvert = (res: DictDetail<string>[]) => {
-    const details: DictDetail<T>[] = res.map((i) => {
+  const valueConvert = (data: DictDetail<string>[]) => {
+    const details: DictDetail<T>[] = data.map((i) => {
       let value: any = i.value
       //转为布尔型
       if (valueType === 'boolean') {
@@ -33,28 +35,15 @@ export async function getDictDetails<T extends DictDetailValueType<K>, K extends
     return details
   }
 
-  let dict: DictCache | void = dictCacheMap.get(dictTypeId)
+  let fetch = dictCacheMap.get(dictTypeId)
   //如果已缓存直接取缓存数据即可
-  if (dict) {
-    if (dict.details) return Promise.resolve(dict.details).then(valueConvert)
-    if (dict.fetch) return dict.fetch.then(valueConvert)
+  if (!fetch) {
+    fetch = queryDictDetailList({ isPage: false, param: { dictTypeId } })
+      .then((res) => res.data.list)
+      .catch(() => delete dictCacheMap[dictTypeId])
+    dictCacheMap[dictTypeId] = fetch
   }
-  dict = {
-    sysDictTypeId: dictTypeId,
-    fetch: queryDictDetailList({ isPage: false, param: { dictTypeId } })
-      .then((res) => {
-        const binary = res.data.list
-        dict!.details = binary
-        return binary
-      })
-      .catch(() => {
-        delete dict!.fetch
-      })
-  }
-  dictCacheMap.set(dictTypeId, dict)
-  return dict.fetch!.then(valueConvert)
+  const dictDetails: Ref<DictDetail<T>[]> = ref([])
+  fetch.then((data) => (dictDetails.value = valueConvert(data)))
+  return dictDetails
 }
-
-export default getDictDetails
-
-export { dictCacheMap }

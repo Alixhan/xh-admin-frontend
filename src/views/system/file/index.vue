@@ -41,13 +41,14 @@
   </div>
 </template>
 <script setup lang="jsx">
-import { computed, reactive, ref } from 'vue'
+import { computed, createVNode, reactive, ref } from 'vue'
 import { delFileByIds, queryFileList } from '@/api/file/fileOperation'
 import { statusList } from '@/views/system/file/constant'
 import FileForm from './fileForm.vue'
 import { filesize } from 'filesize'
 import { getDownloadFileUrl } from '@/utils'
 import { useI18n } from 'vue-i18n'
+import MSvgIcon from '@/components/SvgIcon.vue'
 
 const { t } = useI18n()
 
@@ -140,7 +141,7 @@ function del(rows) {
 
 // 文件下载
 function download(file) {
-  window.open(getDownloadFileUrl({ object: file.object, fileName: file.name }))
+  globalThis.open(getDownloadFileUrl({ object: file.object, fileName: file.name }))
 }
 
 // 图片文件预览
@@ -149,7 +150,11 @@ function previewImage(scope) {
   if (file.contentType.startsWith('image')) {
     const src = getDownloadFileUrl({ object: file.object, isScale: true })
     if (file.suffix === 'svg')
-      return <m-svg-icon inherited={true} style="width: 25px; height: 25px; display: block" src={src} />
+      return createVNode(MSvgIcon, {
+        inherited: true,
+        style: 'width: 25px; height: 25px; display: block',
+        src
+      })
     return (
       <el-image
         {...{

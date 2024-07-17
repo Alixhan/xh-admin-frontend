@@ -14,10 +14,10 @@
 </template>
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import MExcelImport from '@/components/ExcelImport.vue'
 import { importUsers } from '@/api/system/user'
 import { ElNotification } from 'element-plus'
 import { useI18n } from 'vue-i18n'
+import type { ImportExcelColumn } from '@i/utils/excel'
 
 declare type CloseType = 'refresh' | undefined
 
@@ -29,7 +29,7 @@ const { t } = useI18n()
 
 const visible = ref(false)
 
-const excelColumns = computed(() => [
+const excelColumns = computed<ImportExcelColumn[]>(() => [
   { prop: 'code', label: t('system.user.code'), rules: [{ required: true }] },
   { prop: 'name', label: t('system.user.name'), rules: [{ required: true }] },
   {

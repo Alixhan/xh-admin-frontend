@@ -20,6 +20,7 @@ import { useSystemStore } from '@/stores/system'
 import { computed, ref } from 'vue'
 import { getPersonalCenterDetail, personalCenterSave } from '@/api/system/user'
 import { useI18n } from 'vue-i18n'
+import type { CommonFormColumn } from '@i/components/form'
 
 defineOptions({
   name: 'PersonalCenter'
@@ -34,7 +35,7 @@ const formData = ref({
   password2: ''
 })
 
-const columns = computed(() => [
+const columns = computed<CommonFormColumn<typeof formData.value>[]>(() => [
   { prop: 'code', label: t('system.user.code'), disabled: true },
   { prop: 'name', label: t('system.user.name') },
   { prop: 'avatar', label: t('system.user.avatar'), type: 'upload-img', single: 'object' },

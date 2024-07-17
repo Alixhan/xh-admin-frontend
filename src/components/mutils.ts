@@ -30,7 +30,7 @@ import MUpload from '@/components/form/Upload.vue'
 import i18n, { getCurrentLocales } from '@/i18n'
 import type { CommonItemData, CommonModelParam, ItemListColumn } from '@i/components'
 import type { CommonFormColumn } from '@i/components/form'
-import type { CommonTableColumn } from '@i/components/table'
+import type { CommonTableColumn, TableColumn } from '@i/components/table'
 import type { ValidRule } from '@i/utils/validate'
 
 const { t } = i18n.global
@@ -229,11 +229,12 @@ export function getItemListRef(column: ItemListColumn): Ref<CommonItemData[]> {
     })
   }
   // 下拉框option数据
-  const itemArr: Ref<CommonItemData[]> = ref([])
   let itemList = toRaw(column.itemList ?? [])
+  if (isRef(itemList)) return itemList
   if (itemList instanceof Function) {
     itemList = itemList()
   }
+  const itemArr: Ref<CommonItemData[]> = ref([])
   if (itemList instanceof Promise) {
     itemList.then((res) => (itemArr.value = generateItemList(res)))
   } else {
@@ -276,13 +277,13 @@ export function generateFormRules<T extends object>(
 /**
  * 设置一下rules
  */
-export function getRules<T extends object>(column: CommonFormColumn<T>) {
+export function getRules<T extends object>(column: Pick<CommonFormColumn<T>, 'rules'>) {
   if (!column.rules) return
   let rules = column.rules
   if (!(rules instanceof Array)) {
     rules = [rules]
   }
-  return rules as ValidRule<T, keyof T>[]
+  return rules
 }
 
 // 生成默认的formatter函数
@@ -308,18 +309,19 @@ export function generateLabelWidth<T extends object>(
   const charWidth = getCurrentLocales().getCharWidth()
   return (
     Math.max(
-      ...columns.filter(i => !i.hidden)
-          .map((column) => {
-        let width = column.label?.length ?? 0
-        width *= charWidth
-        //有备注疑问的加上额外宽度
-        if (column.comment) width += 18
-        //有必填*的加上额外宽度
-        if (column.required) width += 12
-        //有排序的加上额外宽度
-        if (column.sortable) width += 24
-        return width
-      })
+      ...columns
+        .filter((i) => !i.hidden)
+        .map((column) => {
+          let width = column.label?.length ?? 0
+          width *= charWidth
+          //有备注疑问的加上额外宽度
+          if (column.comment) width += 18
+          //有必填*的加上额外宽度
+          if (column.required) width += 12
+          //有排序的加上额外宽度
+          if (column.sortable) width += 24
+          return width
+        })
     ) + 28
   )
 }

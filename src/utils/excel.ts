@@ -3,7 +3,7 @@ import type { Border } from 'exceljs'
 import ExcelJS from 'exceljs'
 import { generateFormatter, getRules } from '@/components/mutils'
 import { toRaw } from 'vue'
-import type { CommonExcelColumn, ExcelJsWorksheetColumn, ExcelTreeNode } from '@i/utils/excel'
+import type { CommonExcelColumn, CommonExcelData, ExcelJsWorksheetColumn, ExcelTreeNode } from '@i/utils/excel'
 import i18n from '@/i18n'
 
 const { t } = i18n.global
@@ -11,7 +11,7 @@ const { t } = i18n.global
 /**
  * excel树,提供遍历方法和导出文件方法
  */
-export class ExcelTree<T extends object> implements ExcelTreeNode<T> {
+export class ExcelTree<T extends CommonExcelData<T>> implements ExcelTreeNode<T> {
   $row: number = 0
   $col: number = 1
   $plies: number = 0
@@ -40,7 +40,7 @@ export class ExcelTree<T extends object> implements ExcelTreeNode<T> {
     const leafNodes: ExcelTreeNode<T>[] = [] // 叶子节点集合
     while (stackArray.length) {
       const node = stackArray[stackArray.length - 1]
-      if (node.rules) node.rules = getRules(node)
+      if (node.rules) node.rules = getRules({ rules: node.rules })
       if (this.invalidColumn(node)) {
         stackArray.pop()
         continue
@@ -113,7 +113,7 @@ export class ExcelTree<T extends object> implements ExcelTreeNode<T> {
   /**
    * 导出为excel文件
    */
-  async exportExcel(fileName: string, data: any[]) {
+  async exportExcel(fileName: string, data: T[]) {
     const workbook = new ExcelJS.Workbook()
     const worksheet = workbook.addWorksheet('sheet')
     this.eachNode((node) => {
@@ -145,6 +145,8 @@ export class ExcelTree<T extends object> implements ExcelTreeNode<T> {
       // 标题单元格字体
       cell.font = { bold: true, size: 9 }
       const rules = node.rules instanceof Array ? node.rules : [node.rules || {}]
+      let note = ''
+      if (node.note) note = node.note + ';'
       rules.forEach((i) => {
         // 必填字段标题红色
         if (i.required) {
@@ -153,18 +155,25 @@ export class ExcelTree<T extends object> implements ExcelTreeNode<T> {
         // 下拉框标题单元格添加提示批注
         const itemList = toRaw(i.itemList)
         if (itemList && Array.isArray(itemList)) {
-          cell.note = t('m.form.valRestriction', {
-            label: node.label ?? '',
-            enums: Object.values(itemList.map((j) => j.label))
-          })
+          note =
+            (note ?? '') +
+            t('m.form.valRestriction', {
+              label: node.label ?? '',
+              enums: Object.values(itemList.map((j) => j.label))
+            }) +
+            ';'
         }
         if (i.dateFormat) {
-          cell.note = t('m.form.formatTip', {
-            label: node.label ?? '',
-            format: i.dateFormat
-          })
+          note =
+            (note ?? '') +
+            t('m.form.formatTip', {
+              label: node.label ?? '',
+              format: i.dateFormat
+            }) +
+            ';'
         }
       })
+      if (note) cell.note = note
       // 单元格标题居中
       cell.alignment = { vertical: 'middle', horizontal: 'center' }
     })

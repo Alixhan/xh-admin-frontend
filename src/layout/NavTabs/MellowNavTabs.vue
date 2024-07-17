@@ -25,7 +25,7 @@
 </template>
 <script setup>
 import { useSystemStore } from '@/stores/system'
-import { inject, nextTick, watch } from 'vue'
+import { inject } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Icon from '@/components/Icon.vue'
 
@@ -35,22 +35,6 @@ const route = useRoute()
 const router = useRouter()
 
 const navTab = inject('navTab')
-
-/**
- * 当前菜单变化或者增加菜单项需将当前菜单页签滚动至可视区域
- */
-watch(
-  () => [route.fullPath, navTabs.length],
-  () => {
-    nextTick(() => {
-      const dom = document.getElementsByClassName('active-tab').item(0)
-      dom?.scrollIntoView({
-        behavior: 'smooth',
-        inline: 'center'
-      })
-    })
-  }
-)
 </script>
 <style scoped lang="scss">
 $transition-time: all 0.2s linear;

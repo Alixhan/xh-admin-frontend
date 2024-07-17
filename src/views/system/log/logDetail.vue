@@ -1,7 +1,7 @@
 <template>
   <div class="form-view">
     <el-scrollbar class="m-form-scroll">
-      <el-descriptions class="margin-top" :column="2" border>
+      <el-descriptions class="margin-top" :column="systemStore.layout.widthShrink ? 1 : 2" border>
         <el-descriptions-item label="请求路径">{{ formData.url }}</el-descriptions-item>
         <el-descriptions-item label="请求方法">{{ formData.method }}</el-descriptions-item>
         <el-descriptions-item label="模块">{{ formData.tag }}</el-descriptions-item>
@@ -14,9 +14,7 @@
         <el-descriptions-item label="响应状态">{{ formData.status }}</el-descriptions-item>
         <el-descriptions-item label="token">{{ formData.token }}</el-descriptions-item>
         <el-descriptions-item label="使用语言">{{ formData.locale }} {{ formData.localeLabel }}</el-descriptions-item>
-<!--        <el-descriptions-item label="使用机构ID">{{ formData.sysOrgId }}</el-descriptions-item>-->
         <el-descriptions-item label="使用机构">{{ formData.orgName }}</el-descriptions-item>
-<!--        <el-descriptions-item label="使用角色ID">{{ formData.sysRoleId }}</el-descriptions-item>-->
         <el-descriptions-item label="使用角色">{{ formData.roleName }}</el-descriptions-item>
         <el-descriptions-item label="用户名称">{{ formData.name }}</el-descriptions-item>
         <el-descriptions-item label="请求体类型">{{ formData.contentType }}</el-descriptions-item>
@@ -36,6 +34,7 @@
 <script setup lang="jsx">
 import { ref } from 'vue'
 import { getLogDetailById } from '@/api/system/log'
+import { useSystemStore } from '@/stores/system'
 
 const props = defineProps({
   handleType: {
@@ -46,6 +45,8 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['close'])
+
+const systemStore = useSystemStore()
 
 const formLoading = ref(false)
 const formData = ref({})
@@ -78,7 +79,7 @@ function close(type) {
       table-layout: fixed;
 
       .el-descriptions__label {
-        width: 8em;
+        width: 7em;
       }
     }
   }

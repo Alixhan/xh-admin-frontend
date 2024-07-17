@@ -8,27 +8,27 @@ import type { ErrorResponse, MyAxiosInstance, RequestOption } from '@i/utils/req
 import { isRestResponse } from '@i/utils/request'
 import type { Mutable } from '@vueuse/core'
 
-const { t } = i18n.global
-
 axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8'
 
-const defaultOption: RequestOption = {
-  showLoading: false,
-  showBeforeConfirm: false,
-  confirmButtonText: t('common.confirm'),
-  confirmMsg: t('common.confirmMsg'),
-  loadingText: t('common.loadingText'),
-  showSuccessMsg: false,
-  successDuration: 3000,
-  successMsg: t('common.successMsg'),
-  errorDuration: 3000,
-  errorMsg: t('common.optFailed')
+function getDefaultOption(): RequestOption {
+  const { t } = i18n.global
+  return {
+    showLoading: false,
+    showBeforeConfirm: false,
+    confirmButtonText: t('common.confirm'),
+    confirmMsg: t('common.confirmMsg'),
+    loadingText: t('common.loadingText'),
+    showSuccessMsg: false,
+    successDuration: 3000,
+    successMsg: t('common.successMsg'),
+    errorDuration: 3000,
+    errorMsg: t('common.optFailed')
+  }
 }
 
 // 对请求进行增强处理
 export default function createAxios<R = any, Q = any>(opt?: RequestOption<R>): MyAxiosInstance<R, Q> {
-  const { t } = i18n.global
-  const option: RequestOption<R> = { ...defaultOption, ...opt }
+  const option: RequestOption<R> = { ...getDefaultOption(), ...opt }
   let loadingInstance: { close: Function }
 
   // 重置loading
@@ -82,7 +82,7 @@ export default function createAxios<R = any, Q = any>(opt?: RequestOption<R>): M
     if (option.showBeforeConfirm) {
       config.data
       // 确认的提示
-      await ElMessageBox.confirm(option.confirmMsg, t('common.tip'), {
+      await ElMessageBox.confirm(option.confirmMsg, i18n.global.t('common.tip'), {
         type: 'warning'
       })
     }
@@ -92,7 +92,7 @@ export default function createAxios<R = any, Q = any>(opt?: RequestOption<R>): M
         body: true,
         fullscreen: true,
         lock: true,
-        text: defaultOption.loadingText
+        text: option.loadingText
       })
     }
     const systemStore = useSystemStore()
@@ -111,7 +111,7 @@ export default function createAxios<R = any, Q = any>(opt?: RequestOption<R>): M
         ElNotification({
           type: 'success',
           message: handleMsg(option.successMsg!, data),
-          duration: defaultOption.successDuration
+          duration: option.successDuration
         })
       }
       return data

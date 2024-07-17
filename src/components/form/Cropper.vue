@@ -31,17 +31,14 @@
  * 图片裁剪。
  * sxh 2023-5-16
  */
-import * as _vueCropper from 'vue-cropper'
+import { VueCropper } from 'vue-cropper'
 import 'vue-cropper/dist/index.css'
 import { computed, ref, useAttrs, watchEffect } from 'vue'
 import { useElementSize } from '@vueuse/core'
-import { ElUpload, uploadProps } from 'element-plus'
 
-const { VueCropper } = _vueCropper
 
 defineOptions({
-  name: 'MCropper',
-  extends: ElUpload
+  name: 'MCropper'
 })
 
 const emit = defineEmits<{
@@ -49,10 +46,11 @@ const emit = defineEmits<{
 }>()
 
 const props = defineProps({
-  ...uploadProps,
+  // 裁剪图片的地址
   img: {
     type: String
   },
+  // 是否禁用
   disabled: {
     type: Boolean,
     default: false
@@ -89,7 +87,7 @@ watchEffect(() => {
 })
 
 // 实时裁剪预览
-function onRealTime(data) {
+function onRealTime(data: any) {
   previews.value = data
 }
 
@@ -105,6 +103,9 @@ function sure() {
 }
 </script>
 <style scoped lang="scss">
+img {
+  max-width: none;
+}
 .cropperView {
   width: 100%;
   display: flex;

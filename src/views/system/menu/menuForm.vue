@@ -153,7 +153,7 @@ watchEffect(() => {
       hidden: formData.value.handleType === 'outer',
       rules: { required: true, trigger: 'blur' },
       comment:
-        '作为后端鉴权使用，建议使用实际意义的英文单词，web平台同时对应vue-router的name属性，鉴权时需要拼接上级name。'
+        '作为后端鉴权使用，建议使用实际意义的英文单词，web平台同时对应vue-router的name属性，应保证name唯一。'
     },
     {
       prop: 'path',

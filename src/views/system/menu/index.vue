@@ -167,7 +167,7 @@ function generateMenuIcon(scope) {
     <m-icon
       {...{
         size: 18,
-        modelValue: menu.icon
+        value: menu.icon
       }}
     />
   )

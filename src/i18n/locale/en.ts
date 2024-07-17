@@ -61,6 +61,8 @@ export default {
       imageCropper: 'Image Cropper',
       beEmpty: '{label} can not be empty',
       wrongFormat: '{label} format error',
+      min: '{label} min value is {min}',
+      max: '{label} max value is {max}',
       maxlength: '{label} cannot exceed {maxlength} characters',
       minlength: '{label} cannot be less than {minlength} characters',
       valRestriction: '{label} can only be enums {enums}',
@@ -156,9 +158,9 @@ export default {
     }
   },
   login: {
-    account: 'Please input account',
-    password: 'Please input password',
-    captcha: 'Please input captcha',
+    account: 'Account',
+    password: 'Password',
+    captcha: 'Captcha',
     login: 'Login'
   },
   home: {

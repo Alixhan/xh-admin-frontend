@@ -1,6 +1,6 @@
 import type { TableColumnCtx } from 'element-plus'
 import type { FetchPageDataFun } from '@i/utils/request'
-import type { CommonFormColumn, FormType } from '@i/components/form'
+import type { CommonFormColumn, FormHandleType } from '@i/components/form'
 import type { CommonItemData, CommonItemList, ItemListColumn, SlotRender } from '@i/components/index'
 import type { ExtractPropTypes, PropType, VNode } from 'vue'
 import elTablePropsDefault from 'element-plus/es/components/table/src/table/defaults.mjs'
@@ -13,7 +13,7 @@ import type { ValidRule } from '@i/utils/validate'
 export const mTableProps = {
   ...elTablePropsDefault,
   formType: {
-    type: String as PropType<FormType>,
+    type: String as PropType<FormHandleType>,
     default: 'add'
   },
   // 如果高度随内容自动增高：则需要设置为 "auto", 如果表格高度制定了则需要设定为 "stretch"
@@ -22,7 +22,8 @@ export const mTableProps = {
   },
   // 是否是筛选过滤的表格，是：表格包含搜索框，同时布局有间距调整
   isFilterTable: {
-    type: Boolean
+    type: Boolean,
+    default: false
   },
   // 是否导出excel
   isExportExcel: {
@@ -216,6 +217,7 @@ export interface SelectionTableColumn<T extends object> extends TableColumn<T> {
  */
 export interface IndexTableColumn<T extends object> extends TableColumn<T> {
   type: 'index'
+  index?: (index: number) => number
 }
 
 /**

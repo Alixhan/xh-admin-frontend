@@ -12,7 +12,7 @@
         }"
         class="tab-item"
       >
-        <m-icon v-if="systemStore.layout.showNavTabIcon && tab.icon" class="tab-icon" :model-value="tab.icon" />
+        <m-icon v-if="systemStore.layout.showNavTabIcon && tab.icon" class="tab-icon" :value="tab.icon" />
         <div class="tab-title">{{ tab.title }}</div>
         <el-icon class="close-icon" size="12">
           <Close @click.stop="navTab.removeTab(tab.fullPath)" />
@@ -23,7 +23,7 @@
 </template>
 <script setup>
 import { useSystemStore } from '@/stores/system'
-import { inject, nextTick, watch } from 'vue'
+import { inject } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()
@@ -32,22 +32,6 @@ const systemStore = useSystemStore()
 const navTabs = systemStore.navTabs
 
 const navTab = inject('navTab')
-
-/**
- * 当前菜单变化或者增加菜单项需将当前菜单页签滚动至可视区域
- */
-watch(
-  () => [route.fullPath, navTabs.length],
-  () => {
-    nextTick(() => {
-      const dom = document.getElementsByClassName('active-tab').item(0)
-      dom?.scrollIntoView({
-        behavior: 'smooth',
-        inline: 'center'
-      })
-    })
-  }
-)
 </script>
 <style scoped lang="scss">
 $transition-time: all 0.2s linear;

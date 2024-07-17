@@ -3,7 +3,7 @@
     <div v-for="(statistic, i) in statisticArr" :key="i" :style="`background: ${statistic.color}`">
       <div>
         <el-icon size="25">
-          <m-icon :model-value="statistic.icon" />
+          <m-icon :value="statistic.icon" />
         </el-icon>
         <div>{{ $t(statistic.label) }}</div>
       </div>

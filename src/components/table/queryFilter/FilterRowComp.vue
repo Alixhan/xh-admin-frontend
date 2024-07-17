@@ -168,7 +168,9 @@ function switchLogic() {
     width: 10em;
   }
 
-  --el-date-editor-width: 11em !important;
+  & {
+    --el-date-editor-width: 11em;
+  }
 }
 
 .child-rows {

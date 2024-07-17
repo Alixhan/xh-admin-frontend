@@ -4,7 +4,13 @@
       <slot name="tip" />
     </div>
     <input ref="fileRef" type="file" accept=".xlsx, .xls" style="display: none" @change="handleFile" />
-    <m-table class="m-table" :columns="tableColumns" v-model:data="importData" :is-export-excel="false">
+    <m-table
+      class="m-table"
+      :columns="tableColumns"
+      v-model:data="importData"
+      :layout="layout"
+      :is-export-excel="false"
+    >
       <template #right-action>
         <el-button :loading="loading" text :icon="tipObj.icon" :style="{ color: tipObj.color }" @click="tipClick">
           <span>{{ tipObj.msg }}</span>
@@ -37,7 +43,7 @@ import { ElMessage } from 'element-plus'
 import type { RuleObject, ValidResult } from '@i/utils/validate'
 import validate from '@/utils/validate'
 import type { TableColumn } from '@i/components/table'
-import type { ExcelError, ExportExcelProps } from '@i/components/excelImport'
+import type { ExcelError, ExcelImportProps } from '@i/components/excelImport'
 import { useI18n } from 'vue-i18n'
 
 defineOptions({
@@ -46,7 +52,7 @@ defineOptions({
 
 const { t } = useI18n()
 
-const props = defineProps<ExportExcelProps<T>>()
+const props = defineProps<ExcelImportProps<T>>()
 
 // 导入的excel数据
 const importData: Ref<T[]> = ref([])
@@ -126,23 +132,36 @@ const fileRef = ref()
 // 错误信息表格定义
 const errorTableColumns: Ref<TableColumn<ExcelError>[]> = computed(() => [
   { type: 'index' },
-  { prop: 'num', label: t('m.excelImport.num'), width: 100 },
+  {
+    prop: 'num',
+    label: t('m.excelImport.num'),
+    width: 120,
+    formatter: (row, col, val) => val ?? (row.rowIndex === null || row.rowIndex === undefined ? '' : row.rowIndex + 1)
+  },
   {
     prop: 'excelNum',
     label: t('m.excelImport.excelNum'),
-    width: 100,
-    formatter: (row, col, val) => val ?? (row.num ? row.num + (excelTree.$maxPlies ?? 0) : '')
+    width: 120,
+    formatter: (row, col, val) =>
+      val ?? (row.rowIndex === null || row.rowIndex === undefined ? '' : row.rowIndex + 1 + (excelTree.$maxPlies ?? 0))
   },
   { prop: 'error', label: t('common.errorMsg') }
 ])
 
 /**
  * 模板下载
- * @param data 下载模板之前可以预插入一些数据，可以插入一些示例数据
+ * @param 下载模板之前可以预插入一些示例数据
  */
-async function downloadTemplate(data = []) {
+async function downloadTemplate() {
   try {
     downloadLoading.value = true
+    let data: T[] = []
+    if (props.initData) {
+      let arr: any = props.initData
+      if (arr instanceof Function) arr = arr()
+      if (arr instanceof Promise) arr = await arr
+      data = arr
+    }
     await excelTree.exportExcel(props.templateFileName ?? t('m.excelImport.templateFileName'), data)
   } finally {
     downloadLoading.value = false
@@ -150,8 +169,9 @@ async function downloadTemplate(data = []) {
 }
 
 // 处理选择文件事件
-function handleFile(e) {
-  const files = e.target.files
+function handleFile(e: Event) {
+  const input: HTMLInputElement = e.target as HTMLInputElement
+  const files = input.files!
   loading.value = true
   tip.value.step = '1'
   tip.value.status = ''
@@ -187,7 +207,7 @@ function handleFile(e) {
                   formatPattern = ru.dateFormat ?? formatPattern
                 })
               }
-              cellValue = dayjs(new Date(cellValue.getTime() - 8 * 60 * 60 * 1000)).format(formatPattern)
+              cellValue = dayjs(cellValue).locale('zh-cn').format(formatPattern)
             } else {
               cellValue = cell.text.trim()
             }
@@ -203,10 +223,10 @@ function handleFile(e) {
       ElMessage.error(e.message ?? t('common.importsFailed'))
     } finally {
       loading.value = false
-      e.target.value = ''
+      input.value = ''
     }
   }
-  reader.readAsBinaryString(file)
+  reader.readAsArrayBuffer(file)
 }
 
 /**
@@ -231,11 +251,12 @@ async function validData() {
   }
   return Promise.all(rowPromiseArr).then((result: Array<ValidResult<T>>) => {
     errorData.value = []
-    result.forEach((i, num) => {
+    result.forEach((i, rowIndex) => {
       if (i.error) {
         errorData.value.push({
-          num: num + 1,
-          excelNum: num + (excelTree.$maxPlies ?? 0),
+          rowIndex,
+          num: rowIndex + 1,
+          excelNum: rowIndex + (excelTree.$maxPlies ?? 0),
           error: i.errFields.map((i) => i.errMsg).join('；')
         })
       }

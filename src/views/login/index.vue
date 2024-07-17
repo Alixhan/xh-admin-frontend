@@ -20,7 +20,7 @@
               type="text"
               clearable
               v-model="formData.username"
-              :placeholder="$t('login.account')"
+              :placeholder="t('m.form.toInput', {label: $t('login.account') })"
               prefix-icon="User"
             />
           </el-form-item>
@@ -28,22 +28,26 @@
             <el-input
               v-model="formData.password"
               type="password"
-              :placeholder="$t('login.password')"
+              :placeholder="t('m.form.toInput', {label: $t('login.password') })"
               show-password
               clearable
               prefix-icon="Unlock"
             />
           </el-form-item>
           <el-form-item prop="captchaCode">
-            <div style="display: inline-flex; width: 100%">
+            <div style="display: inline-flex; width: 100%; align-items: center;">
               <el-input
                 v-model="formData.captchaCode"
-                :placeholder="$t('login.captcha')"
+                :placeholder="t('m.form.toInput', {label: $t('login.captcha') })"
                 clearable
                 :prefix-icon="captchaIcon"
               >
               </el-input>
-              <img @click="refresh" class="captcha-img" :src="verificationUrl" alt="" />
+              <div class="captcha-img" @click="refresh">
+                <el-button v-if="captchaState === 'loading'" text :loading="true">加载中</el-button>
+                <img v-if="captchaState === 'success'" :src="verificationUrl" alt="验证码" />
+                <el-button v-if="captchaState === 'failed'" text>加载失败</el-button>
+              </div>
             </div>
           </el-form-item>
           <!--          <div class="forget-password-view">-->
@@ -64,7 +68,7 @@
   </el-scrollbar>
 </template>
 <script setup>
-import { computed, createVNode, defineOptions, reactive, ref } from 'vue'
+import { computed, createVNode, reactive, ref } from 'vue'
 import { getImageCaptcha, userLogin } from '@/api/system/user'
 import { useSystemStore } from '@/stores/system'
 import { useRouter } from 'vue-router'
@@ -95,15 +99,16 @@ const formData = reactive({
   captchaCode: ''
 })
 
-const captchaIcon = createVNode(MIcon, { modelValue: 'local|/src/assets/icon/captcha.svg' })
+const captchaIcon = createVNode(MIcon, { value: 'local|/src/assets/icon/captcha.svg' })
 
+const captchaState = ref('')
 //图形验证码
 const verificationUrl = ref()
 
 const rules = computed(() => ({
-  username: [{ required: true, message: t('login.captcha') }],
-  password: [{ required: true, message: t('login.captcha') }],
-  captchaCode: [{ required: true, message: t('login.captcha') }]
+  username: [{ required: true, message: t('m.form.toInput', {label: t('login.account') }) }],
+  password: [{ required: true, message: t('m.form.toInput', {label: t('login.password') }) }],
+  captchaCode: [{ required: true, message: t('m.form.toInput', {label: t('login.captcha') }) }]
 }))
 
 const formRef = ref()
@@ -111,9 +116,13 @@ const formRef = ref()
 refresh()
 
 function refresh() {
-  getImageCaptcha(captchaKey).then((res) => {
-    verificationUrl.value = res.data.imageBase64
-  })
+  captchaState.value = 'loading'
+  getImageCaptcha(captchaKey)
+    .then((res) => {
+      verificationUrl.value = res.data.imageBase64
+      captchaState.value = 'success'
+    })
+    .catch(() => (captchaState.value = 'failed'))
 }
 
 function submit() {
@@ -135,7 +144,7 @@ function submit() {
         systemStore.setLoginUserInfo(data)
         const firstRoute = systemStore.getFirstRoute()
         router.replace(firstRoute.fullPath)
-      })
+      }).catch(refresh)
     }
   })
 }
@@ -212,9 +221,18 @@ function demoLogin() {
       .captcha-img {
         margin: 2px 0 2px 5px;
         width: 100px;
-        height: auto;
+        height: var(--el-component-size);
+        flex-shrink: 0;
         cursor: pointer;
         border-radius: 5px;
+        display: flex;
+        align-items: center;
+        background-color: var(--el-input-bg-color, var(--el-fill-color-blank));
+
+        > * {
+          width: 100%;
+          height: 100%;
+        }
       }
 
       .submit-button {

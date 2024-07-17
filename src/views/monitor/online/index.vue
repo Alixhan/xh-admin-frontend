@@ -80,8 +80,6 @@ const systemStore = useSystemStore()
 
 function toLog(row) {
   const logMenu = systemStore.menus.find((i) => 'system:log' === i.name)
-
-  console.info(logMenu)
   if (!logMenu) {
     return ElNotification({
       type: 'error',

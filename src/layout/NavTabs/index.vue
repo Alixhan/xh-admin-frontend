@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { provide, ref } from 'vue'
+import { nextTick, provide, ref, watch } from 'vue'
 import { useSystemStore } from '@/stores/system'
 import MellowNavTabs from './MellowNavTabs.vue'
 import SquareNavTabs from './SquareNavTabs.vue'
@@ -17,6 +17,7 @@ const tabStyleComp = {
 const currentIndex = ref<number>(0)
 const navTabs = systemStore.navTabs
 
+const navTabsRef = ref()
 const contextMenuRef = ref()
 
 /**
@@ -77,6 +78,22 @@ function clickMenu(menu: ContextMenuItem) {
   }
 }
 
+/**
+ * 当前菜单变化或者增加菜单项需将当前菜单页签滚动至可视区域
+ */
+watch(
+  () => [route.fullPath, navTabs.length],
+  () => {
+    nextTick(() => {
+      const dom = navTabsRef.value.getElementsByClassName('active-tab').item(0)
+      dom?.scrollIntoView({
+        behavior: 'smooth',
+        inline: 'center'
+      })
+    })
+  }
+)
+
 provide('navTab', {
   removeTab,
   onContextmenu
@@ -84,7 +101,7 @@ provide('navTab', {
 </script>
 
 <template>
-  <div class="nav-tabs-view" v-if="!systemStore.layout.heightShrink">
+  <div ref="navTabsRef" class="nav-tabs-view" v-if="!systemStore.layout.heightShrink">
     <component :is="tabStyleComp[systemStore.layout.tabStyle]" />
   </div>
   <ContextMenu ref="contextMenuRef" @click="clickMenu" />

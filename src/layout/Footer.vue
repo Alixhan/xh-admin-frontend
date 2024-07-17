@@ -26,7 +26,7 @@ const icpCode = '皖ICP备2023021987号-1'
 const psbCode = '34180202000574'
 
 function windowOpen(url) {
-  window.open(url)
+  globalThis.open(url)
 }
 </script>
 

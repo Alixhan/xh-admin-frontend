@@ -8,11 +8,15 @@ import type { Ref } from 'vue'
 import type { FieldRule, FieldValidResult, RuleObject, ValidResult, ValidRule } from '@i/utils/validate'
 import type { CommonItemData } from '@i/components'
 import i18n from '@/i18n'
+import dayjs from 'dayjs'
 
 const { t } = i18n.global
 
-// 验证类型定义
-const datatype: { [any: string]: RegExp | ((val: any) => boolean) } = {
+/**
+ * 验证类型定义，定义好可以直接用type引用验证
+ * 可以用正则对象，或者一个函数
+ */
+export const datatype = {
   phone: /^1\d{10}$/,
   email: /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/,
   username: /^[\u4E00-\u9FA5A-Za-z]+$/,
@@ -21,7 +25,8 @@ const datatype: { [any: string]: RegExp | ((val: any) => boolean) } = {
   number: /^(-?\d+)(\.\d+)?$/,
   idCard: /^[1-9]\d{5}(18|19|20|(3\d))\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/,
   carNum:
-    /^(([京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领][A-Z](([0-9]{5}[DF])|([DF]([A-HJ-NP-Z0-9])[0-9]{4})))|([京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领][A-Z][A-HJ-NP-Z0-9]{4}[A-HJ-NP-Z0-9挂学警港澳使领]))$/
+    /^(([京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领][A-Z](([0-9]{5}[DF])|([DF]([A-HJ-NP-Z0-9])[0-9]{4})))|([京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领][A-Z][A-HJ-NP-Z0-9]{4}[A-HJ-NP-Z0-9挂学警港澳使领]))$/,
+  test: (val: string) => !val
 }
 
 // 整个表单验证
@@ -94,13 +99,44 @@ export async function ruleValid<T extends object>(
       // 验证数据格式
       return reject(rule.message ?? t('m.form.wrongFormat', { label: fieldRule.label ?? '' }))
     }
+    // 验证时间格式是否正确
+    if (rule.dateFormat) {
+      const day = dayjs(formValue)
+      if (!day.isValid() || day.format(rule.dateFormat) !== formValue) {
+        return reject(rule.message ?? t('m.form.wrongFormat', { label: fieldRule.label ?? '' }))
+      }
+    }
     // 验证字符最大长度
     if (rule.maxlength && formValue.length > rule.maxlength) {
-      return reject(rule.message ?? t('m.form.maxlength', { label: fieldRule.label ?? '', maxlength: rule.maxlength }))
+      return reject(
+        rule.message ??
+          t('m.form.maxlength', {
+            label: fieldRule.label ?? '',
+            maxlength: rule.maxlength
+          })
+      )
     }
     // 验证字符最小长度
     if (rule.minlength && formValue.length < rule.minlength) {
-      return reject(rule.message ?? t('m.form.minlength', { label: fieldRule.label ?? '', maxlength: rule.minlength }))
+      return reject(
+        rule.message ??
+          t('m.form.minlength', {
+            label: fieldRule.label ?? '',
+            maxlength: rule.minlength
+          })
+      )
+    }
+    // 验证最小值
+    if (rule.min || rule.min === 0) {
+      if (typeof rule.min === 'number' ? Number(formValue) < (rule.min as number) : formValue < (rule.min as any)) {
+        return reject(rule.message ?? t('m.form.min', { label: fieldRule.label ?? '', min: rule.min }))
+      }
+    }
+    // 验证最大值
+    if (rule.max || rule.max === 0) {
+      if (typeof rule.max === 'number' ? Number(formValue) > (rule.max as number) : formValue > (rule.max as any)) {
+        return reject(rule.message ?? t('m.form.min', { label: fieldRule.label ?? '', max: rule.max }))
+      }
     }
     // 下拉选项验证
     if (rule.itemList) {

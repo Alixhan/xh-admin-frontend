@@ -22,16 +22,12 @@
       </el-form-item>
       <el-form-item :label="$t('setting.size.label')" :span="24">
         <el-radio-group v-model="systemStore.layout.size">
-          <el-radio v-for="i in sizes" :key="i" :label="i">
-            {{ $t('setting.size.' + i) }}
-          </el-radio>
+          <el-radio v-for="i in sizes" :key="i" :value="i" :label="$t('setting.size.' + i)" />
         </el-radio-group>
       </el-form-item>
       <el-form-item :label="$t('setting.tabStyle.label')" :span="24">
         <el-radio-group v-model="systemStore.layout.tabStyle">
-          <el-radio v-for="i in tabStyles" :key="i" :label="i">
-            {{ $t('setting.tabStyle.' + i) }}
-          </el-radio>
+          <el-radio v-for="i in tabStyles" :key="i" :label="$t('setting.tabStyle.' + i)" :value="i" />
         </el-radio-group>
       </el-form-item>
       <el-form-item :label="$t('setting.showLogo')" :span="24">

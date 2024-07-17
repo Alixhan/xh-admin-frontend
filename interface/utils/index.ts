@@ -15,4 +15,6 @@ export interface DownloadParam {
     scaleWidth?: number
     // 仅视频文件有效，可以传入需要预览视频第几帧图片，响应一个视频对应帧的图片流
     videoFrameNum?: number
+    // 是否禁用协议缓存，设置为true时，禁用协商缓存，不会返回304状态码
+    noCache?: boolean
 }

@@ -2,7 +2,7 @@
   <el-breadcrumb separator="/">
     <el-breadcrumb-item v-for="item in systemStore.activeMenuArr" :key="item.fullPath">
       <div class="tag-content">
-        <m-icon v-show="systemStore.layout.showNavTabIcon && item.icon" class="tab-icon" :model-value="item.icon" />
+        <m-icon v-show="systemStore.layout.showNavTabIcon && item.icon" class="tab-icon" :value="item.icon" />
         {{ item.title }}
       </div>
     </el-breadcrumb-item>

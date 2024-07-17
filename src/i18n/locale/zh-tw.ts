@@ -48,6 +48,8 @@ export default {
       imageCropper: '圖片裁剪',
       beEmpty: '{label}不能為空',
       wrongFormat: '{label}格式不對',
+      min: '{label}最小值为{min}',
+      max: '{label}最大值为{max}',
       maxlength: '{label}最大字符不超過{maxlength}',
       minlength: '{label}不得少於{minlength}個字符',
       valRestriction: '{label}的值只能為{enums}',
@@ -142,9 +144,9 @@ export default {
     }
   },
   login: {
-    account: '請輸入賬號',
-    password: '請輸入密碼',
-    captcha: '請輸入圖形驗證碼',
+    account: '賬號',
+    password: '密碼',
+    captcha: '圖形驗證碼',
     login: '登入'
   },
   home: {

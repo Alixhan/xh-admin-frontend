@@ -43,12 +43,11 @@ import type {
   TableSortColumn
 } from '@i/components/table'
 import { mTableProps } from '@i/components/table'
-import ContextMenu, {type ContextMenuItem} from '@/components/ContextMenu.vue'
+import ContextMenu, { type ContextMenuItem } from '@/components/ContextMenu.vue'
 
 /**
  * 通用表格组件
- * sxh
- * 2023-3-12
+ * @author sxh 2023-3-12
  */
 export default defineComponent(
   <T extends object, F extends object>(props: MTableProps<T, F>, { attrs, emit, slots, expose }) => {
@@ -212,15 +211,17 @@ export default defineComponent(
 
     //列表头右击
     function onHeaderContextmenu(column: any, e: PointerEvent) {
-      console.info(column.getColumnIndex())
       if (column.property) {
         e.preventDefault()
-        contextMenuRef.value.show(e, [
-          { id: 1, prop: column.property, label: t('m.table.complexFilter'), icon: 'Filter' },
+        const menus = [
           { id: 2, prop: column.property, label: t('m.table.ascending'), icon: 'ArrowUp' },
-          { id: 3, prop: column.property, label: t('m.table.descending'), icon: 'ArrowDown' },
+          { id: 3, prop: column.property, label: t('m.table.descending'), icon: 'ArrowDown' }
           // { id: 4, prop: column.property, label: t('common.hide'), icon: 'Hide' }
-        ])
+        ]
+        if (props.isComplexFilter && props.fetchData) {
+          menus.unshift({ id: 1, prop: column.property, label: t('m.table.complexFilter'), icon: 'Filter' })
+        }
+        contextMenuRef.value.show(e, menus)
       }
     }
 
@@ -598,7 +599,7 @@ export default defineComponent(
                     columns={tableColumnsParams.value}
                   />
                 )}
-                {props.isComplexFilter && (
+                {props.isComplexFilter && props.fetchData && (
                   <QueryFilter ref={queryFilterRef} v-model={pageQuery.value.filters} onSearch={fetchQuery} />
                 )}
                 {props.isSortColumn && (
@@ -632,17 +633,20 @@ export default defineComponent(
      */
     function generatePaginationView() {
       if (pageQuery.value.isPage) {
+        const paginationParam = {
+          ...pagination.value,
+          total: Math.max(pagination.value.total ?? 0, data.value.length),
+          size: systemStore.layout.widthShrink ? 'small' : systemStore.layout.size,
+          layout: pagination.value.layout
+            .split(',')
+            .filter((i) => i !== 'total')
+            .join(',')
+        }
         return (
           <el-scrollbar class={['table-scrollbar', 'pagination']} wrap-style="height: auto;">
             <ElForm disabled={false}>
               <el-pagination
-                {...pagination.value}
-                total={Math.max(pagination.value.total ?? 0, data.value.length)}
-                small={systemStore.layout.widthShrink || systemStore.layout.size === 'small'}
-                layout={pagination.value.layout
-                  .split(',')
-                  .filter((i) => i !== 'total')
-                  .join(',')}
+                {...paginationParam}
                 onCurrentChange={fetchQuery}
                 onSizeChange={fetchQuery}
                 v-model:current-page={pageQuery.value.currentPage}

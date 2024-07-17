@@ -1,7 +1,6 @@
 <script lang="tsx">
-import type { PropType } from 'vue'
-import { defineComponent, ref, watchEffect } from 'vue'
-import binary from '@/utils/binary'
+import { defineComponent, ref, toRef, watchEffect } from 'vue'
+import useFileBinary from '@/utils/binary'
 
 /**
  * svg图片使用，可动态修改svg节点属性，改变颜色等
@@ -11,21 +10,21 @@ export default defineComponent({
   name: 'MSvgIcon',
   props: {
     src: {
-      type: [String, Promise<String>] as PropType<string | Promise<string>>,
+      type: String,
       required: true
     }, // 图标路径
     property: Object, // 修改svg属性值
     inherited: Boolean // 是否继承当前字体颜色
   },
   setup(props) {
+    const svgBinary = useFileBinary(toRef(props, 'src'))
     const svg = ref()
+
     watchEffect(compSvg)
 
     async function compSvg() {
-      let src: string | Promise<string> = props.src
-      if (src instanceof Promise) src = await src
-      let svgStr: string | undefined = await binary(src)
-      if (!svgStr) return
+      if (!svgBinary.value) return
+      let svgStr = svgBinary.value
       if (props.property) {
         for (const prop in props.property) {
           svgStr = replaceStr(svgStr, prop, props.property[prop])

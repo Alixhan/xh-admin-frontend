@@ -115,7 +115,6 @@ export interface Layout {
   tabStyle: TabStyle
 }
 
-const { t } = i18n.global
 /**
  * 系统全局store,主要定义项目布局信息，系统登录， 路由管理，权限管理，浏览器标题管理，注销等
  * sxh 2023-03-31
@@ -166,14 +165,14 @@ export const useSystemStore = defineStore('system', () => {
   }
 
   // 监听窗口变化
-  window.addEventListener('resize', onResize)
+  globalThis.addEventListener?.('resize', onResize)
   onResize()
 
   function onResize() {
-    layout.windowWidth = window.innerWidth
-    layout.windowHeight = window.innerHeight
-    layout.widthShrink = window.innerWidth < 800
-    layout.heightShrink = window.innerHeight < 600
+    layout.windowWidth = globalThis.innerWidth
+    layout.windowHeight = globalThis.innerHeight
+    layout.widthShrink = globalThis.innerWidth < 800
+    layout.heightShrink = globalThis.innerHeight < 600
     if (layout.widthShrink) layout.menuCollapse = true
   }
 
@@ -296,6 +295,7 @@ export const useSystemStore = defineStore('system', () => {
 
   // 设置登录用户信息
   function setLoginUserInfo(loginUserInfo: any) {
+    const { t } = i18n.global
     loginUserInfo.menus ??= []
     // 开发环境把开发文档置顶
     if (import.meta.env.DEV) {
@@ -348,7 +348,7 @@ export const useSystemStore = defineStore('system', () => {
 
   // 初始化动态路由
   function initDynamicRouter() {
-    const viewsComponent = import.meta.glob('/src/views/**/*.vue')
+    const viewsComponent = import.meta.glob('@/views/**/*.vue')
     router.addRoute({
       name: layoutRouteName,
       path: `/${layoutRouteName}`,
@@ -431,13 +431,13 @@ export const useSystemStore = defineStore('system', () => {
     return switchUserRole(orgRole, {
       showSuccessMsg: true
     }).then(() => {
-      setTimeout(() => window.location.reload(), 1000)
+      setTimeout(() => globalThis.location.reload(), 1000)
     })
   }
 
   // 注销
   function logout() {
-    window.location.reload()
+    globalThis.location.reload()
   }
 
   return {

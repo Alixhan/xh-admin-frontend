@@ -6,6 +6,10 @@
   </div>
 </template>
 <script lang="ts" setup>
+/**
+ * 通用表格组件
+ * @author sxh 2023-3-12
+ */
 import { toRef, useAttrs } from 'vue'
 import dayjs from 'dayjs'
 import { useI18n } from 'vue-i18n'
@@ -14,7 +18,6 @@ import { singleDatePickerProps } from '@i/components/singleDatePicker'
 const { t } = useI18n()
 
 defineOptions({
-  inheritAttrs: false,
   name: 'MSingleDatePicker'
 })
 
@@ -145,5 +148,9 @@ const endParam = {
   justify-content: space-between;
   align-items: center;
   gap: 5px;
+
+  ::v-deep(> div) {
+    flex: 1;
+  }
 }
 </style>

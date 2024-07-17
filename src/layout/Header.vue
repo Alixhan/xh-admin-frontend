@@ -13,8 +13,6 @@
           <NavTabs
             v-if="systemStore.layout.heightShrink && !systemStore.layout.widthShrink"
             key="nav-tabs"
-            style="width: 0; flex-grow: 1"
-            class="nav-tabs"
           />
           <Breadcrumb v-if="!systemStore.layout.widthShrink" class="breadcrumb" />
         </div>
@@ -24,7 +22,7 @@
       </el-link>
       <Action class="action" />
     </div>
-    <NavTabs v-if="!systemStore.layout.heightShrink" key="nav-tabs" class="nav-tabs" />
+    <NavTabs v-if="!systemStore.layout.heightShrink" key="nav-tabs"/>
   </div>
 </template>
 <script setup>

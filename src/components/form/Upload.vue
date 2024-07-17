@@ -1,11 +1,15 @@
 <template>
-  <el-upload v-bind="uploadParam" ref="uploadRef" :class="{ 'select-limit': selectLimit !== undefined && selectLimit <= 0 }">
+  <el-upload
+    v-bind="uploadParam"
+    ref="uploadRef"
+    :class="{ 'select-limit': selectLimit !== undefined && selectLimit <= 0 }"
+  >
     <template v-for="name in Object.keys($slots)" #[name]="ctx">
       <slot :name="name" v-bind="ctx" />
     </template>
     <template v-if="!$slots.tip" #tip>
-      <div>
-        {{ props.tip }}
+      <div class="tip">
+        {{ tip }}
       </div>
     </template>
     <!--    <template v-if="!$slots.file" #file="{ file }">-->
@@ -25,18 +29,20 @@
     <!--      </div>-->
     <!--    </template>-->
     <template #trigger>
-      <div v-if="type === 'upload-img'" class="el-upload--picture-card">
-        <div class="file-lib-btn" v-auth="'system:file'" @click.stop="openFileLib('image/')">
-          {{ $t('m.form.lib') }}
+      <slot name="trigger">
+        <div v-if="type === 'upload-img'" class="el-upload--picture-card">
+          <div class="file-lib-btn" v-if="selectFromLib" @click.stop="openFileLib('image/')">
+            {{ $t('m.form.lib') }}
+          </div>
+          <Plus class="icon" />
         </div>
-        <Plus class="icon" />
-      </div>
-      <div v-else>
-        <el-button-group>
-          <el-button type="primary" v-auth="'system:file'" @click.stop="openFileLib()" icon="search" />
-          <el-button type="primary">{{ $t('m.form.selectFile') }}</el-button>
-        </el-button-group>
-      </div>
+        <div v-else>
+          <el-button-group>
+            <el-button type="primary" v-if="selectFromLib" @click.stop="openFileLib()" icon="search" />
+            <el-button type="primary">{{ $t('m.form.selectFile') }}</el-button>
+          </el-button-group>
+        </div>
+      </slot>
     </template>
     <el-image-viewer
       teleported
@@ -83,27 +89,41 @@
  * 增强el-upload上传功能，增加裁剪，直接粘贴图片文件等。
  * sxh 2023-4-14
  */
-import { computed, inject, onUnmounted, ref, useAttrs, watchEffect } from 'vue'
-import type { PropType } from 'vue'
+import type { ExtractPropTypes, PropType } from 'vue'
+import { computed, inject, onUnmounted, ref, watchEffect } from 'vue'
 import { uploadFile } from '@/api/file/fileOperation'
 import selectSysFile from '@/views/system/file/selectSysFile.vue'
 import { getDownloadFileUrl } from '@/utils'
 import type { DownloadParam } from '@i/utils'
+import { ElUpload, uploadProps } from 'element-plus'
+import type { UploadFile } from 'element-plus'
 import Cropper from './Cropper.vue'
 
+export interface UploadFileItem extends UploadFile {
+  // sys_file id
+  id?: number
+  // 云存储 object 值
+  object?: string
+}
+
 defineOptions({
-  name: 'MUpload'
+  name: 'MUpload',
+  extends: ElUpload
 })
 
 const emit = defineEmits(['update:fileList', 'update:modelValue'])
 
 const props = defineProps({
-  //设置为单一文件，直接传入文件表ID即可
+  ...uploadProps,
+  // 设置为单一文件，直接传入文件表ID或object key 即可
   single: {
     type: String as PropType<'id' | 'object'>
   },
+  autoUpload: {
+    type: Boolean
+  },
   type: {
-    type: String
+    type: String as PropType<'upload-img' | 'upload-file'>
   },
   disabled: {
     type: Boolean,
@@ -112,6 +132,11 @@ const props = defineProps({
   modelValue: {
     required: true
   },
+  selectFromLib: {
+    type: Boolean,
+    default: true
+  },
+  // 裁剪参数
   cropper: {
     type: Object
   },
@@ -120,28 +145,11 @@ const props = defineProps({
   }
 })
 
-const attrs = useAttrs()
-
 const uploadRef = ref()
 
 const uploadParam = computed(() => {
-  const defaultParam: {
-    autoUpload?: boolean
-    listType?: string
-    accept?: string
-  } = {
-    autoUpload: false
-  }
-
-  // 上传图片默认参数
-  if (props.type === 'upload-img') {
-    defaultParam.listType = 'picture-card'
-    defaultParam.accept = 'image/*'
-  }
-  const param = {
-    limit: attrs.limit,
-    ...defaultParam,
-    ...attrs,
+  const param: ExtractPropTypes<typeof ElUpload> = {
+    limit: props.limit,
     ...props,
     fileList: fileList.value,
     onChange,
@@ -150,6 +158,13 @@ const uploadParam = computed(() => {
     // 需要裁剪的图片一次只能选择一张
     multiple: !props.cropper
   }
+
+  // 上传图片默认参数
+  if (props.type === 'upload-img') {
+    if (props.listType === 'text') param.listType = 'picture-card'
+    param.accept = 'image/*'
+  }
+
   //如果是单文件上传，设置limit为1
   if (props.single) {
     param.limit = 1
@@ -190,7 +205,7 @@ const param = ref({
 const selection = ref('multiple')
 const selectLimit = computed(() => {
   if (props.single) return 1 - fileList.value.length
-  if (attrs.limit) return Number(attrs.limit) - fileList.value.length
+  if (props.limit) return Number(props.limit) - fileList.value.length
   return undefined
 })
 
@@ -198,7 +213,7 @@ const visible2 = ref(false)
 const cropperOption = ref({})
 const cropperFile = ref()
 
-function onChange(file, files) {
+function onChange(file: UploadFileItem, files: UploadFileItem[]) {
   if (props.cropper) {
     visible2.value = true
     cropperOption.value = {
@@ -211,8 +226,7 @@ function onChange(file, files) {
           name: fileName,
           raw: file,
           size: file.size,
-          // @ts-ignore
-          url: (window.createObjectURL || window.URL.createObjectURL)(file)
+          url: (globalThis.createObjectURL || globalThis.URL.createObjectURL)(file)
         })
         visible2.value = false
       },
@@ -221,28 +235,29 @@ function onChange(file, files) {
     cropperFile.value = file
     files.pop()
   }
-  onUpdateFileList(file, files)
-  attrs.onChange instanceof Function && attrs.onChange?.(file, files)
+  onUpdateFileList(files)
+  props.onChange?.(file, files)
 }
 
-function onRemove(file, files) {
-  onUpdateFileList(file, files)
-  attrs.onRemove instanceof Function && attrs.onRemove?.(file, files)
+function onRemove(file: UploadFileItem, files: UploadFileItem[]) {
+  onUpdateFileList(files)
+  props.onRemove?.(file, files)
 }
 
-function onUpdateFileList(file, files) {
+function onUpdateFileList(files: UploadFileItem[]) {
   fileList.value = files
+  if (props.autoUpload) upload()
   emitModelValue()
 }
 
-function onPreview(file) {
+function onPreview(file: UploadFileItem) {
   if (props.type === 'upload-img') {
     previewImageUrlList.value = fileList.value.map((i) => i.url)
     initialIndex.value = fileList.value.findIndex((i) => i === file)
     previewImageVisible.value = true
   } else {
     if (file.object) {
-      window.open(getDownloadFileUrl({ object: file.object, fileName: file.name }))
+      globalThis.open(getDownloadFileUrl({ object: file.object, fileName: file.name }))
     }
   }
 }
@@ -255,8 +270,8 @@ function onPreview(file) {
 // }
 
 // 图片库选择后事件
-function select(rows) {
-  onUpdateFileList(null, [
+function select(rows: any[]) {
+  onUpdateFileList([
     ...fileList.value,
     ...rows.map((i) => {
       return {
@@ -379,5 +394,10 @@ if (uploadInstances) {
   :deep(.el-upload) {
     display: none;
   }
+}
+
+.tip {
+  color: var(--el-color-danger);
+  font-size: var(--el-font-size-base);
 }
 </style>

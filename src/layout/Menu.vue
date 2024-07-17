@@ -27,7 +27,7 @@ export default defineComponent({
       // 只有目录和菜单渲染，其他类型不渲染
       if (!['dir', 'menu'].includes(menu.type)) return
       // 生成菜单图标
-      const icon = <m-icon class="menu-icon" v-model={menu.icon} />
+      const icon = <m-icon class="menu-icon" value={menu.icon} />
       // 子项包含目录和菜单才视为菜单目录
       const children = menu.children?.filter((i) => ['dir', 'menu'].includes(i.type))
       if (children && children.length) {
@@ -66,7 +66,7 @@ export default defineComponent({
         if (systemStore.layout.widthShrink) systemStore.layout.menuCollapse = true
         const menu = systemStore.menus.find((i) => i.fullPath === fullPath)
         if (menu.handleType === 'outer') {
-          window.open(menu.outerUrl)
+          globalThis.open(menu.outerUrl)
         } else router.push(menu.fullPath)
       }
     }

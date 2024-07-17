@@ -23,7 +23,8 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
-      "@i/*": ["interface/*"]
+      "@i/*": ["interface/*"],
+      "@d/*": ["docs/*"],
     },
     "types": [
       "vite/client"

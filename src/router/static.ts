@@ -35,5 +35,18 @@ export const devMenus = [
     icon: 'el|menu',
     cache: true,
     enabled: true
+  },
+  {
+    id: -4,
+    parentId: -1,
+    title: '代码生成',
+    name: 'generator',
+    path: 'generator',
+    component: '/src/views/generator/index.vue',
+    type: 'menu',
+    handleType: 'route',
+    icon: 'el|star',
+    cache: true,
+    enabled: true
   }
 ]

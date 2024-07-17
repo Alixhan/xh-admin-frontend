@@ -45,7 +45,7 @@ if (firstVisit.value) {
 }
 
 function open(url: string) {
-  window.open(url)
+  globalThis.open(url)
 }
 </script>
 <style lang="scss" scoped>
