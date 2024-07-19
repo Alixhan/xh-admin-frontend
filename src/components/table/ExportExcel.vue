@@ -42,6 +42,9 @@ const loading = ref(false)
 
 const { t } = useI18n()
 
+/**
+ * 导入数据为excel
+ */
 async function exportExcel() {
   const pageQuery = cloneDeep!(props.pageQuery)
   pageQuery.isExport = true // 标识为导出请求
@@ -67,7 +70,7 @@ async function exportExcel() {
     try {
       loading.value = true
       const excelTree = new ExcelTree(unref(props.columns))
-      await excelTree.exportExcel(props.exportFileName ?? t('m.table.fileName') + '.xlsx', data)
+      await excelTree.exportExcel(props.exportFileName ?? t('m.table.fileName'), data)
     } finally {
       loading.value = false
     }
@@ -79,5 +82,9 @@ async function exportExcel() {
     })
   }
 }
+
+defineExpose({
+  exportExcel
+})
 </script>
 <style scoped lang="scss"></style>

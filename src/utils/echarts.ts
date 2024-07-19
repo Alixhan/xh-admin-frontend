@@ -1,10 +1,10 @@
 import * as echarts from 'echarts/core'
 import { GridComponent, LegendComponent, TitleComponent, ToolboxComponent, TooltipComponent } from 'echarts/components'
-import { BarChart, GaugeChart, LineChart, PieChart } from 'echarts/charts'
+import { BarChart, GaugeChart, LineChart, PieChart, SankeyChart } from 'echarts/charts'
 import { LabelLayout, UniversalTransition } from 'echarts/features'
 import { SVGRenderer } from 'echarts/renderers'
 import type { Ref } from 'vue'
-import { effectScope, nextTick, onMounted, onScopeDispose, ref, watch } from 'vue'
+import { effectScope, onMounted, onScopeDispose, ref, watch } from 'vue'
 import type {
   BarSeriesOption,
   GaugeSeriesOption,
@@ -31,7 +31,8 @@ echarts.use([
   GridComponent,
   LineChart,
   UniversalTransition,
-  GaugeChart
+  GaugeChart,
+  SankeyChart
 ])
 
 export type EChartsOption = echarts.ComposeOption<
@@ -56,7 +57,6 @@ export function useEcharts(option: Ref<EChartsOption>, onInit?: (echart: echarts
   async function initEcharts() {
     if (!domRef.value) return
     echartsInstance?.dispose()
-    await nextTick()
     const theme = systemStore.layout.isDark ? 'dark' : 'light'
     echartsInstance = echarts.init(domRef.value, theme)
     onInit?.(echartsInstance)
@@ -77,21 +77,20 @@ export function useEcharts(option: Ref<EChartsOption>, onInit?: (echart: echarts
 
     watch(
       () => [width.value, height.value],
-        useDebounceFn(() => echartsInstance?.resize(), 40)
+      useDebounceFn(() => echartsInstance?.resize(), 40)
     )
 
     watch(() => [systemStore.layout.isDark], initEcharts)
   })
 
-  onMounted(() => setTimeout(initEcharts, 1))
+  onMounted(initEcharts)
 
   onScopeDispose(() => {
     echartsInstance?.dispose()
     scope.stop()
   })
-
-  return {
-    domRef,
-    setOption
-  }
+  const rs = [domRef, setOption]
+  rs['domRef'] = domRef
+  rs['setOption'] = setOption
+  return rs
 }

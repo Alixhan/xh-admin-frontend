@@ -1,9 +1,9 @@
 <template>
   <div class="excel-import-view">
-    <div style="margin-bottom: 10px">
+    <div class="el-text tip-view">
       <slot name="tip" />
     </div>
-    <input ref="fileRef" type="file" accept=".xlsx, .xls" style="display: none" @change="handleFile" />
+    <input ref="fileRef" type="file" accept=".xlsx" style="display: none" @change="handleFile" />
     <m-table
       class="m-table"
       :columns="tableColumns"
@@ -28,7 +28,14 @@
       </template>
     </m-table>
     <el-dialog :title="$t('common.errorMsg')" v-model="errorVisible" align-center draggable append-to-body width="70%">
-      <m-table :columns="errorTableColumns" v-model:data="errorData" :cell-style="cellStyle" style="height: 70vh" />
+      <m-table
+        ref="errorRef"
+        :columns="errorTableColumns"
+        v-model:data="errorData"
+        :cell-style="cellStyle"
+        style="height: 70vh"
+        :export-file-name="$t('common.errorMsg')"
+      />
     </el-dialog>
   </div>
 </template>
@@ -73,7 +80,7 @@ watchEffect(initTableColumn)
 const tip = ref<{
   step?: '' | '1' | '2' | '3' | '4' | '5'
   msg?: string
-  status?: '' | 'success' | 'error'
+  status?: '' | 'success' | 'error' | 'exception'
 }>({
   step: '',
   msg: '',
@@ -96,7 +103,8 @@ const tipObj = computed(() => {
     4: {
       do: t('m.excelImport.step4Do'),
       error: t('m.excelImport.step4Error'),
-      success: t('m.excelImport.step4Success')
+      success: t('m.excelImport.step4Success'),
+      exception: t('m.excelImport.step4Exception'),
     },
     5: { do: t('m.excelImport.step5Do'), success: t('m.excelImport.step5Success') }
   }
@@ -111,6 +119,10 @@ const tipObj = computed(() => {
   }
   if (tip.value.status === 'error') {
     obj.icon = 'CircleClose'
+    obj.color = 'red'
+  }
+  if (tip.value.status === 'exception') {
+    obj.icon = 'WarnTriangleFilled'
     obj.color = 'red'
   }
   return obj
@@ -143,14 +155,14 @@ const errorTableColumns: Ref<TableColumn<ExcelError>[]> = computed(() => [
     label: t('m.excelImport.excelNum'),
     width: 120,
     formatter: (row, col, val) =>
-      val ?? (row.rowIndex === null || row.rowIndex === undefined ? '' : row.rowIndex + 1 + (excelTree.$maxPlies ?? 0))
+      val ?? (row.rowIndex === null || row.rowIndex === undefined ? '' : row.rowIndex + (excelTree.$maxPlies ?? 1))
   },
   { prop: 'error', label: t('common.errorMsg') }
 ])
 
 /**
  * 模板下载
- * @param 下载模板之前可以预插入一些示例数据
+ * 下载模板之前可以预插入一些示例数据
  */
 async function downloadTemplate() {
   try {
@@ -268,31 +280,35 @@ async function validData() {
   })
 }
 
-function subImport() {
+async function subImport() {
   // 确认导入
   if (importData.value.length < 1) return ElMessage.warning(t('m.excelImport.noData'))
   loading.value = true
   tip.value.step = '3'
   tip.value.status = ''
   errorData.value = []
-  validData()
-    .then(() => {
-      tip.value.step = '4'
-      props.onComplete(importData.value, (error) => {
-        loading.value = false
-        if (error) {
-          tip.value.status = 'error'
-          errorVisible.value = true
-          errorData.value = error
-        } else {
-          tip.value.status = 'success'
-        }
-      })
-    })
-    .catch(() => {
+
+  try {
+    // 前端验证
+    await validData()
+
+    // 后端验证
+    tip.value.step = '4'
+    let res = props.onComplete(importData.value)
+    if (res instanceof Promise) res = await res
+    if (res) {
       tip.value.status = 'error'
-      loading.value = false
-    })
+      errorVisible.value = true
+      errorData.value = res
+    } else {
+      tip.value.status = 'success'
+    }
+  } catch (e) {
+    console.error(e)
+    tip.value.status = 'exception'
+  } finally {
+    loading.value = false
+  }
 }
 
 // 设置单元格样式
@@ -315,18 +331,33 @@ function clear() {
   errorData.value = []
 }
 
+const errorRef = ref()
+
+/**
+ * 导出错误信息到excel
+ */
+function exportError() {
+  errorRef.value.exportExcelRef.exportExcel()
+}
+
 // 暴露组件方法
 defineExpose({
   downloadTemplate,
   validData,
-  subImport
+  subImport,
+  exportError
 })
 </script>
-<style scoped>
+<style scoped lang="scss">
 .excel-import-view {
   display: flex;
   flex-direction: column;
   width: 100%;
+
+  .tip-view {
+    align-self: start;
+    margin-bottom: 5px;
+  }
 
   .m-table {
     flex-grow: 1;

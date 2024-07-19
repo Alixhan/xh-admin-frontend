@@ -73,7 +73,7 @@ export default {
     excelImport: {
       downloadTemplate: '下载模板',
       confirmImport: '确认导入',
-      templateFileName: '导入模板.xlsx',
+      templateFileName: '导入模板',
       step1Do: '导入excel',
       step1Error: '导入excel文件失败',
       step2Do: '解析excel',
@@ -85,6 +85,7 @@ export default {
       step4Do: '数据导入中',
       step4Error: '导入失败（服务器校验未通过）',
       step4Success: '数据导入成功',
+      step4Exception: '导入异常',
       step5Do: '清空中',
       step5Success: '清空成功',
       num: '数据行号',

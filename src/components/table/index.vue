@@ -139,6 +139,7 @@ export default defineComponent(
     const queryFilterRef = ref()
     const formRef = ref()
     const tableRef = ref()
+    const exportExcelRef = ref()
 
     // 表格列参数
     const tableColumnsParams: Ref<CommonTableColumn<T>[]> = shallowRef([])
@@ -164,6 +165,7 @@ export default defineComponent(
     expose({
       tableRef,
       formRef,
+      exportExcelRef,
       fetchQuery
     })
 
@@ -590,14 +592,15 @@ export default defineComponent(
               <div class="right-action">
                 {slots['right-action']?.()}
                 {props.isExportExcel && (
-                  <ExportExcel
-                    class="action-btn"
-                    pageQuery={pageQuery.value}
-                    exportFileName={props.exportFileName}
-                    fetchData={props.fetchData}
-                    data={data.value}
-                    columns={tableColumnsParams.value}
-                  />
+                    <ExportExcel
+                        ref={exportExcelRef}
+                        class="action-btn"
+                        pageQuery={pageQuery.value}
+                        exportFileName={props.exportFileName}
+                        fetchData={props.fetchData}
+                        data={data.value}
+                        columns={tableColumnsParams.value}
+                    />
                 )}
                 {props.isComplexFilter && props.fetchData && (
                   <QueryFilter ref={queryFilterRef} v-model={pageQuery.value.filters} onSearch={fetchQuery} />

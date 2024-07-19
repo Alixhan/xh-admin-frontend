@@ -42,22 +42,18 @@ const excelColumns = computed<ImportExcelColumn[]>(() => [
 ])
 
 // 开始导入数据
-function complete(data, callback) {
-  importUsers(data)
-    .then((res) => {
-      callback(res.data)
-      if (!res.data) {
-        ElNotification({
-          type: 'success',
-          message: t('common.importSuccess'),
-          duration: 3000
-        })
-        close('refresh')
-      }
-    })
-    .catch((e) => {
-      callback([{ error: e.message ?? t('common.importsFailed') }])
-    })
+async function complete(data: any[]) {
+  return importUsers(data).then((res) => {
+    if (!res.data) {
+      ElNotification({
+        type: 'success',
+        message: t('common.importSuccess'),
+        duration: 3000
+      })
+      close('refresh')
+    }
+    return res.data
+  })
 }
 
 // 打开导入框

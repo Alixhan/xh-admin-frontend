@@ -58,7 +58,7 @@ export default {
     excelImport: {
       downloadTemplate: '下載模闆',
       confirmImport: '確認導入',
-      templateFileName: '導入模闆.xlsx',
+      templateFileName: '導入模闆',
       step1Do: '導入excel',
       step1Error: '導入excel文件失敗',
       step2Do: '解析excel',

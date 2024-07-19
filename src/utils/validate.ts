@@ -48,17 +48,17 @@ export default async function <T extends object>(formData: T, ruleObject: RuleOb
 // 单个字段多个rules验证
 export async function fieldValid<T extends object>(
   fieldRule: FieldRule<T, keyof T>,
-  formValue: T[keyof T],
-  formData: T
+  val: T[keyof T],
+  formData?: T
 ): Promise<FieldValidResult<T, keyof T>> {
   const rules = fieldRule.rules instanceof Array ? fieldRule.rules : [fieldRule.rules ?? {}]
-  const rulePromiseArr = rules.map((rule) => ruleValid(fieldRule, rule, formValue, formData))
+  const rulePromiseArr = rules.map((rule) => ruleValid(fieldRule, rule, val, formData))
   return Promise.all(rulePromiseArr).then((e) => {
     // 过滤正确，分号拼接错误信息
     const errMsg = e.filter((i) => i).join(';')
     return {
       prop: fieldRule.prop,
-      formValue,
+      value: val,
       result: !errMsg,
       errMsg
     }
@@ -70,7 +70,7 @@ export async function ruleValid<T extends object>(
   fieldRule: FieldRule<T, keyof T>,
   rule: ValidRule<T, keyof T> = {},
   val: T[keyof T],
-  formData: T
+  formData?: T
 ): Promise<string> {
   const formValue: any = val ?? ''
   return new Promise<string>((resolve, reject) => {

@@ -1,8 +1,6 @@
 /**
  * GlobalComponents for Volar
  */
-import 'vue'
-
 import type MExcelImport from '@/components/ExcelImport.vue'
 import type MOperationButton from '@/components/table/OperationButton.vue'
 import type MUpload from '@/components/form/Upload.vue'
@@ -16,7 +14,7 @@ import type MTable from '@/components/table/index.vue'
 import type MTopFilter from '@/components/TopFilter.vue'
 import {AuthDirective} from '@/directive'
 
-declare module 'vue' {
+declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     MForm: typeof MForm
     MTable: typeof MTable
@@ -29,9 +27,5 @@ declare module 'vue' {
     MUpload: typeof MUpload
     MOperationButton: typeof MOperationButton
     MExcelImport: typeof MExcelImport
-  }
-
-  export interface GlobalDirectives {
-    auth: typeof AuthDirective
   }
 }

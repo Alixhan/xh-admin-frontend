@@ -12,22 +12,6 @@
         {{ tip }}
       </div>
     </template>
-    <!--    <template v-if="!$slots.file" #file="{ file }">-->
-    <!--      <div>-->
-    <!--        <el-image :src="file.url" style="position: absolute; inset: 0px;" fit="cover"/>-->
-    <!--        <span class="el-upload-list__item-actions">-->
-    <!--          <span class="el-upload-list__item-preview" @click="onPreview(file)">-->
-    <!--            <el-icon><zoom-in/></el-icon>-->
-    <!--          </span>-->
-    <!--          <span v-if="!disabled" class="el-upload-list__item-delete" @click="onDownload(file)">-->
-    <!--            <el-icon><Download/></el-icon>-->
-    <!--          </span>-->
-    <!--          <span v-if="!disabled" class="el-upload-list__item-delete" @click="uploadRef.handleRemove(file)">-->
-    <!--            <el-icon><Delete/></el-icon>-->
-    <!--          </span>-->
-    <!--        </span>-->
-    <!--      </div>-->
-    <!--    </template>-->
     <template #trigger>
       <slot name="trigger">
         <div v-if="type === 'upload-img'" class="el-upload--picture-card">
@@ -98,6 +82,7 @@ import type { DownloadParam } from '@i/utils'
 import { ElUpload, uploadProps } from 'element-plus'
 import type { UploadFile } from 'element-plus'
 import Cropper from './Cropper.vue'
+import { Plus } from '@element-plus/icons-vue'
 
 export interface UploadFileItem extends UploadFile {
   // sys_file id
@@ -190,7 +175,14 @@ watchEffect(() => {
       }
     ]
   } else {
-    fileList.value = (props.modelValue as any[]) ?? []
+    const files = (props.modelValue as any[]) ?? []
+    files.forEach((file) => {
+      if (!file.url) {
+        const url = getDownloadFileUrl({ id: file.id, object: file.object })
+        if (url) file.url = url
+      }
+    })
+    fileList.value = files
   }
 })
 
@@ -322,8 +314,8 @@ async function upload() {
 }
 
 //从文件库中直接选择
-function openFileLib(type?) {
-  param.value.type = type
+function openFileLib(type?: string) {
+  param.value.type = type ?? ''
   visible.value = true
 }
 

@@ -8,19 +8,19 @@ import MSingleDatePicker from './form/SingleDatePicker.vue'
 import MComment from './Comment.vue'
 import MUpload from './form/Upload.vue'
 import MOperationButton from './table/OperationButton.vue'
+import MExcelImport from './ExcelImport.vue'
 import type { App } from 'vue'
 
-export default {
-  install(app: App<Element>) {
-    app.component('MForm', MForm)
-    app.component('MTable', MTable)
-    app.component('MSvgIcon', MSvgIcon)
-    app.component('MTopFilter', MTopFilter)
-    app.component('MSingleDatePicker', MSingleDatePicker)
-    app.component('MIcon', MIcon)
-    app.component('MIconSelect', MIconSelect)
-    app.component('MComment', MComment)
-    app.component('MUpload', MUpload)
-    app.component('MOperationButton', MOperationButton)
-  }
+export default function (app: App<Element>) {
+  app.component('MForm', MForm)
+  app.component('MTable', MTable)
+  app.component('MSvgIcon', MSvgIcon)
+  app.component('MTopFilter', MTopFilter)
+  app.component('MSingleDatePicker', MSingleDatePicker)
+  app.component('MIcon', MIcon)
+  app.component('MIconSelect', MIconSelect)
+  app.component('MComment', MComment)
+  app.component('MUpload', MUpload)
+  app.component('MOperationButton', MOperationButton)
+  app.component('MExcelImport', MExcelImport)
 }

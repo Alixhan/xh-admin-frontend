@@ -202,7 +202,7 @@ export class ExcelTree<T extends CommonExcelData<T>> implements ExcelTreeNode<T>
       worksheet.addRows(rows)
     }
     return workbook.xlsx.writeBuffer().then((buffer) => {
-      FileSaver.saveAs(new Blob([buffer], { type: 'application/octet-stream' }), fileName)
+      FileSaver.saveAs(new Blob([buffer], { type: 'application/octet-stream' }), fileName + '.xlsx')
     })
   }
 }

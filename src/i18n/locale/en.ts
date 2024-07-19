@@ -71,7 +71,7 @@ export default {
     excelImport: {
       downloadTemplate: 'Download Template',
       confirmImport: 'Confirm Import',
-      templateFileName: 'Excel import template.xlsx',
+      templateFileName: 'Excel import template',
       step1Do: 'Importing excel',
       step1Error: 'Failed to import excel file',
       step2Do: 'Parsing excel',
