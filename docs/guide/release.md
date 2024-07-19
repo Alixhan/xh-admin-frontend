@@ -1,36 +1,46 @@
----
-version: 1.0.0
----
-# 版本发布
-当前版本 <font size=4 > **{{$frontmatter.version}}** </font>
+# 更新日志
 
-::: info <font size=4 > **{{$frontmatter.version}}** </font>
-2024-05-01
-<div class="title">Features</div>
-<ul class="release-view">
-    <li>系统管理模块</li>
-    <li>菜单管理</li>
-    <li>用户管理</li>
-    <li>角色管理</li>
-    <li>机构管理</li>
-    <li>用户组管理</li>
-    <li>文件管理</li>
-    <li>数据字典</li>
-    <li>系统日志</li>
-</ul>
-:::
+## v1.0.1 ^[(2024-06-17)]
+
+**新特性**
+
+- 新增：布局配置栏可定制菜单宽度
+
+**优化**
+
+- 优化：布局bug导致的ui卡顿问题
+- 优化：矮屏设备不展示 `navTabs` 页签栏
+- 修复：当请求体未被 `controller` 读取，`ContentCachingRequestWrapper` 读取请求体内容为空的问题，导致日志未记录请求体内容
+- 修复：当 `ip` 地址为 `localhost` 时不解析 ip所属地
+
+**文档**
+
+- 调整：`README`文件调整
+- 调整：底部栏调整
+
+## v1.0.0 ^[(2024-06-01)]
+
+**新特性**
+
+- 新增：系统管理模块
+- 新增：菜单管理
+- 新增：用户管理
+- 新增：角色管理
+- 新增：机构管理
+- 新增：用户组管理
+- 新增：文件管理
+- 新增：数据字典
+- 新增：系统日志
+
+**文档**
+
+- 新增：项目文档
 
 <style scoped>
-.release-view {
-    font-size: 14px;
+ul {
+ font-size: 14px!important;
 }
-
-.release-view > li {
-    margin: 0 0;
-}
-
-.title {
-    font-size: 1.3em;
-    margin-bottom: -10px;
+li {
+    margin: 2px!important;
 }
 </style>

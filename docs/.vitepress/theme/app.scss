@@ -1,0 +1,174 @@
+@use '@/styles/index.scss';
+@use '@/styles/app.scss';
+
+:root {
+
+  --line-gradient-bg: -webkit-linear-gradient(120deg, #bd34fe, #41d1ff);
+  --vp-home-hero-name-color: transparent;
+  --vp-home-hero-name-background: var(--line-gradient-bg);
+
+  --el-bg-color: var(--vp-c-bg)!important;
+  --vp-layout-max-width: 1550px;
+  //--vp-sidebar-width: 250px;
+  --code-tooltip-color: var(--vp-code-color);
+  --code-tooltip-bg-color: rgba(var(--el-color-primary-rgb), 0.1);
+}
+
+html, body {
+  width: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  background-size: auto;
+}
+
+#app {
+  height: auto;
+}
+
+.image-bg {
+  top: 50%;
+  left: 50%;
+  border-radius: 50%;
+  width: 192px;
+  height: 192px;
+  background-image: linear-gradient(-45deg, #bd34fe 50%, #47caff 50%) !important;
+  filter: blur(70px) !important;
+  transform: translate(-50%, -50%) !important;
+}
+
+.VPLink .text {
+  transition: all 0.25s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+  transform-origin: 0 50%;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+}
+
+.is-active > .item > .VPLink > .text {
+  transform: scale(1.1);
+}
+
+h1 {
+  // h1 标签渐变色文本
+  display: inline-block;
+  background-clip: text;
+  color: #0000;
+  white-space: nowrap;
+  background-image: var(--line-gradient-bg);
+  margin-bottom: 20px;
+}
+
+.VPNavBar {
+  background-color: transparent !important;
+
+  .content-body {
+    background-color: transparent !important;
+    background-size: 3px 3px !important;
+    background-image: radial-gradient(transparent 1px, var(--vp-nav-bg-color) 1px) !important;
+    backdrop-filter: saturate(30%) blur(4px) !important;
+  }
+
+  .content-container {
+    max-width: none !important;
+  }
+}
+
+.VPDoc.has-aside {
+  .content-container {
+    max-width: none !important;
+  }
+
+  .aside {
+    max-width: 200px !important;
+  }
+}
+
+@media (min-width: 960px) {
+  .VPDoc:not(.has-sidebar) .content {
+    max-width: none !important;
+  }
+}
+
+
+.vp-table {
+  width: 100%;
+  overflow-y: hidden;
+  overflow-x: auto;
+  margin-bottom: 45px;
+
+  & > table {
+    display: table;
+    border-collapse: collapse;
+    width: 100%;
+    background-color: var(--bg-color);
+    font-size: 14px;
+    line-height: 1.6em;
+
+    tr {
+      border-bottom: 1px solid var(--vp-c-divider);
+      &:nth-child(2n) {
+        background-color: transparent;
+      }
+
+      td:nth-child(2) {
+        font-family: var(--font-family), serif;
+      }
+    }
+
+    th,
+    td {
+      border-left: none;
+      border-right: none;
+      border-top: 1px solid var(--border-color);
+      border-bottom: 1px solid var(--border-color);
+      padding: 0.6em 1em;
+      text-align: left;
+      max-width: 250px;
+      white-space: pre-wrap;
+    }
+
+    thead tr:first-child th {
+      border-top: none;
+    }
+
+    tbody tr td:first-child {
+      font-family: var(--font-family-mono), serif;
+    }
+  }
+}
+
+.vp-tag {
+  --vp-tag-color: var(--el-color-primary);
+  --vp-tag-border-color: var(--el-color-primary);
+
+  display: inline-block;
+  padding: 0 7px;
+  border-radius: 10px;
+  border: 1px solid var(--vp-tag-border-color);
+  font-size: var(--el-font-size-extra-small);
+  color: var(--vp-tag-color);
+  line-height: 18px;
+  white-space: nowrap;
+
+  &.beta {
+    --vp-tag-color: var(--el-color-danger);
+    --vp-tag-border-color: var(--el-color-danger);
+  }
+
+  &.deprecated {
+    --vp-tag-color: var(--el-color-warning);
+    --vp-tag-border-color: var(--el-color-warning);
+  }
+
+  &.a11y {
+    --vp-tag-color: var(--purple-color);
+    --vp-tag-border-color: var(--purple-color-light);
+  }
+
+  &.required {
+    --vp-tag-color: var(--el-color-success);
+    --vp-tag-border-color: var(--el-color-success);
+  }
+}

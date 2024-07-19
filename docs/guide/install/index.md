@@ -10,7 +10,7 @@ const previewSrcList = ["/image/install/img.png"];
 `NodeJs 18.x +` <br>
 `pnpm 8.x +`
 
-推荐使用 [nvm](https://github.com/nvm-sh/nvm) 管理nodejs版本
+推荐使用 ^link(nvm) 管理nodejs版本
 :::
 
 `git` 拉取代码

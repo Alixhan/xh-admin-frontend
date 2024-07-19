@@ -9,7 +9,7 @@
 **前端技术栈：**
 [Vite](https://cn.vitejs.dev)、
 [Vue3](https://cn.vuejs.org)、
-[Element-plus](https://element-plus.gitee.io/zh-CN/)、
+[Element-plus](https://element-plus.org/)、
 [Pinia](https://pinia.web3doc.top/)、
 [Vue-router4](https://router.vuejs.org/zh/)、
 [Typescript5](https://www.typescriptlang.org/zh)、
