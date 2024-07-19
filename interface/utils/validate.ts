@@ -89,7 +89,7 @@ export interface FieldValidResult<T, K extends keyof T> {
   // 字段property
   prop: K
   // 字段值
-  formValue: T[K]
+  value: T[K]
   // 验证结果
   result: boolean
   // 错误信息

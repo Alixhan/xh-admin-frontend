@@ -1,5 +1,5 @@
-import type { CommonFormColumn } from '@i/components/form'
-import type { TableColumn } from '@i/components/table'
+import type {CommonFormColumn} from '@i/components/form'
+import type {TableColumn} from '@i/components/table'
 
 /**
  * excel列类型定义
@@ -7,7 +7,7 @@ import type { TableColumn } from '@i/components/table'
 export interface CommonExcelColumn<T extends object>
   extends Omit<CommonFormColumn<T>, 'type'>,
     Pick<TableColumn<T>, 'formatter' | 'index' | 'type'> {
-  //标签名称
+  //列名称
   label?: string
   // 此列不导出到excel
   notExport?: boolean
@@ -51,6 +51,10 @@ export interface ExcelTreeNode<T extends object> extends CommonExcelColumn<T> {
  * 导入excel列类型定义
  */
 export interface ImportExcelColumn<T extends object = object> extends CommonExcelColumn<T> {
+  //字段名
+  prop: string
+  //列名称
+  label: string
   //子项
   children?: ImportExcelColumn<T>[]
 }

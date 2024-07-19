@@ -97,7 +97,7 @@ export function isRestResponse(val: any): val is RestResponse & {error?: string}
 /**
  * 通用列表查询请求参数
  */
-export interface PageQuery<T = any> {
+export interface PageQuery<T extends object = object> {
   // 是否为导出请求
   isExport: boolean;
   // 是否分页
@@ -119,7 +119,7 @@ export interface PageQuery<T = any> {
 /**
  * 通用列表查询响应对象类型
  */
-export interface PageResult<T = any> {
+export interface PageResult<T extends object = object> {
   // 列表数据
   list: T [];
   // 合计值
@@ -135,4 +135,4 @@ export interface PageResult<T = any> {
 /**
  * 查询分页数据方法
  */
-export type FetchPageDataFun<T> = (param: PageQuery, option: RequestOption<T>) => Promise<RestResponse<PageResult<T>>>
+export type FetchPageDataFun<T extends object> = (param: PageQuery, option: RequestOption<T>) => Promise<RestResponse<PageResult<T>>>
