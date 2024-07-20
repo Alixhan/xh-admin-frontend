@@ -89,8 +89,5 @@ export function useEcharts(option: Ref<EChartsOption>, onInit?: (echart: echarts
     echartsInstance?.dispose()
     scope.stop()
   })
-  const rs = [domRef, setOption]
-  rs['domRef'] = domRef
-  rs['setOption'] = setOption
-  return rs
+  return { domRef, setOption }
 }

@@ -27,32 +27,20 @@ export default defineComponent({
       let svgStr = svgBinary.value
       if (props.property) {
         for (const prop in props.property) {
-          svgStr = replaceStr(svgStr, prop, props.property[prop])
+          let index = 0
+          const replaceArr = props.property[prop].split(',')
+          svgStr = svgStr.replace(new RegExp(`(?<=${prop}=["'])[^"']*(?=["'])`, 'g'), (str) => {
+            const v = replaceArr[index]
+            index++
+            if (v || v === 0) return v
+            return str
+          })
         }
       } else if (props.inherited) {
-        const regExp = /fill="[^"]*"/g
-        const strArr = svgStr.split(regExp)
-        svgStr = strArr.join('fill="currentColor"')
+        const regExp = /(?<=fill=["'])[^"']*(?=["'])/g
+        svgStr = svgStr.replace(regExp, 'currentColor')
       }
       svg.value = svgStr
-    }
-
-    function replaceStr(baseStr: string, prop: string, newProps: string) {
-      const regExp = new RegExp(prop + '="[^"]*"', 'g')
-      const strArr = baseStr.split(regExp)
-      const oldColorArr = baseStr.match(regExp)
-      const newColorArr = newProps.split(',')
-      for (let i = 0; i < newColorArr.length; i++) {
-        const color = newColorArr[i]
-        if (color && oldColorArr && oldColorArr[i]) {
-          oldColorArr[i] = `${prop}="${color}"`
-        }
-      }
-      let str = ''
-      for (let i = 0; i < strArr.length; i++) {
-        str += strArr[i] + (oldColorArr && oldColorArr[i] ? oldColorArr[i] : '')
-      }
-      return str
     }
 
     return () => <div v-html={svg.value} />
