@@ -6,10 +6,9 @@ import plugin from './plugins'
 import MyVitePlugin from './plugins/vite-plugin'
 import vueI18n from '@intlify/unplugin-vue-i18n/vite'
 
-const mode = 'development'
+const mode = ''
 const dir = process.cwd()
 const env = mergeConfig(loadEnv('', dir), loadEnv(mode, dir))
-env.VITE_BASE_URL = `http://demo.xhansky.cn${env.VITE_BASE_URL}`
 const viteDefine = {}
 for (const key in env) {
     viteDefine['import.meta.env.' + key] = `'${env[key]}'`
