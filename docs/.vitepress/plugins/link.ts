@@ -54,7 +54,8 @@ const links = {
   'SingleDatePicker 日期范围': '/frontend/components/single-date-picker',
   'Form 表单': '/frontend/components/form',
   'Table 表格': '/frontend/components/table',
-  'ExcelImport 导入': '/frontend/components/excel-import'
+  'ExcelImport 导入': '/frontend/components/excel-import',
+  'CommonFormColumn': '/frontend/components/form#commonformcolumn-表单项',
 }
 
 export default (md: MarkdownIt): void => {

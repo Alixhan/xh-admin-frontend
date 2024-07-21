@@ -142,9 +142,9 @@ export default defineConfig({
                         {text: 'Upload 上传', link: '/upload'},
                         {text: 'Icon 图标', link: '/icon'},
                         {text: 'SingleDatePicker 日期范围', link: '/single-date-picker'},
-                        // {text: 'Form 表单', link: '/form'},
-                        // {text: 'Table 表格', link: '/table'},
                         {text: 'ExcelImport 导入', link: '/excel-import'},
+                        {text: 'Form 表单', link: '/form'},
+                        // {text: 'Table 表格', link: '/table'},
                     ]
                 },
                 {

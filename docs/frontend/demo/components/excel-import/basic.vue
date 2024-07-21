@@ -32,7 +32,6 @@ async function complete(data) {
     type: 'success',
     message: `导入成功了 ${data.length} 条数据`
   })
-  return Promise.reject('sfsdfsdf')
 }
 </script>
 <style lang="scss" scoped></style>
