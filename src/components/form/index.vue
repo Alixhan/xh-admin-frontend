@@ -56,6 +56,7 @@ export default {
 
     // 表单提交，表单验证，通过后统一上传文件
     async function submit() {
+      if (props.loading) return Promise.reject('loading...')
       await formRef.value.validate()
       await Promise.all(uploadInstances.value.map((i) => i.upload()))
       return props.model
@@ -136,8 +137,9 @@ export default {
         }
         const formItemSlots: { [name: string]: Function } = {
           default: () => {
-            if (i.columnParam.render) return i.columnParam.render()
-            return createVNode(i.renderArgs.component, param, i.renderArgs.slots)
+            const vNode = createVNode(i.renderArgs.component, param, i.renderArgs.slots)
+            if (i.columnParam.render) return i.columnParam.render(vNode)
+            return vNode
           }
         }
         if (column.comment) {

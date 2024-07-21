@@ -3,11 +3,11 @@
  * 严格的类型定义有助于后期项目的维护，并能极大的提高代码可靠性
  * 表单类型定义
  */
-import type {ValidRule} from '@i/utils/validate'
-import type {CommonColumnType, SlotsObj} from '@i/components/index'
-import type {FormProps} from 'element-plus'
-import {formEmits, formProps} from 'element-plus'
-import type {PropType} from 'vue'
+import type { ValidRule } from '@i/utils/validate'
+import type { CommonColumnType, SlotsObj } from '@i/components/index'
+import type { FormProps } from 'element-plus'
+import { formEmits, formProps } from 'element-plus'
+import type { PropType, VNode } from 'vue'
 
 /**
  * 表单列类型
@@ -17,7 +17,7 @@ export declare type FormColumnType = CommonColumnType | 'separator'
 /**
  * 表单处理类型
  */
-export declare type FormHandleType = 'add' | 'edit' | 'detail' | any
+export declare type FormHandleType = 'add' | 'edit' | 'detail' | string
 
 /**
  * 通用表单column
@@ -33,6 +33,8 @@ export interface CommonFormColumn<T extends object> extends Partial<Omit<FormPro
   prop?: string
   // 校验规则
   rules?: ValidRule<T, keyof T> | ValidRule<T, keyof T>[]
+  // 自定义渲染，参数为默认渲染的vNode
+  render?: (vNode: VNode) => VNode
   //疑问备注框
   comment?: any
   //显示必填星号
@@ -64,7 +66,7 @@ export const mFormProps = {
     type: String as PropType<FormHandleType>,
     default: 'add'
   },
-  // 跨列数，对应el-col
+  // 跨度，对应el-col
   colspan: {
     type: Number
   },
@@ -73,7 +75,7 @@ export const mFormProps = {
     type: Object,
     required: true
   },
-  // 表单列定义
+  // 表单项定义
   columns: {
     type: Array as PropType<CommonFormColumn<any>[]>,
     required: true
