@@ -48,7 +48,6 @@ const links = {
   Nginx: 'https://nginx.org/en',
   Docker: 'https://www.docker.com/',
   // 内部链接
-  'Validate 数据验证': '/frontend/utils/validate',
   'Upload 上传': '/frontend/components/upload',
   'Icon 图标': '/frontend/components/icon',
   'SingleDatePicker 日期范围': '/frontend/components/single-date-picker',
@@ -56,6 +55,11 @@ const links = {
   'Table 表格': '/frontend/components/table',
   'ExcelImport 导入': '/frontend/components/excel-import',
   'CommonFormColumn': '/frontend/components/form#commonformcolumn-表单项',
+  'Validate 数据验证': '/frontend/utils/validate',
+  'Dict 获取数据字典详情': '/frontend/utils/dict',
+  'EChart 图表': '/frontend/utils/echarts',
+  'Request 请求': '/frontend/utils/request',
+  '文件下载链接': '/frontend/utils/request',
 }
 
 export default (md: MarkdownIt): void => {
