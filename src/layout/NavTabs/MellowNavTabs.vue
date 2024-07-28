@@ -16,7 +16,7 @@
         :effect="route.fullPath === tab.fullPath ? 'dark' : 'plain'"
       >
         <div class="tag-content">
-          <Icon v-if="systemStore.layout.showNavTabIcon && tab.icon" class="tab-icon" :model-value="tab.icon" />
+          <m-icon v-if="systemStore.layout.showNavTabIcon && tab.icon" class="tab-icon" :value="tab.icon" />
           {{ tab.title }}
         </div>
       </el-tag>
@@ -27,7 +27,7 @@
 import { useSystemStore } from '@/stores/system'
 import { inject } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import Icon from '@/components/Icon.vue'
+import MIcon from '@/components/Icon.vue'
 
 const systemStore = useSystemStore()
 const navTabs = systemStore.navTabs
