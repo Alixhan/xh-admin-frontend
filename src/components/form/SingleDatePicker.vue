@@ -120,7 +120,7 @@ const startParam = {
   'onUpdate:modelValue': updateStart,
   shortcuts,
   disabledDate(date: Date) {
-    if (props.end) return date.getTime() > new Date(props.end).getTime()
+    if (props.end) return dayjs(date).isAfter(dayjs(props.end))
   }
 }
 const endParam = {
@@ -132,7 +132,7 @@ const endParam = {
   type,
   'onUpdate:modelValue': updateEnd,
   disabledDate(date: Date) {
-    if (props.start) return date.getTime() < new Date(props.start).getTime()
+    if (props.start) return dayjs(date).isBefore(dayjs(props.start))
   }
 }
 
