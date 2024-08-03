@@ -6,7 +6,7 @@ import plugin from './plugins'
 import MyVitePlugin from './plugins/vite-plugin'
 import vueI18n from '@intlify/unplugin-vue-i18n/vite'
 
-const mode = ''
+const mode = process.argv.includes('dev') ? 'development' : ''
 const dir = process.cwd()
 const env = mergeConfig(loadEnv('', dir), loadEnv(mode, dir))
 const viteDefine = {}
@@ -139,12 +139,12 @@ export default defineConfig({
                     text: '组件',
                     base: '/frontend/components',
                     items: [
+                        {text: 'Form 表单', link: '/form'},
+                        {text: 'Table 表格', link: '/table'},
                         {text: 'Upload 上传', link: '/upload'},
                         {text: 'Icon 图标', link: '/icon'},
                         {text: 'SingleDatePicker 日期范围', link: '/single-date-picker'},
                         {text: 'ExcelImport 导入', link: '/excel-import'},
-                        {text: 'Form 表单', link: '/form'},
-                        // {text: 'Table 表格', link: '/table'},
                     ]
                 },
                 {

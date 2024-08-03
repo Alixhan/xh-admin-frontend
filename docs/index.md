@@ -11,9 +11,11 @@ hero:
     alt: 晓寒开源管理系统
   tagline: 一个适合现代的，高开发效率的，前后端分离管理系统基础框架
   actions:
-    - theme: brand
-      text: 开始 ✨
+    - text: 快速开始
       link: /guide/introduction
+    - theme: alt
+      text: 前端手册
+      link: /frontend
 
 features:
   - icon: 💡
