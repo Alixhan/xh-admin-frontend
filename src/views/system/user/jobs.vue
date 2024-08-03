@@ -8,10 +8,26 @@
     :data="jobData"
     row-key="id"
   />
-  <el-dialog :title="$t('system.org.select')" v-model="visible1" draggable destroy-on-close append-to-body align-center width="80%">
+  <el-dialog
+    :title="$t('system.org.select')"
+    v-model="visible1"
+    draggable
+    destroy-on-close
+    append-to-body
+    align-center
+    width="80%"
+  >
     <select-org selection="single" style="height: calc(90vh - 80px)" @select="selectedOrg" @close="visible1 = false" />
   </el-dialog>
-  <el-dialog :title="$t('system.role.select')" v-model="visible2" draggable destroy-on-close append-to-body align-center width="80%">
+  <el-dialog
+    :title="$t('system.role.select')"
+    v-model="visible2"
+    draggable
+    destroy-on-close
+    append-to-body
+    align-center
+    width="80%"
+  >
     <select-role selection="single" style="height: calc(90vh - 80px)" @select="selectedRole" />
   </el-dialog>
 </template>
@@ -64,7 +80,7 @@ watchEffect(() => {
       label: t('system.org.label'),
       required: handleType.value !== 'detail',
       editable: handleType.value !== 'detail',
-      editParam: (row) => {
+      editParam: ({ row }) => {
         return {
           readonly: true,
           rules: { required: true },
@@ -80,7 +96,7 @@ watchEffect(() => {
       label: t('system.role.label'),
       required: handleType.value !== 'detail',
       editable: handleType.value !== 'detail',
-      editParam: (row) => {
+      editParam: ({ row }) => {
         return {
           readonly: true,
           rules: { required: true },
@@ -139,7 +155,7 @@ function selectedRole(rows) {
 
 // 验证方法
 function validate() {
-  return jobTableRef.value.formRef.validate()
+  return jobTableRef.value.validate()
 }
 
 defineExpose({

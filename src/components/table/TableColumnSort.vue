@@ -92,12 +92,6 @@ function checkChange(node: Node & TableSortColumn, checked: boolean, halfChecked
 }
 </script>
 <style scoped lang="scss">
-.column-sort {
-  :deep(.el-tree-node__expand-icon) {
-    display: none;
-  }
-}
-
 :deep(.custom-tree-node) {
   > .el-tree-node__content {
     display: flex;

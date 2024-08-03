@@ -269,7 +269,7 @@ export function generateFormRules<T extends object>(
         if (errMsg) callback(Error(errMsg?.toString()))
         else callback()
       },
-      trigger: i.trigger
+      trigger: i.trigger ?? 'blur'
     }
   })
 }

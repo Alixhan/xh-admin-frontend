@@ -35,7 +35,7 @@
         value-format="YYYY-MM-DD HH:mm:ss"
         v-model="modelValue.value1"
       />
-      <el-input v-else class="filter-input" v-model="modelValue.value1" size="small" clearable />
+      <el-input v-else class="filter-input" :type="column?.type" v-model="modelValue.value1" size="small" clearable />
       <template v-if="modelValue.condition === 'bt'">
         <el-date-picker
           key="2"
@@ -47,7 +47,7 @@
           :default-time="new Date('2000-10-01 23:59:59')"
           v-model="modelValue.value2"
         />
-        <el-input v-else class="filter-input" v-model="modelValue.value2" size="small" clearable />
+        <el-input v-else class="filter-input" :type="column?.type" v-model="modelValue.value2" size="small" clearable />
       </template>
     </template>
     <el-icon

@@ -12,11 +12,11 @@ import type { ValidRule } from '@i/utils/validate'
 
 export const mTableProps = {
   ...elTablePropsDefault,
-  formType: {
+  handleType: {
     type: String as PropType<FormHandleType>,
     default: 'add'
   },
-  // 如果高度随内容自动增高：则需要设置为 "auto", 如果表格高度制定了则需要设定为 "stretch"
+  // 如果高度随内容自动增高：则需要设置为 "auto", 如果需要自动充满父容器，设为 "stretch"
   layout: {
     type: String as PropType<TableLayout>
   },
@@ -45,7 +45,7 @@ export const mTableProps = {
     default: false
   },
   /**
-   * 可选择行的表格 <multiple|single>
+   * 可选择行的表格
    */
   selection: {
     type: String as PropType<TableSelection>
@@ -98,9 +98,8 @@ export const mTableProps = {
 }
 
 /**
- * T为表格行的数据类型，F为表单数据类型
+ * T为表格行的数据类型，F为简单查询条件对象类型
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export type MTableProps<T extends object, F extends object> = ExtractPropTypes<typeof mTableProps>
 
 // 表格列定义
@@ -119,14 +118,14 @@ export interface TableColumn<T extends object> extends Partial<Omit<TableColumnC
   comment?: VNode
   //显示必填星号
   required?: boolean
-  // 表格是否可编辑
-  editable?: boolean
   // 此列不导出到excel
   notExport?: boolean
   // 此列隐藏
   hidden?: boolean
+  // 表格是否可编辑
+  editable?: boolean
   // 表格编辑参数
-  editParam?: CommonFormColumn<T> | ((row: T, column: TableColumn<T>) => CommonFormColumn<T>)
+  editParam?: CommonFormColumn<T> | ((scope :CI<T>) => CommonFormColumn<T>)
   //允许用户按照自己的slotName插槽定制
   slotName?: string
   // 操作列按钮
@@ -158,8 +157,10 @@ export interface TableSortColumn {
 
 export interface CI<T extends object> {
   $index: number
-  column: TableColumn<T>
-  row: T
+  column: any
+  row: T,
+  $fullIndex?: number
+  $column: TableColumn<T>
 }
 
 // 通用表格分页参数对象类型
@@ -174,6 +175,8 @@ export interface TablePagination {
   background: true
   // 显示哪些布局控件，参考element-plus分页组件
   layout: 'total,sizes,prev,pager,next,jumper' | string
+
+  [prop: string]: any
 }
 
 /**
@@ -193,7 +196,6 @@ export type CommonTableColumn<T extends object> =
   | ItemListTableColumn<T>
   | SlotsTableColumn<T>
   | EditableTableColumn<T>
-  | RangeEditableTableColumn<T>
   | SelectionTableColumn<T>
 
 /**
@@ -235,7 +237,9 @@ export interface OperationTableColumn<T extends object> extends TableColumn<T> {
  * 具有itemList列
  */
 export interface ItemListTableColumn<T extends object> extends TableColumn<T>, ItemListColumn {
-  type: 'select' | 'checkbox-group' | 'radio-group'
+  type: 'select'
+  //选项列表
+  itemList: CommonItemList
 }
 
 /**
@@ -252,20 +256,9 @@ export interface SlotsTableColumn<T extends object> extends TableColumn<T> {
  * table可编辑列
  */
 export interface EditableTableColumn<T extends object> extends TableColumn<T>, ItemListColumn {
-  editable: boolean
+  editable: true
   // 表格编辑参数
   editParam?: CommonFormColumn<T> | ((row: T, column: TableColumn<T>) => CommonFormColumn<T>)
-}
-
-/**
- * table时间范围可编辑列
- */
-export interface RangeEditableTableColumn<T extends object> extends EditableTableColumn<T>, ItemListColumn {
-  type: 'daterange' | 'datetimerange' | 'monthrange'
-  // 第二属性
-  prop2: string
-  //可独立选择
-  single?: string
 }
 
 export interface OperationButton<T> {

@@ -33,6 +33,7 @@ import { isUndefined } from 'lodash-es'
 import { DefaultMaxCount } from '@/components/constants'
 import { useI18n } from 'vue-i18n'
 import { getCurrentLocales } from '@/i18n'
+import validateFrom from '@/utils/validate'
 import type { PageQuery, PageResult, RestResponse } from '@i/utils/request'
 import type {
   CI,
@@ -44,6 +45,7 @@ import type {
 } from '@i/components/table'
 import { mTableProps } from '@i/components/table'
 import ContextMenu, { type ContextMenuItem } from '@/components/ContextMenu.vue'
+import type { RuleObject } from '@i/utils/validate'
 
 /**
  * 通用表格组件
@@ -89,6 +91,7 @@ export default defineComponent(
       total: 0,
       currentPage: 1,
       pageSize: 20,
+      pageSizes: [5, 10, 20, 50, 100, 1000],
       background: true,
       layout: 'total,sizes,prev,pager,next,jumper'
     })
@@ -97,6 +100,7 @@ export default defineComponent(
         ...pagination.value,
         ...props.pagination
       })
+      if (pagination.value.defaultPageSize) pageQuery.value.pageSize = pagination.value.defaultPageSize
     }
 
     watch(
@@ -111,9 +115,9 @@ export default defineComponent(
     const loadingRef = ref(false)
 
     // 向后端请求表格数据
-    function fetchQuery() {
+    async function fetchQuery() {
       if (props.fetchData) {
-        props
+        await props
           .fetchData(
             {
               ...pageQuery.value,
@@ -161,13 +165,6 @@ export default defineComponent(
 
     //选中行的数据
     const selectionRows: Ref<T[]> = ref([])
-
-    expose({
-      tableRef,
-      formRef,
-      exportExcelRef,
-      fetchQuery
-    })
 
     function rowClick(row: T, column: CommonTableColumn<T>, event: Event) {
       if (props.selection === 'single') {
@@ -404,10 +401,11 @@ export default defineComponent(
 
     // 生成可编辑column的参数
     function initEditFormItemParam(column: TableColumn<T>) {
-      if (!['add', 'edit'].includes(props.formType ?? '')) return
+      if (!['add', 'edit'].includes(props.handleType ?? '')) return
       // 如果有定义插槽了，优先使用插槽内容
       if (column?.slots?.default) return
       if (!column.editable) return
+      if (!column.prop) return
       column.slots || (column.slots = {})
       const columnParam = {
         type: column.type,
@@ -426,12 +424,15 @@ export default defineComponent(
           ...column.editParam
         })
       }
+
       column.slots.default = (scope: CI<T>) => {
-        const prop = `[${scope.$index}].${column.prop}`
+        let $index = scope.$index
+        if (props.isPage) $index = $index + pagination.value.pageSize! * (pagination.value.currentPage! - 1)
+        const prop = `${$index}.${column.prop}`
         let renderArgs: any
         let editParam = column.editParam
         if (editParam instanceof Function) {
-          editParam = editParam(scope.row, column)
+          editParam = editParam({ ...scope, $fullIndex: $index, $column: column })
           renderArgs = generateDynamicColumn({
             ...columnParam,
             ...editParam
@@ -443,9 +444,8 @@ export default defineComponent(
           ...renderArgs.param,
           ...vModelValue(renderArgs.param, scope.row)
         }
-
         const formItemParam = {
-          key: prop || column.type,
+          key: prop,
           prop,
           style: 'margin-bottom: 0;',
           inlineMessage: true,
@@ -462,6 +462,35 @@ export default defineComponent(
     //调用初始化表格筛选排序列数组
     function initSortColumnFun() {
       sortColumns.value = initSortColumn(tableColumnsParams.value)
+    }
+
+    // 验证表格数据
+    async function validate() {
+      for (let i = 0; i < data.value.length; i++) {
+        const row = data.value[i]
+        const ruleObject: RuleObject<T> = {}
+        leafColumns.value
+          .filter((i) => i.prop && i.editable && i.editParam)
+          .forEach((column) => {
+            let param = column.editParam! as any
+            if (param instanceof Function) {
+              param = param({ column: column, $index: i, row, $fullIndex: i, $column: column })
+            }
+            if (param.rules)
+              ruleObject[column.prop!] = {
+                prop: column.prop as keyof T,
+                label: column.label,
+                rules: param.rules
+              }
+          })
+        const result = await validateFrom(row, ruleObject)
+        if (result.error) {
+          pageQuery.value.currentPage = Math.floor(i / pageQuery.value.pageSize!) + 1
+          await nextTick()
+          formRef.value.validate()
+          return Promise.reject(result)
+        }
+      }
     }
 
     //初始化表格筛选排序数组
@@ -497,7 +526,7 @@ export default defineComponent(
 
           const columnSlots = column.slots
           return <el-table-column {...param} v-slots={columnSlots} />
-        }) as VNode[]
+        }) satisfies VNode[]
     }
 
     // 生成搜索框
@@ -530,7 +559,9 @@ export default defineComponent(
         ]
         if (props.selection) {
           content.push(
-            <span>
+            <span
+              class={{ exceed_selection: props.selectionLimit && selectionRows.value.length > props.selectionLimit }}
+            >
               ，{t('m.table.selected')} <span class="total-text">{selectionRows.value.length}</span>
               {!isUndefined(props.selectionLimit) ? (
                 <span>
@@ -565,7 +596,7 @@ export default defineComponent(
       }
       // 删除无效属性
       const invalidProps = [
-        'formType',
+        'handleType',
         'isFilterTable',
         'isExportExcel',
         'selection',
@@ -592,15 +623,15 @@ export default defineComponent(
               <div class="right-action">
                 {slots['right-action']?.()}
                 {props.isExportExcel && (
-                    <ExportExcel
-                        ref={exportExcelRef}
-                        class="action-btn"
-                        pageQuery={pageQuery.value}
-                        exportFileName={props.exportFileName}
-                        fetchData={props.fetchData}
-                        data={data.value}
-                        columns={tableColumnsParams.value}
-                    />
+                  <ExportExcel
+                    ref={exportExcelRef}
+                    class="action-btn"
+                    pageQuery={pageQuery.value}
+                    exportFileName={props.exportFileName}
+                    fetchData={props.fetchData}
+                    data={data.value}
+                    columns={tableColumnsParams.value}
+                  />
                 )}
                 {props.isComplexFilter && props.fetchData && (
                   <QueryFilter ref={queryFilterRef} v-model={pageQuery.value.filters} onSearch={fetchQuery} />
@@ -615,16 +646,20 @@ export default defineComponent(
               </div>
             </el-scrollbar>
           </ElForm>
-          <el-form ref={formRef} class="table-form" model={props.data} scroll-to-error>
+          <el-form
+            ref={formRef}
+            class="table-form"
+            model={props.data}
+            scroll-to-error
+            scroll-into-view-options={{ inline: 'center', block: 'center' }}
+          >
             <el-table
               {...tableParam}
-              v-slots={slots}
+              v-slots={{ ...slots, default: () => [generateTableColumn(sortColumns.value), slots.default?.()] }}
               onHeaderContextmenu={onHeaderContextmenu}
               // v-loading={loadingRef.value} 发现此处加入loading会导致内存泄漏。。。。
               class={{ 'el-table-view': true, 'radio-selection': props.selection === 'single' }}
-            >
-              {generateTableColumn(sortColumns.value)}
-            </el-table>
+            />
           </el-form>
           {generatePaginationView()}
         </div>
@@ -661,11 +696,19 @@ export default defineComponent(
       }
     }
 
+    expose({
+      tableRef,
+      formRef,
+      exportExcelRef,
+      fetchQuery,
+      validate
+    })
+
     return () => {
       return (
         <div style={props.style}>
           <ContextMenu ref={contextMenuRef} onClick={clickMenu} />
-          <div class={`m-table layout-${props.layout ?? 'default'}`}>
+          <div class={`m-table layout-${props.layout ?? 'default'} ${props.height ? 'custom-height' : ''}`}>
             {generateTopFilter()}
             {generateTableView()}
           </div>
@@ -746,12 +789,17 @@ export default defineComponent(
 
         .total-icon {
           color: var(--el-color-primary);
-          padding-right: 5px;
         }
 
         .total-text {
           color: var(--el-color-primary);
           font-weight: bold;
+        }
+
+        .exceed_selection {
+          .total-text {
+            color: var(--el-color-danger);
+          }
         }
       }
 
@@ -841,6 +889,17 @@ export default defineComponent(
     .table-form {
       flex-grow: 1;
       height: 0;
+    }
+  }
+}
+
+//定制高度
+.custom-height {
+  .table-view {
+    height: auto;
+
+    .table-form {
+      height: auto;
     }
   }
 }

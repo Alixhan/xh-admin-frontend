@@ -135,4 +135,4 @@ export interface PageResult<T extends object = object> {
 /**
  * 查询分页数据方法
  */
-export type FetchPageDataFun<T extends object> = (param: PageQuery, option: RequestOption<T>) => Promise<RestResponse<PageResult<T>>>
+export type FetchPageDataFun<T extends object> = (pageQuery: PageQuery, option: RequestOption<T>) => Promise<RestResponse<PageResult<T>>>
