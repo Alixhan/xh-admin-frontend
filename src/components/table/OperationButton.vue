@@ -10,7 +10,9 @@
         <el-link :underline="false" type="primary">
           <div style="display: inline-flex; align-items: center">
             {{ $t('common.more') }}
-            <el-icon><Arrow-down /></el-icon>
+            <el-icon>
+              <Arrow-down />
+            </el-icon>
           </div>
         </el-link>
         <template #dropdown>
@@ -30,7 +32,7 @@
   </div>
 </template>
 <script lang="ts" setup generic="T">
-import { ref, toRef, watch } from 'vue'
+import { ref, watch } from 'vue'
 import { auth as auth2 } from '@/directive'
 import { ElDropdown, ElDropdownMenu, ElLink } from 'element-plus'
 import { DefaultMaxCount } from '@/components/constants'
@@ -64,12 +66,13 @@ watch(
 )
 
 function init() {
-  const buttons: OperationButton<T>[] = toRef(props, 'buttons').value.map((i) => {
+  arr2.value = []
+  const buttons: OperationButton<T>[] = props.buttons.map((i) => {
     return {
       type: 'primary',
       ...i,
-      onClick: () => i.onClick?.(props.row),
-      disabled: i.disabled instanceof Function ? i.disabled(props.row) : i.disabled
+      onClick: () => i.onClick?.(props.row!),
+      disabled: i.disabled instanceof Function ? i.disabled(props.row!) : i.disabled
     }
   })
   if (props.auth) {

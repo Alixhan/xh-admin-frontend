@@ -1,7 +1,7 @@
 <template>
   <el-icon class="icon">
     <component v-if="iconType === 'el' && src" :is="src" />
-    <svg-icon v-if="iconType === 'local' && src" :src="src" inherited />
+    <svg-icon v-else-if="iconType === 'local' && src" :src="src" inherited />
   </el-icon>
 </template>
 <script setup lang="ts">
@@ -9,7 +9,7 @@
  * 图标展示组件
  * 2023-3-29 sunxh
  */
-import { ref, shallowRef, watchEffect } from 'vue'
+import { ref, watchEffect } from 'vue'
 import SvgIcon from '@/components/SvgIcon.vue'
 
 const localSvg = import.meta.glob('@/assets/icon/**/*.svg', { query: '?url', import: 'default' })
@@ -21,7 +21,7 @@ defineOptions({
 const props = defineProps<{ value?: string }>()
 
 const iconType = ref()
-const src = shallowRef()
+const src = ref()
 
 watchEffect(initIcon)
 

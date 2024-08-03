@@ -1,6 +1,6 @@
 <script lang="tsx">
-import { defineComponent, ref, toRef, watchEffect } from 'vue'
-import useFileBinary from '@/utils/binary'
+import { computed, defineComponent, ref, toRef, watchEffect } from 'vue'
+import fetchBinary from '@/utils/binary'
 
 /**
  * svg图片使用，可动态修改svg节点属性，改变颜色等
@@ -17,13 +17,22 @@ export default defineComponent({
     inherited: Boolean // 是否继承当前字体颜色
   },
   setup(props) {
-    const svgBinary = useFileBinary(toRef(props, 'src'))
-    const svg = ref()
+    const src = toRef(props, 'src')
+    const svgBinary = ref('')
+    let fetch: Promise<string>
 
-    watchEffect(compSvg)
+    watchEffect(async () => {
+      fetch = fetchBinary(src.value)
+      await fetch
+      setBinary()
+    })
 
-    async function compSvg() {
-      if (!svgBinary.value) return
+    function setBinary() {
+      fetch.then((data) => (svgBinary.value = data))
+    }
+
+    const svg = computed(() => {
+      if (!svgBinary.value) return ''
       let svgStr = svgBinary.value
       if (props.property) {
         for (const prop in props.property) {
@@ -40,8 +49,8 @@ export default defineComponent({
         const regExp = /(?<=fill=["'])[^"']*(?=["'])/g
         svgStr = svgStr.replace(regExp, 'currentColor')
       }
-      svg.value = svgStr
-    }
+      return svgStr
+    })
 
     return () => <div v-html={svg.value} />
   }

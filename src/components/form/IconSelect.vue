@@ -45,9 +45,9 @@
         <el-scrollbar class="icon-scroll" height="250px">
           <div class="icon-views">
             <div
-              v-for="(icon, index) in currentIcons"
+              v-for="(icon, i) in currentIcons"
               :title="icon"
-              :key="index"
+              :key="i"
               class="icon-item-view"
               @click="selectIcon(icon)"
             >
@@ -157,6 +157,7 @@ function inputBlur() {
 }
 
 .icon-item-view {
+  box-sizing: border-box;
   display: inline;
   width: 30px;
   height: 30px;
