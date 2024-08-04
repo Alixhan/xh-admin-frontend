@@ -14,7 +14,7 @@ import MockAdapter from 'axios-mock-adapter'
 function mock(axios) {
   const mock = new MockAdapter(axios, { delayResponse: 2000 })
   mock.onAny(`${import.meta.env.VITE_BASE_URL}/api/mock-success`).reply(200, {
-    httPCode: 200,
+    httpCode: 200,
     status: 'success',
     message: 'ok',
     data: [{ id: 1, name: 'John Smith' }]
