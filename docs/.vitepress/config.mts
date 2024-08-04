@@ -152,6 +152,10 @@ export default defineConfig({
                     base: '/frontend/utils',
                     items: [
                         {text: 'Validate 数据校验', link: '/validate'},
+                        {text: 'EChart 图表', link: '/echart'},
+                        {text: 'Request 请求', link: '/request'},
+                        {text: 'Dict 获取数据字典', link: '/dict'},
+                        {text: '获取文件请求链接', link: '/file-url'},
                     ]
                 }
             ],

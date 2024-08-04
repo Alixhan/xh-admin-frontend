@@ -15,7 +15,7 @@
 - ^link(axios)s
 - ^link(countup.js)s
 - ^link(dayjs)s
-- ^link(echarts)s
+- ^link(ECharts)s
 - ^link(Vue3)s
 - ^link(exceljs)s
 - ^link(file-saver)s

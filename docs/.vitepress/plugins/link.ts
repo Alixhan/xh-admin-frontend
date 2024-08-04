@@ -11,7 +11,7 @@ const links = {
   axios: 'https://github.com/axios/axios',
   'countup.js': 'https://github.com/inorganik/countUp.js',
   dayjs: 'https://day.js.org/',
-  echarts: 'https://echarts.apache.org/zh/index.html',
+  ECharts: 'https://echarts.apache.org/zh/index.html',
   Vue3: 'https://cn.vuejs.org/',
   exceljs: 'https://github.com/exceljs/exceljs',
   'file-saver': 'https://github.com/eligrey/FileSaver.js',
@@ -59,7 +59,7 @@ const links = {
   'Dict 获取数据字典详情': '/frontend/utils/dict',
   'EChart 图表': '/frontend/utils/echarts',
   'Request 请求': '/frontend/utils/request',
-  '文件下载链接': '/frontend/utils/request',
+  '文件请求链接': '/frontend/utils/file-url',
 }
 
 export default (md: MarkdownIt): void => {
