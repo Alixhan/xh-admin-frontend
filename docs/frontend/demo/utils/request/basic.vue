@@ -16,19 +16,19 @@ import MockAdapter from 'axios-mock-adapter'
 function mock(axios) {
   const mock = new MockAdapter(axios)
   mock.onAny(`${import.meta.env.VITE_BASE_URL}/api/mock-success`).reply(200, {
-    httPCode: 200,
+    httpCode: 200,
     status: 'success',
     message: 'ok',
     data: [{ id: 1, name: 'John Smith' }]
   })
   mock.onAny(`${import.meta.env.VITE_BASE_URL}/api/mock-error`).reply(500)
   mock.onAny(`${import.meta.env.VITE_BASE_URL}/api/mock-warning`).reply(200, {
-    httPCode: 200,
+    httpCode: 200,
     status: 'warning',
     message: '这是一个警告信息'
   })
   mock.onAny(`${import.meta.env.VITE_BASE_URL}/api/mock-error2`).reply(200, {
-    httPCode: 200,
+    httpCode: 200,
     status: 'error',
     message: '这个是一个业务错误'
   })
