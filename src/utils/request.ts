@@ -67,6 +67,7 @@ export default function createAxios<R = any, Q = any>(opt?: RequestOption<R>): M
     if (e instanceof AxiosError) {
       param.message = e.message
     }
+    param.message ??= 'Error'
     ElNotification(param)
     return Promise.reject(e)
   }
@@ -83,7 +84,8 @@ export default function createAxios<R = any, Q = any>(opt?: RequestOption<R>): M
       config.data
       // 确认的提示
       await ElMessageBox.confirm(option.confirmMsg, i18n.global.t('common.tip'), {
-        type: 'warning'
+        type: 'warning',
+        confirmButtonText: option.confirmButtonText
       })
     }
     isRef(option.loadingRef) && (option.loadingRef.value = true)
@@ -92,7 +94,8 @@ export default function createAxios<R = any, Q = any>(opt?: RequestOption<R>): M
         body: true,
         fullscreen: true,
         lock: true,
-        text: option.loadingText
+        text: option.loadingText,
+        background: 'rgba(0, 0, 0, 0.7)',
       })
     }
     const systemStore = useSystemStore()
@@ -105,6 +108,7 @@ export default function createAxios<R = any, Q = any>(opt?: RequestOption<R>): M
   service.interceptors.response.use(
     async (res) => {
       const data = res.data
+      if (!data.status) return data
       resetLoading()
       if (data.status !== 'success') return showErrorMsg(data)
       if (option.showSuccessMsg) {
