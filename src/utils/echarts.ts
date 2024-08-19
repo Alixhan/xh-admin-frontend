@@ -45,15 +45,15 @@ echarts.use([
 ])
 
 export type EChartsOption = echarts.ComposeOption<
-  | TooltipComponentOption
-  | LegendComponentOption
-  | PieSeriesOption
-  | BarSeriesOption
-  | TitleComponentOption
-  | ToolboxComponentOption
-  | GridComponentOption
-  | LineSeriesOption
-  | GaugeSeriesOption
+    | TooltipComponentOption
+    | LegendComponentOption
+    | PieSeriesOption
+    | BarSeriesOption
+    | TitleComponentOption
+    | ToolboxComponentOption
+    | GridComponentOption
+    | LineSeriesOption
+    | GaugeSeriesOption
 >
 
 export function useEcharts(option: Ref<EChartsOption>, onInit?: (eChart: echarts.ECharts) => void) {
@@ -64,7 +64,7 @@ export function useEcharts(option: Ref<EChartsOption>, onInit?: (eChart: echarts
   const systemStore = useSystemStore()
 
   async function initEcharts() {
-    if (!domRef.value) return
+    if (!domRef.value || !width.value) return
     echartsInstance?.dispose()
     const theme = systemStore.layout.isDark ? 'dark' : 'light'
     echartsInstance = echarts.init(domRef.value, theme)
@@ -72,9 +72,10 @@ export function useEcharts(option: Ref<EChartsOption>, onInit?: (eChart: echarts
     setOption()
   }
 
-  function setOption(opt?: EChartsOption, notMerge?: any, lazyUpdate?: any) {
+  async function setOption(opt?: EChartsOption, notMerge?: any, lazyUpdate?: any) {
+    if(!echartsInstance) await initEcharts()
     ;(opt ?? option.value).backgroundColor ??= 'transparent'
-    echartsInstance.setOption(opt ?? option.value, notMerge, lazyUpdate)
+    echartsInstance?.setOption(opt ?? option.value, notMerge, lazyUpdate)
   }
 
   let initialized = false
@@ -82,17 +83,18 @@ export function useEcharts(option: Ref<EChartsOption>, onInit?: (eChart: echarts
   const scope = effectScope()
   scope.run(() => {
     watch(
-      () => option.value,
-      (opt) => setOption(opt, true),
-      { deep: true }
+        () => option.value,
+        (opt) => setOption(opt, true),
+        { deep: true }
     )
 
     watch(
-      () => [width.value, height.value],
-      useDebounceFn(() => {
-        if (initialized) echartsInstance?.resize()
-        else initialized = true
-      }, 40)
+        () => [width.value, height.value],
+        useDebounceFn(async () => {
+          if(!echartsInstance) await initEcharts()
+          if (initialized && width.value) echartsInstance?.resize()
+          else initialized = true
+        }, 40)
     )
 
     watch(() => [systemStore.layout.isDark], initEcharts)
