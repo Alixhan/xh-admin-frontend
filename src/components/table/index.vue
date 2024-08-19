@@ -44,7 +44,7 @@ import type {
   TableSortColumn
 } from '@i/components/table'
 import { mTableProps } from '@i/components/table'
-import ContextMenu, { type ContextMenuItem } from '@/components/ContextMenu.vue'
+import { type ContextMenuItem, showContextMenu } from '@/utils/context-menu'
 import type { RuleObject } from '@i/utils/validate'
 
 /**
@@ -206,8 +206,6 @@ export default defineComponent(
       fetchQuery()
     }
 
-    const contextMenuRef = ref()
-
     //列表头右击
     function onHeaderContextmenu(column: any, e: PointerEvent) {
       if (column.property) {
@@ -220,7 +218,7 @@ export default defineComponent(
         if (props.isComplexFilter && props.fetchData) {
           menus.unshift({ id: 1, prop: column.property, label: t('m.table.complexFilter'), icon: 'Filter' })
         }
-        contextMenuRef.value.show(e, menus)
+        showContextMenu(e, menus, clickMenu)
       }
     }
 
@@ -536,7 +534,7 @@ export default defineComponent(
           <TopFilter
             class="top-filter"
             columns={props.filterColumns}
-            v-model:param={pageQuery.value.param}
+            param={pageQuery.value.param!}
             loading={loadingRef.value}
             onSearch={fetchQuery}
           />
@@ -673,6 +671,7 @@ export default defineComponent(
       if (pageQuery.value.isPage) {
         const paginationParam = {
           ...pagination.value,
+          disabled: loadingRef.value,
           total: Math.max(pagination.value.total ?? 0, data.value.length),
           size: systemStore.layout.widthShrink ? 'small' : systemStore.layout.size,
           layout: pagination.value.layout
@@ -704,17 +703,14 @@ export default defineComponent(
       validate
     })
 
-    return () => {
-      return (
-        <div style={props.style}>
-          <ContextMenu ref={contextMenuRef} onClick={clickMenu} />
-          <div class={`m-table layout-${props.layout ?? 'default'} ${props.height ? 'custom-height' : ''}`}>
-            {generateTopFilter()}
-            {generateTableView()}
-          </div>
+    return () => (
+      <div style={props.style} class={`layout-${props.layout ?? 'default'}`}>
+        <div class={`m-table ${props.height ? 'custom-height' : ''}`}>
+          {generateTopFilter()}
+          {generateTableView()}
         </div>
-      )
-    }
+      </div>
+    )
   },
   {
     name: 'MTable',
@@ -860,6 +856,21 @@ export default defineComponent(
 
 .height-shrink-layout {
   .layout-default {
+    .m-table {
+      .table-view {
+        height: auto;
+
+        .table-form {
+          height: auto;
+        }
+      }
+    }
+  }
+}
+
+//表格自动高度
+.layout-auto {
+  .m-table {
     .table-view {
       height: auto;
 
@@ -870,25 +881,18 @@ export default defineComponent(
   }
 }
 
-//表格自动高度
-.layout-auto {
-  .table-view {
-    height: auto;
-
-    .table-form {
-      height: auto;
-    }
-  }
-}
-
 //表格伸缩自适应父级高度
 .layout-stretch {
-  .table-view {
-    flex-grow: 1;
+  height: 100%;
 
-    .table-form {
+  .m-table {
+    .table-view {
       flex-grow: 1;
-      height: 0;
+
+      .table-form {
+        flex-grow: 1;
+        height: 0;
+      }
     }
   }
 }
