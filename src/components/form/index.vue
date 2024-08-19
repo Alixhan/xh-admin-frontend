@@ -1,12 +1,6 @@
 <script lang="tsx">
-import { computed, createVNode, provide, ref, shallowRef, watchEffect } from 'vue'
-import {
-  generateDynamicColumn,
-  generateFormRules,
-  generateLabelWidth,
-  generatePlaceholder,
-  vModelValue
-} from '@/components/mutils'
+import { createVNode, provide, ref, shallowRef, watchEffect } from 'vue'
+import { generateDynamicColumn, generateFormRules, generatePlaceholder, vModelValue } from '@/components/mutils'
 import { useSystemStore } from '@/stores/system'
 import { useElementSize } from '@vueuse/core'
 import type { UploadCtx } from '@/components/form/Upload.vue'
@@ -34,16 +28,15 @@ export default {
     const systemStore = useSystemStore()
 
     const formRef = ref()
-    const formSize = ref(useElementSize(formRef))
-    const colspan = ref(0)
-    watchEffect(() => {
-      let span = 24 / (Number(Math.floor(formSize.value.width / 300)) || 1)
-      if (span === 4.8) span = 6
-      colspan.value = span
-    })
 
-    //计算一下labelWidth，以最长label字符宽度作为form的labelWidth
-    const labelWidth = computed(() => props.labelWidth ?? generateLabelWidth(...props.columns!))
+    const formSize = ref(useElementSize(formRef))
+    const cols = ref(0)
+    watchEffect(() => {
+      let sizeWidth = 300
+      if (props.labelPosition === 'top') sizeWidth -= 100
+      if (systemStore.layout.size === 'small') sizeWidth -= 70
+      cols.value = Number(Math.floor(formSize.value.width / sizeWidth)) || 1
+    })
 
     const formItemParams = shallowRef<FormColumn[]>([])
     watchEffect(initFormItemParams)
@@ -102,26 +95,31 @@ export default {
       })
     }
 
+    function getColSpan(column: FormColumn) {
+      const colspan = 24 / cols.value
+      let span = column.colspan || props.colspan || colspan
+      if (systemStore.layout.widthShrink && span < colspan) span = colspan
+      if (column.cols) span = parseInt(column.cols) * span
+      return span
+    }
+
     //生成表单列
     function generateFormColumns() {
       return formItemParams.value.map((i) => {
         // 隐藏的不显示
         if (i.hidden) return null
         if (i.columnParam.type === 'separator') {
+          let content = i.columnParam.label && <div>{i.columnParam.label}</div>
+          if (i.columnParam.render) content = i.columnParam.render()
           return (
-            <el-col span={24}>
-              <el-divider content-position="left">
-                <div class="separator">
-                  <div />
-                  {i.columnParam.label}
-                </div>
-              </el-divider>
+            <el-col span={24} class="separator">
+              {content}
             </el-col>
           )
         }
         const column = i.columnParam
         // 允许用户按照自己的slotName定制
-        if (column.slotName) return slots[column.slotName]?.()
+        if (column.slotName) return slots[column.slotName]?.(i)
         const param = {
           class: 'form-input',
           ...i.renderArgs.param,
@@ -152,12 +150,8 @@ export default {
             )
           }
         }
-        let span = column.colspan || props.colspan || colspan.value
-        if (systemStore.layout.widthShrink && span < colspan.value) span = colspan.value
-        if (column.cols) span = parseInt(column.cols) * span
-        if (span > 24) span = 24
         return (
-          <el-col span={span}>
+          <el-col span={getColSpan(column)}>
             <el-form-item {...i.formItemParams} v-slots={formItemSlots} />
           </el-col>
         )
@@ -204,12 +198,8 @@ export default {
             return <el-skeleton-item {...skeletonParam} />
           }
         }
-        let span = column.colspan || props.colspan || colspan.value
-        if (systemStore.layout.widthShrink && span < colspan.value) span = colspan.value
-        if (column.cols) span = parseInt(column.cols) * span
-        if (span > 24) span = 24
         return (
-          <el-col span={span}>
+          <el-col span={getColSpan(column)}>
             <el-form-item {...{ ...i.formItemParams, required: false }} v-slots={formItemSlots} />
           </el-col>
         )
@@ -221,22 +211,22 @@ export default {
       const formParam: any = {
         ref: formRef,
         ...attrs,
-        ...props,
-        labelWidth: labelWidth.value
+        ...props
       }
       // 明细类型需要禁用表单
       if (isDetail) {
         formParam.disabled = true
       }
       // 小屏设备需要强制改变布局方式（竖屏）
-      if (systemStore.layout.widthShrink && colspan.value === 24) {
+      if (!props.labelPosition && systemStore.layout.widthShrink && cols.value === 1) {
         formParam.labelPosition = 'top'
       }
+      formParam.labelWidth ??= 'auto'
+      formParam.labelPosition ??= 'right'
       const skeletonParam = {
         loading: props.loading ?? false,
         animated: true
       }
-
       const skeletonSlots = {
         default: () => <el-row>{generateFormColumns()}</el-row>,
         template: () => <el-row>{generateFormSkeletons()}</el-row>
@@ -257,16 +247,19 @@ export default {
 }
 
 .separator {
-  font-size: 14px;
-  color: var(--el-text-color);
-  display: flex;
-  align-items: center;
+  font-size: 1.1em;
+  //font-weight: bold;
+  color: var(--el-text-color-regular);
+  margin: 0.5em 0;
+  border-bottom: var(--el-border);
 
   > div {
-    width: 6px;
-    height: 15px;
-    background-color: var(--el-color-primary);
-    margin-right: 10px;
+    margin-bottom: 0.5em;
   }
+}
+
+.el-col {
+  box-sizing: border-box;
+  padding: 0 5px;
 }
 </style>

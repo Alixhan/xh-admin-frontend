@@ -83,6 +83,9 @@ export const mFormProps = {
   labelWidth: {
     type: [String, Number]
   },
+  labelPosition: {
+    type: String as PropType<'top' | 'left' | 'right'>,
+  },
   scrollToError: {
     default: true
   },
