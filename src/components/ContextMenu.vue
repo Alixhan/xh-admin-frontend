@@ -30,22 +30,14 @@
 <script setup lang="tsx">
 import { ref } from 'vue'
 import { onClickOutside } from '@vueuse/core'
+import type { ContextMenuItem } from '@/utils/context-menu'
 
 /**
  * 上下文菜单
  */
-
 defineOptions({
   name: 'ContextMenu'
 })
-
-export interface ContextMenuItem {
-  label: string
-  icon?: any
-  disabled?: boolean
-  type?: 'default' | 'success' | 'warning' | 'info' | 'primary' | 'danger',
-  [prop: string]: any
-}
 
 const visible = defineModel<boolean>({ default: false })
 
@@ -53,7 +45,7 @@ const emit = defineEmits<{
   (e: 'click', data: ContextMenuItem): void
 }>()
 
-const menuItems = ref<ContextMenuItem []>([])
+const menuItems = ref<ContextMenuItem[]>([])
 const top = ref<any>(0)
 const left = ref<any>(0)
 
@@ -71,7 +63,7 @@ const triggerRef = ref({
   }
 })
 
-function show(el: PointerEvent, menus: ContextMenuItem []) {
+function show(el: PointerEvent, menus: ContextMenuItem[]) {
   menuItems.value = menus
   left.value = el.clientX
   top.value = el.clientY + 10
@@ -79,6 +71,7 @@ function show(el: PointerEvent, menus: ContextMenuItem []) {
 }
 
 function clickMenu(menu: ContextMenuItem) {
+  menu.onClick?.()
   emit('click', menu)
   visible.value = false
 }

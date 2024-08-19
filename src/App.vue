@@ -7,6 +7,8 @@
       </transition>
     </router-view>
     <SettingDrawer />
+    <!--   全局的右击菜单 -->
+    <ContextMenu ref="contextMenuRef" @click="callback" />
   </el-config-provider>
 </template>
 
@@ -15,6 +17,8 @@ import { computed, reactive } from 'vue'
 import { useSystemStore } from '@/stores/system'
 import SettingDrawer from '@/layout/SettingDrawer.vue'
 import { getLocale } from '@/i18n/index.ts'
+import ContextMenu from '@/components/ContextMenu.vue'
+import cm from '@/utils/context-menu'
 
 const systemStore = useSystemStore()
 
@@ -31,4 +35,5 @@ const rootClass = computed(() => {
     'height-shrink-layout': systemStore.layout.heightShrink
   }
 })
+const { contextMenuRef, callback } = cm()
 </script>
