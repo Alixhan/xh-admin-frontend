@@ -205,7 +205,7 @@ function demoLogin() {
     position: relative;
     width: min(350px, 80%);
     background: rgba(0, 0, 0, 0.2);
-    margin-top: 12%;
+    margin-top: calc((100vh - 450px) / 2);
 
     .form-view {
       .forget-password-view {

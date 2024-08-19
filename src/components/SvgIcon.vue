@@ -1,5 +1,5 @@
 <script lang="tsx">
-import { computed, defineComponent, ref, toRef, watchEffect } from 'vue'
+import {computed, defineComponent, type PropType, ref, toRef, watchEffect} from 'vue'
 import fetchBinary from '@/utils/binary'
 
 /**
@@ -10,7 +10,7 @@ export default defineComponent({
   name: 'MSvgIcon',
   props: {
     src: {
-      type: String,
+      type: String as PropType<any>,
       required: true
     }, // 图标路径
     property: Object, // 修改svg属性值

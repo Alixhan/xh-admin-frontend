@@ -251,6 +251,7 @@ export default {
       detail: '@:system.role.label@:common.detail',
       name: '角色名称',
       permission: '权限',
+      dataPermission: '数据权限',
       parentId: '上级角色id',
       parentName: '上级角色名称',
       selectParent: '选择上级角色',
@@ -295,7 +296,18 @@ export default {
     },
     log: {
       label: '日志',
-      detail: '@:system.log.label@:common.detail',
+      detail: '@:system.log.label@:common.detail'
+    },
+    dataPermission: {
+      label: '数据权限',
+      entity: '数据实体',
+      add: '@:system.dataPermission.label@:common.add',
+      edit: '@:system.dataPermission.label@:common.edit',
+      detail: '@:system.dataPermission.label@:common.detail',
+      name: '数据权限名称',
+      expression: '权限表达式',
+      positive: '是',
+      negative: '非',
     }
   },
   monitor: {

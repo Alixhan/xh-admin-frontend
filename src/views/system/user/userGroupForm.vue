@@ -3,7 +3,7 @@
     <el-scrollbar class="m-form-scroll">
       <m-form
         ref="formRef"
-        :colspan="24"
+        :colspan="12"
         :columns="columns"
         :model="formData"
         :handleType="handleType"
@@ -37,7 +37,15 @@
         {{ $t('common.save') }}
       </el-button>
     </div>
-    <el-dialog :title="$t('system.user.select')" v-model="visible1" draggable destroy-on-close append-to-body align-center width="80%">
+    <el-dialog
+      :title="$t('system.user.select')"
+      v-model="visible1"
+      draggable
+      destroy-on-close
+      append-to-body
+      align-center
+      width="80%"
+    >
       <select-user style="height: calc(90vh - 80px)" @select="selectedUser" />
     </el-dialog>
   </div>
@@ -118,12 +126,12 @@ watchEffect(() => {
       notExport: true,
       slots: {
         header: () => (
-          <el-button onClick={addUser} type="primary" icon="plus">
+          <el-button onClick={addUser} type="primary" icon="plus" size="small">
             {t('common.add')}
           </el-button>
         ),
         default: (scope) => (
-          <el-button onClick={() => delUser(scope.$index)} type="danger" icon="delete">
+          <el-button onClick={() => delUser(scope.$index)} type="danger" icon="delete" size="small">
             {t('common.del')}
           </el-button>
         )
