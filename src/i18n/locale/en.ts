@@ -5,7 +5,7 @@ export default {
       index: 'Index',
       unit: '',
       total: 'Total',
-      selected: 'Selected',
+      selected: 'Checked',
       colSort: 'Col Sort',
       operation: 'Operations',
       allCol: 'All',

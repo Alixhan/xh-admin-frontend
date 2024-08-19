@@ -26,3 +26,13 @@ export function delRoleByIds(ids: string, option?: RequestOption) {
 export function queryRoleMenu(params = {}, option?: RequestOption) {
   return createAxios(option).get(`${systemBaseUrl}/api/system/role/queryRoleMenu`, { params })
 }
+
+// 查询角色的数据权限
+export function queryRoleDataPermission(params = {}, option?: RequestOption) {
+  return createAxios(option).get(`${systemBaseUrl}/api/system/role/queryRoleDataPermission`, { params })
+}
+
+// 保存角色数据权限
+export function saveRoleDataPermission(params = {}, option?: RequestOption) {
+  return createAxios(option).post(`${systemBaseUrl}/api/system/role/saveRoleDataPermission`, params)
+}

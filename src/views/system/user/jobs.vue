@@ -62,12 +62,12 @@ watchEffect(() => {
       hidden: handleType.value === 'detail',
       slots: {
         header: () => (
-          <el-button onClick={addJob} type="primary" icon="plus">
+          <el-button onClick={addJob} type="primary" icon="plus" size="small">
             {t('common.add')}
           </el-button>
         ),
         default: (scope) => (
-          <el-button onClick={() => delJob(scope.$index)} type="danger" icon="delete">
+          <el-button onClick={() => delJob(scope.$index)} type="danger" icon="delete" size="small">
             {t('common.del')}
           </el-button>
         )
@@ -83,9 +83,10 @@ watchEffect(() => {
       editParam: ({ row }) => {
         return {
           readonly: true,
+          size: 'small',
           rules: { required: true },
           slots: {
-            append: () => <el-button onClick={() => openOrgSelect(row)} icon="search" />
+            append: () => <el-button onClick={() => openOrgSelect(row)} icon="search" size="small" />
           }
         }
       }
@@ -99,9 +100,10 @@ watchEffect(() => {
       editParam: ({ row }) => {
         return {
           readonly: true,
+          size: 'small',
           rules: { required: true },
           slots: {
-            append: () => <el-button onClick={() => openRoleSelect(row)} icon="search" />
+            append: () => <el-button onClick={() => openRoleSelect(row)} icon="search" size="small" />
           }
         }
       }
@@ -111,7 +113,8 @@ watchEffect(() => {
       label: t('common.enabled'),
       itemList: getDictDetails(1, 'boolean'),
       type: 'switch',
-      editable: handleType.value !== 'detail'
+      editable: handleType.value !== 'detail',
+      editParam: { size: 'small' }
     },
     { prop: 'createTime', label: t('common.createTime'), type: 'datetime', width: 155 }
   ]

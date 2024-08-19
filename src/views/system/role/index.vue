@@ -48,12 +48,25 @@
     >
       <role-form :handle-type="handleType" :model-value="row" @close="close" style="height: 70vh" />
     </el-dialog>
+    <el-dialog
+      :title="$t('system.role.dataPermission')"
+      v-model="formVisible2"
+      draggable
+      destroy-on-close
+      append-to-body
+      align-center
+      :close-on-click-modal="false"
+      width="700px"
+    >
+      <data-permission :handle-type="handleType" :model-value="row" @close="close" style="height: 70vh" />
+    </el-dialog>
   </div>
 </template>
 <script setup lang="jsx">
 import { computed, reactive, ref } from 'vue'
 import { delRoleByIds, queryRoleList } from '@/api/system/role'
 import RoleForm from './roleForm.vue'
+import DataPermission from './dataPermission.vue'
 import getDictDetails from '@/utils/dict'
 import { useI18n } from 'vue-i18n'
 
@@ -80,6 +93,12 @@ const columns = computed(() => [
     fixed: 'right',
     align: 'center',
     buttons: [
+      {
+        label: t('system.dataPermission.label'),
+        icon: 'key',
+        auth: 'system:role:dataPermission',
+        onClick: (row) => openForm('dataPermission', row)
+      },
       { label: t('common.edit'), icon: 'edit', auth: 'system:role:edit', onClick: (row) => openForm('edit', row) },
       {
         label: t('common.detail'),
@@ -99,6 +118,7 @@ const columns = computed(() => [
 ])
 
 const formVisible = ref(false)
+const formVisible2 = ref(false)
 const handleType = ref()
 const row = ref()
 
@@ -144,8 +164,10 @@ function toggleExpand() {
 
 function openForm(type, r) {
   row.value = r
-  formVisible.value = true
   handleType.value = type
+
+  if (type === 'dataPermission') formVisible2.value = true
+  else formVisible.value = true
 }
 
 function del(rows) {
@@ -161,6 +183,7 @@ function del(rows) {
 
 function close(type) {
   formVisible.value = false
+  formVisible2.value = false
   if (type === 'refresh') {
     tableRef.value.fetchQuery()
   }
