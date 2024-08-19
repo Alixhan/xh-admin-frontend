@@ -3,8 +3,8 @@ import { nextTick, provide, ref, watch } from 'vue'
 import { useSystemStore } from '@/stores/system'
 import MellowNavTabs from './MellowNavTabs.vue'
 import SquareNavTabs from './SquareNavTabs.vue'
-import ContextMenu, { type ContextMenuItem } from '@/components/ContextMenu.vue'
 import { useRoute } from 'vue-router'
+import { type ContextMenuItem, showContextMenu } from '@/utils/context-menu'
 
 const systemStore = useSystemStore()
 const route = useRoute()
@@ -18,7 +18,6 @@ const currentIndex = ref<number>(0)
 const navTabs = systemStore.navTabs
 
 const navTabsRef = ref()
-const contextMenuRef = ref()
 
 /**
  * 根据fullPath移除一个导航tab
@@ -33,7 +32,7 @@ function removeTab(fullPath: string) {
  */
 function onContextmenu(e: PointerEvent, index: number) {
   currentIndex.value = index
-  const menus = [
+  const menus: ContextMenuItem[] = [
     {
       label: '重新加载',
       icon: 'Refresh',
@@ -57,7 +56,7 @@ function onContextmenu(e: PointerEvent, index: number) {
       disabled: currentIndex.value === navTabs.length - 1
     }
   ]
-  contextMenuRef.value.show(e, menus)
+  showContextMenu(e, menus, clickMenu)
 }
 
 function clickMenu(menu: ContextMenuItem) {
@@ -104,7 +103,6 @@ provide('navTab', {
   <div ref="navTabsRef" class="nav-tabs-view" v-if="!systemStore.layout.heightShrink">
     <component :is="tabStyleComp[systemStore.layout.tabStyle]" />
   </div>
-  <ContextMenu ref="contextMenuRef" @click="clickMenu" />
 </template>
 
 <style scoped lang="scss">
