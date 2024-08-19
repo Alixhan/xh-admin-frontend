@@ -46,7 +46,6 @@
 import { computed, reactive, ref } from 'vue'
 import { delLogByIds, queryLogList } from '@/api/system/log'
 import LogDetail from './logDetail.vue'
-// import getDictDetails from '@/utils/dict'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 
@@ -67,7 +66,7 @@ const topFilterColumns = computed(() => [
   { prop: 'ip', label: 'ip地址' },
   { prop: 'status', label: '响应状态' },
   { prop: 'token', label: 'token' },
-  { prop: 'name', label: '操作用户' },
+  { prop: 'name', label: '操作用户' }
 ])
 
 const columns = computed(() => [
@@ -86,22 +85,61 @@ const columns = computed(() => [
     ]
   },
   { type: 'index', width: 70 },
-  { prop: 'token', label: 'token' },
-  { prop: 'url', label: '请求路径' },
-  { prop: 'method', label: '请求方法' },
+  { prop: 'createTime', label: '发生时间', type: 'datetime', width: 155 },
+  {
+    prop: 'method',
+    label: '请求方法',
+    align: 'center',
+    slots: {
+      default: (scope) => {
+        const param = { effect: 'dark', type: 'primary' }
+        if (scope.row.method === 'GET') param.type = 'success'
+        if (scope.row.method === 'DELETE') param.type = 'danger'
+        if (scope.row.method === 'PATCH') param.type = 'warning'
+        return <el-tag {...param}>{scope.row.method}</el-tag>
+      }
+    }
+  },
   { prop: 'tag', label: '模块' },
   { prop: 'operation', label: '操作' },
-  { prop: 'ip', label: 'ip地址' },
+  {
+    prop: 'ip',
+    label: 'ip地址',
+    slots: {
+      default: (scope) => <el-tag effect="plain">{scope.row.ip}</el-tag>
+    }
+  },
   { prop: 'ipAddress', label: 'ip属地' },
-  { prop: 'time', label: '耗时ms', type: 'number' },
-  { prop: 'status', label: '响应状态' },
+  {
+    prop: 'time',
+    label: '耗时',
+    type: 'number',
+    align: 'center',
+    slots: {
+      default: (scope) => (
+        <span style={`font-weight: bold; color: ${scope.row.time > 2000 ? 'red' : 'green'};`}>{scope.row.time} ms</span>
+      )
+    }
+  },
+  {
+    prop: 'status',
+    label: '响应状态',
+    align: 'center',
+    slots: {
+      default: (scope) => {
+        if (!scope.row.status) return
+        const param = { type: scope.row.status, effect: 'dark', hit: true }
+        if (param.type === 'error') param.type = 'danger'
+        return <el-tag {...param}>{scope.row.status}</el-tag>
+      }
+    }
+  },
   { prop: 'name', label: '操作用户' },
   { prop: 'localeLabel', label: '使用语言' },
   { prop: 'orgName', label: '使用机构' },
   { prop: 'roleName', label: '使用角色' },
-
-  // { prop: 'enabled', label: t('common.isEnabled'), type: 'select', itemList: getDictDetails(1, 'boolean') },
-  { prop: 'createTime', label: t('common.createTime'), type: 'datetime', width: 155 }
+  { prop: 'url', label: '请求路径', style: 'font-weight: bold;' },
+  { prop: 'token', label: '请求token' }
 ])
 
 const formVisible = ref(false)
