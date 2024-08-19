@@ -56,6 +56,8 @@ init()
 
 // 上级菜单下拉框数据
 const parentMenuList = ref([])
+// 上级菜单树形数据
+const parentMenuListTree = ref([])
 
 async function init() {
   formLoading.value = true
@@ -83,7 +85,8 @@ function initParentMenuData() {
     isPage: false,
     param: { flag: 'selectParentMenu' }
   }).then((res) => {
-    parentMenuList.value = generateTreeMenu(res.data.list)
+    parentMenuList.value = res.data.list
+    parentMenuListTree.value = generateTreeMenu(res.data.list)
   })
 }
 
@@ -105,12 +108,14 @@ watchEffect(() => {
       label: t('system.menu.parent'),
       placeholder: t('system.menu.parentPlaceholder'),
       type: 'cascader',
-      options: parentMenuList.value,
+      options: parentMenuListTree.value,
       props: {
         checkStrictly: true
       },
       onChange(val) {
-        formData.value.platform = parentMenuList.value.find((i) => i.value === val)?.platform
+        const parent = val && parentMenuList.value.find((i) => i.id === val[val.length - 1])
+        formData.value.platform = parent?.platform
+        formData.value.parentId = parent?.id
       }
     },
     {
@@ -152,8 +157,7 @@ watchEffect(() => {
       // 处理类型是外链，隐藏此项
       hidden: formData.value.handleType === 'outer',
       rules: { required: true, trigger: 'blur' },
-      comment:
-        '作为后端鉴权使用，建议使用实际意义的英文单词，web平台同时对应vue-router的name属性，应保证name唯一。'
+      comment: '作为后端鉴权使用，建议使用实际意义的英文单词，web平台同时对应vue-router的name属性，应保证name唯一。'
     },
     {
       prop: 'path',
