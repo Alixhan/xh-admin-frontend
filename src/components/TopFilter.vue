@@ -1,166 +1,104 @@
-<script lang="jsx">
-import { computed, createVNode, defineComponent, ref, shallowRef, watchEffect } from 'vue'
-import { generateDynamicColumn, generateLabelWidth, generatePlaceholder, vModelValue } from '@/components/mutils'
+<template>
+  <div :class="`filter-tabs ${expand ? 'expand-filter' : ''}`">
+    <div v-if="systemStore.layout.widthShrink" class="filter-title" />
+    <el-text v-else class="filter-title">
+      <m-svg-icon class="title-logo" src="@/assets/icon/search-list.svg" inherited />
+      {{ t('m.topFilter.query') }}
+    </el-text>
+    <div class="filter-view">
+      <el-scrollbar max-height="45vh">
+        <div style="overflow: hidden" :style="!expand && `height: ${elComponentSizeCssVar};`">
+          <m-form ref="topFilterFormRef" :columns="columns" :model="param" @keyup="keyup" label-position="right" />
+        </div>
+      </el-scrollbar>
+    </div>
+    <div class="filter-btn">
+      <el-button
+        :icon="expand ? 'ArrowUp' : 'ArrowDown'"
+        text
+        @click="() => (expand = !expand)"
+        type="primary"
+        style="padding: 0 5px"
+      >
+        {{ expand ? t('m.topFilter.collapse') : t('m.topFilter.expand') }}
+      </el-button>
+      <el-button type="primary" icon="search" @click="search" :loading="loading">
+        {{ t('m.topFilter.search') }}
+      </el-button>
+      <el-button @click="reset"> {{ t('m.topFilter.reset') }}</el-button>
+    </div>
+  </div>
+</template>
+
+<script lang="tsx" setup>
+import { type PropType, ref } from 'vue'
 import { useSystemStore } from '@/stores/system'
-import { useElementSize } from '@vueuse/core'
-import QueryIcon from '@/assets/icon/search-list.svg'
 import { useI18n } from 'vue-i18n'
 import { useElComponentSizeCssVar } from '@/utils'
+import MForm from '@/components/form/index.vue'
+import MSvgIcon from '@/components/SvgIcon.vue'
+import type { CommonFormColumn } from '@i/components/form'
 
 /**
  * 筛选框组件
  * sxh
  * 2023-3-12
  */
-export default defineComponent({
-  name: 'MTopFilter',
-  props: {
-    // 参数对象
-    param: {
-      type: Object,
-      required: true
-    },
-    // 过滤列定义
-    columns: {
-      type: Array,
-      default: () => []
-    },
-    labelWidth: {
-      type: String
-    },
-    loading: {
-      type: Boolean,
-      default: false
-    }
+
+defineOptions({
+  name: 'MTopFilter'
+})
+
+const props = defineProps({
+  // 参数对象
+  param: {
+    type: Object as PropType<object>,
+    required: true
   },
-  emits: ['search'],
-  setup(props, { emit, expose }) {
-    const { t } = useI18n()
-    const systemStore = useSystemStore()
-    const topFilterFormRef = ref()
-    // 搜索框是否展开
-    const expand = ref(false)
-
-    const filterSize = ref(useElementSize(topFilterFormRef))
-    // 搜索列
-    const columnsParams = shallowRef([])
-    watchEffect(initColumnsParams)
-
-    //计算一下labelWidth，以最长label字符宽度作为form的labelWidth
-    const labelWidth = computed(() => props.labelWidth ?? generateLabelWidth(...props.columns))
-
-    const colspan = ref(0)
-
-    const elComponentSizeCssVar = useElComponentSizeCssVar()
-
-    watchEffect(() => {
-      const width = systemStore.layout.size === 'small' ? 220 : 300
-      let span = 24 / (Number(Math.floor(filterSize.value.width / width)) || 1)
-      colspan.value = Math.floor(span)
-    })
-
-    function search() {
-      if (systemStore.layout.heightShrink) expand.value = false
-      emit('search', props.param)
-    }
-
-    // 重置
-    function reset() {
-      topFilterFormRef.value.resetFields()
-    }
-
-    expose({ reset })
-
-    function initColumnsParams() {
-      columnsParams.value = props.columns
-        .filter((i) => !i.hidden)
-        .map((column) => {
-          const { component, param, slots } = generateDynamicColumn(column)
-          generatePlaceholder(param)
-          const formItemParam = {
-            ...column,
-            slots: {}
-          }
-          formItemParam.slots.default = () => {
-            const vModelParam = vModelValue(
-              {
-                type: column.type,
-                prop2: column.prop2,
-                prop: column.prop,
-                single: column.single
-              },
-              props.param
-            )
-            return createVNode(component, { ...param, ...vModelParam }, slots)
-          }
-          return formItemParam
-        })
-    }
-
-    function keyup(e){
-      if (e.key === 'Enter') {
-        // 回车事件处理逻辑
-        search()
-      }
-    }
-
-    // 生成column
-    function generateFilterColumn() {
-      return columnsParams.value.map((i) => {
-        let span = i.colspan || colspan.value
-        if (systemStore.layout.widthShrink) {
-          span = colspan.value
-        }
-        if (i.cols) span = parseInt(i.cols) * span
-        if (span > 24) span = 24
-        return (
-          <el-col span={span}>
-            <el-form-item prop={i.prop} label={i.label} labelWidth={i.labelWidth}>
-              {i.slots.default()}
-            </el-form-item>
-          </el-col>
-        )
-      })
-    }
-
-    return () => {
-      return (
-        <div class={`filter-tabs ${expand.value ? 'expand-filter' : ''}`}>
-          {systemStore.layout.widthShrink ? (
-            <div class="filter-title" />
-          ) : (
-            <el-text class="filter-title">
-              <m-svg-icon class="title-logo" src={QueryIcon} property={{ fill: 'var(--el-color-primary)' }} />
-              {t('m.topFilter.query')}
-            </el-text>
-          )}
-          <div class="filter-view" style={!expand.value && `height: ${elComponentSizeCssVar.value};`}>
-            <el-form ref={topFilterFormRef} model={props.param} labelWidth={labelWidth.value} onKeyup={keyup}>
-              <el-scrollbar max-height="45vh">
-                <el-row>{generateFilterColumn()}</el-row>
-              </el-scrollbar>
-            </el-form>
-          </div>
-          <div class="filter-btn" style="flex-grow: 1; -width: 0; text-align: right;">
-            <el-button
-              icon={expand.value ? 'ArrowUp' : 'ArrowDown'}
-              text
-              onClick={() => (expand.value = !expand.value)}
-              type="primary"
-              style={{ padding: '0 5px' }}
-            >
-              {expand.value ? t('m.topFilter.collapse') : t('m.topFilter.expand')}
-            </el-button>
-            <el-button type="primary" icon="search" onClick={search} loading={props.loading}>
-              {t('m.topFilter.search')}
-            </el-button>
-            <el-button onClick={reset}> {t('m.topFilter.reset')}</el-button>
-          </div>
-        </div>
-      )
-    }
+  // 过滤列定义
+  columns: {
+    type: Array as PropType<CommonFormColumn<any>[]>,
+    default: () => []
+  },
+  labelWidth: {
+    type: String
+  },
+  loading: {
+    type: Boolean,
+    default: false
   }
 })
+
+const emit = defineEmits<{
+  (e: 'search', param: object): void | Promise<void>
+}>()
+
+const { t } = useI18n()
+const systemStore = useSystemStore()
+const topFilterFormRef = ref()
+// 搜索框是否展开
+const expand = ref(false)
+
+const elComponentSizeCssVar = useElComponentSizeCssVar()
+
+function search() {
+  if (systemStore.layout.heightShrink) expand.value = false
+  emit('search', props.param)
+}
+
+// 重置
+function reset() {
+  topFilterFormRef.value.resetFields()
+}
+
+function keyup(e: KeyboardEvent) {
+  if (e.key === 'Enter') {
+    // 回车事件处理逻辑
+    search()
+  }
+}
+
+defineExpose({ reset })
 </script>
 <style scoped lang="scss">
 :deep(.el-form-item--small) {
@@ -193,14 +131,15 @@ export default defineComponent({
   .filter-view {
     justify-items: end;
     overflow: hidden;
-    @media all and (max-width: 500px) {
+    @media all and (max-width: 400px) {
       height: 0;
     }
   }
 
   .filter-btn {
-    margin: 5px 0;
+    flex-grow: 1;
     text-align: right;
+    margin: 5px 0;
   }
 }
 
