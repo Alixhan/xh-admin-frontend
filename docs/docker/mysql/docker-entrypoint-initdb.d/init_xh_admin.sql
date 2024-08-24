@@ -64,27 +64,30 @@ INSERT INTO `sys_dict_type` VALUES (1, '是否', 1, '2023-06-01 16:15:15', '2023
 -- Table structure for sys_file
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_file`;
-CREATE TABLE `sys_file`  (
-                             `id` int NOT NULL AUTO_INCREMENT COMMENT 'id',
-                             `object` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '对象存储key',
-                             `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '文件名',
-                             `content_type` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '文件类型',
-                             `suffix` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '文件后缀扩展名',
-                             `size` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '文件大小',
-                             `preview_image_file_id` int NULL DEFAULT NULL COMMENT '视频抽帧预览图，上传时会尝试抽第10帧图片作为视频文件的预览图',
-                             `img_width` int NULL DEFAULT NULL COMMENT '图片宽度',
-                             `img_height` int NULL DEFAULT NULL COMMENT '图片高度',
-                             `img_ratio` double(5, 2) NULL DEFAULT NULL COMMENT '图片宽高比',
-                             `status` tinyint NULL DEFAULT NULL COMMENT '文件状态，1：正常，2:：禁用，3：标记删除，4：已删除',
-                             `sha1` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '文件摘要sha1',
-                             `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-                             `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
-                             `create_by` int NULL DEFAULT NULL COMMENT '创建人',
-                             `update_by` int NULL DEFAULT NULL COMMENT '修改人',
-                             `deleted` tinyint NULL DEFAULT 0 COMMENT '是否已删除1：是，0：否',
-                             PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统文件表' ROW_FORMAT = Dynamic;
-
+create table sys_file
+(
+    id                    int auto_increment comment 'id'
+        primary key,
+    object                varchar(100)      null comment '对象存储key',
+    name                  varchar(50)       null comment '文件名',
+    content_type          varchar(100)      null comment '文件类型',
+    suffix                varchar(50)       null comment '文件后缀扩展名',
+    size                  mediumtext        null comment '文件大小',
+    preview_image_file_id int               null comment '视频抽帧预览图，上传时会尝试抽第10帧图片作为视频文件的预览图',
+    img_width             int               null comment '图片宽度',
+    img_height            int               null comment '图片高度',
+    img_ratio             double(5, 2)      null comment '图片宽高比',
+    status                tinyint           null comment '文件状态，1：正常，2:：禁用，3：标记删除，4：已删除',
+    sha1                  varchar(50)       null comment '文件摘要sha1',
+    sys_org_id            int               null comment '机构ID',
+    sys_role_id           int               null comment '角色ID',
+    create_time           datetime          null comment '创建时间',
+    update_time           datetime          null comment '更新时间',
+    create_by             int               null comment '创建人',
+    update_by             int               null comment '修改人',
+    deleted               tinyint default 0 null comment '是否已删除1：是，0：否'
+)
+    comment '系统文件表' row_format = DYNAMIC;
 -- ----------------------------
 -- Records of sys_file
 -- ----------------------------
@@ -204,6 +207,12 @@ INSERT INTO `sys_menu` VALUES (51, 50, '在线用户', 'monitor:online', 'onlien
 INSERT INTO `sys_menu` VALUES (73, 50, '系统日志', 'system:log', 'log', '/src/views/system/log/index.vue', 'web', 'menu', 'route', NULL, 'el|DataLine', NULL, NULL, 1, 1, '2023-08-17 21:41:09', '2024-05-07 21:43:56', 1, 1, 0);
 INSERT INTO `sys_menu` VALUES (74, 73, '明细', 'system:log:detail', NULL, NULL, 'web', 'btn', NULL, NULL, NULL, NULL, NULL, 1, 1, '2023-04-03 13:01:08', '2023-08-14 15:30:02', 1, 1, 0);
 INSERT INTO `sys_menu` VALUES (75, 73, '删除', 'system:log:del', NULL, NULL, 'web', 'btn', NULL, NULL, NULL, NULL, NULL, 1, 1, '2023-04-03 23:58:45', '2023-08-14 15:29:47', 1, 1, 0);
+INSERT INTO `sys_menu` VALUES (77, 2, '数据权限', 'system:dataPermission', 'dataPermission', '/src/views/system/dataPermission/index.vue', 'web', 'menu', 'route', NULL, 'el|Key', NULL, 6, 1, 1, '2023-03-05 21:55:27', '2024-08-17 18:07:58', 1, 1, 0);
+INSERT INTO `sys_menu` VALUES (78, 77, '明细', 'system:dataPermission:detail', NULL, NULL, 'web', 'btn', NULL, NULL, NULL, NULL, NULL, 1, 1, '2023-04-03 23:58:09', '2024-08-17 19:31:41', 1, 1, 0);
+INSERT INTO `sys_menu` VALUES (79, 77, '新增', 'system:dataPermission:add', NULL, NULL, 'web', 'btn', NULL, NULL, NULL, NULL, NULL, 1, 1, '2023-04-03 23:57:26', '2023-08-14 15:32:47', 1, 1, 0);
+INSERT INTO `sys_menu` VALUES (80, 77, '编辑', 'system:dataPermission:edit', NULL, NULL, 'web', 'btn', NULL, NULL, NULL, NULL, NULL, 1, 1, '2023-04-03 23:57:51', '2023-08-14 15:32:53', 1, 1, 0);
+INSERT INTO `sys_menu` VALUES (81, 77, '删除', 'system:dataPermission:del', NULL, NULL, 'web', 'btn', NULL, NULL, NULL, NULL, NULL, 1, 1, '2023-04-03 23:58:45', '2023-08-14 15:33:07', 1, 1, 0);
+INSERT INTO `sys_menu` VALUES (82, 27, '数据权限', 'system:role:dataPermission', NULL, NULL, 'web', 'btn', NULL, NULL, NULL, NULL, 5, 1, 1, '2023-04-03 23:58:09', '2024-08-18 23:11:59', 1, 1, 0);
 
 -- ----------------------------
 -- Table structure for sys_org
@@ -464,5 +473,55 @@ CREATE TABLE `sys_user_password_log`  (
 -- ----------------------------
 -- Records of sys_user_password_log
 -- ----------------------------
+
+DROP TABLE IF EXISTS `sys_data_entity`;
+create table sys_data_entity
+(
+    id   varchar(50) not null comment 'id'
+        primary key,
+    name varchar(50) null comment '数据实体名称'
+)
+    comment '数据实体';
+INSERT INTO `sys_data_entity` (`id`, `name`) VALUES ('sys_log', '系统日志');
+INSERT INTO `sys_data_entity` (`id`, `name`) VALUES ('sys_file', '文件管理');
+
+
+DROP TABLE IF EXISTS `sys_data_permission`;
+create table sys_data_permission
+(
+    id          int auto_increment comment 'id'
+        primary key,
+    name        varchar(50)          null comment '数据权限名称',
+    expression  varchar(500)         null comment '权限表达式',
+    json        text                 null comment '权限json数据',
+    create_time datetime             null comment '创建时间',
+    update_time datetime             null comment '更新时间',
+    create_by   int                  null comment '创建人',
+    update_by   int                  null comment '修改人',
+    deleted     tinyint(1) default 0 null comment '是否已删除1：是，0：否'
+)
+    comment '数据权限';
+
+INSERT INTO `sys_data_permission` (`id`, `name`, `expression`, `json`, `create_time`, `update_time`, `create_by`, `update_by`, `deleted`) VALUES (1, '仅可查看本人数据', '$BR', '[{\"prop\":\"$BR\",\"logic\":\"and\",\"condition\":\"positive\"}]', '2024-08-17 20:07:17', '2024-08-21 21:44:25', 1, 1, 0);
+INSERT INTO `sys_data_permission` (`id`, `name`, `expression`, `json`, `create_time`, `update_time`, `create_by`, `update_by`, `deleted`) VALUES (2, '仅可见本机构数据', '$BJG', '[{\"prop\":\"$BJG\",\"logic\":\"and\",\"condition\":\"positive\",\"value\":\"\"}]', '2024-08-18 22:59:19', '2024-08-21 21:44:35', 1, 1, 0);
+INSERT INTO `sys_data_permission` (`id`, `name`, `expression`, `json`, `create_time`, `update_time`, `create_by`, `update_by`, `deleted`) VALUES (3, '仅可见当前角色数据', '$DQJS', '[{\"prop\":\"$DQJS\",\"logic\":\"and\",\"condition\":\"positive\",\"value\":\"\"}]', '2024-08-18 23:00:00', '2024-08-21 21:44:49', 1, 1, 0);
+INSERT INTO `sys_data_permission` (`id`, `name`, `expression`, `json`, `create_time`, `update_time`, `create_by`, `update_by`, `deleted`) VALUES (4, '可查看本机构及下属机构数据', '$BJG or $BJGX', '[{\"prop\":\"$BJG\",\"logic\":\"and\",\"condition\":\"positive\",\"value\":\"\"},{\"prop\":\"$BJGX\",\"logic\":\"or\",\"condition\":\"positive\"}]', '2024-08-18 23:00:52', '2024-08-22 00:30:13', 1, 1, 0);
+INSERT INTO `sys_data_permission` (`id`, `name`, `expression`, `json`, `create_time`, `update_time`, `create_by`, `update_by`, `deleted`) VALUES (5, '可查看当前角色及下属角色的数据', '$DQJS or $DQJSX', '[{\"prop\":\"$DQJS\",\"logic\":\"and\",\"condition\":\"positive\"},{\"prop\":\"$DQJSX\",\"logic\":\"or\",\"condition\":\"positive\"}]', '2024-08-18 23:01:45', '2024-08-22 00:30:26', 1, 1, 0);
+
+DROP TABLE IF EXISTS `sys_role_data_permission`;
+create table sys_role_data_permission
+(
+    id                     int auto_increment comment 'id'
+        primary key,
+    sys_role_id            bigint               null comment '角色ID',
+    sys_data_entity_id     varchar(20)          null comment '数据实体ID',
+    sys_data_permission_id bigint               null comment '数据权限ID',
+    create_time            datetime             null comment '创建时间',
+    update_time            datetime             null comment '更新时间',
+    create_by              int                  null comment '创建人',
+    update_by              int                  null comment '修改人',
+    deleted                tinyint(1) default 0 null comment '是否已删除1：是，0：否'
+)
+    comment '系统角色数据权限';
 
 SET FOREIGN_KEY_CHECKS = 1;

@@ -46,6 +46,8 @@ components/form/slotName
 
 ## jsx 风格绑定事件
 
+在模板中我们一般使用 `@事件名` 来绑定事件， 表单组件基于 `jsx` 动态实现，所以绑定事件应调整为 `on事件名` 的函数名来绑定事件，
+如 `onChange`
 :::demo
 components/form/event
 :::
