@@ -19,7 +19,7 @@
                   <div v-html="expressionStr" />
                 </div>
                 <div class="opt-btn">
-                  <el-icon @click="addRow('')" size="16" color="var(--el-color-primary)" style="cursor: pointer">
+                  <el-icon @click="addRow()" size="16" color="var(--el-color-primary)" style="cursor: pointer">
                     <CirclePlus />
                   </el-icon>
                 </div>
@@ -51,14 +51,6 @@
         </el-button>
       </template>
     </div>
-    <el-dialog :title="'1'" v-model="visible" draggable append-to-body align-center width="80%">
-      <div
-        selection="single"
-        style="height: calc(90vh - 80px)"
-        @select="selectedParentDataPermission"
-        @clear="clearParentDataPermission"
-      />
-    </el-dialog>
   </div>
 </template>
 <script setup lang="tsx">
@@ -117,22 +109,6 @@ async function initFormData() {
   formLoading.value = false
 }
 
-const visible = ref(false)
-
-// 选择了上级角色数据
-function selectedParentDataPermission(rows) {
-  formData.value.parentId = rows[0].id
-  formData.value.parentName = rows[0].name
-  visible.value = false
-}
-
-//清空上级角色
-function clearParentDataPermission() {
-  formData.value.parentId = ''
-  formData.value.parentName = ''
-  visible.value = false
-}
-
 // 表单字段根据表单数据变化，有所不同
 const columns = ref<FormColumn[]>([])
 watchEffect(() => {
@@ -164,7 +140,7 @@ function close(type?: any) {
 
 const expression = ref<any[]>([])
 
-function addRow(prop: string, parent?: PermissionRowType) {
+function addRow(parent?: PermissionRowType) {
   const permissionRow: PermissionRowType = {
     prop: '$BR',
     logic: 'and',
@@ -197,9 +173,9 @@ function removeRow(index: number, parent?: PermissionRowType) {
 const permissionColumns = [
   { prop: '$BR', label: '本人' },
   { prop: '$BJG', label: '本机构' },
-  { prop: '$BJGX', label: '本机构及下属机构' },
+  { prop: '$BJGX', label: '本机构的下属机构' },
   { prop: '$DQJS', label: '当前角色' },
-  { prop: '$DQJSX', label: '当前角色及下属角色' },
+  { prop: '$DQJSX', label: '当前角色的下属角色' },
   { prop: '$ZDJG', label: '指定机构' },
   { prop: '$ZDJS', label: '指定角色' },
   { prop: '$ZDYH', label: '指定用户' }
@@ -222,16 +198,18 @@ function getPreview(filter: PermissionRowType, index: number) {
   if (filter.children?.length) {
     const childrenPreviews = filter.children.map((i, j) => getPreview(i, j))
     str += ` ( ${childrenPreviews.map((i) => i.str).join('')} ) `
-    expression += ` ( ${childrenPreviews.map((i) => i.expression).join('')} ) `
+    expression += `( ${childrenPreviews.map((i) => i.expression).join(' ')} )`
     p.children = childrenPreviews as any
   } else {
     if (filter.condition === 'negative') {
       str += `<span class="condition"> ${t('system.dataPermission.' + filter.condition)}</span>`
     }
-    str += `<span class="field">${column?.label} </span>`
-    str += ` ${filter.value ?? ''} `
-    expression += `${filter.condition === 'negative' ? '^' : ''}${column?.prop} `
-    if (filter.value) expression += `'${filter.value}' `
+    str += `<span class="field">${column?.label}</span>`
+    expression += `${filter.condition === 'negative' ? '^' : ''}${column?.prop}`
+    if (filter.value) {
+      str += `(${filter.value}) `
+      expression += `(${filter.value})`
+    }
   }
   p.str = str
   p.expression = expression
@@ -248,7 +226,7 @@ const expressionStr = computed(() =>
   expression.value
     .map(getPreview)
     .map((i) => i.expression)
-    .join('')
+    .join(' ')
 )
 
 watch(
@@ -259,11 +237,15 @@ watch(
   }
 )
 
-provide<any>('permissionHome', {
+const permissionHome = {
   addRow,
   removeRow,
   columns: permissionColumns
-})
+}
+
+export declare type PermissionHome = typeof permissionHome
+
+provide<PermissionHome>('permissionHome', permissionHome)
 </script>
 <style lang="scss" scoped>
 .form-view {
