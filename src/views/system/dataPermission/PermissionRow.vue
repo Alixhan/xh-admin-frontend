@@ -9,16 +9,22 @@
     <template v-if="!modelValue.children?.length">
       <el-select class="filter-input" v-model="modelValue.condition" size="small">
         <el-option
-            v-for="(comparator, i) in comparators"
-            :key="i"
-            :label="$t('system.dataPermission.' + comparator)"
-            :value="comparator"
+          v-for="(comparator, i) in comparators"
+          :key="i"
+          :label="$t('system.dataPermission.' + comparator)"
+          :value="comparator"
         />
       </el-select>
       <el-select class="filter-input" v-model="modelValue.prop" size="small" @change="changeProp">
         <el-option v-for="(column, i) in permissionHome.columns" :key="i" :label="column.label" :value="column.prop" />
       </el-select>
-      <el-input v-if="['$ZDJG', '$ZDJS', '$ZDYH'].includes(modelValue.prop)" class="filter-input" :type="column?.type" v-model="modelValue.value" size="small" clearable>
+      <el-input
+        v-if="['$ZDJG', '$ZDJS', '$ZDYH'].includes(modelValue.prop)"
+        class="filter-input"
+        v-model="modelValue.value"
+        size="small"
+        clearable
+      >
         <template #append>
           <el-button @click="toSelect" icon="search" size="small" />
         </template>
@@ -29,7 +35,7 @@
     </el-icon>
   </div>
   <div class="child-rows">
-    <filter-row-comp
+    <PermissionRow
       v-for="(filter, index) in modelValue?.children ?? []"
       :key="index"
       :index="index"
@@ -41,9 +47,10 @@
 <script setup lang="ts">
 import { computed, inject, watch } from 'vue'
 import { type PermissionRowType } from './dataPermissionForm.vue'
+import type { PermissionHome } from '@/views/system/dataPermission/dataPermissionForm.vue'
 
 defineOptions({
-  name: 'FilterRowComp'
+  name: 'PermissionRow'
 })
 
 const props = defineProps({
@@ -56,7 +63,7 @@ const emits = defineEmits<{
 
 const modelValue = defineModel<PermissionRowType>({ default: {} })
 
-const permissionHome = inject<any>('permissionHome')
+const permissionHome = inject<PermissionHome>('permissionHome')!
 
 const column = computed(() => {
   return permissionHome.columns?.find((i) => i.prop === modelValue.value.prop)
@@ -84,7 +91,7 @@ function changeProp() {
 
 //添加子行
 function addChildRow() {
-  permissionHome!.addRow('', modelValue.value)
+  permissionHome!.addRow(modelValue.value)
 }
 
 function handleRemove(index: number) {
@@ -95,9 +102,7 @@ function switchLogic() {
   modelValue.value.logic = modelValue.value.logic === 'and' ? 'or' : 'and'
 }
 
-function toSelect() {
-
-}
+function toSelect() {}
 </script>
 <style scoped lang="scss">
 .permission-row {
