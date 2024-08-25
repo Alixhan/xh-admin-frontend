@@ -218,7 +218,12 @@ export default defineComponent(
         if (props.isComplexFilter && props.fetchData) {
           menus.unshift({ id: 1, prop: column.property, label: t('m.table.complexFilter'), icon: 'Filter' })
         }
-        showContextMenu(e, menus, clickMenu)
+        showContextMenu({
+          clientX: e.clientX,
+          clientY: e.clientY,
+          menus,
+          onClick: clickMenu
+        })
       }
     }
 

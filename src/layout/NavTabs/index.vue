@@ -56,7 +56,12 @@ function onContextmenu(e: PointerEvent, index: number) {
       disabled: currentIndex.value === navTabs.length - 1
     }
   ]
-  showContextMenu(e, menus, clickMenu)
+  showContextMenu({
+    clientX: e.clientX,
+    clientY: e.clientY,
+    menus,
+    onClick: clickMenu
+  })
 }
 
 function clickMenu(menu: ContextMenuItem) {

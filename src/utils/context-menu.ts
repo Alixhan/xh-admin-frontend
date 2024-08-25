@@ -1,8 +1,18 @@
-import { ref } from 'vue'
+import type { App } from 'vue'
+import { type AppContext, createVNode, render } from 'vue'
+import ContextMenu from '@/components/ContextMenu.vue'
 
-/**
- * 展示右键上下文菜单，全局单例模式
- */
+export interface ContextMenuOption {
+  // 菜单
+  menus: ContextMenuItem[]
+  // 点击回调函数
+  onClick: (menu: ContextMenuItem) => void
+  // x方向位置
+  clientX: number
+  // y方向位置
+  clientY: number
+}
+
 export interface ContextMenuItem {
   label: string
   icon?: any
@@ -12,17 +22,30 @@ export interface ContextMenuItem {
   [prop: string]: any
 }
 
-const contextMenuRef = ref()
-const callback = ref<(menu: ContextMenuItem) => void>()
+let vn: any
 
-export function showContextMenu(e: PointerEvent, menus: ContextMenuItem[], onClick: (menu: ContextMenuItem) => void) {
-  contextMenuRef.value.show(e, menus)
-  callback.value = onClick
+/**
+ * 展示上下文菜单，全局单例模式
+ */
+function _showContextMenu(option: ContextMenuOption) {
+  if (!vn) {
+    const container = document.createElement('div')
+    vn = createVNode(ContextMenu, { ...option })
+    vn.appContext = showContextMenu._context
+    render(vn, container)
+    document.body.appendChild(container)
+  }
+  vn.component.exposed.show(option)
 }
 
-export default function () {
-  return {
-    contextMenuRef,
-    callback
-  }
+export const showContextMenu = _showContextMenu as typeof showContextMenu & {
+  _content: AppContext | null
+}
+
+function install(app: App) {
+  showContextMenu._context = app._context
+}
+
+export default {
+  install
 }
