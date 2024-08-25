@@ -128,7 +128,8 @@ export default defineConfig({
                         {text: '特别鸣谢', link: '/special-thanks'},
                         {text: '常见问题', link: '/faq'},
                         {text: '更新日志', link: '/release'},
-                        {text: '加入交流群', link: '/join-group'}
+                        {text: '加入交流群', link: '/join-group'},
+                        {text: '待办', link: '/todo-list'},
                     ]
                 }
             ],
@@ -156,6 +157,7 @@ export default defineConfig({
                         {text: 'Request 请求', link: '/request'},
                         {text: 'Dict 获取数据字典', link: '/dict'},
                         {text: '获取文件请求链接', link: '/file-url'},
+                        {text: 'ContextMenu 上下文菜单', link: '/context-menu'},
                     ]
                 }
             ],

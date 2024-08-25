@@ -1,9 +1,9 @@
-import type { MarkdownRenderer } from 'vitepress';
 import markdown from 'markdown-it'
+import MarkdownIt from 'markdown-it'
 
 const ApiMd = new markdown()
 
-export default function ApiTableContainer(md: MarkdownRenderer) {
+export default function ApiTableContainer(md: MarkdownIt) {
   const fence = md.renderer.rules.fence!
 
   ApiMd.renderer.rules = md.renderer.rules
