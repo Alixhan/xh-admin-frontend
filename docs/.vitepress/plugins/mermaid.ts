@@ -1,10 +1,10 @@
-import type { MarkdownRenderer } from 'vitepress'
+import MarkdownIt from 'markdown-it'
 
 /**
  * 支持Mermaid图表
  * 2024-7-14 sunxh
  */
-export default function useMermaid(md: MarkdownRenderer) {
+export default function useMermaid(md: MarkdownIt) {
   const defaultRenderer = md.renderer.rules.fence
   md.renderer.rules.fence = (tokens, index, options, env, slf) => {
     const token = tokens[index]
