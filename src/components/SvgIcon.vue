@@ -1,5 +1,5 @@
 <script lang="tsx">
-import {computed, defineComponent, type PropType, ref, toRef, watchEffect} from 'vue'
+import { computed, defineComponent, type PropType, ref, toRef, watchEffect } from 'vue'
 import fetchBinary from '@/utils/binary'
 
 /**
@@ -52,18 +52,18 @@ export default defineComponent({
       return svgStr
     })
 
-    return () => <div v-html={svg.value} />
+    return () => <i v-html={svg.value} />
   }
 })
 </script>
 <style scoped lang="scss">
-div {
+i {
   display: inline-block;
 }
 
 ::v-deep(svg) {
+  display: block;
   width: 100%;
   height: 100%;
-  vertical-align: middle;
 }
 </style>
