@@ -30,7 +30,7 @@
 <script setup lang="tsx">
 import { ref } from 'vue'
 import { onClickOutside } from '@vueuse/core'
-import type { ContextMenuItem } from '@/utils/context-menu'
+import type { ContextMenuItem, ContextMenuOption } from '@/utils/context-menu'
 
 /**
  * 上下文菜单
@@ -39,15 +39,11 @@ defineOptions({
   name: 'ContextMenu'
 })
 
-const visible = defineModel<boolean>({ default: false })
-
-const emit = defineEmits<{
-  (e: 'click', data: ContextMenuItem): void
-}>()
-
+const visible = defineModel<boolean>({ default: true })
 const menuItems = ref<ContextMenuItem[]>([])
 const top = ref<any>(0)
 const left = ref<any>(0)
+const onClick = ref<ContextMenuOption['onClick']>()
 
 const tipRef = ref()
 onClickOutside(tipRef, () => (visible.value = false))
@@ -63,16 +59,16 @@ const triggerRef = ref({
   }
 })
 
-function show(el: PointerEvent, menus: ContextMenuItem[]) {
-  menuItems.value = menus
-  left.value = el.clientX
-  top.value = el.clientY + 10
+function show(option: ContextMenuOption) {
+  menuItems.value = option.menus
+  left.value = option.clientX
+  top.value = option.clientY
+  onClick.value = option.onClick
   visible.value = true
 }
 
 function clickMenu(menu: ContextMenuItem) {
-  menu.onClick?.()
-  emit('click', menu)
+  onClick.value?.(menu)
   visible.value = false
 }
 
@@ -92,7 +88,6 @@ defineExpose({
 
     &:hover:not(.disable-menu) {
       background-color: var(--el-color-primary-light-9);
-      color: var(--el-color-primary);
     }
   }
 }
