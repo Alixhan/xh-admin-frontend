@@ -154,6 +154,8 @@ export default defineComponent(
     //排序筛选列定义
     const sortColumns: Ref<TableSortColumn[]> = ref([])
 
+    const sortColumnsParams = computed(() => getSortColumnsParams(sortColumns.value))
+
     //叶子节点列
     const leafColumns: Ref<CommonTableColumn<T>[]> = ref([])
 
@@ -509,24 +511,33 @@ export default defineComponent(
       })
     }
 
-    // 生成表格列视图
-    function generateTableColumn(sortColumns: TableSortColumn[]): VNode[] {
+    //初始化表格筛选排序列参数数组
+    function getSortColumnsParams(sortColumns?: TableSortColumn[]) {
       return sortColumns
-        .filter((i) => !i.hidden)
+        ?.filter((i) => !i.hidden)
         .map((sortCol) => {
-          let column: CommonTableColumn<T> = tableColumnsParamsObj.value[sortCol._id]!
-          if (column.hidden) return null
-          if (column.children?.length) {
-            column.slots!.default = () => generateTableColumn(sortCol.children!)
+          return {
+            ...tableColumnsParamsObj.value[sortCol._id]!,
+            children: getSortColumnsParams(sortCol.children)
           }
+        })
+    }
+
+    // 生成表格列视图
+    function generateTableColumn(sortColumnsParams: CommonTableColumn<T>[]): VNode[] {
+      return sortColumnsParams
+        .map((column) => {
+          if (column.hidden) return null
           // 允许用户按照自己的slotName定制
           if (column.slotName && slots[column.slotName ?? '']) return slots[column.slotName ?? '']?.()
           const param = {
             ...column
           }
+          if (param.children?.length) {
+            param.slots!.default = () => generateTableColumn(param.children!)
+          }
           delete param.slots
           delete param.children
-
           const columnSlots = column.slots
           return <el-table-column {...param} v-slots={columnSlots} />
         }) satisfies VNode[]
@@ -633,7 +644,7 @@ export default defineComponent(
                     exportFileName={props.exportFileName}
                     fetchData={props.fetchData}
                     data={data.value}
-                    columns={tableColumnsParams.value}
+                    columns={sortColumnsParams.value}
                   />
                 )}
                 {props.isComplexFilter && props.fetchData && (
@@ -658,7 +669,7 @@ export default defineComponent(
           >
             <el-table
               {...tableParam}
-              v-slots={{ ...slots, default: () => [generateTableColumn(sortColumns.value), slots.default?.()] }}
+              v-slots={{ ...slots, default: () => [generateTableColumn(sortColumnsParams.value), slots.default?.()] }}
               onHeaderContextmenu={onHeaderContextmenu}
               // v-loading={loadingRef.value} 发现此处加入loading会导致内存泄漏。。。。
               class={{ 'el-table-view': true, 'radio-selection': props.selection === 'single' }}

@@ -32,7 +32,7 @@ export default {
     const formSize = ref(useElementSize(formRef))
     const cols = ref(0)
     watchEffect(() => {
-      let sizeWidth = 300
+      let sizeWidth = 350
       if (props.labelPosition === 'top') sizeWidth -= 100
       if (systemStore.layout.size === 'small') sizeWidth -= 70
       cols.value = Number(Math.floor(formSize.value.width / sizeWidth)) || 1
@@ -95,12 +95,14 @@ export default {
       })
     }
 
-    function getColSpan(column: FormColumn) {
+    function getColStyle(column: FormColumn) {
       const colspan = 24 / cols.value
       let span = column.colspan || props.colspan || colspan
-      if (systemStore.layout.widthShrink && span < colspan) span = colspan
-      if (column.cols) span = parseInt(column.cols) * span
-      return span
+      if (span < colspan) span = colspan
+      if (!column.colspan && column.cols) span = parseInt(column.cols) * span
+      if (span > 24) span = 24
+      const cacl = `calc(100% / 24 * ${span})`
+      return `flex: 0 0 ${cacl}; max-width: ${cacl};`
     }
 
     //生成表单列
@@ -119,10 +121,10 @@ export default {
         }
         const column = i.columnParam
         // 允许用户按照自己的slotName定制
-        if (column.slotName) return slots[column.slotName]?.(i)
+        if (column.slotName) return slots[column.slotName]?.()
         const param = {
           class: 'form-input',
-          ...i.renderArgs.param,
+          ...i.renderArgs?.param,
           ...vModelValue(
             {
               type: column.type,
@@ -135,7 +137,7 @@ export default {
         }
         const formItemSlots: { [name: string]: Function } = {
           default: () => {
-            const vNode = createVNode(i.renderArgs.component, param, i.renderArgs.slots)
+            const vNode = i.renderArgs && createVNode(i.renderArgs.component, param, i.renderArgs.slots)
             if (i.columnParam.render) return i.columnParam.render(vNode)
             return vNode
           }
@@ -151,7 +153,7 @@ export default {
           }
         }
         return (
-          <el-col span={getColSpan(column)}>
+          <el-col style={getColStyle(column)}>
             <el-form-item {...i.formItemParams} v-slots={formItemSlots} />
           </el-col>
         )
@@ -164,7 +166,7 @@ export default {
         // 隐藏的不显示
         if (i.hidden) return null
         if (i.columnParam.type === 'separator')
-          return <el-skeleton-item style={{ width: '60%', marginBottom: '1em' }} />
+          return <el-skeleton-item style={{ width: '100%', marginBottom: '1em' }} />
         const column = i.columnParam
         const formItemSlots: { [name: string]: Function } = {
           default: () => {
@@ -199,7 +201,7 @@ export default {
           }
         }
         return (
-          <el-col span={getColSpan(column)}>
+          <el-col style={getColStyle(column)}>
             <el-form-item {...{ ...i.formItemParams, required: false }} v-slots={formItemSlots} />
           </el-col>
         )
@@ -231,11 +233,11 @@ export default {
         default: () => <el-row>{generateFormColumns()}</el-row>,
         template: () => <el-row>{generateFormSkeletons()}</el-row>
       }
-      return (
-        <el-form {...formParam} v-slots={slots} class={{ 'detail-form': props.handleType === 'detail' }}>
-          <el-skeleton {...skeletonParam} v-slots={skeletonSlots} />
-        </el-form>
-      )
+      const formSlots = {
+        ...slots,
+        default: () => [<el-skeleton {...skeletonParam} v-slots={skeletonSlots} />, slots.default?.()]
+      }
+      return <el-form {...formParam} v-slots={formSlots} class={{ 'detail-form': props.handleType === 'detail' }} />
     }
   }
 }
@@ -246,9 +248,13 @@ export default {
   align-items: center;
 }
 
+.el-col {
+  padding: 0 5px;
+}
+
 .separator {
   font-size: 1.1em;
-  //font-weight: bold;
+  font-weight: bold;
   color: var(--el-text-color-regular);
   margin: 0.5em 0;
   border-bottom: var(--el-border);
@@ -256,10 +262,5 @@ export default {
   > div {
     margin-bottom: 0.5em;
   }
-}
-
-.el-col {
-  box-sizing: border-box;
-  padding: 0 5px;
 }
 </style>
