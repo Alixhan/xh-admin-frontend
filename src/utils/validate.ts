@@ -122,7 +122,7 @@ export async function ruleValid<T extends object>(
         rule.message ??
           t('m.form.minlength', {
             label: fieldRule.label ?? '',
-            maxlength: rule.minlength
+            minlength: rule.minlength
           })
       )
     }
@@ -147,7 +147,7 @@ export async function ruleValid<T extends object>(
       })
       const item = itemList.value.find((i) => i.label === formValue)
       if (item) {
-        formData?.[fieldRule.prop] && (formData[fieldRule.prop] = item.value as T[keyof T])
+        if(formData?.[fieldRule.prop]) formData[fieldRule.prop] = item.value as T[keyof T]
       } else {
         return reject(
           rule.message ??

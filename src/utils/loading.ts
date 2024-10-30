@@ -91,7 +91,7 @@ export const loading = {
   hide: () => {
     return nextTick(() => {
       const el = document.querySelector('.loading-view')
-      el && el.parentNode?.removeChild(el)
+      el?.parentNode?.removeChild(el)
     })
   },
   delayHide: () => {

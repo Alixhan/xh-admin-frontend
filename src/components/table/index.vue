@@ -139,7 +139,7 @@ export default defineComponent(
     }
 
     // 默认启动就查询
-    props.defaultQuery && nextTick(fetchQuery)
+    if(props.defaultQuery) nextTick(fetchQuery)
     const queryFilterRef = ref()
     const formRef = ref()
     const tableRef = ref()
@@ -275,7 +275,7 @@ export default defineComponent(
             r.showOverflowTooltip ??= false
           }
 
-          r.prop && (r.sortable ??= props.fetchData ? 'custom' : true) // 默认后端排序
+          if(r.prop) r.sortable ??= props.fetchData ? 'custom' : true // 默认后端排序
 
           // 没有设置宽度则根据label字数自动设定宽度，这样可以避免标题换行，影响美观
           if (!(r.width ?? r.minWidth) && r.label) {
@@ -324,7 +324,6 @@ export default defineComponent(
 
           // column属性
           const tableColumParams = {
-            key: column._id,
             showOverflowTooltip: !(column.slotName || column.editable),
             ...column,
             slots: { ...column.slots }
@@ -385,11 +384,16 @@ export default defineComponent(
           }
           // 如果是操作列需要生成操作按钮
           if (tableColumParams.type === 'operation' && !tableColumParams.slots.default) {
-            tableColumParams.slots.default = (scope) =>
-              createVNode(MOperationButton, {
+            tableColumParams.slots.default = (scope) => {
+              const $index = scope.$index
+              let $fullIndex = $index
+              if (props.isPage) $fullIndex = $index + pagination.value.pageSize! * (pagination.value.currentPage! - 1)
+              return createVNode(MOperationButton, {
                 ...tableColumParams,
-                row: scope.row
+                row: scope.row,
+                index: { $index, $fullIndex }
               })
+            }
           }
           // 默认表格格式化函数
           generateFormatter(tableColumParams)
@@ -411,7 +415,7 @@ export default defineComponent(
       if (column?.slots?.default) return
       if (!column.editable) return
       if (!column.prop) return
-      column.slots || (column.slots = {})
+      column.slots ??= {}
       const columnParam = {
         type: column.type,
         prop: column.prop,
@@ -450,7 +454,6 @@ export default defineComponent(
           ...vModelValue(renderArgs.param, scope.row)
         }
         const formItemParam = {
-          key: prop,
           prop,
           style: 'margin-bottom: 0;',
           inlineMessage: true,
@@ -525,22 +528,21 @@ export default defineComponent(
 
     // 生成表格列视图
     function generateTableColumn(sortColumnsParams: CommonTableColumn<T>[]): VNode[] {
-      return sortColumnsParams
-        .map((column) => {
-          if (column.hidden) return null
-          // 允许用户按照自己的slotName定制
-          if (column.slotName && slots[column.slotName ?? '']) return slots[column.slotName ?? '']?.()
-          const param = {
-            ...column
-          }
-          if (param.children?.length) {
-            param.slots!.default = () => generateTableColumn(param.children!)
-          }
-          delete param.slots
-          delete param.children
-          const columnSlots = column.slots
-          return <el-table-column {...param} v-slots={columnSlots} />
-        }) satisfies VNode[]
+      return sortColumnsParams.map((column) => {
+        if (column.hidden) return null
+        // 允许用户按照自己的slotName定制
+        if (column.slotName && slots[column.slotName ?? '']) return slots[column.slotName ?? '']?.()
+        const param = {
+          ...column
+        }
+        if (param.children?.length) {
+          param.slots!.default = () => generateTableColumn(param.children!)
+        }
+        delete param.slots
+        delete param.children
+        const columnSlots = column.slots
+        return <el-table-column {...param} v-slots={columnSlots} />
+      }) satisfies VNode[]
     }
 
     // 生成搜索框
@@ -669,7 +671,10 @@ export default defineComponent(
           >
             <el-table
               {...tableParam}
-              v-slots={{ ...slots, default: () => [generateTableColumn(sortColumnsParams.value), slots.default?.()] }}
+              v-slots={{
+                ...slots,
+                default: () => [generateTableColumn(sortColumnsParams.value), slots.default?.()]
+              }}
               onHeaderContextmenu={onHeaderContextmenu}
               // v-loading={loadingRef.value} 发现此处加入loading会导致内存泄漏。。。。
               class={{ 'el-table-view': true, 'radio-selection': props.selection === 'single' }}
@@ -843,6 +848,10 @@ export default defineComponent(
 
       :deep(.el-zoom-in-top-leave-active) {
         transition: none;
+      }
+
+      :deep(.el-form-item__content) {
+        justify-content: center;
       }
     }
   }

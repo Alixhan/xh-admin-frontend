@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
-import checker from 'vite-plugin-checker'
+import eslint from 'vite-plugin-eslint2'
 import { fileURLToPath, URL } from 'node:url'
 import autoprefixer from 'autoprefixer'
 
@@ -21,12 +21,7 @@ export default defineConfig({
       }
     }),
     vueJsx(),
-    checker({
-      // vueTsc: true,
-      eslint: {
-        lintCommand: 'eslint "./src/**/*.{ts,tsx,vue,js.jsx}"'
-      },
-    })
+    eslint()
   ],
   resolve: {
     alias: {
@@ -35,6 +30,11 @@ export default defineConfig({
     }
   },
   css: {
+    preprocessorOptions: {
+      scss: {
+        api: 'modern-compiler' // or "modern", "legacy"
+      },
+    },
     postcss: {
       plugins: [
         autoprefixer({

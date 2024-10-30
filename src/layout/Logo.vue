@@ -8,7 +8,7 @@
     </transition>
   </div>
 </template>
-<script setup>
+<script setup lang="ts">
 import { useSystemStore } from '@/stores/system'
 import logoBlack from '@/assets/icon/logo-black.svg'
 import logoWhite from '@/assets/icon/logo-white.svg'

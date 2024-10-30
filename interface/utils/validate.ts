@@ -40,10 +40,6 @@ export interface ValidRule<T extends object, K extends keyof T> {
   dateFormat?: string
 }
 
-function getPropertyType<T, K extends keyof T>(obj: T, key: K): typeof obj[K] {
-  return obj[key]; // 返回属性值的类型
-}
-
 /**
  * 自定义验证函数
  */

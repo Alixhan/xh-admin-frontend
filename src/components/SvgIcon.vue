@@ -1,7 +1,7 @@
 <template>
   <i v-html="svg" />
 </template>
-<script lang="tsx" setup>
+<script setup lang="ts">
 import { computed, type PropType, ref, toRef, watchEffect } from 'vue'
 import fetchBinary from '@/utils/binary'
 
@@ -16,7 +16,7 @@ defineOptions({
 
 const props = defineProps({
   src: {
-    type: String as PropType<any>,
+    type: String as PropType<string>,
     required: true
   }, // 图标路径
   property: Object, // 修改svg属性值

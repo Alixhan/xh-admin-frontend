@@ -25,7 +25,7 @@
     <NavTabs v-if="!systemStore.layout.heightShrink" key="nav-tabs"/>
   </div>
 </template>
-<script setup>
+<script setup lang="ts">
 import Action from '@/layout/Action/index.vue'
 import NavTabs from './NavTabs/index.vue'
 import Breadcrumb from './Breadcrumb.vue'

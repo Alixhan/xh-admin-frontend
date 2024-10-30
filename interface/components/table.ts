@@ -100,7 +100,7 @@ export const mTableProps = {
 /**
  * T为表格行的数据类型，F为简单查询条件对象类型
  */
-export type MTableProps<T extends object, F extends object> = ExtractPropTypes<typeof mTableProps>
+export type MTableProps = ExtractPropTypes<typeof mTableProps>
 
 // 表格列定义
 export interface TableColumn<T extends object> extends Partial<Omit<TableColumnCtx<T>, 'children'>> {
@@ -125,7 +125,7 @@ export interface TableColumn<T extends object> extends Partial<Omit<TableColumnC
   // 表格是否可编辑
   editable?: boolean
   // 表格编辑参数
-  editParam?: CommonFormColumn<T> | ((scope :CI<T>) => CommonFormColumn<T>)
+  editParam?: CommonFormColumn<T> | ((scope: CI<T>) => CommonFormColumn<T>)
   //允许用户按照自己的slotName插槽定制
   slotName?: string
   // 操作列按钮
@@ -158,7 +158,7 @@ export interface TableSortColumn {
 export interface CI<T extends object> {
   $index: number
   column: any
-  row: T,
+  row: T
   $fullIndex?: number
   $column: TableColumn<T>
 }
@@ -267,14 +267,20 @@ export interface OperationButton<T> {
   icon?: string
   auth?: string | string[]
   authLogic?: 'and' | 'or'
-  onClick?: (row: T) => void
+  onClick?: (row: T, index: { $index: number; $fullIndex: number }) => void
   disabled?: ((row: T) => boolean) | boolean
 }
 
 export interface OperationButtonProps<T> {
+  // 按钮权限
   readonly auth?: boolean
+  // 最大显示数量，超出会被收纳进更多
   readonly maxCount?: number
+  // 当前行数据
   readonly row?: T
+  // 当前行索引
+  readonly index?: { $index: number; $fullIndex: number }
+  // 按钮
   readonly buttons: OperationButton<T>[]
 }
 

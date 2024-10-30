@@ -29,11 +29,11 @@ function getDefaultOption(): RequestOption {
 // 对请求进行增强处理
 export default function createAxios<R = any, Q = any>(opt?: RequestOption<R>): MyAxiosInstance<R, Q> {
   const option: RequestOption<R> = { ...getDefaultOption(), ...opt }
-  let loadingInstance: { close: Function }
+  let loadingInstance: { close: () => void }
 
   // 重置loading
   function resetLoading() {
-    isRef(option.loadingRef) && (option.loadingRef.value = false)
+    if(isRef(option.loadingRef)) option.loadingRef.value = false
     loadingInstance?.close()
     //解除占用，防止内存泄漏
     delete option.loadingRef
@@ -81,14 +81,13 @@ export default function createAxios<R = any, Q = any>(opt?: RequestOption<R>): M
   // request拦截器
   service.interceptors.request.use(async (config) => {
     if (option.showBeforeConfirm) {
-      config.data
       // 确认的提示
       await ElMessageBox.confirm(option.confirmMsg, i18n.global.t('common.tip'), {
         type: 'warning',
         confirmButtonText: option.confirmButtonText
       })
     }
-    isRef(option.loadingRef) && (option.loadingRef.value = true)
+    if(isRef(option.loadingRef)) option.loadingRef.value = true
     if (option.showLoading) {
       loadingInstance = ElLoading.service({
         body: true,

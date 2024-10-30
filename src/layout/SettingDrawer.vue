@@ -48,7 +48,7 @@
     </el-form>
   </el-drawer>
 </template>
-<script setup>
+<script setup lang="ts">
 import { useThemeStore } from '@/stores/theme'
 import { useSystemStore } from '@/stores/system'
 

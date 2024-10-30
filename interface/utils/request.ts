@@ -99,13 +99,13 @@ export function isRestResponse(val: any): val is RestResponse & {error?: string}
  */
 export interface PageQuery<T extends object = object> {
   // 是否为导出请求
-  isExport: boolean;
+  isExport?: boolean;
   // 是否分页
   isPage: boolean;
   // 当前页码 分页为true时必有值
-  currentPage: number;
+  currentPage?: number;
   // 分页大小 分页为true时必有值
-  pageSize: number;
+  pageSize?: number;
   // 其他查询参数
   param?: T;
   // 高级筛选条件

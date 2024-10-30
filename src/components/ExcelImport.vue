@@ -50,7 +50,7 @@ import { ElMessage } from 'element-plus'
 import type { RuleObject, ValidResult } from '@i/utils/validate'
 import validate from '@/utils/validate'
 import type { TableColumn } from '@i/components/table'
-import type { ExcelError, ExcelImportProps } from '@i/components/excelImport'
+import type { ExcelError, ExcelImportInitData, ExcelImportProps } from '@i/components/excelImport'
 import { useI18n } from 'vue-i18n'
 
 defineOptions({
@@ -104,7 +104,7 @@ const tipObj = computed(() => {
       do: t('m.excelImport.step4Do'),
       error: t('m.excelImport.step4Error'),
       success: t('m.excelImport.step4Success'),
-      exception: t('m.excelImport.step4Exception'),
+      exception: t('m.excelImport.step4Exception')
     },
     5: { do: t('m.excelImport.step5Do'), success: t('m.excelImport.step5Success') }
   }
@@ -169,7 +169,7 @@ async function downloadTemplate() {
     downloadLoading.value = true
     let data: T[] = []
     if (props.initData) {
-      let arr: any = props.initData
+      let arr: ExcelImportInitData<T> = props.initData
       if (arr instanceof Function) arr = arr()
       if (arr instanceof Promise) arr = await arr
       data = arr
@@ -193,7 +193,6 @@ function handleFile(e: Event) {
     try {
       const workbook = new ExcelJS.Workbook()
       tip.value.step = '2'
-      // @ts-ignore
       await workbook.xlsx.load(reader.result)
       const worksheet = workbook.getWorksheet(1)
       if (!worksheet) throw new Error(t('m.excelImport.templateMismatch'))
@@ -204,7 +203,7 @@ function handleFile(e: Event) {
       })
       if (!flag) throw new Error(t('m.excelImport.templateMismatch'))
       worksheet.columns = excelTree.excelColumns
-      const datas: any[] = []
+      const datas: T[] = []
       worksheet.eachRow((row, rowNumber) => {
         if (rowNumber > excelTree.$maxPlies - 1) {
           const rowData = {}
@@ -230,7 +229,7 @@ function handleFile(e: Event) {
       })
       importData.value = datas
       tip.value.status = 'success'
-    } catch (e: any) {
+    } catch (e) {
       tip.value.status = 'error'
       ElMessage.error(e.message ?? t('common.importsFailed'))
     } finally {
@@ -247,15 +246,16 @@ function handleFile(e: Event) {
 async function validData() {
   const data = importData.value.map((item) => Object.assign({}, item))
   const ruleObject: RuleObject<T> = excelTree.leafNodes.reduce<RuleObject<T>>((a, b) => {
-    b.rules &&
-      (a[b.prop!] = {
+    if (b.rules) {
+      a[b.prop!] = {
         prop: b.prop as keyof T,
         label: b.label,
         rules: b.rules
-      })
+      }
+    }
     return a
   }, {})
-  const dataArr: any[] = [...data]
+  const dataArr: T[] = [...data]
   const rowPromiseArr: ValidResult<T>[] = []
   while (dataArr.length) {
     const row = dataArr.shift()

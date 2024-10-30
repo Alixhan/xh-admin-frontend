@@ -71,7 +71,7 @@ function init() {
     return {
       type: 'primary',
       ...i,
-      onClick: () => i.onClick?.(props.row!),
+      onClick: () => i.onClick?.(props.row!, props.index!),
       disabled: i.disabled instanceof Function ? i.disabled(props.row!) : i.disabled
     }
   })

@@ -100,12 +100,9 @@ body {
   min-width: min(350px, 95vw);
   max-width: 95vw;
 
-  .el-dialog__header {
-    padding-bottom: 0;
-  }
 
   .el-dialog__body {
-    padding: 20px;
+    padding: 0;
   }
 }
 

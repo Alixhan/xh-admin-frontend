@@ -6,6 +6,7 @@ import { useElementSize } from '@vueuse/core'
 import type { UploadCtx } from '@/components/form/Upload.vue'
 import { mFormEmits, mFormProps } from '@i/components/form'
 import { useElComponentSizeCssVar } from '@/utils'
+import type { SlotsObj } from '@i/components'
 
 /**
  * 通用表单组件
@@ -56,20 +57,20 @@ export default {
     }
 
     expose({
-      clearValidate: function () {
-        return formRef.value.clearValidate(...arguments)
+      clearValidate: function (...args) {
+        return formRef.value.clearValidate(...args)
       },
-      scrollToField: function () {
-        return formRef.value.scrollToField(...arguments)
+      scrollToField: function (...args) {
+        return formRef.value.scrollToField(...args)
       },
-      resetFields: function () {
-        return formRef.value.resetFields(...arguments)
+      resetFields: function (...args) {
+        return formRef.value.resetFields(...args)
       },
-      validateField: function () {
-        return formRef.value.validateField(...arguments)
+      validateField: function (...args) {
+        return formRef.value.validateField(...args)
       },
-      validate: function () {
-        return formRef.value.validate(...arguments)
+      validate: function (...args) {
+        return formRef.value.validate(...args)
       },
       submit
     })
@@ -135,7 +136,7 @@ export default {
             props.model
           )
         }
-        const formItemSlots: { [name: string]: Function } = {
+        const formItemSlots: SlotsObj = {
           default: () => {
             const vNode = i.renderArgs && createVNode(i.renderArgs.component, param, i.renderArgs.slots)
             if (i.columnParam.render) return i.columnParam.render(vNode)
@@ -168,7 +169,7 @@ export default {
         if (i.columnParam.type === 'separator')
           return <el-skeleton-item style={{ width: '100%', marginBottom: '1em' }} />
         const column = i.columnParam
-        const formItemSlots: { [name: string]: Function } = {
+        const formItemSlots: SlotsObj = {
           default: () => {
             const randomWidth = 30 + Math.random() * 70
             const skeletonParam = {

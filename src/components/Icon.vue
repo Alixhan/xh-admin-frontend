@@ -31,7 +31,7 @@ function initIcon() {
   const [type, icon] = (props.value ?? '').split('|')
   iconType.value = type
   if (type === 'local') {
-    let val = localSvg[icon]?.()
+    const val = localSvg[icon]?.()
     if (val instanceof Promise) {
       val.then((i) => (src.value = i))
     } else src.value = val

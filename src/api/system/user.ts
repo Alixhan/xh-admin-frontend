@@ -22,7 +22,7 @@ export function getImageCaptcha(captchaKey: string, option?: RequestOption): Pro
 /**
  * 系统登录
  */
-export function userLogin(params: any = {}, option?: RequestOption) {
+export function userLogin(params: {[prop: string]: string}, option?: RequestOption) {
   //携带上当前语言信息
   params.locale = useSystemStore().locale
   params.localeLabel = getCurrentLocales().label

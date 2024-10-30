@@ -30,7 +30,7 @@
   </div>
 </template>
 
-<script lang="tsx" setup>
+<script lang="ts" setup>
 import { type PropType, ref } from 'vue'
 import { useSystemStore } from '@/stores/system'
 import { useI18n } from 'vue-i18n'
@@ -129,7 +129,6 @@ defineExpose({ reset })
   }
 
   .filter-view {
-    justify-items: end;
     overflow: hidden;
     @media all and (max-width: 400px) {
       height: 0;

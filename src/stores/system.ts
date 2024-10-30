@@ -235,7 +235,7 @@ export const useSystemStore = defineStore('system', () => {
     }
     let path: string | undefined
     if (token.value && !loginStatus.value) {
-      path = await userLogin()
+      path = await userLogin({})
         .then((res) => {
           // 用户已登录
           if (res.status + '' === 'success' && res.data) {
