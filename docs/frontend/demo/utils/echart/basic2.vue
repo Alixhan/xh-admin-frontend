@@ -389,7 +389,7 @@ const barOption = {
       universalTransition: {
         enabled: true,
         seriesKey: ['female', 'male'],
-        delay: function (idx, count) {
+        delay: function () {
           return Math.random() * 400
         }
       }

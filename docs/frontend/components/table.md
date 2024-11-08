@@ -183,7 +183,8 @@ components/table/editable2
 
 ## CommonTableColumn 表格列
 
-仅列出新加的特有字段说明，关于 `ElTableColumn` 基础属性用法，可参考 [Element Plus](https://element-plus.org/zh-CN/component/table.html) 文档
+仅列出新加的特有字段说明，关于 `ElTableColumn`
+基础属性用法，可参考 [Element Plus](https://element-plus.org/zh-CN/component/table.html) 文档
 
 | 字段        | 字段描述                                                 | 类型                                                                        |
 |-----------|------------------------------------------------------|---------------------------------------------------------------------------|
@@ -194,7 +195,7 @@ components/table/editable2
 | required  | 显示必填星号，一般在表格编辑时，标识此列必填                               | ^[boolean]                                                                |
 | hidden    | 隐藏此列                                                 | ^[boolean]                                                                |
 | notExport | 此列不导出到excel                                          | ^[boolean]                                                                |
-| slots     | jsx 风格定义 `el-table-column` 插槽                        | ^[string]                                                                 |
+| slots     | jsx 风格定义 `el-table-column` 插槽                        | ^[SlotsObj]`位于interface/components/index.ts，查看详细类型定义`                     |
 | slotName  | 允许用户按照自己的slotName插槽定制                                | ^[string]                                                                 |
 | itemList  | `type` 为 `'select'`  时的枚举选项                          | ^[Array]`CommonItemList []，位于 interface/components/index.ts，查看详细类型定义`     |
 | labelKey  | 枚举选项的 labelKey，默认为 `'label'`                         | ^[string]                                                                 |

@@ -13,9 +13,7 @@ export default function demoContainer(md) {
       return params.trim().match(/^demo\s*(.*)$/)
     },
     render(tokens: any[], idx: number) {
-      const m = tokens[idx].info.trim().match(/^demo\s*(.*)$/)
       if (tokens[idx].nesting === 1) {
-        const description = m && m.length > 1 ? m[1] : ''
         const sourceFileToken = tokens[idx + 2]
         const sourceFile = sourceFileToken.children?.[0].content ?? ''
         if (sourceFileToken.type === 'inline') {
@@ -44,8 +42,8 @@ function getFileDetail(url: string) {
   const dirPath = fileURLToPath(new URL(`../../frontend/demo${dir}`, import.meta.url))
   const filesAndDirectories = readdirSync(dirPath)
   for (const str of filesAndDirectories) {
-    let fullPath = join(dirPath, str)
-    let stats = statSync(fullPath)
+    const fullPath = join(dirPath, str)
+    const stats = statSync(fullPath)
     if (stats.isFile()) {
       const [file, suffix] = str.split('.')
       if (file === fileName) {
