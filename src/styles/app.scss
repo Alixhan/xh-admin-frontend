@@ -80,6 +80,7 @@ body {
   .el-table__cell {
     padding: 5px;
   }
+
   thead {
     font-size: 15px;
   }
@@ -88,18 +89,22 @@ body {
     font-size: 14px;
   }
 }
+
 .el-form-item--small {
   --font-size: 12px;
   --el-form-label-font-size: var(--font-size);
 }
+
 .el-form-item--default {
   margin: 0 0 15px 0;
 }
 
 .el-dialog {
-  min-width: min(350px, 95vw);
-  max-width: 95vw;
 
+  &:not(.is-fullscreen) {
+    min-width: min(350px, 95vw);
+    max-width: 95vw;
+  }
 
   .el-dialog__body {
     padding: 0;
@@ -219,13 +224,15 @@ body {
 }
 
 /* nprogress color */
-#nprogress  {
+#nprogress {
   .bar {
     background: var(--el-color-primary);
   }
+
   .peg {
     box-shadow: 0 0 10px var(--el-color-primary), 0 0 5px var(--el-color-primary);
   }
+
   .spinner-icon {
     border-top-color: var(--el-color-primary);
     border-left-color: var(--el-color-primary);

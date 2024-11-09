@@ -33,9 +33,9 @@ export default {
     const formSize = ref(useElementSize(formRef))
     const cols = ref(0)
     watchEffect(() => {
-      let sizeWidth = 350
-      if (props.labelPosition === 'top') sizeWidth -= 100
-      if (systemStore.layout.size === 'small') sizeWidth -= 70
+      let sizeWidth = 300
+      if (props.labelPosition === 'top') sizeWidth -= 60
+      if (systemStore.layout.size === 'small') sizeWidth -= 50
       cols.value = Number(Math.floor(formSize.value.width / sizeWidth)) || 1
     })
 
@@ -96,14 +96,14 @@ export default {
       })
     }
 
-    function getColStyle(column: FormColumn) {
+    function getColSpan(column: FormColumn) {
       const colspan = 24 / cols.value
       let span = column.colspan || props.colspan || colspan
       if (span < colspan) span = colspan
-      if (!column.colspan && column.cols) span = parseInt(column.cols) * span
+      if (!column.colspan && column.cols) span = Number(column.cols) * span
       if (span > 24) span = 24
-      const cacl = `calc(100% / 24 * ${span})`
-      return `flex: 0 0 ${cacl}; max-width: ${cacl};`
+      if (span == 4.8) span = 4
+      return span
     }
 
     //生成表单列
@@ -122,7 +122,7 @@ export default {
         }
         const column = i.columnParam
         // 允许用户按照自己的slotName定制
-        if (column.slotName) return slots[column.slotName]?.()
+        if (column.slotName) return slots[column.slotName]?.(i)
         const param = {
           class: 'form-input',
           ...i.renderArgs?.param,
@@ -154,7 +154,7 @@ export default {
           }
         }
         return (
-          <el-col style={getColStyle(column)}>
+          <el-col span={getColSpan(column)}>
             <el-form-item {...i.formItemParams} v-slots={formItemSlots} />
           </el-col>
         )
@@ -202,7 +202,7 @@ export default {
           }
         }
         return (
-          <el-col style={getColStyle(column)}>
+          <el-col span={getColSpan(column)}>
             <el-form-item {...{ ...i.formItemParams, required: false }} v-slots={formItemSlots} />
           </el-col>
         )
