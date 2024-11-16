@@ -9,7 +9,7 @@
     "build": "run-p type-check build:production",
     "build:production": "vite build --mode production",
     "preview": "vite preview",
-    "type-check": "vue-tsc --noEmit -p tsconfig.app.json --composite false",
+    "type-check": "vue-tsc --build --force",
     "lint": "eslint . --fix",
     "format": "prettier --write src/",
     "docs:dev": "vitepress dev docs",

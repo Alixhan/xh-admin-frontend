@@ -65,10 +65,11 @@
  * 2023-3-29 sunxh
  */
 
-import { computed, nextTick, type Ref, ref, shallowRef } from 'vue'
+import { computed, nextTick, ref, shallowRef } from 'vue'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import MIcon from '@/components/Icon.vue'
 import { round } from 'lodash-es'
+import type { ElInput } from 'element-plus'
 
 const localSvg = import.meta.glob('@/assets/icon/**/*.svg', { query: '?url', import: 'default' })
 
@@ -110,7 +111,7 @@ function updateVisible() {
 
 const refInput = ref()
 
-function inputRef(el: Ref<Element>) {
+function inputRef(el: InstanceType<typeof ElInput>) {
   refInput.value = el
   const clientWidth = el?.$el.clientWidth
   let sl = round(Number(clientWidth) / 41.3, 0)

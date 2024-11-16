@@ -59,7 +59,8 @@ router.beforeEach(async (to, from, next) => {
   NProgress.start()
   const systemStore = useSystemStore()
   const path = await systemStore.beforeEach(to)
-  next(path)
+  if (path) next(path)
+  else next()
 })
 
 router.afterEach((to) => {

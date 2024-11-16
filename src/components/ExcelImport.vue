@@ -193,7 +193,7 @@ function handleFile(e: Event) {
     try {
       const workbook = new ExcelJS.Workbook()
       tip.value.step = '2'
-      await workbook.xlsx.load(reader.result)
+      await workbook.xlsx.load(reader.result as any)
       const worksheet = workbook.getWorksheet(1)
       if (!worksheet) throw new Error(t('m.excelImport.templateMismatch'))
       let flag = true // 模板匹配
@@ -206,7 +206,7 @@ function handleFile(e: Event) {
       const datas: T[] = []
       worksheet.eachRow((row, rowNumber) => {
         if (rowNumber > excelTree.$maxPlies - 1) {
-          const rowData = {}
+          const rowData: any = {}
           excelTree.leafNodes.forEach((c, index) => {
             const cell = row.getCell(index + 1)
             let cellValue = cell.value ?? ''
@@ -229,7 +229,7 @@ function handleFile(e: Event) {
       })
       importData.value = datas
       tip.value.status = 'success'
-    } catch (e) {
+    } catch (e: any) {
       tip.value.status = 'error'
       ElMessage.error(e.message ?? t('common.importsFailed'))
     } finally {
@@ -259,7 +259,7 @@ async function validData() {
   const rowPromiseArr: ValidResult<T>[] = []
   while (dataArr.length) {
     const row = dataArr.shift()
-    rowPromiseArr.push(await validate(row, ruleObject))
+    rowPromiseArr.push(await validate(row!, ruleObject))
   }
   return Promise.all(rowPromiseArr).then((result: Array<ValidResult<T>>) => {
     errorData.value = []

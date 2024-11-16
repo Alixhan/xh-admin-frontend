@@ -14,7 +14,7 @@
 import { computed, reactive } from 'vue'
 import { useSystemStore } from '@/stores/system'
 import SettingDrawer from '@/layout/SettingDrawer.vue'
-import { getLocale } from '@/i18n/index.ts'
+import { getLocale } from '@/i18n'
 
 const systemStore = useSystemStore()
 

@@ -42,7 +42,7 @@ const { copy } = useClipboard()
 usePermission('clipboard-write')
 
 function cp() {
-  copy(route.meta.component).then(() => {
+  copy(route.meta.component as string).then(() => {
     console.info('恭喜你！你发现了这个贴心的小功能~👻🏀🐔')
     ElMessage({
       type: 'success',

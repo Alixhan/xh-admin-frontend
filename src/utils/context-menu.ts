@@ -1,4 +1,4 @@
-import type {App, VNode} from 'vue'
+import type { App, VNode } from 'vue'
 import { type AppContext, createVNode, render } from 'vue'
 import ContextMenu from '@/components/ContextMenu.vue'
 
@@ -19,10 +19,10 @@ export interface ContextMenuItem {
   disabled?: boolean
   type?: 'default' | 'success' | 'warning' | 'info' | 'primary' | 'danger'
 
-  [prop: string]: string | object
+  [prop: string]: any
 }
 
-let vn: never
+let vn: VNode
 
 /**
  * 展示上下文菜单，全局单例模式
@@ -35,7 +35,7 @@ function _showContextMenu(option: ContextMenuOption) {
     render(vn, container)
     document.body.appendChild(container)
   }
-  vn.component.exposed.show(option)
+  vn.component?.exposed?.show(option)
 }
 
 export const showContextMenu = _showContextMenu as typeof showContextMenu & {

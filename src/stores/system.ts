@@ -205,7 +205,7 @@ export const useSystemStore = defineStore('system', () => {
         if (refresh.value && i.fullPath === route.fullPath) return false
         return i.cache
       })
-      .map((i) => i.componentName)
+      .map((i) => i.componentName as string)
   })
 
   function setRefresh(val: boolean) {
