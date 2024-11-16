@@ -27,7 +27,6 @@ import MOperationButton from './OperationButton.vue'
 import TableColumnSort from './TableColumnSort.vue'
 import { useSystemStore } from '@/stores/system.js'
 import { ElForm } from 'element-plus'
-import { InfoFilled } from '@element-plus/icons-vue'
 import { auth } from '@/directive'
 import { isUndefined } from 'lodash-es'
 import { DefaultMaxCount } from '@/components/constants'
@@ -139,7 +138,7 @@ export default defineComponent(
     }
 
     // 默认启动就查询
-    if(props.defaultQuery) nextTick(fetchQuery)
+    if (props.defaultQuery) nextTick(fetchQuery)
     const queryFilterRef = ref()
     const formRef = ref()
     const tableRef = ref()
@@ -275,7 +274,7 @@ export default defineComponent(
             r.showOverflowTooltip ??= false
           }
 
-          if(r.prop) r.sortable ??= props.fetchData ? 'custom' : true // 默认后端排序
+          if (r.prop) r.sortable ??= props.fetchData ? 'custom' : true // 默认后端排序
 
           // 没有设置宽度则根据label字数自动设定宽度，这样可以避免标题换行，影响美观
           if (!(r.width ?? r.minWidth) && r.label) {
@@ -563,37 +562,27 @@ export default defineComponent(
     // 生成合计框
     function generateTotalView() {
       if (pagination.value.layout.includes('total')) {
-        const content = [
-          <el-icon class="total-icon" size="15">
-            <InfoFilled />
-          </el-icon>,
-          <span>
-            {t('m.table.total')}{' '}
-            <span class="total-text">{Math.max(pagination.value.total ?? 0, data.value.length)}</span>{' '}
-            {t('m.table.unit')}
-          </span>
-        ]
-        if (props.selection) {
-          content.push(
-            <span
-              class={{ exceed_selection: props.selectionLimit && selectionRows.value.length > props.selectionLimit }}
-            >
-              ，{t('m.table.selected')} <span class="total-text">{selectionRows.value.length}</span>
-              {!isUndefined(props.selectionLimit) ? (
-                <span>
-                  {' '}
-                  / <span class="total-text">{props.selectionLimit}</span>
-                </span>
-              ) : (
-                ''
-              )}{' '}
-              {t('m.table.unit')}
-            </span>
-          )
-        }
         return (
           <el-button class="total-view" type="primary" plain>
-            {content}
+            <span>
+              {t('m.table.total')}
+              <span class="total-text">{Math.max(pagination.value.total ?? 0, data.value.length)}</span>
+              {t('m.table.unit')}
+            </span>
+            {props.selection && (
+              <span
+                class={{ exceed_selection: props.selectionLimit && selectionRows.value.length > props.selectionLimit }}
+              >
+                ，{t('m.table.selected')}
+                <span class="total-text">{selectionRows.value.length}</span>
+                {props.selectionLimit && (
+                  <span>
+                    / <span class="total-text">{props.selectionLimit}</span>
+                  </span>
+                )}
+                {t('m.table.unit')}
+              </span>
+            )}
           </el-button>
         )
       }
@@ -811,6 +800,7 @@ export default defineComponent(
         .total-text {
           color: var(--el-color-primary);
           font-weight: bold;
+          margin: auto 5px;
         }
 
         .exceed_selection {
@@ -942,8 +932,3 @@ export default defineComponent(
   }
 }
 </style>
-<template>
-  <!-- 此处添加只是为了有slot的提示 -->
-  <slot name="left-action" />
-  <slot name="right-action" />
-</template>
