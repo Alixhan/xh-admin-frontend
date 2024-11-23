@@ -9,6 +9,7 @@ export * from './excel'
 export * from './loading'
 export * from './request'
 export * from './validate'
+export * from './string'
 
 /**
  * 获取文件下载url
@@ -23,6 +24,7 @@ export function getDownloadFileUrl(param: DownloadParam): string {
   const systemStore = useSystemStore()
   return Object.keys(param).reduce(
     (url, key) => {
+      if (!param[key]) return url
       return `${url}&${key}=${encodeURIComponent(param[key])}`
     },
     `${fileBaseUrl}/api/file/operation/download?${import.meta.env.VITE_SYS_TOKEN_KEY}=${systemStore.token}`

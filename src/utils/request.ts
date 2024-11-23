@@ -107,9 +107,8 @@ export default function createAxios<R = any, Q = any>(opt?: RequestOption<R>): M
   service.interceptors.response.use(
     async (res) => {
       const data = res.data
-      if (!data.status) return data
       resetLoading()
-      if (data.status !== 'success') return showErrorMsg(data)
+      if (data.status && data.status !== 'success') return showErrorMsg(data)
       if (option.showSuccessMsg) {
         ElNotification({
           type: 'success',
