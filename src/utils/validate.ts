@@ -5,7 +5,14 @@
 import { isEmpty } from 'lodash-es'
 import { getItemListRef } from '@/components/mutils'
 import type { Ref } from 'vue'
-import type { FieldRule, FieldValidResult, RuleObject, ValidResult, ValidRule } from '@i/utils/validate'
+import type {
+  FieldRule,
+  FieldValidResult,
+  RuleObject,
+  UnknownFieldRule,
+  ValidResult,
+  ValidRule
+} from '@i/utils/validate'
 import type { CommonItemData } from '@i/components'
 import i18n from '@/i18n'
 import dayjs from 'dayjs'
@@ -27,15 +34,20 @@ export const datatype = {
   idCard: /^[1-9]\d{5}(18|19|20|(3\d))\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/,
   carNum:
     /^(([京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领][A-Z](([0-9]{5}[DF])|([DF]([A-HJ-NP-Z0-9])[0-9]{4})))|([京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领][A-Z][A-HJ-NP-Z0-9]{4}[A-HJ-NP-Z0-9挂学警港澳使领]))$/,
-  required: (val: string) => !(val?.length)
+  required: (val: string) => !val?.length
 }
 
-// 整个表单验证
-export default async function <T extends object>(formData: T, ruleObject: RuleObject<T>): Promise<ValidResult<T>> {
-  const formPromiseArr: Promise<FieldValidResult<T, keyof T>>[] = []
-  for (const prop in ruleObject) {
-    formPromiseArr.push(fieldValid(ruleObject[prop], formData[prop], formData))
-  }
+/**
+ * 通过FieldRule规则数组或者规则对象 来验证对象数据
+ */
+export default async function validate<T extends object>(
+  formData: T,
+  fieldRules: RuleObject<T> | UnknownFieldRule<T, keyof T>[]
+): Promise<ValidResult<T>> {
+  const formPromiseArr = Object.values(fieldRules)
+    .filter((i) => i.prop && i.rules)
+    .map((i) => i as FieldRule<T, keyof T>)
+    .map((i) => fieldValid(i, formData[i.prop], formData))
   return Promise.all(formPromiseArr).then((res) => {
     const errFields = res.filter((i) => !i.result)
     return {
@@ -148,7 +160,7 @@ export async function ruleValid<T extends object>(
       })
       const item = itemList.value.find((i) => i.label === formValue)
       if (item) {
-        if(formData?.[fieldRule.prop]) formData[fieldRule.prop] = item.value as T[keyof T]
+        if (formData?.[fieldRule.prop]) formData[fieldRule.prop] = item.value as T[keyof T]
       } else {
         return reject(
           rule.message ??

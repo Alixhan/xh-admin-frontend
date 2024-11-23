@@ -60,10 +60,20 @@ export interface FieldRule<T extends object, K extends keyof T> {
 }
 
 /**
+ * 单字段的验证规则（未知）
+ */
+export interface UnknownFieldRule<T extends object, K extends keyof T> {
+  prop?: K
+  label?: string
+  rules?: ValidRule<T, K> | ValidRule<T, K>[]
+}
+
+
+/**
  * 验证规则对象
  */
 export interface RuleObject<T extends object> {
-  [prop: string]: FieldRule<T, keyof T>
+  [prop: string]: UnknownFieldRule<T, keyof T>
 }
 
 /**
