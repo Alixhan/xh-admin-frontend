@@ -332,5 +332,6 @@ export default {
     add: '@:generator.label@:common.add',
     edit: '@:generator.label@:common.edit',
     detail: '@:generator.label@:common.detail',
+    download: '下载代码',
   }
 }
