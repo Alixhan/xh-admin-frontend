@@ -1,8 +1,12 @@
 <template>
-  <el-icon class="icon">
+  <el-icon v-if="wrap" class="icon">
     <component v-if="iconType === 'el' && src" :is="src" />
     <svg-icon v-else-if="iconType === 'local' && src" :src="src" inherited />
   </el-icon>
+  <template v-else>
+    <component v-if="iconType === 'el' && src" :is="src" />
+    <svg-icon v-else-if="iconType === 'local' && src" :src="src" inherited />
+  </template>
 </template>
 <script setup lang="ts">
 /**
@@ -18,7 +22,10 @@ defineOptions({
   name: 'MIcon'
 })
 
-const props = defineProps<{ value?: string }>()
+const props = withDefaults(defineProps<{
+  value?: string
+  wrap?: boolean //是否用el-icon组件包裹
+}>(), { wrap: true })
 
 const iconType = ref()
 const src = ref()

@@ -1,5 +1,5 @@
 <template>
-  <i v-html="svg" />
+  <span v-html="svg" />
 </template>
 <script setup lang="ts">
 import { computed, type PropType, ref, toRef, watchEffect } from 'vue'

@@ -47,7 +47,7 @@ import { ExcelTree } from '@/utils/excel'
 import ExcelJS from 'exceljs'
 import dayjs from 'dayjs'
 import { ElMessage } from 'element-plus'
-import type { RuleObject, ValidResult } from '@i/utils/validate'
+import type { ValidResult } from '@i/utils/validate'
 import validate from '@/utils/validate'
 import type { TableColumn } from '@i/components/table'
 import type { ExcelError, ExcelImportInitData, ExcelImportProps } from '@i/components/excelImport'
@@ -245,21 +245,11 @@ function handleFile(e: Event) {
  */
 async function validData() {
   const data = importData.value.map((item) => Object.assign({}, item))
-  const ruleObject: RuleObject<T> = excelTree.leafNodes.reduce<RuleObject<T>>((a, b) => {
-    if (b.rules) {
-      a[b.prop!] = {
-        prop: b.prop as keyof T,
-        label: b.label,
-        rules: b.rules
-      }
-    }
-    return a
-  }, {})
   const dataArr: T[] = [...data]
   const rowPromiseArr: ValidResult<T>[] = []
   while (dataArr.length) {
     const row = dataArr.shift()
-    rowPromiseArr.push(await validate(row!, ruleObject))
+    rowPromiseArr.push(await validate(row!, excelTree.leafNodes))
   }
   return Promise.all(rowPromiseArr).then((result: Array<ValidResult<T>>) => {
     errorData.value = []

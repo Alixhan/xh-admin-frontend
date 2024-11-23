@@ -44,7 +44,7 @@ import type {
 } from '@i/components/table'
 import { mTableProps } from '@i/components/table'
 import { type ContextMenuItem, showContextMenu } from '@/utils/context-menu'
-import type { RuleObject } from '@i/utils/validate'
+import type { UnknownFieldRule } from '@i/utils/validate'
 
 /**
  * 通用表格组件
@@ -295,6 +295,7 @@ export default defineComponent(
           // 操作类型时，判断如果buttons没有，则隐藏操作列
           if (i.type === 'operation') {
             i.buttons = i.buttons?.filter((j) => {
+              if(j.hidden) return false
               if (!j.auth) return true
               return auth(j.auth, j.authLogic)
             })
@@ -415,11 +416,10 @@ export default defineComponent(
       if (!column.editable) return
       if (!column.prop) return
       column.slots ??= {}
-      const columnParam = {
-        type: column.type,
+      const columnParam: CommonFormColumn = {
+        type: column.type as any,
         prop: column.prop,
         prop2: column.prop2,
-        single: column.single,
         label: column.label,
         itemList: column.itemList,
         valueKey: column.valueKey,
@@ -475,22 +475,22 @@ export default defineComponent(
     async function validate() {
       for (let i = 0; i < data.value.length; i++) {
         const row = data.value[i]
-        const ruleObject: RuleObject<T> = {}
-        leafColumns.value
+        const validRules = leafColumns.value
           .filter((i) => i.prop && i.editable && i.editParam)
-          .forEach((column) => {
+          .map((column) => {
             let param = column.editParam! as any
             if (param instanceof Function) {
               param = param({ column: column, $index: i, row, $fullIndex: i, $column: column })
             }
-            if (param.rules)
-              ruleObject[column.prop!] = {
-                prop: column.prop as keyof T,
-                label: column.label,
-                rules: param.rules
-              }
+            const ruleField: UnknownFieldRule<T, keyof T> = {}
+            if (param.rules) {
+              ruleField.prop = column.prop as keyof T
+              ruleField.label = column.label
+              ruleField.rules = param.rules
+            }
+            return ruleField
           })
-        const result = await validateFrom(row, ruleObject)
+        const result = await validateFrom(row, validRules)
         if (result.error) {
           pageQuery.value.currentPage = Math.floor(i / pageQuery.value.pageSize!) + 1
           await nextTick()
