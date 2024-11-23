@@ -103,7 +103,7 @@ async function init() {
 }
 
 // 表单列定义
-const columns = ref<FormColumn[]>([])
+const columns = ref<CommonFormColumn[]>([])
 watchEffect(() => {
   columns.value = [
     { prop: 'name', label: t('system.user.group.name'), rules: { required: true } },

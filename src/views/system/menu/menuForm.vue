@@ -194,7 +194,7 @@ watchEffect(() => {
       label: t('system.menu.icon'),
       // 按钮不需要选择图标
       hidden: formData.value.type === 'btn',
-      type: 'icon'
+      type: 'icon-select'
     },
     {
       prop: 'order',

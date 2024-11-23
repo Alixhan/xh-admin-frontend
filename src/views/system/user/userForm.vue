@@ -89,7 +89,7 @@ if (props.handleType !== 'add') {
 }
 
 // 表单列定义
-const columns = ref<FormColumn[]>([])
+const columns = ref<CommonFormColumn[]>([])
 watchEffect(() => {
   columns.value = [
     {

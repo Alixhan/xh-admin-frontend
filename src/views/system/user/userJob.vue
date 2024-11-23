@@ -63,7 +63,7 @@ async function init() {
 }
 
 // 表单列定义
-const columns = ref<FormColumn[]>([])
+const columns = ref<CommonFormColumn[]>([])
 watchEffect(() => {
   columns.value = [
     { prop: 'avatar', label: t('system.user.avatar'), type: 'upload-img', cols: 2, single: 'object', disabled: true },
