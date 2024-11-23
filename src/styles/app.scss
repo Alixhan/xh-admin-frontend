@@ -106,6 +106,16 @@ body {
     max-width: 95vw;
   }
 
+  &.is-fullscreen {
+    display: flex;
+    flex-direction: column;
+
+    .el-dialog__body {
+      height: 0;
+      flex-grow: 1;
+    }
+  }
+
   .el-dialog__body {
     padding: 0;
   }
