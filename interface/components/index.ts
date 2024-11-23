@@ -46,6 +46,7 @@ export declare type CommonColumnType =
   | 'upload'
   | 'upload-file'
   | 'upload-img'
+  | 'icon-select'
   | 'autocomplete'
 
 /**

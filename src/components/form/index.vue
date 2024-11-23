@@ -4,7 +4,7 @@ import { generateDynamicColumn, generateFormRules, generatePlaceholder, vModelVa
 import { useSystemStore } from '@/stores/system'
 import { useElementSize } from '@vueuse/core'
 import type { UploadCtx } from '@/components/form/Upload.vue'
-import { mFormEmits, mFormProps } from '@i/components/form'
+import { type CommonFormColumn, mFormEmits, mFormProps } from '@i/components/form'
 import { useElComponentSizeCssVar } from '@/utils'
 import type { SlotsObj } from '@i/components'
 
@@ -39,7 +39,7 @@ export default {
       cols.value = Number(Math.floor(formSize.value.width / sizeWidth)) || 1
     })
 
-    const formItemParams = shallowRef<FormColumn[]>([])
+    const formItemParams = shallowRef<CommonFormColumn<any>[]>([])
     watchEffect(initFormItemParams)
 
     const uploadInstances = ref<UploadCtx[]>([])
@@ -79,7 +79,7 @@ export default {
       formItemParams.value = props.columns!.map((i) => {
         // 隐藏的直接返回
         if (i.hidden) return i
-        const formItemObj = {
+        const formItemObj: CommonFormColumn<any> = {
           columnParam: i,
           formItemParams: {
             key: i.prop || i.type,
@@ -96,13 +96,12 @@ export default {
       })
     }
 
-    function getColSpan(column: FormColumn) {
+    function getColSpan(column: CommonFormColumn<any>) {
       const colspan = 24 / cols.value
       let span = column.colspan || props.colspan || colspan
       if (span < colspan) span = colspan
       if (!column.colspan && column.cols) span = Number(column.cols) * span
-      if (span > 24) span = 24
-      if (span == 4.8) span = 4
+      span = [2, 3, 4, 6, 8, 12, 24].find((i) => i >= span) ?? 24
       return span
     }
 
