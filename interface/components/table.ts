@@ -100,7 +100,8 @@ export const mTableProps = {
 /**
  * T为表格行的数据类型，F为简单查询条件对象类型
  */
-export type MTableProps = ExtractPropTypes<typeof mTableProps>
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export type MTableProps<T, F> = ExtractPropTypes<typeof mTableProps>
 
 // 表格列定义
 export interface TableColumn<T extends object> extends Partial<Omit<TableColumnCtx<T>, 'children'>> {
@@ -264,8 +265,9 @@ export interface EditableTableColumn<T extends object> extends TableColumn<T>, I
 export interface OperationButton<T> {
   type?: 'default' | 'success' | 'warning' | 'info' | 'primary' | 'danger'
   label: string
-  icon?: string
+  icon?: string | VNode | (() => VNode)
   auth?: string | string[]
+  hidden?: boolean
   authLogic?: 'and' | 'or'
   onClick?: (row: T, index: { $index: number; $fullIndex: number }) => void
   disabled?: ((row: T) => boolean) | boolean
