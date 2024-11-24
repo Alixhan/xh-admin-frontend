@@ -576,7 +576,7 @@ export default defineComponent(
                 <span class="total-text">{selectionRows.value.length}</span>
                 {props.selectionLimit && (
                   <span>
-                    / <span class="total-text">{props.selectionLimit}</span>
+                    /<span class="total-text">{props.selectionLimit}</span>
                   </span>
                 )}
                 {t('m.table.unit')}
