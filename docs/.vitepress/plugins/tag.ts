@@ -11,14 +11,14 @@ export default (md: MarkdownIt): void => {
      * Add styles for some special tags
      * vitepress/styles/content/tag-content.scss
      */
-    const tagClass = ['beta', 'deprecated', 'a11y', 'required'].includes(value)
-      ? value
+    const tagClass = ['danger', 'warning', 'success'].includes(token.meta)
+      ? token.meta
       : ''
     return `<span class="vp-tag ${tagClass}">${value}</span>`
   }
 
   md.inline.ruler.before('emphasis', 'tag', (state, silent) => {
-    const tagRegExp = /^\^\(([^)]*)\)/
+    const tagRegExp = /^\^\(([^)]*)\)([a-z]*)?/
     const str = state.src.slice(state.pos, state.posMax)
 
     if (!tagRegExp.test(str)) return false
@@ -30,6 +30,7 @@ export default (md: MarkdownIt): void => {
 
     const token = state.push('tag', 'tag', 0)
     token.content = result[1].trim()
+    token.meta = result[2]
     token.level = state.level
     state.pos += result[0].length
 

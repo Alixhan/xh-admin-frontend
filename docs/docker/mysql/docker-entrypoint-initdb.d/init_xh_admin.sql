@@ -24,12 +24,12 @@ CREATE TABLE `sys_dict_detail`  (
                                     `value` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '字典值key',
                                     `label` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '字典名称',
                                     `order` int NULL DEFAULT NULL COMMENT '排序号',
-                                    `enabled` tinyint(1) NULL DEFAULT NULL COMMENT '是否启用1：是，0：否',
+                                    `enabled` bit(1) NULL DEFAULT NULL COMMENT '是否启用1：是，0：否',
                                     `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
                                     `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
                                     `create_by` int NULL DEFAULT NULL COMMENT '创建人',
                                     `update_by` int NULL DEFAULT NULL COMMENT '修改人',
-                                    `deleted` tinyint(1) NULL DEFAULT 0 COMMENT '是否已删除1：是，0：否',
+                                    `deleted` bit(1) NULL DEFAULT 0 COMMENT '是否已删除1：是，0：否',
                                     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '数据字典明细表' ROW_FORMAT = Dynamic;
 
@@ -51,7 +51,7 @@ CREATE TABLE `sys_dict_type`  (
                                   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
                                   `create_by` int NULL DEFAULT NULL COMMENT '创建人',
                                   `update_by` int NULL DEFAULT NULL COMMENT '修改人',
-                                  `deleted` tinyint(1) NULL DEFAULT 0 COMMENT '是否已删除1：是，0：否',
+                                  `deleted` bit(1) NULL DEFAULT 0 COMMENT '是否已删除1：是，0：否',
                                   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '数据字典类型表' ROW_FORMAT = Dynamic;
 
@@ -124,7 +124,7 @@ CREATE TABLE `sys_log`  (
                             `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
                             `create_by` int NULL DEFAULT NULL COMMENT '创建人',
                             `update_by` int NULL DEFAULT NULL COMMENT '修改人',
-                            `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否已删除1：是，0：否',
+                            `deleted` bit(1) NOT NULL DEFAULT 0 COMMENT '是否已删除1：是，0：否',
                             PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 183 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统日志' ROW_FORMAT = DYNAMIC;
 
@@ -146,8 +146,8 @@ CREATE TABLE `sys_menu`  (
                              `icon` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '菜单图标',
                              `icon_type` varchar(5) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '图标类型(el,ali,svg,)',
                              `order` int NULL DEFAULT NULL COMMENT '排序号',
-                             `cache` tinyint(1) NULL DEFAULT NULL COMMENT '是否缓存1：是，0：否',
-                             `enabled` tinyint(1) NULL DEFAULT NULL COMMENT '是否启用1：是，0：否',
+                             `cache` bit(1) NULL DEFAULT NULL COMMENT '是否缓存1：是，0：否',
+                             `enabled` bit(1) NULL DEFAULT NULL COMMENT '是否启用1：是，0：否',
                              `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
                              `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
                              `create_by` int NULL DEFAULT NULL COMMENT '创建人',
@@ -213,6 +213,11 @@ INSERT INTO `sys_menu` VALUES (79, 77, '新增', 'system:dataPermission:add', NU
 INSERT INTO `sys_menu` VALUES (80, 77, '编辑', 'system:dataPermission:edit', NULL, NULL, 'web', 'btn', NULL, NULL, NULL, NULL, NULL, 1, 1, '2023-04-03 23:57:51', '2023-08-14 15:32:53', 1, 1, 0);
 INSERT INTO `sys_menu` VALUES (81, 77, '删除', 'system:dataPermission:del', NULL, NULL, 'web', 'btn', NULL, NULL, NULL, NULL, NULL, 1, 1, '2023-04-03 23:58:45', '2023-08-14 15:33:07', 1, 1, 0);
 INSERT INTO `sys_menu` VALUES (82, 27, '数据权限', 'system:role:dataPermission', NULL, NULL, 'web', 'btn', NULL, NULL, NULL, NULL, 5, 1, 1, '2023-04-03 23:58:09', '2024-08-18 23:11:59', 1, 1, 0);
+INSERT INTO `sys_menu` VALUES (83, NULL, '代码生成', 'generator', 'generator', '/src/views/generator/index.vue', 'web', 'menu', 'route', NULL, 'local|/src/assets/icon/generator.svg', NULL, 9, 1, 1, '2023-03-05 21:55:27', '2024-11-12 20:51:21', 1, 1, 0);
+INSERT INTO `sys_menu` VALUES (84, 83, '新增', 'generator:add', NULL, NULL, 'web', 'btn', NULL, NULL, NULL, NULL, NULL, 1, 1, '2023-04-03 12:59:28', '2023-08-14 15:30:18', 1, 1, 0);
+INSERT INTO `sys_menu` VALUES (85, 83, '编辑', 'generator:edit', NULL, NULL, 'web', 'btn', NULL, NULL, NULL, NULL, NULL, 1, 1, '2023-04-03 12:59:44', '2023-08-14 15:30:10', 1, 1, 0);
+INSERT INTO `sys_menu` VALUES (86, 83, '明细', 'generator:detail', NULL, NULL, 'web', 'btn', NULL, NULL, NULL, NULL, NULL, 1, 1, '2023-04-03 13:01:08', '2023-08-14 15:30:02', 1, 1, 0);
+INSERT INTO `sys_menu` VALUES (87, 83, '删除', 'generator:del', NULL, NULL, 'web', 'btn', NULL, NULL, NULL, NULL, NULL, 1, 1, '2023-04-03 23:58:45', '2023-08-14 15:29:47', 1, 1, 0);
 
 -- ----------------------------
 -- Table structure for sys_org
@@ -223,12 +228,12 @@ CREATE TABLE `sys_org`  (
                             `parent_id` int NULL DEFAULT NULL COMMENT '上级id',
                             `code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '机构代码',
                             `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '机构名称',
-                            `enabled` tinyint(1) NULL DEFAULT NULL COMMENT '是否启用1：是，0：否',
+                            `enabled` bit(1) NULL DEFAULT NULL COMMENT '是否启用1：是，0：否',
                             `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
                             `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
                             `create_by` int NULL DEFAULT NULL COMMENT '创建人',
                             `update_by` int NULL DEFAULT NULL COMMENT '修改人',
-                            `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否已删除1：是，0：否',
+                            `deleted` bit(1) NOT NULL DEFAULT 0 COMMENT '是否已删除1：是，0：否',
                             PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统机构表' ROW_FORMAT = Dynamic;
 
@@ -252,12 +257,12 @@ CREATE TABLE `sys_role`  (
                              `id` int NOT NULL AUTO_INCREMENT COMMENT 'id',
                              `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '角色名称',
                              `parent_id` int NULL DEFAULT NULL COMMENT '上级id',
-                             `enabled` tinyint(1) NULL DEFAULT NULL COMMENT '是否启用1：是，0：否',
+                             `enabled` bit(1) NULL DEFAULT NULL COMMENT '是否启用1：是，0：否',
                              `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
                              `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
                              `create_by` int NULL DEFAULT NULL COMMENT '创建人',
                              `update_by` int NULL DEFAULT NULL COMMENT '修改人',
-                             `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否已删除1：是，0：否',
+                             `deleted` bit(1) NOT NULL DEFAULT 0 COMMENT '是否已删除1：是，0：否',
                              PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统角色表' ROW_FORMAT = Dynamic;
 
@@ -279,7 +284,7 @@ CREATE TABLE `sys_role_menu`  (
                                   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
                                   `create_by` int NULL DEFAULT NULL COMMENT '创建人',
                                   `update_by` int NULL DEFAULT NULL COMMENT '修改人',
-                                  `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否已删除1：是，0：否',
+                                  `deleted` bit(1) NOT NULL DEFAULT 0 COMMENT '是否已删除1：是，0：否',
                                   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1190 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统角色权限表' ROW_FORMAT = Dynamic;
 
@@ -361,12 +366,12 @@ CREATE TABLE `sys_user`  (
                              `password` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '登录密码',
                              `avatar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '头像',
                              `telephone` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '手机号',
-                             `status` tinyint(1) NULL DEFAULT NULL COMMENT '状态（1：正常，2：锁定）',
+                             `status` bit(1) NULL DEFAULT NULL COMMENT '状态（1：正常，2：锁定）',
                              `failures_num` int NULL DEFAULT NULL COMMENT '登录失败的次数',
                              `lock_msg` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '账号锁定的原因',
-                             `enabled` tinyint(1) NULL DEFAULT NULL COMMENT '是否启用1：启用，0：禁用',
-                             `allow_repeat` tinyint(1) NULL DEFAULT NULL COMMENT '允许重复登录1：允许，0：不允许',
-                             `auto_renewal` tinyint(1) NULL DEFAULT NULL COMMENT '自动续签，请求会自动延长token失效时间1：自动，0：不自动',
+                             `enabled` bit(1) NULL DEFAULT NULL COMMENT '是否启用1：启用，0：禁用',
+                             `allow_repeat` bit(1) NULL DEFAULT NULL COMMENT '允许重复登录1：允许，0：不允许',
+                             `auto_renewal` bit(1) NULL DEFAULT NULL COMMENT '自动续签，请求会自动延长token失效时间1：自动，0：不自动',
                              `is_demo` bit(1) NULL DEFAULT NULL COMMENT '是否演示账号1：是，0：否',
                              `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
                              `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
@@ -388,12 +393,12 @@ DROP TABLE IF EXISTS `sys_user_group`;
 CREATE TABLE `sys_user_group`  (
                                    `id` int NOT NULL AUTO_INCREMENT COMMENT 'id',
                                    `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '用户组名',
-                                   `enabled` tinyint(1) NULL DEFAULT NULL COMMENT '是否启用1：是，0：否',
+                                   `enabled` bit(1) NULL DEFAULT NULL COMMENT '是否启用1：是，0：否',
                                    `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
                                    `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
                                    `create_by` int NULL DEFAULT NULL COMMENT '创建人',
                                    `update_by` int NULL DEFAULT NULL COMMENT '修改人',
-                                   `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否已删除1：是，0：否',
+                                   `deleted` bit(1) NOT NULL DEFAULT 0 COMMENT '是否已删除1：是，0：否',
                                    PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统用户组表' ROW_FORMAT = Dynamic;
 
@@ -414,7 +419,7 @@ CREATE TABLE `sys_user_group_member`  (
                                           `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
                                           `create_by` int NULL DEFAULT NULL COMMENT '创建人',
                                           `update_by` int NULL DEFAULT NULL COMMENT '修改人',
-                                          `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否已删除1：是，0：否',
+                                          `deleted` bit(1) NOT NULL DEFAULT 0 COMMENT '是否已删除1：是，0：否',
                                           PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 29 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统用户组成员表' ROW_FORMAT = Dynamic;
 
@@ -429,16 +434,16 @@ INSERT INTO `sys_user_group_member` VALUES (1, 1, 1, '2023-08-11 17:43:38', NULL
 DROP TABLE IF EXISTS `sys_user_job`;
 CREATE TABLE `sys_user_job`  (
                                  `id` int NOT NULL AUTO_INCREMENT COMMENT 'id',
-                                 `type` tinyint(1) NULL DEFAULT NULL COMMENT '1：用户，2：用户组',
+                                 `type` bit(1) NULL DEFAULT NULL COMMENT '1：用户，2：用户组',
                                  `user_id` int NULL DEFAULT NULL COMMENT '用户id或者用户组的id',
                                  `sys_org_id` int NULL DEFAULT NULL COMMENT '机构id',
                                  `sys_role_id` int NULL DEFAULT NULL COMMENT '角色id',
-                                 `enabled` tinyint(1) NULL DEFAULT NULL COMMENT '是否启用1：是，0：否',
+                                 `enabled` bit(1) NULL DEFAULT NULL COMMENT '是否启用1：是，0：否',
                                  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
                                  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
                                  `create_by` int NULL DEFAULT NULL COMMENT '创建人',
                                  `update_by` int NULL DEFAULT NULL COMMENT '修改人',
-                                 `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否已删除1：是，0：否',
+                                 `deleted` bit(1) NOT NULL DEFAULT 0 COMMENT '是否已删除1：是，0：否',
                                  PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '用户岗位表' ROW_FORMAT = Dynamic;
 
@@ -466,7 +471,7 @@ CREATE TABLE `sys_user_password_log`  (
                                           `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
                                           `create_by` int NULL DEFAULT NULL COMMENT '创建人',
                                           `update_by` int NULL DEFAULT NULL COMMENT '修改人',
-                                          `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否已删除1：是，0：否',
+                                          `deleted` bit(1) NOT NULL DEFAULT 0 COMMENT '是否已删除1：是，0：否',
                                           PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统用户密码修改日志' ROW_FORMAT = Dynamic;
 
@@ -498,7 +503,7 @@ create table sys_data_permission
     update_time datetime             null comment '更新时间',
     create_by   int                  null comment '创建人',
     update_by   int                  null comment '修改人',
-    deleted     tinyint(1) default 0 null comment '是否已删除1：是，0：否'
+    deleted     bit(1) default 0 null comment '是否已删除1：是，0：否'
 )
     comment '数据权限';
 
@@ -520,8 +525,33 @@ create table sys_role_data_permission
     update_time            datetime             null comment '更新时间',
     create_by              int                  null comment '创建人',
     update_by              int                  null comment '修改人',
-    deleted                tinyint(1) default 0 null comment '是否已删除1：是，0：否'
+    deleted                bit(1) default 0 null comment '是否已删除1：是，0：否'
 )
     comment '系统角色数据权限';
+
+DROP TABLE IF EXISTS `gen_table`;
+create table gen_table
+(
+    id            int auto_increment comment 'id'
+        primary key,
+    design_type   varchar(1)           null comment '设计方式',
+    table_name    varchar(20)          null comment '表名',
+    table_comment varchar(20)          null comment '表注释',
+    entity_name   varchar(20)          null comment '实体类名',
+    name          varchar(20)          null comment '功能名',
+    service       varchar(20)          null comment '所属服务',
+    module        varchar(20)          null comment '模块名',
+    author        varchar(20)          null comment '作者',
+    extend        varchar(20)          null comment '继承类',
+    columns_json  longtext             null comment '列json串',
+    frontend_path varchar(200)         null comment '前端项目生成路径',
+    backend_path  varchar(200)         null comment '后端项目生成路径',
+    create_time   datetime             null comment '创建时间',
+    update_time   datetime             null comment '更新时间',
+    create_by     int                  null comment '创建人',
+    update_by     int                  null comment '修改人',
+    deleted       bit(1) default 0 null comment '是否已删除1：是，0：否'
+)
+    comment '代码生成表';
 
 SET FOREIGN_KEY_CHECKS = 1;

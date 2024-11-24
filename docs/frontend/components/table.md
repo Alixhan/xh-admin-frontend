@@ -95,11 +95,16 @@ components/table/selection
 
 ## operation 操作列
 
-我们知道，在不同权限下，可能显示不同的按钮，`type` 为 `operation` 时可以很方便的实现按钮组的控制，会自动根据字数和按钮数量调整列的宽度，多出的按钮会自动收纳进下拉菜单中，
-在无按钮权限时，自动隐藏该列
+我们知道，在不同权限下，可能显示不同的按钮，`type` 为 `operation` 时可以很方便的实现按钮组的控制，会自动根据字数和按钮数量调整列的宽度，多出的按钮会自动收纳进下拉菜单中
 
 :::demo
 components/table/operation
+:::
+
+`buttons` 的 `auth` 属性会动态判断按钮权限，在无按钮权限时，自动隐藏该列，设置 `hidden` 属性为 `true` 可手动隐藏该按钮，`icon` 属性还支持直接传入 ^link(Icon 图标) 组件的 `value` 展示自定义图标
+
+:::demo
+components/table/operation2
 :::
 
 ## 和后端列表查询集成

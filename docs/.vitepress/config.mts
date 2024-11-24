@@ -108,7 +108,17 @@ export default defineConfig({
                     items: [
                         {text: '介绍', link: '/introduction'},
                         {text: '快速了解', link: '/quick-info'},
-                        {text: '安装', base: '/guide/install', link: '/'}
+                        {text: '安装', base: '/guide/install', link: '/'},
+                        {
+                            text: '初始化数据库',
+                            base: '/guide/install/initialized-database',
+                            link: '/',
+                            items: [
+                                {text: 'init_nacos_config.sql', link: '/init_nacos_config'},
+                                {text: 'init_xh_admin.sql', link: '/init_xh_admin'},
+                                {text: 'init_xxl_job.sql', link: '/init_xxl_job'},
+                            ]
+                        },
                     ]
                 },
                 {
