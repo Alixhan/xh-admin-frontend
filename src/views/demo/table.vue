@@ -45,11 +45,10 @@ const columns = ref<CommonTableColumn<any>[]>([
   { label: '字段1', prop: 'fd' },
   {
     label: '字段3',
-    prop: 'gh',
-    editable: true,
-    editParam: {
-      rules: [{ required: true }]
-    }
+    children: [
+      { label: '字段ss', prop: 'fd223' },
+      { label: '字段fs1', prop: 'fd2211收拾收拾懂法守法2' }
+    ]
   },
   {
     label: '字段2',

@@ -9,6 +9,7 @@
   ],
   "compilerOptions": {
     "composite": true,
+    "outDir": "dist",
     "noEmit": true,
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
     "module": "ESNext",

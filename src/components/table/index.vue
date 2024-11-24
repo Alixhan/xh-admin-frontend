@@ -295,7 +295,7 @@ export default defineComponent(
           // 操作类型时，判断如果buttons没有，则隐藏操作列
           if (i.type === 'operation') {
             i.buttons = i.buttons?.filter((j) => {
-              if(j.hidden) return false
+              if (j.hidden) return false
               if (!j.auth) return true
               return auth(j.auth, j.authLogic)
             })
@@ -531,16 +531,15 @@ export default defineComponent(
         if (column.hidden) return null
         // 允许用户按照自己的slotName定制
         if (column.slotName && slots[column.slotName ?? '']) return slots[column.slotName ?? '']?.()
+        if (column.children?.length) {
+          column.slots!.default = () => generateTableColumn(column.children!)
+        }
         const param = {
           ...column
         }
-        if (param.children?.length) {
-          param.slots!.default = () => generateTableColumn(param.children!)
-        }
         delete param.slots
         delete param.children
-        const columnSlots = column.slots
-        return <el-table-column {...param} v-slots={columnSlots} />
+        return <el-table-column {...param} v-slots={column.slots} />
       }) satisfies VNode[]
     }
 
@@ -662,7 +661,7 @@ export default defineComponent(
               {...tableParam}
               v-slots={{
                 ...slots,
-                default: () => [generateTableColumn(sortColumnsParams.value), slots.default?.()]
+                default: () => [...generateTableColumn(sortColumnsParams.value), slots.default?.()]
               }}
               onHeaderContextmenu={onHeaderContextmenu}
               // v-loading={loadingRef.value} 发现此处加入loading会导致内存泄漏。。。。
