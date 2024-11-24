@@ -1,5 +1,42 @@
 # 更新日志
 
+## v1.2.0 ^[(2024-11-24)]
+
+**新特性**
+
+- 新增：^(重要)danger 新增 `代码生成` 功能菜单，现在可以在开发环境生成规范的增删改查代码了，
+  [系统初始化sql语句](/guide/install/initialized-database/)、
+  [jenkins部署脚本](/guide/deploy/microservice.html#后端服务部署) 都已更新
+- 新增：^(重要)danger 后端新增 `generator` 微服务
+- 新增：^link(Table 表格)#operation-操作列 操作按钮列新增 `hidden` 属性，可以手动控制显隐
+- 新增：^link(Table 表格)#operation-操作列 按钮的 `icon` 属性支持直接传入 ^link(Icon 图标) 组件的 `value` 展示自定义图标
+- 新增：^link(Table 表格) 组件现在支持 `el-table-row` 默认插槽，默认追加到配置项列后边
+- 新增：^link(Validate 数据验证) 增加了整数 `int` 的快捷验证类型
+- 新增：^link(Validate 数据验证) 现在整体的表单数据验证函数支持直接传入规则数组来进行验证
+- 新增：`utils` 工具类新增一些字符串处理函数，方便一些字符串的处理
+
+**优化**
+
+- 修复：修复 `el-dialog` 和 `el-drawer` 在全屏时的宽度无法充满的问题
+- 修复：修复 ^link(typescript) 类型定义的部分错误
+- 修复：修复 ^link(Table 表格) 组件的内存泄漏问题（该漏洞导致切换页签内存无法释放，编辑型表格内持续编辑会占用大量内存）
+- 修复：修复 ^link(Upload 上传) `single` 属性为 `true` 时，附件在预览时无法下载的问题
+- 修复：修复 ^link(Request 请求) 在响应内容类型为非 `application/json` 时无法正确处理的问题，现在服务端响应文件流也可以正确处理
+-
+- 优化：现在 ^link(Table 表格) 组件的表格列被用户调整排序后，导出的excel文件列将会保持与排序后的表格列一致
+- 优化：^link(Form 表单) 组件表单项动态布局的实现逻辑，现在实现跨列布局也更加容易、灵活
+
+**升级**
+
+- 升级：^link(eslint) 升级至9.x版本，现在eslint配置文件已调整至新版本格式
+- 升级：前端和后端所有依赖均已升级至最新版本
+
+**文档**
+
+- 新增：^link(Form 表单) 手册新增一些演示案例
+- 新增：新增 [初始化语句](/guide/install/initialized-database/) 文档，方便新人安装时找到初始化语句
+- 优化：修复部分文档错误
+
 ## v1.1.1 ^[(2024-08-25)]
 
 **新特性**
