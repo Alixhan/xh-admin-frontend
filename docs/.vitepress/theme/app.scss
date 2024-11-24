@@ -151,23 +151,19 @@ h1 {
   color: var(--vp-tag-color);
   line-height: 18px;
   white-space: nowrap;
+  font-weight: bold;
 
-  &.beta {
+  &.danger {
     --vp-tag-color: var(--el-color-danger);
     --vp-tag-border-color: var(--el-color-danger);
   }
 
-  &.deprecated {
+  &.warning {
     --vp-tag-color: var(--el-color-warning);
     --vp-tag-border-color: var(--el-color-warning);
   }
 
-  &.a11y {
-    --vp-tag-color: var(--purple-color);
-    --vp-tag-border-color: var(--purple-color-light);
-  }
-
-  &.required {
+  &.success {
     --vp-tag-color: var(--el-color-success);
     --vp-tag-border-color: var(--el-color-success);
   }

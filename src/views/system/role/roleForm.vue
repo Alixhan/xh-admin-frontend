@@ -184,7 +184,7 @@ function clearParentRole() {
 }
 
 // 表单字段根据表单数据变化，有所不同
-const columns = ref<FormColumn[]>([])
+const columns = ref<CommonFormColumn[]>([])
 watchEffect(() => {
   columns.value = [
     {

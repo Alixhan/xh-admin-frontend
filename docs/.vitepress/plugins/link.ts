@@ -54,13 +54,13 @@ const links = {
   'Form 表单': '/frontend/components/form',
   'Table 表格': '/frontend/components/table',
   'ExcelImport 导入': '/frontend/components/excel-import',
-  'CommonFormColumn': '/frontend/components/form#commonformcolumn-表单项',
+  CommonFormColumn: '/frontend/components/form#commonformcolumn-表单项',
   'Validate 数据验证': '/frontend/utils/validate',
   'Dict 获取数据字典详情': '/frontend/utils/dict',
   'EChart 图表': '/frontend/utils/echarts',
   'Request 请求': '/frontend/utils/request',
-  '文件请求链接': '/frontend/utils/file-url',
-  'ContextMenu 上下文菜单': '/frontend/utils/context-menu',
+  文件请求链接: '/frontend/utils/file-url',
+  'ContextMenu 上下文菜单': '/frontend/utils/context-menu'
 }
 
 export default (md: MarkdownIt): void => {
@@ -70,13 +70,13 @@ export default (md: MarkdownIt): void => {
 
     if (url) {
       const target = url.startsWith('http') ? 'target="_blank"' : ''
-      return `<a href="${url}" ${target} rel="noreferrer">${token.content}</a>${token.meta ? `<code>${url}</code>` : ''}`
+      return `<a href="${url + token.meta[1]}" ${target} rel="noreferrer">${token.content}</a>${token.meta[0] ? `<code>${url}</code>` : ''}`
     }
     return token.content
   }
 
   md.inline.ruler.before('emphasis', 'link', (state, silent) => {
-    const regExp = /^\^link\(([^)]*)\)s?/
+    const regExp = /^\^link\(([^)]*)\)(s?)(#[a-zA-Z0-9\-\u4e00-\u9fff]+)?/
     const str = state.src.slice(state.pos, state.posMax)
 
     if (!regExp.test(str)) return false
@@ -86,7 +86,7 @@ export default (md: MarkdownIt): void => {
 
     const token = state.push('link', 'link', 0)
     token.content = result[1]
-    token.meta = result[0].endsWith('s')
+    token.meta = [result[2] === 's', result[3] || '']
     token.level = state.level
     state.pos += result[0].length
 

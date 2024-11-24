@@ -1,9 +1,5 @@
 <template>
   <div style="position: relative; padding: 20px; background-color: var(--el-bg-color)">
-    <el-button @contextmenu.prevent="cl">sdlfkslfjk</el-button>
-    <ContextMenu ref="contextMenuRef">
-      <div v-for="i in 20" :key="i">收到浪费快结束了副科级拉萨科技大</div>
-    </ContextMenu>
     <el-switch v-model="formLoading" />
     <el-select v-model="handleType" placeholder="handleType" style="width: 100px">
       <el-option value="add">add</el-option>
@@ -24,20 +20,14 @@
 <script setup lang="tsx">
 import { reactive, ref } from 'vue'
 import type { CommonFormColumn } from '@i/components/form'
-import ContextMenu from '@/components/ContextMenu.vue'
+
 defineOptions({
   name: 'DemoForm'
 })
-const contextMenuRef = ref()
 const formRef = ref()
 const handleType = ref('add')
 const formLoading = ref(false)
-
 const formData = reactive({})
-
-function cl(e) {
-  contextMenuRef.value.show(e)
-}
 
 // 表单列定义
 const columns = ref<CommonFormColumn<any>[]>([

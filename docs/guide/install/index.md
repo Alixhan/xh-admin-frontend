@@ -87,8 +87,9 @@ git clone https://gitee.com/sun-xiaohan/xh-admin-backend.git
 ```
 **运行模块**
 
-SystemApplication [系统服务] （<font color=Red>必须</font>） <br>
-FileApplication [文件服务] （可选）
+- SystemApplication [系统服务] （<font color=Red>必须</font>）
+- FileApplication [文件服务] （可选）
+- GeneratorApplication [代码生成服务] （可选）
 ::: tip 提示
 后端集成了 `nacos` 作为配置中心和注册中心，启动前先配置好`nacos`，初始化好`nacos`配置数据库和系统初始数据，并在配置中心配置好相关项目配置。
 

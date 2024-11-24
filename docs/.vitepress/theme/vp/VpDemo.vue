@@ -36,7 +36,7 @@ const props = defineProps({
   path: String
 })
 
-let component = shallowRef()
+const component = shallowRef()
 demos[`/frontend/demo/${props.path}`]().then((res) => {
   component.value = res.default
 })

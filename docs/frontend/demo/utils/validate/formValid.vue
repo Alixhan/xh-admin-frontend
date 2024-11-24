@@ -25,23 +25,11 @@ const formData = ref({
   birthday: ''
 })
 
-const ruleObject = ref({
-  mc: {
-    prop: 'mc',
-    label: '名称',
-    rules: [{ required: true, maxlength: 10 }]
-  },
-  email: {
-    prop: 'email',
-    label: '邮箱',
-    rules: [{ type: 'email' }]
-  },
-  birthday: {
-    prop: 'birthday',
-    label: '生日',
-    rules: [{ dateFormat: 'YYYY-MM-DD' }]
-  }
-})
+const ruleObject = ref([
+  { prop: 'mc', label: '名称', rules: [{ required: true, maxlength: 10 }] },
+  { prop: 'email', label: '邮箱', rules: [{ type: 'email' }] },
+  { prop: 'birthday', label: '生日', rules: [{ dateFormat: 'YYYY-MM-DD' }] }
+])
 
 const result = ref()
 

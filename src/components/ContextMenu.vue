@@ -27,7 +27,7 @@
     </template>
   </el-tooltip>
 </template>
-<script setup lang="tsx">
+<script setup lang="ts">
 import { ref } from 'vue'
 import { onClickOutside } from '@vueuse/core'
 import type { ContextMenuItem, ContextMenuOption } from '@/utils/context-menu'

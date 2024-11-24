@@ -5,7 +5,7 @@ import TableWrapper from './table-wrapper'
 import tag from './tag'
 import tooltip from './tooltip'
 import MermaidExample from './mermaid'
-import ExternalLinkIcon from './external-link-icon'
+// import ExternalLinkIcon from './external-link-icon'
 import link from './link'
 
 export default function install(md: MarkdownIt) {

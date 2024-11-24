@@ -3,8 +3,10 @@
     <QuestionFilled />
   </el-icon>
 </template>
-<script setup>
+<script setup lang="ts">
 import { ElMessageBox } from 'element-plus'
+import type { PropType } from 'vue'
+import type { ElMessageBoxOptions } from 'element-plus/es/components/message-box/src/message-box.type'
 
 /**
  * 疑问说明组件
@@ -19,7 +21,8 @@ const props = defineProps({
     type: String
   },
   comment: {
-    required: true
+    required: true,
+    type: [Object, String] as PropType<ElMessageBoxOptions['message']>
   }
 })
 

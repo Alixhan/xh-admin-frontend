@@ -326,5 +326,12 @@ export default {
       forceLogout: '强制下线',
       confirmLogout: '确认踢除此用户下线吗？踢除下线后，该用户需要重新登录！'
     }
+  },
+  generator: {
+    label: '代码生成',
+    add: '@:generator.label@:common.add',
+    edit: '@:generator.label@:common.edit',
+    detail: '@:generator.label@:common.detail',
+    download: '下载代码',
   }
 }

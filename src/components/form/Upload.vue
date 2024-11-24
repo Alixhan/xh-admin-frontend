@@ -83,6 +83,7 @@ import { ElUpload, uploadProps } from 'element-plus'
 import type { UploadFile } from 'element-plus'
 import Cropper from './Cropper.vue'
 import { Plus } from '@element-plus/icons-vue'
+import type { UploadSingle } from '@i/components/form'
 
 export interface UploadFileItem extends UploadFile {
   // sys_file id
@@ -102,7 +103,7 @@ const props = defineProps({
   ...uploadProps,
   // 设置为单一文件，直接传入文件表ID或object key 即可
   single: {
-    type: String as PropType<'id' | 'object'>
+    type: String as PropType<UploadSingle>
   },
   autoUpload: {
     type: Boolean
@@ -248,8 +249,8 @@ function onPreview(file: UploadFileItem) {
     initialIndex.value = fileList.value.findIndex((i) => i === file)
     previewImageVisible.value = true
   } else {
-    if (file.object) {
-      globalThis.open(getDownloadFileUrl({ object: file.object, fileName: file.name }))
+    if (file.object || file.id) {
+      globalThis.open(getDownloadFileUrl({ object: file.object, id: file.id, fileName: file.name }))
     }
   }
 }

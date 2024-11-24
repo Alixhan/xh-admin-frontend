@@ -67,6 +67,13 @@ components/form/span
 components/form/comment
 :::
 
+## Native 特殊表单项类型
+
+有时候，有些表单项可能只是要展示一些内容而已，用插槽自定义来实现又比较麻烦，所以增加此类型方便使用
+:::demo
+components/form/native
+:::
+
 ## Form API
 
 ### Form 属性
@@ -104,8 +111,8 @@ components/form/comment
 | rules       | 验证规则，参考 ^link(Validate 数据验证)                                       | ^[ValidRules]`ValidRule \| ValidRule []`                     |
 | render      | 自定义渲染，参数为默认渲染的vNode                                                | ^[Function]`(vNode: VNode) => VNode`                         |
 | comment     | 疑问备注                                                               | ^[string] \| ^[VNode]                                        |
-| required    | 显示必填星号                                                             | ^[CommonItemList]`位于 interface/components/index.ts，查看详细类型定义` |
-| slots       | 表单项插槽                                                              | ^[string]                                                    |
+| required    | 显示必填星号                                                             | ^[boolean]                                                   |
+| slots       | 表单项插槽                                                              | ^[SlotsObj]`位于interface/components/index.ts，查看详细类型定义`        |
 | slotName    | 允许用户按照自己的slotName插槽定制                                              | ^[string]                                                    |
 | optionParam | 定制 `'radio-group'` 和 `'checkbox-group'` 的选项参数                      | ^[object]                                                    |
 | itemList    | type = `'select'`  \| `'radio-group'` \| `'checkbox-group'` 时的枚举选项 | ^[CommonItemList]`位于 interface/components/index.ts，查看详细类型定义` |
@@ -114,27 +121,29 @@ components/form/comment
 
 ## Form Type 对照表
 
-| type值                                                                                                                              | 对应组件                                     |
-|------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------|
-| `'text'` \| `'textarea'` \| `'password'` \| `'number'` \| `undefined`                                                              | ElInput                                  |
-| `'year'` \| `'month'` \| `'date'` \| `'dates'` \| `'datetime'` \| `'week'` \| `'datetimerange'` \| `'daterange'` \| `'monthrange'` | ElDatePiker                              |
-| `'autocomplete'`                                                                                                                   | ElAutocomplete                           |
-| `'cascader'`                                                                                                                       | ElCascader                               |
-| `'checkbox'`                                                                                                                       | ElCheckbox                               |
-| `'checkbox-button'`                                                                                                                | ElCheckboxButton                         |
-| `'color-picker'`                                                                                                                   | ElColorPicker                            |
-| `'input-number'`                                                                                                                   | ElInputNumber                            |
-| `'radio'`                                                                                                                          | ElRadio                                  |
-| `'radio-button'`                                                                                                                   | ElRadioButton                            |
-| `'rate'`                                                                                                                           | ElRate                                   |
-| `'select'`                                                                                                                         | ElSelect                                 |
-| `'select-v2'`                                                                                                                      | ElSelectV2                               |
-| `'slider'`                                                                                                                         | ElSlider                                 |
-| `'switch'`                                                                                                                         | ElSwitch                                 |
-| `'time-picker'`                                                                                                                    | ElTimePicker                             |
-| `'time-select'`                                                                                                                    | ElTimeSelect                             |
-| `'upload'`                                                                                                                         | ElUpload                                 |
-| `'radio-group'`                                                                                                                    | ElRadioGroup                             |
-| `'checkbox-group'`                                                                                                                 | ElCheckboxGroup                          |
-| `'icon-select'`                                                                                                                    | [MIconSelect](/frontend/components/icon) |
-| `'upload-img'`  \| `'upload-file'`                                                                                                 | [MUpload](/frontend/components/upload)   |
+| type值                                                                                                                              | 对应组件                                     | 说明                            |
+|------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------|-------------------------------|
+| `'text'` \| `'textarea'` \| `'password'` \| `'number'` \| `undefined`                                                              | ElInput                                  |                               |
+| `'year'` \| `'month'` \| `'date'` \| `'dates'` \| `'datetime'` \| `'week'` \| `'datetimerange'` \| `'daterange'` \| `'monthrange'` | ElDatePiker                              |                               |
+| `'autocomplete'`                                                                                                                   | ElAutocomplete                           |                               |
+| `'cascader'`                                                                                                                       | ElCascader                               |                               |
+| `'checkbox'`                                                                                                                       | ElCheckbox                               |                               |
+| `'checkbox-button'`                                                                                                                | ElCheckboxButton                         |                               |
+| `'color-picker'`                                                                                                                   | ElColorPicker                            |                               |
+| `'input-number'`                                                                                                                   | ElInputNumber                            |                               |
+| `'radio'`                                                                                                                          | ElRadio                                  |                               |
+| `'radio-button'`                                                                                                                   | ElRadioButton                            |                               |
+| `'rate'`                                                                                                                           | ElRate                                   |                               |
+| `'select'`                                                                                                                         | ElSelect                                 |                               |
+| `'select-v2'`                                                                                                                      | ElSelectV2                               |                               |
+| `'slider'`                                                                                                                         | ElSlider                                 |                               |
+| `'switch'`                                                                                                                         | ElSwitch                                 |                               |
+| `'time-picker'`                                                                                                                    | ElTimePicker                             |                               |
+| `'time-select'`                                                                                                                    | ElTimeSelect                             |                               |
+| `'upload'`                                                                                                                         | ElUpload                                 |                               |
+| `'radio-group'`                                                                                                                    | ElRadioGroup                             |                               |
+| `'checkbox-group'`                                                                                                                 | ElCheckboxGroup                          |                               |
+| `'icon-select'`                                                                                                                    | [MIconSelect](/frontend/components/icon) |                               |
+| `'upload-img'`  \| `'upload-file'`                                                                                                 | [MUpload](/frontend/components/upload)   |                               |
+| `'span'`\| `'div'`\| `'p'`\| `'a'`\| `'i'`                                                                                         | MNative                                  | 表单的值将作为这些原生标签的 innerHtml 插入展示 |
+| `'blank'`                                                                                                                          | MNative                                  | 将此表单项将显示为空                    |

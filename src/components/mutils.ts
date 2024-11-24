@@ -27,6 +27,7 @@ import {
 import SingleDatePicker from '@/components/form/SingleDatePicker.vue'
 import IconSelect from '@/components/form/IconSelect.vue'
 import MUpload from '@/components/form/Upload.vue'
+import MNative from '@/components/form/Native.vue'
 import i18n, { getCurrentLocales } from '@/i18n'
 import type { CommonItemData, CommonModelParam, ItemListColumn } from '@i/components'
 import type { CommonFormColumn } from '@i/components/form'
@@ -40,9 +41,9 @@ const { t } = i18n.global
  * sxh
  * 2023-3-14
  */
-export function generateDynamicColumn(column: FormColumn) {
+export function generateDynamicColumn<T extends object>(column: CommonFormColumn<T>) {
   if (!column.prop) return
-  const param = {
+  const param: CommonFormColumn<T> = {
     clearable: true,
     ariaLabel: column.label,
     ...column
@@ -112,11 +113,11 @@ export function generateDynamicColumn(column: FormColumn) {
       if (['month', 'monthrange'].includes(type)) param.valueFormat = 'YYYY-MM'
     }
     type = 'el-date-picker'
-  } else if (type === 'icon') {
+  } else if (type === 'icon-select') {
     type = 'm-icon-select'
   } else if (['upload-img', 'upload-file'].includes(type)) {
     type = 'm-upload'
-  } else {
+  } else if (!['span', 'div', 'p', 'a', 'i', 'blank'].includes(type)) {
     type = 'el-' + type
   }
 
@@ -141,7 +142,7 @@ export function generateDynamicColumn(column: FormColumn) {
 
 // 生成双向绑定属性值
 export function vModelValue<T extends object = any>(
-  param: FormColumn & { prop: any; prop2: any },
+  param: CommonFormColumn<T> & { prop: any; prop2: any },
   form: T | undefined
 ) {
   const returnParam: CommonModelParam = {}
@@ -328,28 +329,30 @@ export function generateLabelWidth<T extends object>(
 
 // 通过名称获取组件对象
 function getFormComponentByName(compName: string) {
-  let component: any = ElInput
-  if (compName === 'el-autocomplete') component = ElAutocomplete
-  if (compName === 'el-cascader') component = ElCascader
-  if (compName === 'el-checkbox') component = ElCheckbox
-  if (compName === 'el-checkbox-button') component = ElCheckboxButton
-  if (compName === 'el-color-picker') component = ElColorPicker
-  if (compName === 'el-date-picker') component = ElDatePicker
-  if (compName === 'el-input-number') component = ElInputNumber
-  if (compName === 'el-radio') component = ElRadio
-  if (compName === 'el-radio-button') component = ElRadioButton
-  if (compName === 'el-rate') component = ElRate
-  if (compName === 'el-select') component = ElSelect
-  if (compName === 'el-select-v2') component = ElSelectV2
-  if (compName === 'el-slider') component = ElSlider
-  if (compName === 'el-switch') component = ElSwitch
-  if (compName === 'el-time-picker') component = ElTimePicker
-  if (compName === 'el-time-select') component = ElTimeSelect
-  if (compName === 'el-upload') component = ElUpload
-  if (compName === 'el-radio-group') component = ElRadioGroup
-  if (compName === 'el-checkbox-group') component = ElCheckboxGroup
-  if (compName === 'm-single-date-picker') component = SingleDatePicker
-  if (compName === 'm-icon-select') component = IconSelect
-  if (compName === 'm-upload') component = MUpload
+  let component: any
+  if (compName === 'el-input') component = ElInput
+  else if (compName === 'el-autocomplete') component = ElAutocomplete
+  else if (compName === 'el-cascader') component = ElCascader
+  else if (compName === 'el-checkbox') component = ElCheckbox
+  else if (compName === 'el-checkbox-button') component = ElCheckboxButton
+  else if (compName === 'el-color-picker') component = ElColorPicker
+  else if (compName === 'el-date-picker') component = ElDatePicker
+  else if (compName === 'el-input-number') component = ElInputNumber
+  else if (compName === 'el-radio') component = ElRadio
+  else if (compName === 'el-radio-button') component = ElRadioButton
+  else if (compName === 'el-rate') component = ElRate
+  else if (compName === 'el-select') component = ElSelect
+  else if (compName === 'el-select-v2') component = ElSelectV2
+  else if (compName === 'el-slider') component = ElSlider
+  else if (compName === 'el-switch') component = ElSwitch
+  else if (compName === 'el-time-picker') component = ElTimePicker
+  else if (compName === 'el-time-select') component = ElTimeSelect
+  else if (compName === 'el-upload') component = ElUpload
+  else if (compName === 'el-radio-group') component = ElRadioGroup
+  else if (compName === 'el-checkbox-group') component = ElCheckboxGroup
+  else if (compName === 'm-single-date-picker') component = SingleDatePicker
+  else if (compName === 'm-icon-select') component = IconSelect
+  else if (compName === 'm-upload') component = MUpload
+  else component = MNative
   return component
 }

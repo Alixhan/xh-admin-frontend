@@ -1,88 +1,152 @@
 <template>
   <div class="root">
-    <el-card>
-      <m-form
-        ref="formRef"
-        :loading="formLoading"
-        :columns="columns"
-        :model="formData"
-        handleType="edit"
-        :colspan="24"
-      ></m-form>
-      <div class="m-footer">
-        <el-button icon="check" type="primary" :loading="saveLoading" @click="save">{{ $t('common.save') }}</el-button>
-      </div>
-    </el-card>
+    <m-table
+      class="m-table"
+      ref="tableRef"
+      is-filter-table
+      is-complex-filter
+      row-key="id"
+      :filter-param="filterParam"
+      :filter-columns="topFilterColumns"
+      :columns="columns"
+      :fetch-data="queryGeneratorList"
+      selection="multiple"
+      @selection-change="(rows) => (selectRows = rows)"
+      v-model:data="data"
+    >
+      <template #right-action>
+        <el-button v-auth="'system:user:add'" type="primary" icon="plus" @click="openForm('add', null)">
+          {{ $t('common.add') }}
+        </el-button>
+        <el-button
+          v-auth="'system:user:del'"
+          type="danger"
+          icon="delete"
+          :disabled="selectRows.length === 0"
+          @click="del(selectRows)"
+          >{{ $t('common.del') }}
+        </el-button>
+      </template>
+    </m-table>
+    <el-dialog
+      :title="handleType && $t('generator.' + handleType)"
+      v-model="formVisible"
+      draggable
+      destroy-on-close
+      append-to-body
+      align-center
+      fullscreen
+      :close-on-click-modal="false"
+    >
+      <code-gen-form :handle-type="handleType" :model-value="row" @close="close" style="height: 100%" />
+    </el-dialog>
   </div>
 </template>
-<script lang="tsx" setup>
-import { useSystemStore } from '@/stores/system'
-import { computed, ref } from 'vue'
-import { getPersonalCenterDetail, personalCenterSave } from '@/api/system/user'
+<script setup lang="tsx">
+import type { Ref } from 'vue'
+import { computed, reactive, ref } from 'vue'
+import { delGeneratorByIds, getCodeZipFile, postGenerateCode, queryGeneratorList } from '@/api/generator'
+import CodeGenForm from './codeGenForm.vue'
 import { useI18n } from 'vue-i18n'
-import type { CommonFormColumn } from '@i/components/form'
-
-defineOptions({
-  name: 'PersonalCenter'
-})
+import FileSaver from 'file-saver'
+import { ElMessage } from 'element-plus'
 
 const { t } = useI18n()
+const tableRef = ref()
+const data = ref([])
+const selectRows = ref([])
 
-const systemStore = useSystemStore()
+const filterParam = reactive({})
 
-const formData = ref({
-  password: '',
-  password2: ''
-})
+const topFilterColumns = computed(() => [
+  { prop: 'tableName', label: '表名' },
+  { prop: 'name', label: '功能名' },
+  { prop: 'author', label: '作者' },
+])
 
-const columns = computed<CommonFormColumn<typeof formData.value>[]>(() => [
-  { prop: 'code', label: t('system.user.code'), disabled: true },
-  { prop: 'name', label: t('system.user.name') },
-  { prop: 'avatar', label: t('system.user.avatar'), type: 'upload-img', single: 'object' },
-  { prop: 'telephone', label: t('system.user.telephone'), rules: { type: 'phone' } },
+const columns: Ref<CommonTableColumn[]> = computed(() => [
+  { type: 'index', width: 90 },
+  { prop: 'id', label: 'Id', width: 90 },
+  { prop: 'tableName', label: '表名' },
+  { prop: 'entityName', label: '实体名' },
+  { prop: 'tableComment', label: '表注释' },
+  { prop: 'name', label: '功能名' },
+  { prop: 'service', label: '所属服务' },
+  { prop: 'module', label: '模块名' },
+  { prop: 'author', label: '作者' },
+  { prop: 'createTime', label: t('common.createTime'), type: 'datetime', width: 155 },
   {
-    prop: 'password',
-    label: t('system.user.newPassword'),
-    type: 'password',
-    autocomplete: 'new-password',
-    placeholder: t('system.user.newPasswordH')
-  },
-  {
-    prop: 'password2',
-    label: t('system.user.repeatPassword'),
-    placeholder: t('system.user.repeatPassword'),
-    type: 'password',
-    rules: [
+    type: 'operation',
+    fixed: 'right',
+    align: 'center',
+    buttons: [
+      { label: t('common.edit'), auth: 'system:user:edit', icon: 'edit', onClick: (row) => openForm('edit', row) },
       {
-        validator: (rule, val, callback) => {
-          if (formData.value.password && formData.value.password !== val) {
-            return callback(new Error(t('system.user.passwordMismatches')))
-          }
-          callback()
-        }
+        label: t('common.detail'),
+        auth: 'system:user:detail',
+        icon: 'document',
+        onClick: (row) => openForm('detail', row)
+      },
+      { label: t('common.del'), auth: 'system:user:del', icon: 'delete', type: 'danger', onClick: (row) => del([row]) },
+      { label: t('generator.download'), icon: 'download', type: 'primary', onClick: downloadCodeZipFile },
+      {
+        label: t('generator.label'),
+        icon: 'local|/src/assets/icon/generator.svg',
+        type: 'primary',
+        onClick: generateCode
       }
     ]
   }
 ])
 
-const formLoading = ref(true)
-const saveLoading = ref(false)
-const formRef = ref()
-getPersonalCenterDetail().then((res) => {
-  formData.value = res.data
-  formData.value.password = ''
-  formLoading.value = false
-})
+const formVisible = ref(false)
+const handleType = ref()
+const row = ref()
 
-function save() {
-  formRef.value.submit().then(() => {
-    personalCenterSave(formData.value, {
-      loadingRef: saveLoading,
-      showSuccessMsg: true,
-      successMsg: t('common.saveSuccess')
-    }).then((res) => {
-      systemStore.user.avatar = res.data.avatar
-    })
+function openForm(type: FormHandleType, r) {
+  row.value = r
+  formVisible.value = true
+  handleType.value = type
+}
+
+function del(rows: any[]) {
+  delGeneratorByIds(rows.map((i) => i.id).join(','), {
+    showLoading: true,
+    showBeforeConfirm: true,
+    showSuccessMsg: true,
+    confirmMsg: t('common.confirmDelete')
+  }).then(() => {
+    tableRef.value.fetchQuery()
+  })
+}
+
+function close(type) {
+  formVisible.value = false
+  if (type === 'refresh') {
+    tableRef.value.fetchQuery()
+  }
+}
+
+function downloadCodeZipFile(row) {
+  getCodeZipFile(row.id, {
+    showLoading: true,
+    showSuccessMsg: true,
+    successMsg: '下载成功'
+  }).then((res) => {
+    FileSaver.saveAs(res as any, 'sdfsdf.zip')
+  })
+}
+
+function generateCode(row) {
+  if (!import.meta.env.DEV) {
+    ElMessage.warning('仅开发环境可生成！')
+  }
+  postGenerateCode(row.id, {
+    showLoading: true,
+    showBeforeConfirm: true,
+    showSuccessMsg: true,
+    successMsg: '代码生成成功！',
+    confirmMsg: '确认生成代码吗？'
   })
 }
 </script>

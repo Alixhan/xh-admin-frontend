@@ -18,7 +18,7 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "jsxImportSource": "vue",
-    "composite": true,
+    "composite": false,
     "moduleResolution": "Node",
     "baseUrl": ".",
     "paths": {

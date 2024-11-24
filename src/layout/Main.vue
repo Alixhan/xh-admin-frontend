@@ -12,7 +12,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { useSystemStore } from '@/stores/system'
 import { ref, watch } from 'vue'
 import { useElementSize } from '@vueuse/core'

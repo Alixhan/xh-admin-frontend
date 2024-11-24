@@ -46,7 +46,14 @@ export declare type CommonColumnType =
   | 'upload'
   | 'upload-file'
   | 'upload-img'
+  | 'icon-select'
   | 'autocomplete'
+  | 'span'
+  | 'div'
+  | 'p'
+  | 'a'
+  | 'i'
+  | 'blank'
 
 /**
  * itemList 类型

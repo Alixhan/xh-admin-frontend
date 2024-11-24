@@ -205,7 +205,7 @@ export const useSystemStore = defineStore('system', () => {
         if (refresh.value && i.fullPath === route.fullPath) return false
         return i.cache
       })
-      .map((i) => i.componentName)
+      .map((i) => i.componentName as string)
   })
 
   function setRefresh(val: boolean) {
@@ -235,7 +235,7 @@ export const useSystemStore = defineStore('system', () => {
     }
     let path: string | undefined
     if (token.value && !loginStatus.value) {
-      path = await userLogin()
+      path = await userLogin({})
         .then((res) => {
           // 用户已登录
           if (res.status + '' === 'success' && res.data) {

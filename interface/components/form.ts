@@ -4,7 +4,7 @@
  * 表单类型定义
  */
 import type { ValidRule } from '@i/utils/validate'
-import type { CommonColumnType, SlotsObj } from '@i/components/index'
+import type { CommonColumnType, CommonItemData, CommonItemList, SlotsObj } from '@i/components/index'
 import type { FormProps } from 'element-plus'
 import { formEmits, formProps } from 'element-plus'
 import type { PropType, VNode } from 'vue'
@@ -22,7 +22,7 @@ export declare type FormHandleType = 'add' | 'edit' | 'detail' | string
 /**
  * 通用表单column
  */
-export interface CommonFormColumn<T extends object> extends Partial<Omit<FormProps, 'rules'>> {
+export interface CommonFormColumn<T extends object> extends Partial<Omit<FormProps, 'rules' | 'type'>> {
   //标题名称
   label?: string
   //表单类型
@@ -46,6 +46,11 @@ export interface CommonFormColumn<T extends object> extends Partial<Omit<FormPro
   placeholder?: string
   startPlaceholder?: string
   endPlaceholder?: string
+  itemList?: CommonItemList
+  labelKey?: string | ((item: CommonItemData) => string | number)
+  valueKey?: string | ((item: CommonItemData) => string | number)
+  //绑定表单的属性
+  single?: UploadSingle | boolean
 
   [prop: string]: any
 }
@@ -84,7 +89,7 @@ export const mFormProps = {
     type: [String, Number]
   },
   labelPosition: {
-    type: String as PropType<'top' | 'left' | 'right'>,
+    type: String as PropType<'top' | 'left' | 'right'>
   },
   scrollToError: {
     default: true
@@ -97,6 +102,8 @@ export const mFormProps = {
     type: Boolean
   }
 }
+
+export declare type UploadSingle = 'id' | 'object'
 
 export const mFormEmits = {
   ...formEmits

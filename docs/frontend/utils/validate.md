@@ -1,6 +1,6 @@
 # Validate 数据验证
 
-提供框架的统一数据验证逻辑，增加 `Element-Plus` 表单验证的 `rules` 规则。
+提供框架的统一数据验证逻辑，增强 `Element-Plus` 表单验证的 `rules` 规则。
 
 ## 单值验证
 

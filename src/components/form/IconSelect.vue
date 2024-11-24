@@ -69,6 +69,7 @@ import { computed, nextTick, ref, shallowRef } from 'vue'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import MIcon from '@/components/Icon.vue'
 import { round } from 'lodash-es'
+import type { ElInput } from 'element-plus'
 
 const localSvg = import.meta.glob('@/assets/icon/**/*.svg', { query: '?url', import: 'default' })
 
@@ -105,12 +106,12 @@ function onModelValue(val: string) {
 }
 
 function updateVisible() {
-  isFocus.value || (visible.value = false)
+  if (!isFocus.value) visible.value = false
 }
 
 const refInput = ref()
 
-function inputRef(el: any) {
+function inputRef(el: InstanceType<typeof ElInput>) {
   refInput.value = el
   const clientWidth = el?.$el.clientWidth
   let sl = round(Number(clientWidth) / 41.3, 0)
@@ -140,7 +141,7 @@ function selectIcon(icon: string) {
 
 function inputBlur() {
   isFocus.value = false
-  active.value || (visible.value = false)
+  if (!active.value) visible.value = false
 }
 </script>
 <style scoped lang="scss">

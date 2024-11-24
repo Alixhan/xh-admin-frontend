@@ -1,9 +1,10 @@
 import createAxios from '@/utils/request'
+import type { PageQuery } from '@i/utils/request'
 
 const systemBaseUrl = import.meta.env.VITE_SYSTEM_BASE_URL
 
 // 数据字典列表查询
-export function queryDictTypeList(params = {}, option?: RequestOption) {
+export function queryDictTypeList(params: PageQuery<any>, option?: RequestOption) {
   return createAxios(option).post(`${systemBaseUrl}/api/system/dict/type/query`, params)
 }
 

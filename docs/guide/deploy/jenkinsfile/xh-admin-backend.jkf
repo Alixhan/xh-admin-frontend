@@ -23,7 +23,7 @@ pipeline {
     //参数化构建
     parameters {
         //添加一个发布下拉选项，选择发布哪个服务
-        choice(name: 'DEPLOY_TYPE', choices: ['system', 'file'], description: '发布服务')
+        choice(name: 'DEPLOY_TYPE', choices: ['system', 'file', 'generator'], description: '发布服务')
     }
 
     //环境变量
@@ -79,6 +79,10 @@ pipeline {
                     if(dir_name == 'file') {
                         outer_port = '2103'
                         inner_port = '2103'
+                    }
+                    if(dir_name == 'generator') {
+                        outer_port = '2104'
+                        inner_port = '2104'
                     }
 
                     sh "mvn clean -DskipTests=true"

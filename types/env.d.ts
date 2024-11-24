@@ -19,6 +19,10 @@ interface ImportMetaEnv {
   readonly VITE_SYSTEM_BASE_URL: string
   // file服务请求前缀
   readonly VITE_FILE_BASE_URL: string
+  // generator服务请求前缀
+  readonly VITE_GENERATOR_BASE_URL: string
+  // 开发环境前端项目路径
+  readonly VITE_FRONTEND_PATH: string
 }
 
 interface ImportMeta {
@@ -39,10 +43,10 @@ declare type RestResponse<T> = import('@i/utils/request').RestResponse<T>
 // declare type CommonItemData = import('@/components/mutils').CommonItemData
 // declare type CommonModelParam = import('@/components/mutils').CommonModelParam
 
-declare type PageQuery<T = any> = import('@i/utils/request').PageQuery<T>
+declare type PageQuery = import('@i/utils/request').PageQuery
 declare type TableSelection = import('@i/components/table').TableSelection
-declare type TableColumn<T = any> = import('@i/components/table').TableColumn<T>
-declare type CommonTableColumn<T = any> = import('@i/components/table').CommonTableColumn<T>
+declare type TableColumn<T extends object = any> = import('@i/components/table').TableColumn<T>
+declare type CommonTableColumn<T extends object = any> = import('@i/components/table').CommonTableColumnn<T>
 
-declare type FormHandleType = import('@/components/form').FormHandleType
-declare type FormColumn = import('@/components/form').FormColumn
+declare type FormHandleType = import('@i/components/form').FormHandleType
+declare type CommonFormColumn<T extends object = any> = import('@i/components/form').CommonFormColumn<T>

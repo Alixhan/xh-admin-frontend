@@ -12,7 +12,6 @@ import type MSingleDatePicker from '@/components/form/SingleDatePicker.vue'
 import type MForm from '@/components/form/index.vue'
 import type MTable from '@/components/table/index.vue'
 import type MTopFilter from '@/components/TopFilter.vue'
-import {AuthDirective} from '@/directive'
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
