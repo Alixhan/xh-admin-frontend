@@ -187,6 +187,7 @@ async function initFormData() {
 }
 
 function changeTableName(val: string) {
+  formData.value.entityName = upperFirst(camelCase(val))
   if (formData.value.designType === '2') {
     if (val) {
       getTableDetail({ tableName: val }, { showLoading: true }).then((res) => {
