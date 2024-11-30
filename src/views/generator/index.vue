@@ -49,7 +49,6 @@ import { delGeneratorByIds, getCodeZipFile, postGenerateCode, queryGeneratorList
 import CodeGenForm from './codeGenForm.vue'
 import { useI18n } from 'vue-i18n'
 import FileSaver from 'file-saver'
-import { ElMessage } from 'element-plus'
 
 const { t } = useI18n()
 const tableRef = ref()
@@ -61,7 +60,7 @@ const filterParam = reactive({})
 const topFilterColumns = computed(() => [
   { prop: 'tableName', label: '表名' },
   { prop: 'name', label: '功能名' },
-  { prop: 'author', label: '作者' },
+  { prop: 'author', label: '作者' }
 ])
 
 const columns: Ref<CommonTableColumn[]> = computed(() => [
@@ -133,14 +132,11 @@ function downloadCodeZipFile(row) {
     showSuccessMsg: true,
     successMsg: '下载成功'
   }).then((res) => {
-    FileSaver.saveAs(res as any, 'sdfsdf.zip')
+    FileSaver.saveAs(res as any, `${row.name}.zip`)
   })
 }
 
 function generateCode(row) {
-  if (!import.meta.env.DEV) {
-    ElMessage.warning('仅开发环境可生成！')
-  }
   postGenerateCode(row.id, {
     showLoading: true,
     showBeforeConfirm: true,

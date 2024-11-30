@@ -22,7 +22,7 @@
       :handle-type="handleType"
     >
       <template #left-action>
-        <el-button v-if="designType === '1'" type="danger" icon="delete" @click="clear">
+        <el-button v-if="['add', 'edit'].includes(handleType ?? '') && designType === '1'" type="danger" icon="delete" @click="clear">
           {{ $t('common.clear') }}
         </el-button>
       </template>
@@ -165,8 +165,7 @@ const columns = computed<CommonTableColumn<DesignTableColumn>[]>(() => [
       {
         type: 'danger',
         icon: 'delete',
-        hidden: props.designType === '2',
-        disabled: !['add', 'edit'].includes(props.handleType ?? ''),
+        hidden: props.designType === '2' || !['add', 'edit'].includes(props.handleType ?? ''),
         label: '删除',
         onClick: (row, { $fullIndex }) => {
           tableColumns.value.splice($fullIndex, 1)
@@ -175,6 +174,7 @@ const columns = computed<CommonTableColumn<DesignTableColumn>[]>(() => [
       {
         type: 'primary',
         icon: 'rank',
+        hidden: !['add', 'edit'].includes(props.handleType ?? ''),
         label: '拖拽排序',
         class: 'sort-btn',
         style: 'cursor: move'
