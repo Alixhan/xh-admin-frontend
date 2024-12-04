@@ -158,6 +158,21 @@ body {
   }
 }
 
+@media screen and (max-width: 600px) {
+  .el-scrollbar__bar {
+    pointer-events: none;
+
+    &.is-vertical {
+      width: 3px;
+    }
+
+    &.is-horizontal {
+      height: 3px;
+    }
+  }
+}
+
+
 //表单为明细查看时的样式
 .detail-form {
   .el-input__wrapper,
