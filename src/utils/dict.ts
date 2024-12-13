@@ -40,8 +40,8 @@ export default function useDictDetails<T extends DictDetailValueType<K>, K exten
   if (!fetch) {
     fetch = queryDictDetailList({ isPage: false, param: { dictTypeId } })
       .then((res) => res.data.list)
-      .catch(() => delete dictCacheMap[dictTypeId])
-    dictCacheMap[dictTypeId] = fetch
+      .catch(() => dictCacheMap.delete(dictTypeId))
+    dictCacheMap.set(dictTypeId, fetch)
   }
   const dictDetails: Ref<DictDetail<T>[]> = ref([])
   fetch.then((data) => (dictDetails.value = valueConvert(data)))
