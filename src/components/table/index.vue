@@ -25,7 +25,7 @@ import QueryFilter from '@/components/table/queryFilter/index.vue'
 import ExportExcel from './ExportExcel.vue'
 import MOperationButton from './OperationButton.vue'
 import TableColumnSort from './TableColumnSort.vue'
-import { useSystemStore } from '@/stores/system.js'
+import { useSystemStore } from '@/stores/system'
 import { ElForm } from 'element-plus'
 import { auth } from '@/directive'
 import { isUndefined } from 'lodash-es'
@@ -324,6 +324,7 @@ export default defineComponent(
 
           // column属性
           const tableColumParams = {
+            key: column._id,
             showOverflowTooltip: !(column.slotName || column.editable),
             ...column,
             slots: { ...column.slots }
