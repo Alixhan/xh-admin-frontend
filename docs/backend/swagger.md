@@ -8,4 +8,4 @@ RESTful 服务开发过程。
 
 ## 访问swagger文档
 在本项目中，启动任意一个后台服务后均会默认启动该服务的 swagger 接口文档服务，访问地址默认为 `服务地址/swagger-ui.html`<br/>
-例:在本地启动了 `system` 服务，则可访问 <http://localhost:6002/swagger-ui.html> 来使用swagger 文档了
+例:在本地启动了 `system` 服务，则可访问 `http://localhost:6002/swagger-ui.html` 来使用swagger 文档了
