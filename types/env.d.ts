@@ -9,6 +9,8 @@ interface ImportMetaEnv {
   readonly DEV: boolean
   // 系统名称
   readonly VITE_TITLE: string
+  // 系统版本
+  readonly VITE_VERSION: string
   // token会存放在localstorage,此项配置存放的key
   readonly VITE_SYS_TOKEN_KEY: string
   // 路由的前缀

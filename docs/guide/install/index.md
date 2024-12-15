@@ -14,9 +14,15 @@ const previewSrcList = ["/image/install/img.png"];
 :::
 
 `git` 拉取代码
-```shell
+::: code-group
+```shell [github]
+$ git clone https://github.com/Alixhan/xh-admin-frontend.git
+```
+```shell [gitee]
 $ git clone https://gitee.com/sun-xiaohan/xh-admin-frontend.git
 ```
+:::
+
 
 强烈建议使用 [pnpm](https://pnpm.io/) 替代 `npm`，如未安装 `pnpm`，执行下列命令安装
 ```shell
@@ -81,10 +87,18 @@ $ pnpm dev
 `Nacos 2.2 +` <br>
 :::
 
-```shell
+git 拉取代码
+::: code-group
+```shell [github]
+# git拉取后端代码库的代码
+$ git clone https://github.com/Alixhan/xh-admin-backend.git
+```
+```shell [gitee]
 # git拉取后端代码库的代码
 git clone https://gitee.com/sun-xiaohan/xh-admin-backend.git
 ```
+:::
+
 **运行模块**
 
 - SystemApplication [系统服务] （<font color=Red>必须</font>）

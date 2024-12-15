@@ -138,8 +138,9 @@ export default defineConfig({
                         {text: '特别鸣谢', link: '/special-thanks'},
                         {text: '常见问题', link: '/faq'},
                         {text: '更新日志', link: '/release'},
-                        {text: '加入交流群', link: '/join-group'},
                         {text: '待办', link: '/todo-list'},
+                        {text: '加入交流群', link: '/join-group'},
+                        {text: '捐赠与支持', link: '/reward'},
                     ]
                 }
             ],
@@ -195,10 +196,10 @@ export default defineConfig({
             prev: '上一节',
             next: '下一节'
         },
-        editLink: {
-            pattern: 'https://gitee.com/sun-xiaohan/xh-admin-frontend/tree/main/docs/:path',
-            text: '帮助改进此页面'
-        },
+        // editLink: {
+        //     pattern: 'https://gitee.com/sun-xiaohan/xh-admin-frontend/tree/main/docs/:path',
+        //     text: '帮助改进此页面'
+        // },
         darkModeSwitchLabel: '切换主题',
         sidebarMenuLabel: '菜单',
         returnToTopLabel: '回到顶部',

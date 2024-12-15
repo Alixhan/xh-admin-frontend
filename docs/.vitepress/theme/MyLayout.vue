@@ -14,11 +14,18 @@ const locale = computed(() => getLocale()[systemStore.locale])
 const btnConfig = reactive({
   autoInsertSpace: false
 })
+
+const version = import.meta.env.VITE_VERSION
 </script>
 
 <template>
   <el-config-provider :locale="locale" :size="systemStore.layout.size" :button="btnConfig">
     <DefaultTheme.Layout>
+      <template #home-hero-info-after>
+        <div style="margin-top: 10px">
+          当前版本： <el-tag effect="dark" round>{{ version }}</el-tag>
+        </div>
+      </template>
       <template #layout-bottom>
         <div style="text-align: center">
           <Footer />
