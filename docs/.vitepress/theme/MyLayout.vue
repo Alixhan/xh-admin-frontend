@@ -23,7 +23,7 @@ const version = import.meta.env.VITE_VERSION
     <DefaultTheme.Layout>
       <template #home-hero-info-after>
         <div style="margin-top: 10px">
-          当前版本： <el-tag effect="dark" round>{{ version }}</el-tag>
+          当前版本： <el-tag effect="dark" round style="font-weight: bold;">{{ version }}</el-tag>
         </div>
       </template>
       <template #layout-bottom>
