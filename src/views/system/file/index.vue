@@ -101,15 +101,17 @@ const columns = computed(() => [
     fixed: 'right',
     align: 'center',
     buttons: [
-      { label: t('system.file.download'), onClick: download },
-      { label: t('common.edit'), auth: 'system:file:edit', onClick: (row) => openForm('edit', row) },
+      { label: t('system.file.download'), icon: 'download', onClick: download },
+      { label: t('common.edit'), icon: 'edit', auth: 'system:file:edit', onClick: (row) => openForm('edit', row) },
       {
         label: t('common.detail'),
+        icon: 'document',
         auth: 'system:file:detail',
         onClick: (row) => openForm('detail', row)
       },
       {
         label: t('common.del'),
+        icon: 'delete',
         auth: 'system:file:del',
         type: 'danger',
         onClick: (row) => del([row])

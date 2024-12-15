@@ -30,9 +30,9 @@
       is-complex-filter
     >
       <template #right-action>
-        <el-button v-auth="'system:dict:add'" type="primary" icon="plus" @click="openForm('add')">{{
-          $t('common.add')
-        }}</el-button>
+        <el-button v-auth="'system:dict:add'" type="primary" icon="plus" @click="openForm('add')"
+          >{{ $t('common.add') }}
+        </el-button>
         <el-button
           v-auth="'system:dict:del'"
           type="danger"
@@ -118,9 +118,14 @@ const columns = computed(() => [
     fixed: 'right',
     align: 'center',
     buttons: [
-      { label: t('common.edit'), auth: 'system:dict:edit', onClick: (row) => openForm('edit', row) },
-      { label: t('common.detail'), auth: 'system:dict:detail', onClick: (row) => openForm('detail', row) },
-      { label: t('common.del'), auth: 'system:dict:del', type: 'danger', onClick: (row) => del([row]) }
+      { label: t('common.edit'), icon: 'edit', auth: 'system:dict:edit', onClick: (row) => openForm('edit', row) },
+      {
+        label: t('common.detail'),
+        icon: 'document',
+        auth: 'system:dict:detail',
+        onClick: (row) => openForm('detail', row)
+      },
+      { label: t('common.del'), icon: 'delete', auth: 'system:dict:del', type: 'danger', onClick: (row) => del([row]) }
     ]
   },
   { type: 'index', width: 90 },

@@ -118,14 +118,16 @@ const columns = computed(() => [
     fixed: 'right',
     align: 'center',
     buttons: [
-      { label: t('common.edit'), auth: 'system:org:edit', onClick: (row) => openForm('edit', row) },
+      { label: t('common.edit'), auth: 'system:org:edit', icon: 'edit', onClick: (row) => openForm('edit', row) },
       {
         label: t('common.detail'),
+        icon: 'document',
         auth: 'system:org:detail',
         onClick: (row) => openForm('detail', row)
       },
       {
         label: t('common.del'),
+        icon: 'delete',
         auth: 'system:org:del',
         type: 'danger',
         onClick: (row) => del([row])
