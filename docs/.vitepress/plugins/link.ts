@@ -60,7 +60,8 @@ const links = {
   'EChart 图表': '/frontend/utils/echarts',
   'Request 请求': '/frontend/utils/request',
   文件请求链接: '/frontend/utils/file-url',
-  'ContextMenu 上下文菜单': '/frontend/utils/context-menu'
+  'ContextMenu 上下文菜单': '/frontend/utils/context-menu',
+  'Swagger 文档': '/backend/swagger',
 }
 
 export default (md: MarkdownIt): void => {

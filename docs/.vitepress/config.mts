@@ -173,16 +173,8 @@ export default defineConfig({
                 }
             ],
             backend: [
-                {text: '后端规范', link: '/backend/specification'},
-                {
-                    text: '工具类',
-                    base: '/backend',
-                    items: [
-                        {text: '介绍', link: '/introduction'},
-                        {text: '快速了解', link: '/quick-info'},
-                        {text: '安装', base: '/guide/install', link: '/'}
-                    ]
-                },
+                {text: '总览', link: '/backend/'},
+                {text: 'swagger 文档', link: '/backend/swagger'},
             ]
         },
         outline: {
