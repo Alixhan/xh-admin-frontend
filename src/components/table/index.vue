@@ -45,6 +45,7 @@ import type {
 import { mTableProps } from '@i/components/table'
 import { type ContextMenuItem, showContextMenu } from '@/utils/context-menu'
 import type { UnknownFieldRule } from '@i/utils/validate'
+import { usePreview } from '@/components/table/queryFilter/queryFilter'
 
 /**
  * 通用表格组件
@@ -113,27 +114,27 @@ export default defineComponent(
 
     const loadingRef = ref(false)
 
+    // 可用的高级筛选条件
+    const enabledPageQuery = computed(() => {
+      return {
+        ...pageQuery.value,
+        filters: enabledFilters.value
+      }
+    })
+
     // 向后端请求表格数据
     async function fetchQuery() {
       if (props.fetchData) {
-        await props
-          .fetchData(
-            {
-              ...pageQuery.value,
-              filters: queryFilterRef.value?.enabledFilters
-            },
-            { loadingRef }
-          )
-          .then((res: RestResponse<PageResult<T>>) => {
-            const resData = res.data!
-            if (props.data) {
-              emit('update:data', resData.list)
-            } else {
-              data.value = resData.list
-            }
-            pagination.value.total = resData.total
-            selectionChange([])
-          })
+        await props.fetchData(enabledPageQuery.value, { loadingRef }).then((res: RestResponse<PageResult<T>>) => {
+          const resData = res.data!
+          if (props.data) {
+            emit('update:data', resData.list)
+          } else {
+            data.value = resData.list
+          }
+          pagination.value.total = resData.total
+          selectionChange([])
+        })
       }
     }
 
@@ -159,6 +160,8 @@ export default defineComponent(
     const leafColumns: Ref<CommonTableColumn<T>[]> = ref([])
 
     provide('leafColumns', leafColumns.value)
+
+    const { enabledFilters } = usePreview(pageQuery.value.filters ?? [], leafColumns.value)
 
     initTableColumnParamFun()
 
@@ -631,7 +634,7 @@ export default defineComponent(
                   <ExportExcel
                     ref={exportExcelRef}
                     class="action-btn"
-                    pageQuery={pageQuery.value}
+                    pageQuery={enabledPageQuery.value}
                     exportFileName={props.exportFileName}
                     fetchData={props.fetchData}
                     data={data.value}

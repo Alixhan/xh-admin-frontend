@@ -1,11 +1,5 @@
 <template>
-  <el-popover
-    placement="bottom"
-    trigger="click"
-    :visible="popoverVisible"
-    popper-style="width: auto;"
-    append-to-body
-  >
+  <el-popover placement="bottom" trigger="click" :visible="popoverVisible" popper-style="width: auto;" append-to-body>
     <div class="query-filter-view" @keyup.enter="search">
       <div class="title-view">
         <el-text size="large">{{ $t('m.table.complexFilter') }}</el-text>
@@ -32,13 +26,7 @@
       />
     </div>
     <template #reference>
-      <el-button
-        icon="Filter"
-        :type="modelValue?.length ? 'danger' : 'primary'"
-        text
-        class="action-btn"
-        @click="open"
-      >
+      <el-button icon="Filter" :type="modelValue?.length ? 'danger' : 'primary'" text class="action-btn" @click="open">
         {{ $t('m.table.complexFilter') }}
       </el-button>
     </template>
@@ -65,8 +53,6 @@ const emits = defineEmits<{
 const modelValue = defineModel<FilterRow[]>({ default: [] })
 
 const popoverVisible = ref(false)
-
-const enabledFilters = ref<FilterRow[]>([])
 
 onDeactivated(() => (popoverVisible.value = false))
 
@@ -118,13 +104,11 @@ function clear() {
 provide<QueryFilter>('queryFilter', {
   recursive: props.recursive,
   filters: modelValue.value,
-  enabledFilters: enabledFilters.value,
   addRow,
   removeRow
 })
 
 defineExpose({
-  enabledFilters: enabledFilters.value,
   open,
   addRow
 })
