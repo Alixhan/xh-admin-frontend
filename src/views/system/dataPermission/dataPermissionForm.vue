@@ -18,18 +18,21 @@
                   <div v-html="previews" />
                   <div v-html="expressionStr" />
                 </div>
-                <div class="opt-btn">
+                <div class="opt-btn" v-if="handleType !== 'detail'">
                   <el-icon @click="addRow()" size="16" color="var(--el-color-primary)" style="cursor: pointer">
                     <CirclePlus />
                   </el-icon>
                 </div>
-                <permission-row
-                  v-for="(filter, index) in expression"
-                  :key="index"
-                  :index="index"
-                  :model-value="filter"
-                  @remove="removeRow(index)"
-                />
+                <template v-if="handleType !== 'detail'" >
+                  <permission-row
+                    v-for="(filter, index) in expression"
+                    :key="index"
+                    :index="index"
+                    :model-value="filter"
+                    :handle-type="handleType"
+                    @remove="removeRow(index)"
+                  />
+                </template>
               </div>
             </el-form-item>
           </el-col>

@@ -1,8 +1,7 @@
 <template>
-  <el-icon class="collapse-icon" size="14">
+  <el-icon class="collapse-icon" size="14" @click="toggleMenuCollapse">
     <m-svg-icon
       src="@/assets/icon/fold.svg"
-      @click="toggleMenuCollapse"
       inherited
       :class="{ rotate180: systemStore.layout.menuCollapse }"
     />

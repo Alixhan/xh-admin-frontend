@@ -22,12 +22,12 @@
 </template>
 <script lang="ts" setup>
 import { useSystemStore } from '@/stores/system'
-import { useLocalStorage } from '@vueuse/core'
 import { ElMessageBox } from 'element-plus'
+import { ref } from 'vue'
 
 const systemStore = useSystemStore()
 
-const firstVisit = useLocalStorage('firstVisit', true)
+const firstVisit = ref(false)
 
 if (firstVisit.value) {
   setTimeout(async () => {
