@@ -322,8 +322,11 @@ function openFileLib(type?: string) {
 
 function emitModelValue() {
   if (props.single) {
-    if (props.single === 'id') emit('update:modelValue', fileList.value[0]?.id)
-    if (props.single === 'object') emit('update:modelValue', fileList.value[0]?.object)
+    const file = fileList.value[0]
+    let val = file?.id
+    if (props.single === 'object') val = file?.object
+    if (fileList.value?.length && !val) val = '-1'
+    emit('update:modelValue', val)
   } else {
     emit('update:modelValue', fileList.value)
   }
