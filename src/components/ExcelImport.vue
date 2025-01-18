@@ -98,7 +98,8 @@ const tipObj = computed(() => {
     3: {
       do: t('m.excelImport.step3Do'),
       error: t('m.excelImport.step3Error'),
-      success: t('m.excelImport.step3Success')
+      success: t('m.excelImport.step3Success'),
+      exception: t('m.excelImport.step3Error')
     },
     4: {
       do: t('m.excelImport.step4Do'),
