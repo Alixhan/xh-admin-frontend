@@ -109,7 +109,6 @@ function clear() {
 }
 
 function changeChecked() {
-  console.log(checked.value)
   modelValue.value.forEach((i) => changeCheck(i, checked.value))
 }
 
