@@ -50,7 +50,8 @@ import { type PermissionRowType } from './dataPermissionForm.vue'
 import type { PermissionHome } from '@/views/system/dataPermission/dataPermissionForm.vue'
 
 defineOptions({
-  name: 'PermissionRow'
+  name: 'PermissionRow',
+  inheritAttrs: false
 })
 
 const props = defineProps({
