@@ -91,8 +91,8 @@ function removeRow(index: number, parent?: FilterRow) {
     }
   } else {
     modelValue.value.splice(index, 1)
-    initChecked()
   }
+  initChecked()
 }
 
 function open() {

@@ -6,9 +6,7 @@ import { useI18n } from 'vue-i18n'
 export function usePreview(filters: FilterRow[], leafColumns?: CommonTableColumn<any>[]) {
   const { t } = useI18n()
 
-  if (leafColumns === null) {
-    leafColumns = inject<CommonTableColumn<any>[]>('leafColumns')
-  }
+  leafColumns ??= inject<CommonTableColumn<any>[]>('leafColumns')
 
   const previews = computed(() => filters.map(getPreview))
 
