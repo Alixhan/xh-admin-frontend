@@ -50,10 +50,11 @@
       draggable
       destroy-on-close
       append-to-body
+      align-center
       :close-on-click-modal="false"
       width="600"
     >
-      <dict-form :handle-type="handleType" :model-value="row" style="height: 50vh" @close="close" />
+      <dict-form :handle-type="handleType" :model-value="row" @close="close" />
     </el-dialog>
   </div>
 </template>

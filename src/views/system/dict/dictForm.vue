@@ -1,6 +1,6 @@
 <template>
   <div class="form-view">
-    <el-scrollbar class="m-form-scroll">
+    <el-scrollbar class="m-form-scroll" max-height="75vh">
       <m-form
         ref="formRef"
         :colspan="24"
