@@ -305,6 +305,7 @@ export interface QueryFilterProps {
 export interface QueryFilter {
   recursive: boolean
   filters: FilterRow[]
+  changeCheck: (row: FilterRow, checked: boolean) => void
   addRow: (prop: string, parent?: FilterRow) => void
   removeRow: (index: number, parent?: FilterRow) => void
 }

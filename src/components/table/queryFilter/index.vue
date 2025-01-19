@@ -9,9 +9,12 @@
       </div>
       <Preview />
       <div class="opt-btn">
-        <el-icon @click="addRow('')" size="16" color="var(--el-color-primary)" style="cursor: pointer">
-          <CirclePlus />
-        </el-icon>
+        <div class="left-btn">
+          <el-checkbox v-if="modelValue.length" v-model="checked" @change="changeChecked" size="small" />
+          <el-icon @click="addRow('')" size="16" color="var(--el-color-primary)" style="cursor: pointer">
+            <CirclePlus />
+          </el-icon>
+        </div>
         <div>
           <el-button @click="clear" type="danger" size="small">{{ $t('common.clear') }}</el-button>
           <el-button @click="search" type="primary" size="small">{{ $t('m.topFilter.search') }}</el-button>
@@ -22,6 +25,7 @@
         :key="index"
         :index="index"
         :model-value="filter"
+        @change-check="initChecked"
         @remove="removeRow(index)"
       />
     </div>
@@ -51,6 +55,8 @@ const emits = defineEmits<{
 }>()
 
 const modelValue = defineModel<FilterRow[]>({ default: [] })
+
+const checked = ref(false)
 
 const popoverVisible = ref(false)
 
@@ -85,6 +91,7 @@ function removeRow(index: number, parent?: FilterRow) {
     }
   } else {
     modelValue.value.splice(index, 1)
+    initChecked()
   }
 }
 
@@ -101,9 +108,24 @@ function clear() {
   modelValue.value.length = 0
 }
 
+function changeChecked() {
+  console.log(checked.value)
+  modelValue.value.forEach((i) => changeCheck(i, checked.value))
+}
+
+function initChecked() {
+  checked.value = !!modelValue.value?.some((i) => i.checked)
+}
+
+function changeCheck(row: FilterRow, checked: boolean) {
+  row.checked = checked
+  row.children?.forEach((i) => changeCheck(i, checked))
+}
+
 provide<QueryFilter>('queryFilter', {
   recursive: props.recursive,
   filters: modelValue.value,
+  changeCheck,
   addRow,
   removeRow
 })
@@ -138,6 +160,12 @@ defineExpose({
     align-items: center;
     justify-content: space-between;
     margin-top: 5px;
+
+    .left-btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
   }
 }
 

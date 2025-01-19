@@ -73,7 +73,7 @@
 </template>
 <script setup lang="ts">
 import type { CommonTableColumn, FilterRow, QueryFilter } from '@i/components/table'
-import { computed, inject, watch } from 'vue'
+import { computed, inject, onMounted, watch } from 'vue'
 import type { CommonItemData } from '@i/components'
 
 defineOptions({
@@ -90,8 +90,6 @@ const emits = defineEmits<{
 }>()
 
 const modelValue = defineModel<FilterRow>({ default: {} })
-
-watch(() => modelValue.value?.children?.length, initChecked)
 
 const queryFilter = inject<QueryFilter>('queryFilter')
 
@@ -122,6 +120,9 @@ watch(
 //初始化一下关联条件
 changeProp()
 
+//添加一行时需要更新父级checkbox的选中状态
+onMounted(() => emits('changeCheck'))
+
 function changeProp() {
   if (!comparators.value.includes(modelValue.value.condition ?? '')) {
     modelValue.value.condition = comparators.value[0] as any
@@ -129,11 +130,7 @@ function changeProp() {
 }
 
 function changeChecked() {
-  const changeCheck = (row: FilterRow, checked: boolean) => {
-    row.checked = checked
-    row.children?.forEach((i) => changeCheck(i, checked))
-  }
-  changeCheck(modelValue.value, modelValue.value.checked)
+  queryFilter?.changeCheck(modelValue.value, modelValue.value.checked)
   emits('changeCheck')
 }
 
@@ -151,6 +148,7 @@ function addChildRow() {
 
 function handleRemove(index: number) {
   queryFilter!.removeRow(index, modelValue.value)
+  initChecked()
 }
 
 function switchLogic() {
