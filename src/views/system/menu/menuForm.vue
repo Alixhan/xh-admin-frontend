@@ -46,6 +46,8 @@ const formRef = ref()
 const formLoading = ref(false)
 const saveLoading = ref(false)
 const formData = ref({
+  handleType: '',
+  type: '',
   cache: true,
   enabled: true
 })
@@ -65,7 +67,7 @@ async function init() {
   formLoading.value = false
 }
 
-function initFormData() {
+async function initFormData() {
   if (handleType.value !== 'add') {
     // 查询明细
     return getMenuById(props.modelValue.id).then((res) => {
@@ -80,7 +82,7 @@ function initFormData() {
 }
 
 //初始化上级菜单数据
-function initParentMenuData() {
+async function initParentMenuData() {
   return queryMenuList({
     isPage: false,
     param: { flag: 'selectParentMenu' }
@@ -205,7 +207,7 @@ watchEffect(() => {
     },
     {
       prop: 'cache',
-      label: t('common.isEnabled'),
+      label: t('common.cache'),
       type: 'switch',
       // 按钮不需要排序号
       hidden: ['dir', 'btn'].includes(formData.value.type),
