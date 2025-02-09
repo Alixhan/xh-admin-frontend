@@ -1,7 +1,7 @@
 import createAxios from '@/utils/request'
 import type { AxiosProgressEvent } from 'axios'
 
-const fileBaseUrl = import.meta.env.VITE_FILE_BASE_URL
+const fileBaseUrl = import.meta.env.VITE_SYSTEM_BASE_URL
 
 /**
  * 文件上传

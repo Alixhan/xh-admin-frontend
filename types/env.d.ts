@@ -19,8 +19,6 @@ interface ImportMetaEnv {
   readonly VITE_BASE_URL: string
   // system服务请求前缀
   readonly VITE_SYSTEM_BASE_URL: string
-  // file服务请求前缀
-  readonly VITE_FILE_BASE_URL: string
   // generator服务请求前缀
   readonly VITE_GENERATOR_BASE_URL: string
   // 开发环境前端项目路径

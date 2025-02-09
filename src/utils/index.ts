@@ -19,7 +19,7 @@ export * from './string'
 export function getDownloadFileUrl(param: DownloadParam): string {
   if (!param) return ''
   if (!param.id && !param.object) return ''
-  let fileBaseUrl = import.meta.env.VITE_FILE_BASE_URL
+  let fileBaseUrl = import.meta.env.VITE_SYSTEM_BASE_URL
   if (!fileBaseUrl.startsWith('http')) fileBaseUrl = import.meta.env.VITE_BASE_URL + fileBaseUrl
   const systemStore = useSystemStore()
   return Object.keys(param).reduce(
