@@ -1,7 +1,7 @@
 ---
 ---
 <script setup>
-const previewSrcList = ["/image/install/img.png"];
+const previewSrcList = ["/image/img_8.png"];
 </script>
 # 安装
 ## 前端运行
@@ -15,11 +15,11 @@ const previewSrcList = ["/image/install/img.png"];
 
 `git` 拉取代码
 ::: code-group
-```shell [github]
-$ git clone https://github.com/Alixhan/xh-admin-frontend.git
-```
 ```shell [gitee]
 $ git clone https://gitee.com/sun-xiaohan/xh-admin-frontend.git
+```
+```shell [github]
+$ git clone https://github.com/Alixhan/xh-admin-frontend.git
 ```
 :::
 
@@ -84,28 +84,29 @@ $ pnpm dev
 `Maven 3.8 +` <br>
 `MySql 8.0 +` <br>
 `Redis 6.0 +` <br>
-`Nacos 2.2 +` <br>
+`Nacos 2.2 +` (非必须，参考[以单体架构本地配置文件运行](#以单体架构运行))<br>
 :::
 
 git 拉取代码
 ::: code-group
-```shell [github]
-# git拉取后端代码库的代码
-$ git clone https://github.com/Alixhan/xh-admin-backend.git
-```
 ```shell [gitee]
 # git拉取后端代码库的代码
 git clone https://gitee.com/sun-xiaohan/xh-admin-backend.git
+```
+```shell [github]
+# git拉取后端代码库的代码
+$ git clone https://github.com/Alixhan/xh-admin-backend.git
 ```
 :::
 
 **运行模块**
 
 - SystemApplication [系统服务] （<font color=Red>必须</font>）
-- FileApplication [文件服务] （可选）
 - GeneratorApplication [代码生成服务] （可选）
 ::: tip 提示
-后端集成了 `nacos` 作为配置中心和注册中心，启动前先配置好`nacos`，初始化好`nacos`配置数据库和系统初始数据，并在配置中心配置好相关项目配置。
+后端默认集成了 `nacos` 作为配置中心和注册中心，启动前先配置好`nacos`，初始化好`nacos`配置数据库和系统初始数据，并在配置中心配置好相关项目配置。
+  
+如若仅希望使用本地配置文件启动单体架构的服务，可以免去`nacos`的配置直接启动，参考[以单体架构本地配置文件运行](#以单体架构运行)
 
 如用 `docker` 部署，可直接参考 [部署中间件](/guide/deploy/middleware)
 :::
@@ -120,8 +121,8 @@ VITE_BASE_URL=http://demo.xhansky.cn/frontend-api
 
 # system服务请求前缀
 VITE_SYSTEM_BASE_URL=/system-service
-# file服务请求前缀
-VITE_FILE_BASE_URL=/file-service
+# generator服务请求前缀
+VITE_GENERATOR_BASE_URL=/generator-service
 ```
 
 前端服务会自动重启，控制台输出如下：
@@ -130,3 +131,11 @@ VITE_FILE_BASE_URL=/file-service
 09:48:27 [vite] server restarted.
 ```
 演示站账号：`admin` 密码：`admin123`
+
+## 以单体架构运行
+本项目为了方便后续 `spring cloud` 集成，默认使用 ^link(Nacos) 作为配置中心和注册中心，考虑到部分用户不方便部署 `nacos`，
+于是将这部分配置抽离至 `common-nacos` 模块，此模块依赖默认已经引入。
+
+若想使用本地配置文件以单体架构直接运行服务，只需将 `common-nacos` 依赖移除即可，如下图所示，
+移除或注释 `system-service` pom文件的 `common-nacos` 依赖，reload maven，然后启动服务即可不依赖`nacos`直接运行， `generator` 服务也是一样的道理：
+<el-image style="width: 100%;" :src="previewSrcList[0]" :preview-src-list="previewSrcList" fit="cover" :initial-index="0" alt="" />

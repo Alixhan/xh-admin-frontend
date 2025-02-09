@@ -33,7 +33,9 @@ const links = {
   'Spring Cloud Alibaba': 'https://spring.io/projects/spring-cloud-alibaba',
   MinIo: 'https://min.io/',
   'Sa-Token': 'https://sa-token.cc',
+  'SpringBoot': 'https://spring.io/projects/spring-boot/',
   swagger: 'https://swagger.io/',
+  'SpringDoc': 'https://swagger.io/',
   'xxl-job': 'https://www.xuxueli.com/xxl-job',
   fastjson2: 'https://github.com/alibaba/fastjson2',
   ip2region: 'https://github.com/lionsoul2014/ip2region',
@@ -47,6 +49,7 @@ const links = {
   Maven: 'https://maven.apache.org',
   Nginx: 'https://nginx.org/en',
   Docker: 'https://www.docker.com/',
+  Nacos: 'https://nacos.io/',
   // 内部链接
   'Upload 上传': '/frontend/components/upload',
   'Icon 图标': '/frontend/components/icon',

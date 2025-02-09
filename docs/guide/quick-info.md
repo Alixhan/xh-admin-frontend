@@ -16,7 +16,7 @@
 等。
 
 **后端技术栈：**
-[Java17](https://docs.oracle.com/en/java/javase/17/books.html)、
+[Java21](https://docs.oracle.com/en/java/javase/21/books.html)、
 [Springboot3](https://spring.io/projects/spring-boot)、
 [Spring-cloud](https://spring.io/projects/spring-cloud)、
 [Spring-cloud-alibaba](https://spring.io/projects/spring-cloud-alibaba)、
