@@ -22,7 +22,7 @@ export function getImageCaptcha(captchaKey: string, option?: RequestOption): Pro
 /**
  * 系统登录
  */
-export function userLogin(params: {[prop: string]: string}, option?: RequestOption) {
+export function userLogin(params: { [prop: string]: string }, option?: RequestOption) {
   //携带上当前语言信息
   params.locale = useSystemStore().locale
   params.localeLabel = getCurrentLocales().label
@@ -93,6 +93,11 @@ export function delUserByIds(ids: string, option: RequestOption) {
 // 用户批量导入
 export function importUsers(params: object[], option?: RequestOption) {
   return createAxios(option).post(`${systemBaseUrl}/api/system/user/imports`, params)
+}
+
+// 用户账号密码重置
+export function postRestPassword(params: object, option?: RequestOption) {
+  return createAxios(option).post(`${systemBaseUrl}/api/system/user/restPassword`, params)
 }
 
 export interface UserJobsParam {

@@ -280,6 +280,7 @@ export default {
       status: '用户状态',
       lockMsg: '锁定原因',
       jobMaintain: '岗位维护',
+      resetPassword: '密码重置',
       userCodeRule: '登录账号只能是大小写字母和数字！',
       select: '用户选择',
       jobSuccess: '岗位保存成功',
