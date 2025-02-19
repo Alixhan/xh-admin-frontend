@@ -97,7 +97,7 @@ export function importUsers(params: object[], option?: RequestOption) {
 
 // 用户账号密码重置
 export function postRestPassword(params: object, option?: RequestOption) {
-  return createAxios(option).post(`${systemBaseUrl}/api/system/user/restPassword`, params)
+  return createAxios(option).post(`${systemBaseUrl}/api/system/user/resetPassword`, params)
 }
 
 export interface UserJobsParam {
