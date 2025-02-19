@@ -1,6 +1,6 @@
 <template>
   <div class="form-view">
-    <el-scrollbar class="m-form-scroll">
+    <el-scrollbar class="m-form-scroll" max-height="70vh">
       <m-form
         ref="formRef"
         :colspan="handleType === 'detail' ? 12 : 24"
@@ -38,6 +38,7 @@ import { ref, watchEffect } from 'vue'
 import { getUserById, getUserGroups, getUserJobs, postSaveUser } from '@/api/system/user'
 import Jobs from '@/views/system/user/jobs.vue'
 import { useI18n } from 'vue-i18n'
+import { statusList } from '@/views/system/user/constant'
 
 const props = defineProps({
   handleType: {
@@ -119,6 +120,13 @@ watchEffect(() => {
       comment: '开启后，请求将自动续签超时时间，这样只要账号一直在使用中，就不会登录超时。'
     },
     { prop: 'enabled', label: t('common.isEnabled'), type: 'switch' },
+    {
+      prop: 'status',
+      label: t('system.user.status'),
+      type: 'radio-group',
+      itemList: statusList,
+      comment: '锁定的用户账号将无法登录。'
+    },
     { type: 'separator', label: t('system.user.job'), hidden: props.handleType !== 'detail' },
     { slotName: 'job', hidden: props.handleType !== 'detail' },
     { type: 'separator', label: t('system.user.inGroup'), hidden: props.handleType !== 'detail' },

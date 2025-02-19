@@ -23,25 +23,39 @@
 <script lang="ts" setup>
 import { useSystemStore } from '@/stores/system'
 import { ElMessageBox } from 'element-plus'
-import { ref } from 'vue'
+import { useLocalStorage } from '@vueuse/core'
 
 const systemStore = useSystemStore()
 
-const firstVisit = ref(false)
+const star = useLocalStorage('star', {
+  isStar: false,
+  time: 0
+})
 
-if (firstVisit.value) {
-  setTimeout(async () => {
-    await ElMessageBox.confirm('觉得不错的话，可以帮忙 star 点个小⭐⭐吗？感激不敬！', '小小请求', {
-      confirmButtonText: '马上去',
-      cancelButtonText: '我就不！',
-      closeOnClickModal: false
-    })
-      .then(() => {
-        open('https://gitee.com/sun-xiaohan/xh-admin-frontend')
+toStar()
+
+function toStar() {
+  if (!star.value.isStar) {
+    if (star.value.time) {
+      const time = new Date().getTime()
+      const days = (time - star.value.time) / (24 * 60 * 60 * 1000)
+      if (days < 10) return
+    }
+    setTimeout(() => {
+      ElMessageBox.confirm('觉得不错的话，可以帮忙给开源代码仓库点个 star 小⭐⭐吗？你的 star 是作者的前进的动力！', '小小请求', {
+        confirmButtonText: '马上去',
+        cancelButtonText: '我就不！',
+        closeOnClickModal: false
       })
-      .catch(() => {})
-    firstVisit.value = false
-  }, 60000)
+        .then(() => {
+          open('https://gitee.com/sun-xiaohan/xh-admin-frontend')
+          star.value.isStar = true
+        })
+        .catch(() => {
+          star.value.time = new Date().getTime()
+        })
+    }, 120000)
+  }
 }
 
 function open(url: string) {

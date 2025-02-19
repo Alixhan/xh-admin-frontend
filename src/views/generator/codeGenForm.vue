@@ -96,7 +96,8 @@ const columns = computed(() => {
                 type: 'select',
                 itemList: tables,
                 labelKey: 'tableName',
-                valueKey: 'tableName'
+                valueKey: 'tableName',
+                filterable: true
               }
             : {})
         },
@@ -115,7 +116,6 @@ const columns = computed(() => {
           comment: '必选！指定代码所属的微服务。',
           itemList: [
             { value: 'system', label: 'system 系统服务' },
-            { value: 'file', label: 'file 文件服务' }
           ],
           rules: [{ required: true, pattern: /^[a-z][a-z0-9]*$/ }]
         },
