@@ -14,8 +14,8 @@ XHan Admin（晓寒开源管理系统）是一个开源免费（前后端分离�
 后端代码库: [xh-admin-backend](https://github.com/Alixhan/xh-admin-backend)
 
 gitee 码云代码仓库<br>
-前端代码库: [xh-admin-frontend](https://github.com/Alixhan/xh-admin-frontend)<br>
-前端代码库: [xh-admin-frontend](https://github.com/Alixhan/xh-admin-frontend)
+前端代码库: [xh-admin-frontend](https://gitee.com/sun-xiaohan/xh-admin-frontend)<br>
+后端代码库: [xh-admin-frontend](https://gitee.com/sun-xiaohan/xh-admin-backend)
 
 ## 📚 文档
 
@@ -46,6 +46,7 @@ gitee 码云代码仓库<br>
 - **数据字典**
 - **系统监控**
 - **多角色切换**
+- **数据权限**
 - **代码生成器**
 
 ## 🚀 开始使用
