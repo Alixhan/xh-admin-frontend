@@ -434,7 +434,7 @@ INSERT INTO `sys_user_group_member` VALUES (1, 1, 1, '2023-08-11 17:43:38', NULL
 DROP TABLE IF EXISTS `sys_user_job`;
 CREATE TABLE `sys_user_job`  (
                                  `id` int NOT NULL AUTO_INCREMENT COMMENT 'id',
-                                 `type` bit(1) NULL DEFAULT NULL COMMENT '1：用户，2：用户组',
+                                 `type` bit(2) NULL DEFAULT NULL COMMENT '1：用户，2：用户组',
                                  `user_id` int NULL DEFAULT NULL COMMENT '用户id或者用户组的id',
                                  `sys_org_id` int NULL DEFAULT NULL COMMENT '机构id',
                                  `sys_role_id` int NULL DEFAULT NULL COMMENT '角色id',
@@ -546,6 +546,8 @@ create table gen_table
     columns_json  longtext             null comment '列json串',
     frontend_path varchar(200)         null comment '前端项目生成路径',
     backend_path  varchar(200)         null comment '后端项目生成路径',
+    is_create_menu bit(1) DEFAULT NULL COMMENT '是否创建系统菜单',
+    is_data_permission bit(1) DEFAULT NULL COMMENT '是否启用数据权限',
     create_time   datetime             null comment '创建时间',
     update_time   datetime             null comment '更新时间',
     create_by     int                  null comment '创建人',

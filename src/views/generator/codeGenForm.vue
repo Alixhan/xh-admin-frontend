@@ -65,6 +65,8 @@ const formData = ref({
   extend: 'BaseEntity',
   frontendPath: '',
   backendPath: '',
+  isCreateMenu: false,
+  isDataPermission: false,
   columns: []
 })
 
@@ -114,9 +116,7 @@ const columns = computed(() => {
           label: '所属服务',
           type: 'select',
           comment: '必选！指定代码所属的微服务。',
-          itemList: [
-            { value: 'system', label: 'system 系统服务' },
-          ],
+          itemList: [{ value: 'system', label: 'system 系统服务' }],
           rules: [{ required: true, pattern: /^[a-z][a-z0-9]*$/ }]
         },
         {
@@ -132,7 +132,10 @@ const columns = computed(() => {
           comment: '继承通用类，可以获得通用字段，比如创建时间，主键等',
           type: 'select',
           labelKey: 'value',
-          itemList: [{ value: 'BaseEntity' }, { value: 'DataPermissionEntity' }]
+          itemList: [{ value: 'BaseEntity' }, { value: 'DataPermissionEntity' }],
+          onChange(val: string) {
+            if (val !== 'DataPermissionEntity') formData.value.isDataPermission = false
+          }
         },
         {
           prop: 'frontendPath',
@@ -155,6 +158,19 @@ const columns = computed(() => {
           slots: {
             append: () => <el-button onClick={autoGetBackendPath}>自动获取</el-button>
           }
+        },
+        {
+          prop: 'isCreateMenu',
+          label: '创建系统菜单',
+          type: 'switch',
+          comment: '自动创建系统菜单及按钮'
+        },
+        {
+          prop: 'isDataPermission',
+          disabled: formData.value.extend !== 'DataPermissionEntity',
+          label: '启用数据权限',
+          type: 'switch',
+          comment: '须继承DataPermissionEntity实体类后可选，选中后将自动创建数据实体，列表查询自动启用数据权限。'
         },
         { type: 'separator', label: '字段配置' },
         { slotName: 'design' }
