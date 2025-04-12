@@ -373,6 +373,7 @@ CREATE TABLE `sys_user`  (
                              `allow_repeat` bit(1) NULL DEFAULT NULL COMMENT '允许重复登录1：允许，0：不允许',
                              `auto_renewal` bit(1) NULL DEFAULT NULL COMMENT '自动续签，请求会自动延长token失效时间1：自动，0：不自动',
                              `is_demo` bit(1) NULL DEFAULT NULL COMMENT '是否演示账号1：是，0：否',
+                             `role_sorter` varchar(500) NULL DEFAULT NULL COMMENT '角色排序',
                              `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
                              `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
                              `create_by` int NULL DEFAULT NULL COMMENT '创建人',
@@ -384,7 +385,7 @@ CREATE TABLE `sys_user`  (
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES (1, 'admin', '超级管理员', '$2a$10$gCTe1KKFwO5v7OYUvyVKqevvOSDuVzzBV39cYGHB41BehvoKNNcEm', '20231207/2b2efd0f7de6470f9259ac2ab6e4202f.gif', '18888888888', 1, 0, NULL, 1, 1, 1, NULL, '2023-02-26 20:19:50', '2024-05-17 19:23:05', NULL, 1, 0);
+INSERT INTO `sys_user` VALUES (1, 'admin', '超级管理员', '$2a$10$gCTe1KKFwO5v7OYUvyVKqevvOSDuVzzBV39cYGHB41BehvoKNNcEm', '20231207/2b2efd0f7de6470f9259ac2ab6e4202f.gif', '18888888888', 1, 0, NULL, 1, 1, 1, NULL, NULL, '2023-02-26 20:19:50', '2024-05-17 19:23:05', NULL, 1, 0);
 
 -- ----------------------------
 -- Table structure for sys_user_group
