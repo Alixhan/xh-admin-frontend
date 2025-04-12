@@ -10,13 +10,7 @@
         :title="$t('system.user.role')"
         direction="rtl"
       >
-        <div v-for="(item, i) in systemStore.orgRoles" :key="i" class="role-item">
-          <el-text> {{ item.orgName }} -- {{ item.roleName }}</el-text>
-          <div>
-            <el-tag v-if="item.active" class="ml-2" type="success">{{ $t('layout.activeRole') }}</el-tag>
-            <el-link v-else type="primary" @click="switchRole(item)">{{ $t('common.switch') }}</el-link>
-          </div>
-        </div>
+        <SwitchRole @close="drawerVisible = false" />
       </el-drawer>
     </div>
     <template #dropdown>
@@ -38,6 +32,7 @@ import { computed, ref } from 'vue'
 import { getDownloadFileUrl } from '@/utils'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
+import SwitchRole from '@/layout/SwitchRole.vue'
 
 const { t } = useI18n()
 const systemStore = useSystemStore()
@@ -69,13 +64,6 @@ function handleCommand(key) {
     })
   }
 }
-
-//角色切换
-function switchRole(orgRole) {
-  systemStore.switchRole(orgRole).then(() => {
-    drawerVisible.value = false
-  })
-}
 </script>
 <style scoped lang="scss">
 .avatar {
@@ -87,11 +75,5 @@ function switchRole(orgRole) {
     font-size: 14px;
     margin-left: 10px;
   }
-}
-
-.role-item {
-  display: flex;
-  justify-content: space-between;
-  padding: 5px;
 }
 </style>

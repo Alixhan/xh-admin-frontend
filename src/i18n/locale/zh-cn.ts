@@ -131,11 +131,13 @@ export default {
     successMsg: '操作成功',
     optFailed: '操作失败',
     noMenus: '当前角色未分配菜单，请重新登录！',
-    hide: '隐藏'
+    hide: '隐藏',
+    default: '默认'
   },
   layout: {
     switchLocaleError: '切换语言失败',
     activeRole: '当前角色',
+    defaultRole: '默认角色',
     personalCenter: '个人中心',
     switchRole: '切换角色',
     logout: '注销',
@@ -308,7 +310,7 @@ export default {
       name: '数据权限名称',
       expression: '权限表达式',
       positive: '是',
-      negative: '非',
+      negative: '非'
     }
   },
   monitor: {
@@ -333,6 +335,6 @@ export default {
     add: '@:generator.label@:common.add',
     edit: '@:generator.label@:common.edit',
     detail: '@:generator.label@:common.detail',
-    download: '下载代码',
+    download: '下载代码'
   }
 }

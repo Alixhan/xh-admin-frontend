@@ -60,6 +60,11 @@ export function kickOut(params = {}, option?: RequestOption) {
   return createAxios(option).post(`${systemBaseUrl}/api/system/user/kickOut`, params)
 }
 
+// 用户角色排序
+export function roleSort(params = '', option?: RequestOption) {
+  return createAxios(option).post(`${systemBaseUrl}/api/system/user/roleSort`, params)
+}
+
 // 保存系统用户
 export function personalCenterSave(params = {}, option?: RequestOption) {
   return createAxios(option).post(`${systemBaseUrl}/api/system/user/personalCenterSave`, params)
