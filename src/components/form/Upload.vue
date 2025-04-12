@@ -158,8 +158,12 @@ const uploadParam = computed(() => {
   return param
 })
 
+// 标记此次update:modelValue 不触发fileList更新
+let sign: boolean = false
 const fileList = ref<any[]>([])
+
 watchEffect(() => {
+  if (sign) return (sign = true)
   if (props.single && props.modelValue) {
     const downloadParam: DownloadParam = {}
     if (props.single === 'id') {
@@ -321,6 +325,7 @@ function openFileLib(type?: string) {
 }
 
 function emitModelValue() {
+  sign = true
   if (props.single) {
     const file = fileList.value[0]
     let val = file?.id
