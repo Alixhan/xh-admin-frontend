@@ -1,5 +1,6 @@
 <template>
   <div class="action-view">
+    <Github class="action-item" />
     <FullScreenControl class="action-item" />
     <SwitchStyle class="action-item" />
     <SwitchLocale class="action-item" />
@@ -8,6 +9,7 @@
   </div>
 </template>
 <script setup>
+import Github from './Github.vue'
 import FullScreenControl from './FullScreenControl.vue'
 import UserAvatar from './UserAvatar.vue'
 import SwitchStyle from './SwitchStyle.vue'
