@@ -36,8 +36,43 @@ CREATE TABLE `sys_dict_detail`  (
 -- ----------------------------
 -- Records of sys_dict_detail
 -- ----------------------------
-INSERT INTO `sys_dict_detail` VALUES (1, 1, NULL, '1', '是', 1, 1, '2023-06-01 16:17:22', '2024-01-19 14:20:36', NULL, 1, 0);
+INSERT INTO `sys_dict_detail` VALUES (1, 1, NULL, '1', '是', 1, 1, '2023-06-01 16:17:22', '2024-12-12 23:10:00', NULL, 1, 0);
 INSERT INTO `sys_dict_detail` VALUES (2, 1, NULL, '0', '否', 2, 1, '2023-06-01 16:17:50', NULL, NULL, NULL, 0);
+INSERT INTO `sys_dict_detail` VALUES (3, 2, NULL, 'INT', 'INT', NULL, 1, '2024-09-12 23:50:29', NULL, 1, NULL, 0);
+INSERT INTO `sys_dict_detail` VALUES (4, 2, NULL, 'DATETIME', 'DATETIME', NULL, 1, '2024-09-12 23:50:29', NULL, 1, NULL, 0);
+INSERT INTO `sys_dict_detail` VALUES (5, 2, NULL, 'TINYINT', 'TINYINT', NULL, 1, '2024-09-12 23:50:29', NULL, 1, NULL, 0);
+INSERT INTO `sys_dict_detail` VALUES (6, 2, NULL, 'VARCHAR', 'VARCHAR', NULL, 1, '2024-09-12 23:50:29', NULL, 1, NULL, 0);
+INSERT INTO `sys_dict_detail` VALUES (7, 2, NULL, 'TEXT', 'TEXT', NULL, 1, '2024-09-12 23:50:29', NULL, 1, NULL, 0);
+INSERT INTO `sys_dict_detail` VALUES (8, 2, NULL, 'DOUBLE', 'DOUBLE', NULL, 1, '2024-09-12 23:50:29', NULL, 1, NULL, 0);
+INSERT INTO `sys_dict_detail` VALUES (9, 2, NULL, 'MEDIUMTEXT', 'MEDIUMTEXT', NULL, 1, '2024-09-12 23:50:29', NULL, 1, NULL, 0);
+INSERT INTO `sys_dict_detail` VALUES (10, 2, NULL, 'LONGTEXT', 'LONGTEXT', NULL, 1, '2024-09-12 23:50:29', NULL, 1, NULL, 0);
+INSERT INTO `sys_dict_detail` VALUES (11, 2, NULL, 'BIGINT', 'BIGINT', NULL, 1, '2024-09-12 23:50:29', NULL, 1, NULL, 0);
+INSERT INTO `sys_dict_detail` VALUES (12, 2, NULL, 'BIT', 'BIT', NULL, 1, '2024-09-12 23:50:29', NULL, 1, NULL, 0);
+INSERT INTO `sys_dict_detail` VALUES (13, 2, NULL, 'ENUM', 'ENUM', NULL, 1, '2024-09-12 23:50:29', NULL, 1, NULL, 0);
+INSERT INTO `sys_dict_detail` VALUES (14, 2, NULL, 'JSON', 'JSON', NULL, 1, '2024-09-12 23:50:29', NULL, 1, NULL, 0);
+INSERT INTO `sys_dict_detail` VALUES (15, 2, NULL, 'TIMESTAMP', 'TIMESTAMP', NULL, 1, '2024-09-12 23:50:29', NULL, 1, NULL, 0);
+INSERT INTO `sys_dict_detail` VALUES (16, 2, NULL, 'SET', 'SET', NULL, 1, '2024-09-12 23:50:29', NULL, 1, NULL, 0);
+INSERT INTO `sys_dict_detail` VALUES (17, 2, NULL, 'BINARY', 'BINARY', NULL, 1, '2024-09-12 23:50:29', NULL, 1, NULL, 0);
+INSERT INTO `sys_dict_detail` VALUES (18, 2, NULL, 'CHAR', 'CHAR', NULL, 1, '2024-09-12 23:50:29', NULL, 1, NULL, 0);
+INSERT INTO `sys_dict_detail` VALUES (19, 2, NULL, 'FLOAT', 'FLOAT', NULL, 1, '2024-09-12 23:50:29', NULL, 1, NULL, 0);
+INSERT INTO `sys_dict_detail` VALUES (20, 2, NULL, 'VARBINARY', 'VARBINARY', NULL, 1, '2024-09-12 23:50:29', NULL, 1, NULL, 0);
+INSERT INTO `sys_dict_detail` VALUES (21, 2, NULL, 'DECIMAL', 'DECIMAL', NULL, 1, '2024-09-12 23:50:29', NULL, 1, NULL, 0);
+INSERT INTO `sys_dict_detail` VALUES (22, 2, NULL, 'BLOB', 'BLOB', NULL, 1, '2024-09-12 23:50:29', NULL, 1, NULL, 0);
+INSERT INTO `sys_dict_detail` VALUES (23, 2, NULL, 'MEDIUMBLOB', 'MEDIUMBLOB', NULL, 1, '2024-09-12 23:50:29', NULL, 1, NULL, 0);
+INSERT INTO `sys_dict_detail` VALUES (24, 2, NULL, 'SMALLINT', 'SMALLINT', NULL, 1, '2024-09-12 23:50:29', NULL, 1, NULL, 0);
+INSERT INTO `sys_dict_detail` VALUES (25, 2, NULL, 'TIME', 'TIME', NULL, 1, '2024-09-12 23:50:29', NULL, 1, NULL, 0);
+INSERT INTO `sys_dict_detail` VALUES (26, 2, NULL, 'LONGBLOB', 'LONGBLOB', NULL, 1, '2024-09-12 23:50:29', NULL, 1, NULL, 0);
+INSERT INTO `sys_dict_detail` VALUES (27, 3, NULL, 'String', 'String', NULL, 1, '2024-09-12 23:52:37', NULL, 1, NULL, 0);
+INSERT INTO `sys_dict_detail` VALUES (28, 3, NULL, 'Integer', 'Integer', NULL, 1, '2024-09-12 23:52:37', NULL, 1, NULL, 0);
+INSERT INTO `sys_dict_detail` VALUES (29, 3, NULL, 'Long', 'Long', NULL, 1, '2024-09-12 23:52:37', NULL, 1, NULL, 0);
+INSERT INTO `sys_dict_detail` VALUES (30, 3, NULL, 'Double', 'Double', NULL, 1, '2024-09-12 23:52:37', NULL, 1, NULL, 0);
+INSERT INTO `sys_dict_detail` VALUES (31, 3, NULL, 'BigDecimal', 'BigDecimal', NULL, 1, '2024-09-12 23:52:37', NULL, 1, NULL, 1);
+INSERT INTO `sys_dict_detail` VALUES (32, 3, NULL, 'LocalDateTime', 'LocalDateTime', NULL, 1, '2024-09-12 23:52:37', NULL, 1, NULL, 0);
+INSERT INTO `sys_dict_detail` VALUES (33, 3, NULL, 'LocalDate', 'LocalDate', NULL, 1, '2024-09-12 23:52:37', NULL, 1, NULL, 0);
+INSERT INTO `sys_dict_detail` VALUES (34, 3, NULL, 'LocalTime', 'LocalTime', NULL, 1, '2024-09-12 23:52:37', NULL, 1, NULL, 0);
+INSERT INTO `sys_dict_detail` VALUES (35, 3, NULL, 'Boolean', 'Boolean', NULL, 1, '2024-11-09 12:07:50', NULL, 1, NULL, 0);
+INSERT INTO `sys_dict_detail` VALUES (36, 2, NULL, 'DATE', 'DATE', NULL, 1, '2024-11-09 16:34:09', NULL, 1, NULL, 0);
+INSERT INTO `sys_dict_detail` VALUES (37, 3, NULL, 'BigDecimal', 'BigDecimal', NULL, 1, '2024-11-20 18:13:33', NULL, 1, NULL, 0);
 
 -- ----------------------------
 -- Table structure for sys_dict_type
@@ -59,6 +94,8 @@ CREATE TABLE `sys_dict_type`  (
 -- Records of sys_dict_type
 -- ----------------------------
 INSERT INTO `sys_dict_type` VALUES (1, '是否', 1, '2023-06-01 16:15:15', '2023-06-01 16:15:17', 1, 1, 0);
+INSERT INTO `sys_dict_type` VALUES (2, 'mysql字段类型', 1, '2024-09-12 23:35:55', NULL, 1, NULL, 0);
+INSERT INTO `sys_dict_type` VALUES (3, 'java类型', 1, '2023-05-26 12:57:44', '2023-05-26 12:57:47', 1, 1, 0);
 
 -- ----------------------------
 -- Table structure for sys_file
@@ -126,7 +163,7 @@ CREATE TABLE `sys_log`  (
                             `update_by` int NULL DEFAULT NULL COMMENT '修改人',
                             `deleted` bit(1) NOT NULL DEFAULT 0 COMMENT '是否已删除1：是，0：否',
                             PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 183 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统日志' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统日志' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for sys_menu
