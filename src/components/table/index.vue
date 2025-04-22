@@ -8,6 +8,7 @@ import {
   type Ref,
   ref,
   shallowRef,
+  type SlotsType,
   toRef,
   type VNode,
   watch
@@ -729,6 +730,11 @@ export default defineComponent(
     name: 'MTable',
     inheritAttrs: true,
     props: { ...mTableProps },
+    slots: Object as SlotsType<{
+      default: void
+      'left-action': void
+      'right-action': void
+    }>,
     emits: [
       'select',
       'select-all',

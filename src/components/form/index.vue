@@ -1,5 +1,5 @@
 <script lang="tsx">
-import { createVNode, provide, ref, shallowRef, watchEffect } from 'vue'
+import { createVNode, provide, ref, shallowRef, type SlotsType, watchEffect } from 'vue'
 import { generateDynamicColumn, generateFormRules, generatePlaceholder, vModelValue } from '@/components/mutils'
 import { useSystemStore } from '@/stores/system'
 import { useElementSize } from '@vueuse/core'
@@ -17,6 +17,10 @@ export default {
   inheritAttrs: false,
   props: { ...mFormProps },
   emits: { ...mFormEmits },
+  slots: Object as SlotsType<{
+    default: void
+    'top-btn': boolean
+  }>,
   setup(
     props,
     {
@@ -107,7 +111,9 @@ export default {
 
     //生成表单列
     function generateFormColumns() {
-      return formItemParams.value.map((i) => {
+      let topBtnIndex = -1
+      let spans = 0
+      const columnViews = formItemParams.value.map((i, index) => {
         // 隐藏的不显示
         if (i.hidden) return null
         if (i.columnParam.type === 'separator') {
@@ -120,6 +126,12 @@ export default {
           )
         }
         const column = i.columnParam
+        const span = getColSpan(column)
+        if (topBtnIndex === -1) {
+          const sp = spans + span
+          if (sp >= 24) topBtnIndex = index
+          else spans = sp
+        }
         // 允许用户按照自己的slotName定制
         if (column.slotName) return slots[column.slotName]?.(i)
         const param = {
@@ -153,11 +165,24 @@ export default {
           }
         }
         return (
-          <el-col span={getColSpan(column)}>
+          <el-col span={span}>
             <el-form-item {...i.formItemParams} v-slots={formItemSlots} />
           </el-col>
         )
       })
+      if (slots['top-btn']) {
+        const btnView = (
+          <el-col span={spans < 24 ? 24 - spans : getColSpan({})}>
+            <el-form-item label-width="0">{slots['top-btn'](topBtnIndex !== -1)}</el-form-item>
+          </el-col>
+        )
+        if (topBtnIndex === -1) {
+          columnViews.push(btnView)
+        } else {
+          columnViews.splice(topBtnIndex, 0, btnView)
+        }
+      }
+      return columnViews
     }
 
     //生成骨架屏表单列

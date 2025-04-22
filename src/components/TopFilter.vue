@@ -1,32 +1,33 @@
 <template>
-  <div :class="`filter-tabs ${expand ? 'expand-filter' : ''}`">
-    <div v-if="systemStore.layout.widthShrink" class="filter-title" />
-    <el-text v-else class="filter-title">
-      <m-svg-icon class="title-logo" src="@/assets/icon/search-list.svg" inherited />
-      {{ t('m.topFilter.query') }}
-    </el-text>
-    <div class="filter-view">
-      <el-scrollbar max-height="45vh">
-        <div style="overflow: hidden" :style="!expand && `height: ${elComponentSizeCssVar};`">
-          <m-form ref="topFilterFormRef" :columns="columns" :model="param" @keyup="keyup" label-position="right" />
-        </div>
-      </el-scrollbar>
-    </div>
-    <div class="filter-btn">
-      <el-button
-        :icon="expand ? 'ArrowUp' : 'ArrowDown'"
-        text
-        @click="() => (expand = !expand)"
-        type="primary"
-        style="padding: 0 5px"
+  <div class="filter-view">
+    <el-scrollbar max-height="45vh">
+      <div
+        style="overflow: hidden"
+        @scroll="(e: any) => (e.target.scrollTop = 0)"
+        :style="!expand && `height: calc(${elComponentSizeCssVar} + 14px);`"
       >
-        {{ expand ? t('m.topFilter.collapse') : t('m.topFilter.expand') }}
-      </el-button>
-      <el-button type="primary" icon="search" @click="search" :loading="loading">
-        {{ t('m.topFilter.search') }}
-      </el-button>
-      <el-button @click="reset"> {{ t('m.topFilter.reset') }}</el-button>
-    </div>
+        <m-form ref="topFilterFormRef" :columns="columns" :model="param" @keyup="keyup" label-position="right">
+          <template #top-btn="hasMore">
+            <div class="filter-btn">
+              <el-button
+                v-if="hasMore"
+                :icon="expand ? 'ArrowUp' : 'ArrowDown'"
+                text
+                @click="() => (expand = !expand)"
+                type="primary"
+                style="padding: 0 5px"
+              >
+                {{ expand ? t('m.topFilter.collapse') : t('m.topFilter.expand') }}
+              </el-button>
+              <el-button type="primary" icon="search" @click="search" :loading="loading">
+                {{ t('m.topFilter.search') }}
+              </el-button>
+              <el-button @click="reset"> {{ t('m.topFilter.reset') }}</el-button>
+            </div>
+          </template>
+        </m-form>
+      </div>
+    </el-scrollbar>
   </div>
 </template>
 
@@ -36,7 +37,6 @@ import { useSystemStore } from '@/stores/system'
 import { useI18n } from 'vue-i18n'
 import { useElComponentSizeCssVar } from '@/utils'
 import MForm from '@/components/form/index.vue'
-import MSvgIcon from '@/components/SvgIcon.vue'
 import type { CommonFormColumn } from '@i/components/form'
 
 /**
@@ -81,8 +81,9 @@ const expand = ref(false)
 
 const elComponentSizeCssVar = useElComponentSizeCssVar()
 
-function search() {
+async function search() {
   if (systemStore.layout.heightShrink) expand.value = false
+  await topFilterFormRef.value.submit()
   emit('search', props.param)
 }
 
@@ -101,58 +102,22 @@ function keyup(e: KeyboardEvent) {
 defineExpose({ reset })
 </script>
 <style scoped lang="scss">
-:deep(.el-form-item--small) {
-  margin-bottom: 10px !important;
+:deep(.el-form-item) {
+  margin-bottom: 14px !important;
+
+  .el-form-item__error {
+    font-size: 10px !important;
+  }
 }
 
-.filter-tabs {
+.filter-view {
   background-color: var(--el-bg-color);
-  padding: 7px 15px 7px 15px;
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  grid-auto-flow: row dense;
-  gap: 10px;
-  transition: all 0.2s ease-in-out;
-  align-items: center;
-
-  .filter-title {
-    display: flex;
-    align-items: center;
-    color: var(--el-color-primary);
-
-    .title-logo {
-      margin-right: 0.4em;
-      line-height: 1em;
-      width: 1.5em;
-      height: 1.5em;
-    }
-  }
-
-  .filter-view {
-    overflow: hidden;
-    @media all and (max-width: 400px) {
-      height: 0;
-    }
-  }
-
-  .filter-btn {
-    flex-grow: 1;
-    text-align: right;
-    margin: 5px 0;
-  }
+  padding: 18px 15px 0 15px;
+  overflow: hidden;
 }
 
-.expand-filter {
-  grid-template-columns: auto 1fr auto;
-
-  .filter-title {
-    grid-column-start: span 2;
-  }
-
-  .filter-view {
-    height: auto;
-    overflow: hidden;
-    grid-column-start: span 3;
-  }
+.filter-btn {
+  flex-grow: 1;
+  text-align: right;
 }
 </style>
