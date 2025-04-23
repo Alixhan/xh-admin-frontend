@@ -112,7 +112,7 @@ defineExpose({ reset })
 
 .filter-view {
   background-color: var(--el-bg-color);
-  padding: 18px 15px 0 15px;
+  padding: 14px 15px 0 15px;
   overflow: hidden;
 }
 
