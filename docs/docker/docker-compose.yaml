@@ -1,5 +1,5 @@
 version: "3.9"
-# 有个细节还是说下：方便新人了解，docker-compose up会创建的默认的网络，网络的名称为 ”当前compose文件所在文件夹名称_default“，例如此配置文件在data目录下，所以默认网络为 data_default
+# 有个细节还是说下：方便新人了解，docker compose up会创建的默认的网络，网络的名称为 ”当前compose文件所在文件夹名称_default“，例如此配置文件在data目录下，所以默认网络为 data_default
 # 设置COMPOSE_PROJECT_NAME环境变量可以定制默认网络名称
 # 在同一个compose配置文件中启动的所有容器默认会加入同一个网络，so,容器间互相访问可以直接通过容器container_name访问，无需额外的配置
 services:
@@ -43,7 +43,7 @@ services:
   jenkins:
     image: jenkins/jenkins:lts-jdk17
     container_name: jenkins
-    # 用root用户启动，因为jenkins需要调用宿主机的docker,docker-compose，会有权限问题，怕麻烦直接root省事，但要注意网络安全
+    # 用root用户启动，因为jenkins需要调用宿主机的 docker 会有权限问题，怕麻烦直接root省事，但要注意网络安全
     user: root
     ports:
       - "8080:8080"
@@ -53,9 +53,6 @@ services:
       # 映射宿主机docker，这样再容器内部执行docker就等于在宿主机执行
       - /var/run/docker.sock:/var/run/docker.sock
       - /usr/bin/docker:/bin/docker
-      # 映射宿主机docker-compose，这样再容器内部执行docker-compose就等于在宿主机执行
-      - /usr/local/bin/docker-compose:/usr/local/bin/docker-compose
-      - /usr/bin/docker-compose:/usr/bin/docker-compose
     environment:
       JAVA_OPTS: "-Xmx256m -Xms256m"
     deploy:
@@ -87,7 +84,7 @@ services:
       - mysql
     restart: always
   nacos:
-    image: nacos/nacos-server:v2.2.3-slim
+    image: nacos/nacos-server:v3.0.1-slim
     container_name: nacos
     environment:
       MODE: "standalone"
@@ -107,6 +104,7 @@ services:
     volumes:
       - ./nacos/logs:/home/nacos/logs
     ports:
+      - "18080:8080"
       - "8848:8848"
       - "9848:9848"
     depends_on:

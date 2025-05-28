@@ -26,7 +26,7 @@
 import { ref, shallowRef } from 'vue'
 import { ElCollapseTransition } from 'element-plus'
 
-const demos = import.meta.glob(`@d/frontend/demo/**/*.*`)
+const demos = import.meta.glob(`@d/document/frontend/demo/**/*.*`)
 
 defineOptions({
   name: 'VpDemo'
@@ -37,7 +37,7 @@ const props = defineProps({
 })
 
 const component = shallowRef()
-demos[`/frontend/demo/${props.path}`]().then((res) => {
+demos[`/document/frontend/demo/${props.path}`]().then((res) => {
   component.value = res.default
 })
 

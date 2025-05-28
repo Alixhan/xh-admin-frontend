@@ -143,7 +143,7 @@ components/form/native
 | `'upload'`                                                                                                                         | ElUpload                                 |                               |
 | `'radio-group'`                                                                                                                    | ElRadioGroup                             |                               |
 | `'checkbox-group'`                                                                                                                 | ElCheckboxGroup                          |                               |
-| `'icon-select'`                                                                                                                    | [MIconSelect](/frontend/components/icon) |                               |
-| `'upload-img'`  \| `'upload-file'`                                                                                                 | [MUpload](/frontend/components/upload)   |                               |
+| `'icon-select'`                                                                                                                    | [MIconSelect](/document/frontend/components/icon) |                               |
+| `'upload-img'`  \| `'upload-file'`                                                                                                 | [MUpload](/document/frontend/components/upload)   |                               |
 | `'span'`\| `'div'`\| `'p'`\| `'a'`\| `'i'`                                                                                         | MNative                                  | 表单的值将作为这些原生标签的 innerHtml 插入展示 |
 | `'blank'`                                                                                                                          | MNative                                  | 将此表单项将显示为空                    |

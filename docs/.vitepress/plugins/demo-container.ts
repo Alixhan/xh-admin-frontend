@@ -39,7 +39,7 @@ function getFileDetail(url: string) {
     dir = '/' + url.slice(0, lastIndex)
     fileName = url.slice(lastIndex + 1)
   }
-  const dirPath = fileURLToPath(new URL(`../../frontend/demo${dir}`, import.meta.url))
+  const dirPath = fileURLToPath(new URL(`../../document/frontend/demo${dir}`, import.meta.url))
   const filesAndDirectories = readdirSync(dirPath)
   for (const str of filesAndDirectories) {
     const fullPath = join(dirPath, str)

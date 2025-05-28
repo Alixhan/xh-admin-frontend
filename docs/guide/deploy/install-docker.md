@@ -105,26 +105,3 @@ $ sudo systemctl daemon-reload && sudo systemctl enable docker.service && sudo s
 $ docker info
 ```
 可以看到 Docker Root Dir 现在指向 /data/docker 了，说明切换成功
-
-
-## 安装docker-compose
-[docker-compose](https://docs.docker.com/compose)是使用docker中必备工具
-具有很多优点，配置文件配置多容器部署，可移植性好，可读性好，后期运维方便查看，容器间的关系一目了然，所有配置都存在配置文件中，后面好回溯。咱们用就对了，推荐用docker-compose部署容器，不用写复杂的docker脚本
-```sh
-# 下载文件放到/usr/local/bin目录并且给与权限就能用
-$ curl -SL \
-  https://github.com/docker/compose/releases/download/v2.23.0/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose
-# 下载可能比较慢，耐心等待一下
-
-# 如果服务器下载比较慢，你也可以本地下载，上传到服务器/usr/local/bin目录
-# 手动授予执行权限
-$ chmod 777 /usr/local/bin/docker-compose
-
-# 测试一下
-$ docker-compose -v
-# 输出版本信息 表示安装成功
-Docker Compose version v2.23.0
-
-# 如果报错可能是当前用户权限问题，软连接到 /usr/bin下应该就可以了
-$ sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
-```

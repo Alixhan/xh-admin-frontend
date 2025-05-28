@@ -5,7 +5,7 @@ const previewSrcList = ["/image/img.png", "/image/img_1.png"];
 # 部署中间件
 
 :::info 提示
-`docker-compose` 结构化的yaml文档可以清晰的了解整个系统容器，所有中间件均采用 `docker-compose` 工具部署。
+`docker-compose` 结构化的yaml文档可以清晰的了解整个系统容器，所有中间件均采用 `docker compose` 工具部署。
 
 为方便快速搭建环境，我已经将相关部署配置文件放在 [docs/docker/](https://gitee.com/sun-xiaohan/xh-admin-frontend/tree/main/docs/docker)
 目录下，直接拷贝至服务器运行即可完成所需中间件的部署。
@@ -14,7 +14,7 @@ const previewSrcList = ["/image/img.png", "/image/img_1.png"];
 ## 说明
 
 :::tip 有个细节还是必要说下：
-`docker-compose up` 会创建默认的网络，网络的名称为 `当前compose文件所在文件夹名称_default`，例如此配置文件在data目录下，所以默认网络为
+`docker compose up` 会创建默认的网络，网络的名称为 `当前compose文件所在文件夹名称_default`，例如此配置文件在data目录下，所以默认网络为
 `data_default`。
 
 设置 `COMPOSE_PROJECT_NAME` 环境变量可以定制默认网络名称，本节教程中我设置的是 `xh` ，所以会创建一个 `xh_default` 的网络。
@@ -31,7 +31,7 @@ docker
 ├─ mysql                               
 │  ├─ docker-entrypoint-initdb.d       // 需要初始化的sql放在此目录
 │  │  ├─ init_nacos_config.sql        // nacos配置初始化sql
-│  │  ├─ init_xh_admin.sql               // 晓寒系统初始化sql
+│  │  ├─ init_xh_admin.sql               // 晓寒管理系统初始化sql
 │  │  └─ init_xxl_job.sql              // xxl-job配置初始化sql
 │  └─ my.cnf                          // mysql配置文件
 ├─ nginx                               
@@ -76,7 +76,7 @@ root 4096 Nov  2 20:34 nginx
 直接执行compose脚本部署：
 
 ```sh
-$ docker-compose up -d
+$ docker compose up -d
 ```
 会自动下载所有的镜像文件，等待一段时间，咱们中间件的应用就部署好了：
 <el-image style="width: 100%;" :src="previewSrcList[0]" :preview-src-list="previewSrcList" fit="cover" :initial-index="

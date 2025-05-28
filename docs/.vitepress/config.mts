@@ -86,8 +86,7 @@ export default defineConfig({
         },
         nav: [
             {text: '开始✨', activeMatch: '/guide', link: '/guide/introduction'},
-            {text: '前端手册', activeMatch: '/frontend', link: '/frontend/'},
-            {text: '后端手册', activeMatch: '/backend', link: '/backend/'},
+            {text: '使用手册', activeMatch: '/document', link: '/document/'},
             {text: '演示站', link: 'http://demo.xhansky.cn'},
             {text: '更新日志', link: '/guide/release'},
         ],
@@ -144,38 +143,50 @@ export default defineConfig({
                     ]
                 }
             ],
-            frontend: [
-                {text: '总览', link: '/frontend/'},
-                {text: '前端规范', link: '/frontend/specification'},
+            document: [
+                {text: '前言', link: '/document/'},
+                {text: '数据权限', link: '/document/permission/data-permission'},
                 {
-                    text: '组件',
-                    base: '/frontend/components',
+                    text: '前端手册',
+                    base: '/document/frontend',
+                    link: '/',
                     items: [
-                        {text: 'Form 表单', link: '/form'},
-                        {text: 'Table 表格', link: '/table'},
-                        {text: 'Upload 上传', link: '/upload'},
-                        {text: 'Icon 图标', link: '/icon'},
-                        {text: 'SingleDatePicker 日期范围', link: '/single-date-picker'},
-                        {text: 'ExcelImport 导入', link: '/excel-import'},
+                        {text: '前端规范', link: '/specification'},
+                        {
+                            text: '组件',
+                            base: '/document/frontend/components',
+                            items: [
+                                {text: 'Form 表单', link: '/form'},
+                                {text: 'Table 表格', link: '/table'},
+                                {text: 'Upload 上传', link: '/upload'},
+                                {text: 'Icon 图标', link: '/icon'},
+                                {text: 'SingleDatePicker 日期范围', link: '/single-date-picker'},
+                                {text: 'ExcelImport 导入', link: '/excel-import'},
+                            ]
+                        },
+                        {
+                            text: '工具类',
+                            base: '/document/frontend/utils',
+                            items: [
+                                {text: 'Validate 数据校验', link: '/validate'},
+                                {text: 'EChart 图表', link: '/echart'},
+                                {text: 'Request 请求', link: '/request'},
+                                {text: 'Dict 获取数据字典', link: '/dict'},
+                                {text: '获取文件请求链接', link: '/file-url'},
+                                {text: 'ContextMenu 上下文菜单', link: '/context-menu'},
+                            ]
+                        },
                     ]
                 },
                 {
-                    text: '工具类',
-                    base: '/frontend/utils',
+                    text: '后端手册',
+                    base: '/document/backend',
+                    link: '/',
                     items: [
-                        {text: 'Validate 数据校验', link: '/validate'},
-                        {text: 'EChart 图表', link: '/echart'},
-                        {text: 'Request 请求', link: '/request'},
-                        {text: 'Dict 获取数据字典', link: '/dict'},
-                        {text: '获取文件请求链接', link: '/file-url'},
-                        {text: 'ContextMenu 上下文菜单', link: '/context-menu'},
+                        {text: 'swagger 文档', link: '/swagger'},
                     ]
-                }
+                },
             ],
-            backend: [
-                {text: '总览', link: '/backend/'},
-                {text: 'swagger 文档', link: '/backend/swagger'},
-            ]
         },
         outline: {
             label: '本页目录',
