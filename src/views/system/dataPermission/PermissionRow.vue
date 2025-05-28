@@ -24,11 +24,7 @@
         v-model="modelValue.value"
         size="small"
         clearable
-      >
-        <template #append>
-          <el-button @click="toSelect" icon="search" size="small" />
-        </template>
-      </el-input>
+      />
     </template>
     <el-icon @click="addChildRow" size="16" color="var(--el-color-primary)" style="cursor: pointer">
       <CirclePlus />
@@ -102,8 +98,6 @@ function handleRemove(index: number) {
 function switchLogic() {
   modelValue.value.logic = modelValue.value.logic === 'and' ? 'or' : 'and'
 }
-
-function toSelect() {}
 </script>
 <style scoped lang="scss">
 .permission-row {

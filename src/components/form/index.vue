@@ -20,6 +20,7 @@ export default {
   slots: Object as SlotsType<{
     default: void
     'top-btn': boolean
+    [slot: string]: any
   }>,
   setup(
     props,
