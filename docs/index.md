@@ -14,8 +14,8 @@ hero:
     - text: 开始 ✨
       link: /guide/introduction
     - theme: alt
-      text: 前端手册
-      link: /frontend
+      text: 使用手册
+      link: /document
 
 features:
   - icon: 💡
