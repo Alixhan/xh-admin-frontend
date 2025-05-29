@@ -21,13 +21,11 @@ pipeline {
     //使用全局工具
     tools {
         //引用之前全局工具配置的NodeJs的name
-        nodejs 'nodejs20.9.0'
+        nodejs 'nodejs22'
     }
 
     //参数化构建
     parameters {
-        //添加一个下拉选项，选择是发布前端项目还是发布文档
-        choice(name: 'DEPLOY_TYPE', choices: ['frontend', 'docs'], description: '发布类型')
         //获取git仓库分支列表，并选择
         gitParameter branchFilter: 'origin/(.*)',
                 defaultValue: 'main',
@@ -69,23 +67,7 @@ pipeline {
         stage("编译项目") {
             steps {
                 sh "npm install"
-                script {
-                    //发布前端项目
-                    if (DEPLOY_TYPE == 'frontend') {
-                        sh "npm run build:${profile}"
-                    } else {
-                        //发布文档
-                        sh "npm run docs:build"
-                        //发布文档生成的dist在docs/.vitepress，移到当前目录来
-                        sh "rm -rf dist && mv docs/.vitepress/dist dist"
-                        //把容器名称调整一下
-                        service_name = 'xh-admin-docs'
-                        //把容器名称调整一下
-                        image = service_name + ':latest'
-                        //对外端口号改下
-                        outer_port = '1999'
-                    }
-                }
+                sh "npm run build:${profile}"
             }
         }
         stage("构建docker镜像") {

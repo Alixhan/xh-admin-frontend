@@ -14,8 +14,8 @@ pipeline {
 
     //使用全局工具
     tools {
-        // jenkins已内置jdk17环境
-        // jdk 'jdk17'
+        // jenkins已内置jdk21环境
+//        jdk 'jdk21'
         //需要maven环境打包，之前全局配置的Maven Name
         maven 'maven3.9.5'
     }
@@ -23,7 +23,14 @@ pipeline {
     //参数化构建
     parameters {
         //添加一个发布下拉选项，选择发布哪个服务
-        choice(name: 'DEPLOY_TYPE', choices: ['system', 'file', 'generator'], description: '发布服务')
+        choice(name: 'DEPLOY_TYPE', choices: ['system', 'generator'], description: '发布服务')
+        //获取git仓库分支列表，并选择
+        gitParameter branchFilter: 'origin/(.*)',
+                defaultValue: 'main',
+                name: 'GIT_PROJECT_BRANCH',
+                type: 'PT_BRANCH',
+                description: '选择发布分支',
+                useRepository: 'https://gitee.com/sun-xiaohan/xh-admin-backend.git'
     }
 
     //环境变量
@@ -46,7 +53,7 @@ pipeline {
         network = 'xh_default'
         Dockerfile = '''
             # 基础镜像
-            FROM openjdk:21-ea-17-jdk
+            FROM openjdk:21-jdk
             # author
             MAINTAINER sxh
             #设置时区
@@ -66,7 +73,7 @@ pipeline {
         stage("拉取代码") {
             steps {
                 //拉取源码
-                git credentialsId: cred_id, url: git_project_url, branch: git_project_branch
+                git credentialsId: cred_id, url: git_project_url, branch: params.GIT_PROJECT_BRANCH
             }
         }
         stage("打包编译") {
@@ -76,13 +83,9 @@ pipeline {
                         outer_port = '2102'
                         inner_port = '2102'
                     }
-                    if(dir_name == 'file') {
+                    if(dir_name == 'generator') {
                         outer_port = '2103'
                         inner_port = '2103'
-                    }
-                    if(dir_name == 'generator') {
-                        outer_port = '2104'
-                        inner_port = '2104'
                     }
 
                     sh "mvn clean -DskipTests=true"

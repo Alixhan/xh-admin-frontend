@@ -41,7 +41,7 @@ services:
       MINIO_ROOT_PASSWORD: ${MINIO_PASSWORD}
     restart: always
   jenkins:
-    image: jenkins/jenkins:lts-jdk17
+    image: jenkins/jenkins:lts-jdk21
     container_name: jenkins
     # 用root用户启动，因为jenkins需要调用宿主机的 docker 会有权限问题，怕麻烦直接root省事，但要注意网络安全
     user: root
@@ -72,7 +72,7 @@ services:
       - ./nginx/html:/usr/share/nginx/html:ro
     restart: always
   xxl-job-admin:
-    image: xuxueli/xxl-job-admin:2.4.0
+    image: xuxueli/xxl-job-admin:3.1.0
     container_name: xxl-job-admin
     ports:
       - "8088:8080"
