@@ -1,9 +1,9 @@
 import type { VNode, Ref } from 'vue'
 
-export type SlotRender = (...args: any[]) => VNode | VNode[]
+export type SlotRender = (...args: any[]) => VNode | VNode[] | string | string[] | (() => VNode | VNode[])
 
 export type SlotsObj = {
-  [slotName: string]: SlotRender
+  [slotName: string]: SlotRender | (() => SlotRender)
 }
 
 /**
