@@ -104,8 +104,8 @@ const columns = ref<CommonFormColumn[]>([])
 watchEffect(() => {
   columns.value = [
     { prop: 'name', label: t('system.role.name'), readonly: true },
-    { type: 'separator', label: t('system.role.dataPermission') },
-    { slotName: 'dataPermission', label: t('system.role.dataPermission') }
+    { type: 'separator', label: t('system.dataPermission.label') },
+    { slotName: 'dataPermission', label: t('system.dataPermission.label') }
   ]
 })
 
@@ -115,6 +115,7 @@ const permissionData = ref([])
 const tableColumns = [
   {
     width: 100,
+    showOverflowTooltip: false,
     notExport: true,
     hidden: handleType.value === 'detail',
     slots: {

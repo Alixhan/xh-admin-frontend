@@ -142,6 +142,7 @@ export default {
     theme: 'Theme',
     showLogo: 'Show Logo',
     showFooter: 'Show Footer',
+    menuInvertColor: 'Menu Invert',
     menuUnique: 'Menu Unique',
     showNavTabIcon: 'Tab Icon',
     menuWidth: 'Menu Width',
@@ -288,6 +289,21 @@ export default {
         job: 'User Group Job',
         user: 'User Group Member'
       }
+    },
+    log: {
+      label: 'Log',
+      detail: '@:system.log.label@:common.detail'
+    },
+    dataPermission: {
+      label: 'Data Permission',
+      entity: 'Data Entity',
+      add: '@:system.dataPermission.label@:common.add',
+      edit: '@:system.dataPermission.label@:common.edit',
+      detail: '@:system.dataPermission.label@:common.detail',
+      name: 'Permission Name',
+      expression: 'Permission Expression',
+      positive: 'Y',
+      negative: 'N'
     }
   },
   monitor: {

@@ -56,8 +56,8 @@ export function usePreview(filters: FilterRow[], leafColumns?: CommonTableColumn
       p.children = childrenPreviews
     } else {
       p.enabled = !!column && filter.checked
-      str += `<span class="field"> ${column?.label ?? '[请选择字段]'} </span>`
-      str += `<span class="condition"> ${t('m.table.' + filter.condition)} </span>`
+      str += `<span class="field"> ${column?.label ?? t('m.table.noneColumn')} </span>`
+      str += `<span class="condition"> ${t('m.table.' + (filter.condition ?? 'noneCondition'))} </span>`
       str += getValueStr(filter.value1, column)
       if (filter.condition === 'bt') {
         str += getValueStr(filter.value2, column, ' - ')

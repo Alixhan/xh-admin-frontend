@@ -49,7 +49,7 @@
       <role-form :handle-type="handleType" :model-value="row" @close="close" style="height: 70vh" />
     </el-dialog>
     <el-dialog
-      :title="$t('system.role.dataPermission')"
+      :title="$t('system.dataPermission.label')"
       v-model="formVisible2"
       draggable
       destroy-on-close

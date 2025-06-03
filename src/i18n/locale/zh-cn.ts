@@ -30,7 +30,9 @@ export default {
       lt: '小于',
       le: '小于等于',
       in: '包含在',
-      bt: '介于'
+      bt: '介于',
+      noneColumn: '[请选择字段]',
+      noneCondition: '[请选择条件]',
     },
     topFilter: {
       query: '查询',
@@ -148,6 +150,7 @@ export default {
     theme: '主题',
     showLogo: '显示Logo',
     showFooter: '显示Footer',
+    menuInvertColor: '菜单颜色反转',
     menuUnique: '手风琴菜单',
     showNavTabIcon: '页签图标',
     menuWidth: '菜单宽度',
@@ -253,7 +256,6 @@ export default {
       detail: '@:system.role.label@:common.detail',
       name: '角色名称',
       permission: '权限',
-      dataPermission: '数据权限',
       parentId: '上级角色id',
       parentName: '上级角色名称',
       selectParent: '选择上级角色',
