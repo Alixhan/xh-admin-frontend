@@ -20,7 +20,7 @@
       <template #default="{ node, data }">
         <span>{{ node.label }}</span>
         <span v-if="data._id === 'root'" style="flex-grow: 1; text-align: right; padding-left: 10px">
-          <el-link @click="emits('restoreDefault')" :underline="false" type="primary">
+          <el-link @click="emits('restoreDefault')" underline="never" type="primary">
             {{ $t('common.restoreDefault') }}
           </el-link>
         </span>

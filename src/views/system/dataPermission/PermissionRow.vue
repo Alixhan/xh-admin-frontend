@@ -3,7 +3,7 @@
     <el-icon @click="emits('remove')" size="16" color="var(--el-color-danger)" style="cursor: pointer">
       <Remove />
     </el-icon>
-    <el-link style="width: 16px" type="danger" :underline="false" @click="switchLogic">
+    <el-link style="width: 16px" type="danger" underline="never" @click="switchLogic">
       <template v-if="props.index !== 0">{{ $t('m.table.' + modelValue.logic) }}</template>
     </el-link>
     <template v-if="!modelValue.children?.length">

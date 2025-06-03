@@ -22,7 +22,7 @@ const tableColumns = computed(() => [
           return (
             <span>
               {scope.row.desc}
-              <el-link type="primary" underline={false} onClick={() => more('周报已填写')}>
+              <el-link type="primary" underline="never" onClick={() => more('周报已填写')}>
                 填写
               </el-link>
             </span>

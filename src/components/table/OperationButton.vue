@@ -2,12 +2,12 @@
   <div class="operation-button">
     <template v-for="(item, index) in arr1" :key="index">
       <el-divider v-if="index !== 0" direction="vertical" />
-      <el-link :underline="false" v-bind="getBind(item)">{{ item.label }}</el-link>
+      <el-link underline="never" v-bind="getBind(item)">{{ item.label }}</el-link>
     </template>
     <template v-if="arr2.length">
       <el-divider direction="vertical" />
       <el-dropdown>
-        <el-link :underline="false" type="primary">
+        <el-link underline="never" type="primary">
           <div style="display: inline-flex; align-items: center">
             {{ $t('common.more') }}
             <el-icon>

@@ -14,7 +14,7 @@
       <el-collapse-transition>
         <div v-show="showCode" ref="sourceCodeRef">
           <slot name="raw" />
-          <el-link class="vp-raw collapse-view" :underline="false" @click="showCode = false" icon="ArrowUp">
+          <el-link class="vp-raw collapse-view" underline="never" @click="showCode = false" icon="ArrowUp">
             收起
           </el-link>
         </div>

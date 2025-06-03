@@ -18,7 +18,7 @@
             :key="i"
             v-bind="menu"
             @click="clickMenu(menu)"
-            :underline="false"
+            underline="never"
           >
             {{ menu.label }}
           </el-link>
