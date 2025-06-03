@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia'
 import { useCssVar, useLocalStorage } from '@vueuse/core'
 import { useSystemStore } from '@/stores/system'
-import { ref, toRef, watchEffect } from 'vue'
 import type { Ref } from 'vue'
+import { computed, ref, toRef, watchEffect } from 'vue'
 
 export interface ThemeObj {
   id: string
@@ -417,7 +417,24 @@ export const useThemeStore = defineStore('theme', () => {
       }
     }
   ])
+
+  //当前主题id
   const currentTheme = useLocalStorage('currentTheme', '紫')
+
+  const theme = computed(() => themeList.value.find((i) => i.id === currentTheme.value)?.theme ?? defaultTheme)
+
+  // 菜单的主题
+  const menuTheme = computed(() => {
+    const systemStore = useSystemStore()
+    const isDark = toRef(systemStore.layout, 'isDark')
+    const menuInvertColor = toRef(systemStore.layout, 'menuInvertColor')
+    let t = isDark.value ? 'dark' : 'light'
+    if (menuInvertColor.value) {
+      t = t === 'dark' ? 'light' : 'dark'
+    }
+    return t
+  })
+
   //监听主题和明暗，动态调整主题颜色
   watchEffect(switchTheme)
 
@@ -428,16 +445,30 @@ export const useThemeStore = defineStore('theme', () => {
 
   //动态调整主题颜色
   function switchTheme() {
-    const isDark = toRef(useSystemStore().layout, 'isDark')
-    const theme = themeList.value.find((i) => i.id === currentTheme.value)?.theme ?? defaultTheme
-    for (const key in theme) {
-      useCssVar(key, document.documentElement).value = theme[key]?.[isDark.value ? 'dark' : 'light']
+    const systemStore = useSystemStore()
+    const isDark = toRef(systemStore.layout, 'isDark')
+    for (const key in theme.value) {
+      useCssVar(key, document.documentElement).value = theme.value[key]?.[isDark.value ? 'dark' : 'light']
     }
+    switchMenuTheme()
+  }
+
+  //调整菜单的颜色
+  function switchMenuTheme() {
+    useCssVar('--el-menu-active-color', document.documentElement).value =
+      theme.value['--el-color-primary'][menuTheme.value]
+    useCssVar('--el-menu-text-color', document.documentElement).value =
+      menuTheme.value === 'dark' ? 'var(--el-color-white)' : 'var(--el-color-black)'
+    useCssVar('--el-menu-bg-color', document.documentElement).value = theme.value['--el-bg-color'][menuTheme.value]
+    useCssVar('--el-menu-hover-bg-color', document.documentElement).value =
+      theme.value['--el-color-primary-light-8'][menuTheme.value]
   }
 
   return {
     themeList,
     currentTheme,
-    changeThemeId
+    changeThemeId,
+    theme,
+    menuTheme
   }
 })

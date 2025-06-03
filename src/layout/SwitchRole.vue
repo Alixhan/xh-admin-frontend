@@ -11,7 +11,7 @@
       <div class="btn-view">
         <el-tag v-if="i === 0" type="info">{{ $t('layout.defaultRole') }}</el-tag>
         <!--        <el-tag v-if="item.active" type="primary">{{ $t('layout.activeRole') }}</el-tag>-->
-        <el-link class="sort-btn" :underline="false" @click="switchRole(item)" icon="rank" title="拖拽排序" />
+        <el-link class="sort-btn" underline="never" @click="switchRole(item)" icon="rank" title="拖拽排序" />
       </div>
     </div>
   </div>

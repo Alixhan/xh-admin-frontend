@@ -89,11 +89,10 @@ export default defineComponent({
 })
 </script>
 <style scoped lang="scss">
-.el-menu {
-  width: 100%;
-}
-.menu-icon {
-  width: 1.2em;
-  height: 1.2em;
+:deep(.el-menu-item) {
+  &.is-active {
+    background-color: var(--el-menu-active-color);
+    color: white;
+  }
 }
 </style>

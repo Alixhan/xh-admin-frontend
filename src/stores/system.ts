@@ -113,6 +113,8 @@ export interface Layout {
   settingVisible: boolean
   //页签的风格
   tabStyle: TabStyle
+  //菜单主题反转
+  menuInvertColor: boolean
 }
 
 /**
@@ -130,7 +132,7 @@ export const useSystemStore = defineStore('system', () => {
     isDark: useDark(),
     layoutMode: 'Default',
     mainAnimation: 'slide-right',
-    menuWidth: useLocalStorage('menuWidth', 200),
+    menuWidth: useLocalStorage('menuWidth', 220),
     menuCollapse: false,
     menuUniqueOpened: useLocalStorage('menuUniqueOpened', false),
     showLogo: useLocalStorage('showLogo', true),
@@ -142,7 +144,8 @@ export const useSystemStore = defineStore('system', () => {
     heightShrink: false,
     showNavTabIcon: useLocalStorage('showNavTabIcon', true),
     settingVisible: false,
-    tabStyle: useLocalStorage<TabStyle>('tabStyle', 'square')
+    tabStyle: useLocalStorage<TabStyle>('tabStyle', 'square'),
+    menuInvertColor: useLocalStorage('menuInvertColor', true)
   })
 
   const elFontSizeBase = useCssVar('--el-font-size-base')

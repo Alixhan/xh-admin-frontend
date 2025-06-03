@@ -1,6 +1,6 @@
 <template>
   <div class="logo-view">
-    <m-svg-icon class="logo-img" :src="systemStore.layout.isDark ? logoWhite : logoBlack" />
+    <m-svg-icon class="logo-img" :src="themeStore.menuTheme === 'dark' ? logoWhite : logoBlack" />
     <transition :name="systemStore.layout.mainAnimation" mode="out-in">
       <div v-show="!systemStore.layout.menuCollapse" class="logo-text">
         {{ projectTitle }}
@@ -12,11 +12,13 @@
 import { useSystemStore } from '@/stores/system'
 import logoBlack from '@/assets/icon/logo-black.svg'
 import logoWhite from '@/assets/icon/logo-white.svg'
+import { useThemeStore } from '@/stores/theme'
 
 defineOptions({
   name: 'DefaultLogo'
 })
 const systemStore = useSystemStore()
+const themeStore = useThemeStore()
 
 const projectTitle = import.meta.env.VITE_TITLE
 </script>

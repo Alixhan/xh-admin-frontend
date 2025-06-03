@@ -45,6 +45,9 @@
       <el-form-item :label="$t('setting.showFooter')" :span="24">
         <el-switch v-model="systemStore.layout.showFooter" />
       </el-form-item>
+      <el-form-item :label="$t('setting.menuInvertColor')" :span="24">
+        <el-switch v-model="systemStore.layout.menuInvertColor" />
+      </el-form-item>
     </el-form>
   </el-drawer>
 </template>
