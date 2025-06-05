@@ -55,7 +55,7 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to, from, next) => {
-  NProgress.configure({ showSpinner: false })
+  NProgress.configure({ speed: 500, showSpinner: false })
   NProgress.start()
   const systemStore = useSystemStore()
   const path = await systemStore.beforeEach(to)
