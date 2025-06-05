@@ -217,7 +217,20 @@ function close(type) {
 
     .left-tree-view {
       width: 100%;
-      max-height: 200px;
+    }
+
+    :deep(.el-table__inner-wrapper) {
+      .el-table__body-wrapper {
+        .el-scrollbar__wrap {
+          overflow-y: hidden;
+        }
+
+        .el-scrollbar__bar {
+          &.is-vertical {
+            display: none;
+          }
+        }
+      }
     }
   }
 }

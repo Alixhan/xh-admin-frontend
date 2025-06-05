@@ -30,9 +30,9 @@
       @selection-change="(rows) => (selectRows = rows)"
     >
       <template #right-action>
-        <el-button v-auth="'system:org:add'" type="primary" icon="plus" @click="openForm('add')">{{
-          $t('common.add')
-        }}</el-button>
+        <el-button v-auth="'system:org:add'" type="primary" icon="plus" @click="openForm('add')"
+          >{{ $t('common.add') }}
+        </el-button>
         <el-button
           v-auth="'system:org:del'"
           type="danger"
@@ -227,7 +227,20 @@ function close(type) {
 
     .left-tree-view {
       width: 100%;
-      max-height: 200px;
+    }
+
+    :deep(.el-table__inner-wrapper) {
+      .el-table__body-wrapper {
+        .el-scrollbar__wrap {
+          overflow-y: hidden;
+        }
+
+        .el-scrollbar__bar {
+          &.is-vertical {
+            display: none;
+          }
+        }
+      }
     }
   }
 }
