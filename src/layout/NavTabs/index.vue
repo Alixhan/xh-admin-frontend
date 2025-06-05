@@ -3,6 +3,7 @@ import { nextTick, provide, ref, watch } from 'vue'
 import { useSystemStore } from '@/stores/system'
 import MellowNavTabs from './MellowNavTabs.vue'
 import SquareNavTabs from './SquareNavTabs.vue'
+import LivelyNavTabs from './LivelyNavTabs.vue'
 import { useRoute } from 'vue-router'
 import { type ContextMenuItem, showContextMenu } from '@/utils/context-menu'
 
@@ -11,7 +12,8 @@ const route = useRoute()
 
 const tabStyleComp = {
   mellow: MellowNavTabs,
-  square: SquareNavTabs
+  square: SquareNavTabs,
+  lively: LivelyNavTabs
 }
 
 const currentIndex = ref<number>(0)

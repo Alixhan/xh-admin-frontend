@@ -1,23 +1,25 @@
 <template>
   <el-scrollbar>
     <div class="nav-tabs">
-      <el-text
+      <el-tag
         v-for="(tab, index) in navTabs"
-        :key="index"
+        :key="tab.fullPath"
         @contextmenu.prevent="navTab.onContextmenu($event, index)"
         @click="router.push(tab.fullPath)"
+        @close="navTab.removeTab(tab.fullPath)"
+        :closable="navTabs.length > 1"
         :class="{
-          'active-tab': route.fullPath === tab.fullPath,
-          'disable-tab': navTabs.length < 2
+          'active-tab': route.fullPath === tab.fullPath
         }"
         class="tab-item"
+        :type="route.fullPath === tab.fullPath ? 'primary' : 'info'"
+        :effect="route.fullPath === tab.fullPath ? 'dark' : 'plain'"
       >
-        <m-icon v-if="systemStore.layout.showNavTabIcon && tab.icon" class="tab-icon" :value="tab.icon" />
-        <div class="tab-title">{{ tab.title }}</div>
-        <el-icon class="close-icon" size="12">
-          <Close @click.stop="navTab.removeTab(tab.fullPath)" />
-        </el-icon>
-      </el-text>
+        <div class="tag-content">
+          <m-icon v-if="systemStore.layout.showNavTabIcon && tab.icon" class="tab-icon" :value="tab.icon" />
+          {{ tab.title }}
+        </div>
+      </el-tag>
     </div>
   </el-scrollbar>
 </template>
@@ -25,17 +27,17 @@
 import { useSystemStore } from '@/stores/system'
 import { inject } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import MIcon from '@/components/Icon.vue'
 
-const route = useRoute()
-const router = useRouter()
 const systemStore = useSystemStore()
 const navTabs = systemStore.navTabs
+const route = useRoute()
+const router = useRouter()
 
 const navTab = inject('navTab')
 </script>
 <style scoped lang="scss">
 $transition-time: all 0.2s linear;
-
 .nav-tabs {
   padding: 0 0 10px 0;
   height: auto;
@@ -44,58 +46,22 @@ $transition-time: all 0.2s linear;
   font-size: var(--el-font-size-base);
 
   .tab-item {
-    box-sizing: border-box;
+    padding: 13px 10px;
     user-select: none;
     position: relative;
     display: inline-flex;
-    border: var(--el-border);
-    border-radius: 3px;
     align-items: center;
-    padding: 7px 15px;
-    line-height: 1em;
     transition: $transition-time;
     cursor: pointer;
 
-    .tab-icon {
-      margin-right: 0.5em;
-    }
-
-    .tab-title {
-      margin-right: 5px;
-      white-space: nowrap;
-    }
-
-    .close-icon {
-      transition: $transition-time;
-      border-radius: 50%;
+    .tag-content {
       display: flex;
       align-items: center;
-      justify-content: center;
-      width: 0;
-      height: 0;
 
-      &:hover {
-        background-color: gray;
-        color: white;
+      .tab-icon {
+        margin-right: 0.5em;
       }
     }
-
-    &:hover:not(.disable-tab) {
-      padding-left: 9px;
-      padding-right: 9px;
-
-      .close-icon {
-        width: 12px;
-        height: 12px;
-      }
-    }
-  }
-
-  .tab-item:hover,
-  .active-tab {
-    color: var(--el-color-primary);
-    //box-shadow: var(--el-box-shadow);
-    border-color: var(--el-color-primary);
   }
 }
 </style>

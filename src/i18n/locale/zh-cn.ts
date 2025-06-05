@@ -32,7 +32,7 @@ export default {
       in: '包含在',
       bt: '介于',
       noneColumn: '[请选择字段]',
-      noneCondition: '[请选择条件]',
+      noneCondition: '[请选择条件]'
     },
     topFilter: {
       query: '查询',
@@ -157,7 +157,8 @@ export default {
     tabStyle: {
       label: '页签风格',
       square: '方正',
-      mellow: '圆润'
+      mellow: '圆润',
+      lively: '灵动'
     },
     size: {
       label: '组件大小',

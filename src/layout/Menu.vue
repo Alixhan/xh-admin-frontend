@@ -91,8 +91,17 @@ export default defineComponent({
 <style scoped lang="scss">
 :deep(.el-menu-item) {
   &.is-active {
-    background-color: var(--el-menu-active-color);
-    color: white;
+    background-color: var(--el-menu-active-bg-color);
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 3px;
+      background-color: var(--el-menu-active-color);
+    }
   }
 }
 </style>

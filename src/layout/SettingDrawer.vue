@@ -59,7 +59,7 @@ const systemStore = useSystemStore()
 const themeStore = useThemeStore()
 const themeList = themeStore.themeList
 
-const tabStyles = ['square', 'mellow']
+const tabStyles = ['square', 'mellow', 'lively']
 const sizes = ['small', 'default', 'large']
 
 function change(val) {
