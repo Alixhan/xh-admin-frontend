@@ -18,9 +18,15 @@
         <el-descriptions-item label="使用角色">{{ formData.roleName }}</el-descriptions-item>
         <el-descriptions-item label="用户名称">{{ formData.name }}</el-descriptions-item>
         <el-descriptions-item label="请求体类型">{{ formData.contentType }}</el-descriptions-item>
-        <el-descriptions-item label="请求参数" :span="2">{{ formData.requestParameter }}</el-descriptions-item>
-        <el-descriptions-item label="请求体" :span="2">{{ formData.requestBody }}</el-descriptions-item>
-        <el-descriptions-item label="响应体" :span="2">{{ formData.responseBody }}</el-descriptions-item>
+        <el-descriptions-item label="请求参数" :span="2">
+          <pre>{{ formData.requestParameter }}</pre>
+        </el-descriptions-item>
+        <el-descriptions-item label="请求体" :span="2">
+          <pre>{{ formData.requestBody }}</pre>
+        </el-descriptions-item>
+        <el-descriptions-item label="响应体" :span="2">
+          <pre>{{ formData.responseBody }}</pre>
+        </el-descriptions-item>
         <el-descriptions-item label="异常堆栈" :span="2">
           <span>{{ formData.stackTrace }}</span>
         </el-descriptions-item>
@@ -79,6 +85,7 @@ function close(type) {
       table-layout: fixed;
 
       .el-descriptions__label {
+        vertical-align: top;
         width: 7em;
       }
     }

@@ -2,16 +2,23 @@
   --layout-bg-color: var(--el-bg-color-page);
   --layout-left-bg-color: var(--el-bg-color);
   --layout-header-bg-color: var(--el-bg-color);
+
+  --font: "Microsoft YaHei", "微软雅黑", "Noto Sans SC", "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", Arial, sans-serif;
 }
 
 html,
 body {
-  font-family: var(--el-font-family);
+  font-family: var(--font), serif;
   width: 100%;
   height: 100%;
   margin: 0;
   overflow: hidden;
   background-size: cover; //或者background-size:100%;
+}
+
+pre {
+  font-family: var(--font), serif;
+  overflow-x: auto;
 }
 
 #app {
