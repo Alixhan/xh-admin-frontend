@@ -6,7 +6,7 @@
     </template>
     <template v-if="arr2.length">
       <el-divider direction="vertical" />
-      <el-dropdown>
+      <el-dropdown :persistent="false">
         <el-link underline="never" type="primary">
           <div style="display: inline-flex; align-items: center">
             {{ $t('common.more') }}
