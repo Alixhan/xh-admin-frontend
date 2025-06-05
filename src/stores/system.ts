@@ -70,7 +70,7 @@ export interface NavTab {
 }
 
 declare type LayoutSize = 'small' | 'default' | 'large'
-declare type TabStyle = 'square' | 'mellow'
+declare type TabStyle = 'square' | 'mellow' | 'lively'
 
 export interface Layout {
   // 全局布局大小
@@ -144,7 +144,7 @@ export const useSystemStore = defineStore('system', () => {
     heightShrink: false,
     showNavTabIcon: useLocalStorage('showNavTabIcon', true),
     settingVisible: false,
-    tabStyle: useLocalStorage<TabStyle>('tabStyle', 'square'),
+    tabStyle: useLocalStorage<TabStyle>('tabStyle', 'mellow'),
     menuInvertColor: useLocalStorage('menuInvertColor', true)
   })
 

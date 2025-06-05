@@ -35,7 +35,7 @@ const sideWidth = computed(() => {
   }
 }
 
-.layout-width-shrink {
+.width-shrink-layout {
   .left-side {
     z-index: 2002;
     overflow-x: hidden;

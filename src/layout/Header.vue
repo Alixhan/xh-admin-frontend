@@ -1,19 +1,10 @@
 <template>
-  <div
-    class="header-view"
-    :class="{
-      'width-shrink-layout': systemStore.layout.widthShrink,
-      'height-shrink-layout': systemStore.layout.heightShrink
-    }"
-  >
+  <div class="header-view">
     <div class="header-top">
       <div class="header-left">
         <div class="nav-view">
           <ToggleMenu class="collapse-icon" />
-          <NavTabs
-            v-if="systemStore.layout.heightShrink && !systemStore.layout.widthShrink"
-            key="nav-tabs"
-          />
+          <NavTabs v-if="systemStore.layout.heightShrink && !systemStore.layout.widthShrink" key="nav-tabs" />
           <Breadcrumb v-if="!systemStore.layout.widthShrink" class="breadcrumb" />
         </div>
       </div>
@@ -22,7 +13,7 @@
       </el-link>
       <Action class="action" />
     </div>
-    <NavTabs v-if="!systemStore.layout.heightShrink" key="nav-tabs"/>
+    <NavTabs v-if="!systemStore.layout.heightShrink" key="nav-tabs" />
   </div>
 </template>
 <script setup lang="ts">
@@ -87,13 +78,6 @@ const route = useRoute()
   .nav-tabs {
     margin-top: 5px;
     width: 100%;
-  }
-}
-
-.width-shrink-layout,
-.height-shrink-layout {
-  .nav-tabs {
-    font-size: 12px;
   }
 }
 </style>

@@ -717,14 +717,18 @@ export default defineComponent(
       validate
     })
 
-    return () => (
-      <div style={props.style} class={`layout-${props.layout ?? 'default'}`}>
-        <div class={`m-table ${props.height ? 'custom-height' : ''}`}>
-          {generateTopFilter()}
-          {generateTableView()}
+    return () => {
+      let layout = props.layout ?? 'default'
+      if (systemStore.layout.heightShrink) layout = 'auto'
+      return (
+        <div style={props.style} class={`layout-${layout}`}>
+          <div class={`m-table ${props.height ? 'custom-height' : ''}`}>
+            {generateTopFilter()}
+            {generateTableView()}
+          </div>
         </div>
-      </div>
-    )
+      )
+    }
   },
   {
     name: 'MTable',
@@ -875,20 +879,6 @@ export default defineComponent(
   .pagination {
     height: auto;
     padding-top: 10px;
-  }
-}
-
-.height-shrink-layout {
-  .layout-default {
-    .m-table {
-      .table-view {
-        height: auto;
-
-        .table-form {
-          height: auto;
-        }
-      }
-    }
   }
 }
 

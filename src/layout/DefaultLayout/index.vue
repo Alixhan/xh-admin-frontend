@@ -1,13 +1,10 @@
 <script setup lang="ts">
 import LeftSide from './LeftSide.vue'
 import RightSide from './RightSide.vue'
-import { useSystemStore } from '@/stores/system'
-
-const systemStore = useSystemStore()
 </script>
 
 <template>
-  <div class="layout" :class="`${systemStore.layout.widthShrink ? 'layout-width-shrink' : ''}`">
+  <div class="layout">
     <LeftSide class="left-side" />
     <RightSide class="right-side" />
   </div>

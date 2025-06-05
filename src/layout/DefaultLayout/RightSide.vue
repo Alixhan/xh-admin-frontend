@@ -42,7 +42,7 @@ const systemStore = useSystemStore()
   }
 }
 
-.layout-width-shrink {
+.width-shrink-layout {
   .mock-view {
     z-index: 2001;
     position: absolute;
