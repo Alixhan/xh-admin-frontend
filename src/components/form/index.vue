@@ -106,7 +106,8 @@ export default {
       let span = column.colspan || props.colspan || colspan
       if (span < colspan) span = colspan
       if (!column.colspan && column.cols) span = Number(column.cols) * span
-      span = [2, 3, 4, 6, 8, 12, 24].find((i) => i >= span) ?? 24
+      // 保证均匀的跨列
+      span = [2, 3, 4, 6, 8, 12, 16, 18, 20, 24].find((i) => i >= span) ?? 24
       return span
     }
 
