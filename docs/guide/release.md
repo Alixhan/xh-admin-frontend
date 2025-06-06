@@ -63,8 +63,8 @@ const version = import.meta.env.VITE_VERSION
 **新特性**
 
 - 新增：现在 `BaseJdbcDao` 中实现的耦合数据库操作已经抽离为 `SqlExecutor` 接口，实现此接口来支持不同数据库类型的ORM持久化操作
-- 新增：`PostgreSqlExecutor` 实现类来支持 `mysql` 数据库的持久化操作
-- 新增：`MysqlExecutor.java` 实现类来支持 `postgres` 数据库的持久化操作
+- 新增：`MysqlExecutor` 实现类来支持 `mysql` 数据库的持久化操作
+- 新增：`PostgreSqlExecutor` 实现类来支持 `postgres` 数据库的持久化操作
 
 **优化**
 

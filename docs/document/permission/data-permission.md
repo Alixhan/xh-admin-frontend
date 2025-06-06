@@ -67,7 +67,7 @@ String permissionSql = commonService.getPermissionSql("sys_log", "a.create_by", 
 在 `角色管理` 菜单，维护对应角色的数据权限：
 <el-image style="width: 100%;" :src="previewSrcList[2]" :preview-src-list="previewSrcList" fit="cover" :initial-index="2" alt="" />
 :::danger 注意
-如何未给角色维护数据权限，则默认不做数据权限控制！
+如果未给角色维护数据权限，则默认不做数据权限控制！
 :::
 ### 4、后端拼接权限sql
 调用公用方法，拼接权限sql:
