@@ -41,7 +41,7 @@ $transition-time: all 0.2s ease;
   height: auto;
   display: inline-flex;
   gap: 5px;
-  padding: 0 5px;
+  padding: 0 12px;
   font-size: var(--el-font-size-base);
 
   .tab-item {
@@ -93,21 +93,12 @@ $transition-time: all 0.2s ease;
 
     &::before,
     &::after {
+      transition: $transition-time;
       content: '';
       position: absolute;
       width: 15px;
       height: 15px;
       bottom: 0;
-    }
-
-    &::before {
-      transition: $transition-time;
-      left: -15px;
-    }
-
-    &::after {
-      transition: $transition-time;
-      right: -15px;
     }
   }
 
@@ -118,13 +109,13 @@ $transition-time: all 0.2s ease;
     //font-weight: bold;
 
     &::before {
-      /* 设置径向渐变 */
       background: radial-gradient(circle at 0 0, transparent 15px, var(--el-bg-color-page) 15px);
+      left: -15px;
     }
 
     &::after {
-      /* 设置径向渐变 */
       background: radial-gradient(circle at 15px 0, transparent 15px, var(--el-bg-color-page) 15px);
+      right: -15px;
     }
   }
 }

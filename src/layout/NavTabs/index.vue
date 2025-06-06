@@ -116,4 +116,8 @@ provide('navTab', {
 .nav-tabs-view {
   padding: 0 10px;
 }
+
+:deep(.el-scrollbar__bar) {
+  display: none;
+}
 </style>

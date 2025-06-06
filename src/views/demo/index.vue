@@ -1,26 +1,11 @@
 <template>
   <div>
-    {{ formData }}
-    <m-svg-icon />
-    <el-input v-model="formData.ssd" />
-    <el-pagination
-      v-model:current-page="formData.currentPage1"
-      :page-size="100"
-      :small="false"
-      background
-      layout="total, prev, pager, next"
-      :total="1000"
-    />
-    <el-table>
-      <template #empty> </template>
-    </el-table>
+    <div class="el-text">
+      <div>仅开发环境展示此菜单</div>
+
+      在此页面编写测试代码，方便调试，学习
+    </div>
   </div>
 </template>
-<script setup>
-import { reactive } from 'vue'
-
-const formData = reactive({
-  currentPage1: 1
-})
-</script>
+<script setup></script>
 <style lang="scss" scoped></style>

@@ -35,5 +35,18 @@ export const devMenus = [
     icon: 'el|menu',
     cache: true,
     enabled: true
+  },
+  {
+    id: -4,
+    parentId: -1,
+    title: '测试页面',
+    name: 'test',
+    path: 'test',
+    component: '/src/views/demo/index.vue',
+    type: 'menu',
+    handleType: 'route',
+    icon: 'el|menu',
+    cache: true,
+    enabled: true
   }
 ]
