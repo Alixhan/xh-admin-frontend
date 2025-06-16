@@ -73,6 +73,7 @@ export default {
       formatTip: '{label}格式为{format}'
     },
     excelImport: {
+      label: '导入',
       downloadTemplate: '下载模板',
       confirmImport: '确认导入',
       templateFileName: '导入模板',

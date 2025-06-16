@@ -1,32 +1,61 @@
 <template>
   <div class="excel-import-view">
-    <div class="el-text tip-view">
-      <slot name="tip" />
-    </div>
     <input ref="fileRef" type="file" accept=".xlsx" style="display: none" @change="handleFile" />
-    <m-table
-      class="m-table"
-      :columns="tableColumns"
-      v-model:data="importData"
-      :layout="layout"
-      :is-export-excel="false"
-    >
-      <template #right-action>
-        <el-button :loading="loading" text :icon="tipObj.icon" :style="{ color: tipObj.color }" @click="tipClick">
+    <template v-if="embedded">
+      <slot name="embedded">
+        <el-button
+          v-if="showHint && tipObj.msg"
+          :loading="loading"
+          text
+          :icon="tipObj.icon"
+          :style="{ color: tipObj.color }"
+          @click="tipClick"
+        >
           <span>{{ tipObj.msg }}</span>
         </el-button>
-        <el-button :loading="downloadLoading" type="primary" icon="download" @click="downloadTemplate()"
-          >{{ $t('m.excelImport.downloadTemplate') }}
+        <el-button :loading="downloadLoading" type="primary" icon="download" @click="downloadTemplate()">
+          {{ downloadTemplateButtonName ?? $t('m.excelImport.downloadTemplate') }}
         </el-button>
-        <el-button :loading="loading" type="primary" icon="folderOpened" @click="fileRef.click()">
-          {{ $t('m.form.selectFile') }}
+        <el-button :loading="loading" type="primary" icon="upload" @click="fileRef.click()">
+          {{ selectFileButtonName ?? $t('m.excelImport.label') }}
         </el-button>
-        <el-button :loading="loading" type="primary" icon="check" @click="subImport">
-          {{ $t('m.excelImport.confirmImport') }}
-        </el-button>
-        <el-button :loading="loading" type="danger" icon="delete" @click="clear">{{ $t('common.clear') }}</el-button>
-      </template>
-    </m-table>
+      </slot>
+    </template>
+    <template v-else>
+      <div class="el-text tip-view">
+        <slot name="tip" />
+      </div>
+      <m-table
+        class="m-table"
+        :columns="tableColumns"
+        v-model:data="importData"
+        :layout="layout"
+        :is-export-excel="false"
+      >
+        <template #right-action>
+          <el-button
+            v-if="showHint && tipObj.msg"
+            :loading="loading"
+            text
+            :icon="tipObj.icon"
+            :style="{ color: tipObj.color }"
+            @click="tipClick"
+          >
+            <span>{{ tipObj.msg }}</span>
+          </el-button>
+          <el-button :loading="downloadLoading" type="primary" icon="download" @click="downloadTemplate()">
+            {{ downloadTemplateButtonName ?? $t('m.excelImport.downloadTemplate') }}
+          </el-button>
+          <el-button :loading="loading" type="primary" icon="folderOpened" @click="fileRef.click()">
+            {{ selectFileButtonName ?? $t('m.form.selectFile') }}
+          </el-button>
+          <el-button :loading="loading" type="primary" icon="check" @click="subImport">
+            {{ $t('m.excelImport.confirmImport') }}
+          </el-button>
+          <el-button :loading="loading" type="danger" icon="delete" @click="clear">{{ $t('common.clear') }}</el-button>
+        </template>
+      </m-table>
+    </template>
     <el-dialog :title="$t('common.errorMsg')" v-model="errorVisible" align-center draggable append-to-body width="70%">
       <m-table
         ref="errorRef"
@@ -59,7 +88,7 @@ defineOptions({
 
 const { t } = useI18n()
 
-const props = defineProps<ExcelImportProps<T>>()
+const props = withDefaults(defineProps<ExcelImportProps<T>>(), { showHint: true })
 
 // 导入的excel数据
 const importData: Ref<T[]> = ref([])
@@ -183,6 +212,7 @@ async function downloadTemplate() {
 
 // 处理选择文件事件
 function handleFile(e: Event) {
+  errorData.value = []
   const input: HTMLInputElement = e.target as HTMLInputElement
   const files = input.files!
   loading.value = true
@@ -230,6 +260,7 @@ function handleFile(e: Event) {
       })
       importData.value = datas
       tip.value.status = 'success'
+      if (props.embedded) await subImport()
     } catch (e: any) {
       tip.value.status = 'error'
       ElMessage.error(e.message ?? t('common.importsFailed'))
@@ -341,10 +372,6 @@ defineExpose({
 </script>
 <style scoped lang="scss">
 .excel-import-view {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-
   .tip-view {
     align-self: start;
     margin-bottom: 5px;

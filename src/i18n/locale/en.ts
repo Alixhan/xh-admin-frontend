@@ -69,6 +69,7 @@ export default {
       formatTip: '{label} format is {format}'
     },
     excelImport: {
+      label: 'Import',
       downloadTemplate: 'Download Template',
       confirmImport: 'Confirm Import',
       templateFileName: 'Excel import template',
