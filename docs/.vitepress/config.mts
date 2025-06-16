@@ -113,8 +113,8 @@ export default defineConfig({
                             base: '/guide/install/initialized-database',
                             link: '/',
                             items: [
-                                {text: 'init_nacos_config.sql', link: '/init_nacos_config'},
                                 {text: 'init_xh_admin.sql', link: '/init_xh_admin'},
+                                {text: 'init_nacos_config.sql', link: '/init_nacos_config'},
                                 {text: 'init_xxl_job.sql', link: '/init_xxl_job'},
                             ]
                         },
