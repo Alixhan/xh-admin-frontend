@@ -28,20 +28,34 @@ const visible = ref(false)
 const status = ref('success')
 
 const excelColumns = computed(() => [
-  { prop: 'code', label: '登录账号', rules: [{ required: true }], note: '字母和数字组合' },
-  { prop: 'telephone', label: '手机号', rules: [{ type: 'phone' }] },
-  { prop: 'onlyNum', label: '仅数字列', rules: { pattern: /\d+/ } },
-  { prop: 'date', label: '日期类型', rules: { dateFormat: 'YYYY-MM-DD' } },
   {
-    prop: 'custom',
-    label: '自定义验证',
-    rules: [
-      { required: true },
+    label: '基本信息',
+    align: 'center',
+    note: '这是基本信息哈',
+    children: [
+      { prop: 'code', label: '登录账号', rules: [{ required: true }], note: '字母和数字组合' },
+      { prop: 'name', label: '用户名', rules: [{ required: true }] },
+      { prop: 'telephone', label: '手机号', rules: [{ type: 'phone' }] }
+    ]
+  },
+  {
+    label: '其他信息',
+    align: 'center',
+    children: [
+      { prop: 'onlyNum', label: '仅数字列', rules: { pattern: /\d+/ } },
+      { prop: 'date', label: '日期类型', rules: { dateFormat: 'YYYY-MM-DD' } },
       {
-        validator: (rule, val, callback) => {
-          if (val.length === 5) return callback(new Error('可以自定义验证啊！！'))
-          callback()
-        }
+        prop: 'custom',
+        label: '自定义验证',
+        rules: [
+          { required: true },
+          {
+            validator: (rule, val, callback) => {
+              if (val.length === 5) return callback(new Error('可以自定义验证啊！！'))
+              callback()
+            }
+          }
+        ]
       }
     ]
   }

@@ -54,17 +54,28 @@ components/excel-import/tip
 components/excel-import/complex
 :::
 
+## 嵌入式用法
+
+有时候我们不需要显示预览数据，而是选择完文件后直接导入
+:::demo
+components/excel-import/embedded
+:::
+
 ## ExcelImport API
 
 ### ExcelImport 属性
 
-| 属性名                | 描述                                                     | 类型                                                                                          | 默认值      |
-|--------------------|--------------------------------------------------------|---------------------------------------------------------------------------------------------|----------|
-| columns            | excel列定义 [ImportExcelColumn](#importexcelcolumn-类型) [] | ^[object]`ImportExcelColumn []`                                                             | 必填       |
-| template-file-name | 下载导出模板文件名称                                             | ^[string]                                                                                   | `'导入模板'` |
-| layout             | 表格布局方式                                                 | ^['auto' \| 'stretch']                                                                      | `'auto'` |
-| on-complete        | 前端验证通过数据的回调方法，如果是异步操作，请返回Promise对象                     | ^[Function]`(data: T[]) => Promise<ExcelError[] \| undefined> \| ExcelError[] \| undefined` | 必填       |
-| init-data          | 下载模板的初始化数据                                             | ^[ExcelImportInitData]` T[] \| (() => (T[] \| Promise<T[]>)) \| Promise<T[]>`               | —        |
+| 属性名                           | 描述                                                     | 类型                                                                                          | 默认值              |
+|-------------------------------|--------------------------------------------------------|---------------------------------------------------------------------------------------------|------------------|
+| columns                       | excel列定义 [ImportExcelColumn](#importexcelcolumn-类型) [] | ^[object]`ImportExcelColumn []`                                                             | 必填               |
+| template-file-name            | 下载导出模板文件名称                                             | ^[string]                                                                                   | `'导入模板'`         |
+| layout                        | 表格布局方式                                                 | ^['auto' \| 'stretch']                                                                      | `'auto'`         |
+| on-complete                   | 前端验证通过数据的回调方法，如果是异步操作，请返回Promise对象                     | ^[Function]`(data: T[]) => Promise<ExcelError[] \| undefined> \| ExcelError[] \| undefined` | 必填               |
+| init-data                     | 下载模板的初始化数据                                             | ^[ExcelImportInitData]` T[] \| (() => (T[] \| Promise<T[]>)) \| Promise<T[]>`               | —                |
+| show-hint                     | 显示提示信息                                                 | ^[boolean]                                                                                  | `true`           |
+| embedded                      | 嵌入式的                                                   | ^[boolean]                                                                                  | `false`          |
+| download-template-button-name | 下载模板按钮名称                                               | ^[string]                                                                                   | `'下载模板'`         |
+| select-file-button-name       | 选择文件按钮名称                                               | ^[string]                                                                                   | `'选择文件' \| '导入'` |
 
 ### ExcelImport Slots
 
