@@ -67,10 +67,6 @@ const data = ref([{ fd: '房东', fd2: '2023-11-08', fd22: '2023-11-09' }])
 const num = ref(1)
 const num2 = ref(30)
 
-function dbclick(e) {
-  console.info(e)
-}
-
 function add() {
   for (let i = 0; i < num.value; i++) {
     const obj = {}
