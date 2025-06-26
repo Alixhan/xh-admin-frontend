@@ -739,27 +739,7 @@ export default defineComponent(
       'left-action': void
       'right-action': void
     }>,
-    emits: [
-      'select',
-      'select-all',
-      'selection-change',
-      'cell-mouse-enter',
-      'cell-mouse-leave',
-      'cell-contextmenu',
-      'cell-click',
-      'cell-dblclick',
-      'row-click',
-      'row-contextmenu',
-      'row-dblclick',
-      'header-click',
-      'header-contextmenu',
-      'sort-change',
-      'filter-change',
-      'current-change',
-      'header-dragend',
-      'expand-change',
-      'update:data'
-    ]
+    emits: ['update:data', 'selection-change', 'row-click']
   }
 )
 </script>
