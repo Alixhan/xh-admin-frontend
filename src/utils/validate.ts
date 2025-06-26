@@ -2,7 +2,6 @@
  * sxh 2020-10-13
  * 验证通用方法
  */
-import { isEmpty } from 'lodash-es'
 import { getItemListRef } from '@/components/mutils'
 import type { Ref } from 'vue'
 import type {
@@ -87,10 +86,11 @@ export async function ruleValid<T extends object>(
 ): Promise<string> {
   const formValue: any = val ?? ''
   return new Promise<string>((resolve, reject) => {
+    const label = fieldRule.label ?? ''
     if (rule.required) {
       // 验证必填
-      if ((formValue instanceof Array && formValue?.length === 0) || isEmpty(formValue + '')) {
-        return reject(rule.message ?? t('m.form.beEmpty', { label: fieldRule.label ?? '' }))
+      if ((formValue instanceof Array && formValue?.length === 0) || formValue === '') {
+        return reject(rule.message ?? t('m.form.beEmpty', { label }))
       }
     }
     if (!formValue && !rule.validator) return resolve('')
@@ -101,54 +101,41 @@ export async function ruleValid<T extends object>(
         return reject(rule.type + 'not defined!')
       }
       if (typeFilter instanceof RegExp) {
-        if (!typeFilter.test(formValue))
-          return reject(rule.message ?? t('m.form.wrongFormat', { label: fieldRule.label ?? '' }))
+        if (!typeFilter.test(formValue)) return reject(rule.message ?? t('m.form.wrongFormat', { label }))
       } else {
         const re = typeFilter(formValue)
-        if (!re) return reject(rule.message ?? t('m.form.wrongFormat', { label: fieldRule.label ?? '' }))
+        if (!re) return reject(rule.message ?? t('m.form.wrongFormat', { label }))
       }
     }
     if (rule.pattern && !rule.pattern.test(formValue)) {
       // 验证数据格式
-      return reject(rule.message ?? t('m.form.wrongFormat', { label: fieldRule.label ?? '' }))
+      return reject(rule.message ?? t('m.form.wrongFormat', { label }))
     }
     // 验证时间格式是否正确
     if (rule.dateFormat) {
       const day = dayjs(formValue)
       if (!day.isValid() || day.format(rule.dateFormat) !== formValue) {
-        return reject(rule.message ?? t('m.form.wrongFormat', { label: fieldRule.label ?? '' }))
+        return reject(rule.message ?? t('m.form.wrongFormat', { label }))
       }
     }
     // 验证字符最大长度
     if (rule.maxlength && formValue.length > rule.maxlength) {
-      return reject(
-        rule.message ??
-          t('m.form.maxlength', {
-            label: fieldRule.label ?? '',
-            maxlength: rule.maxlength
-          })
-      )
+      return reject(rule.message ?? t('m.form.maxlength', { label, maxlength: rule.maxlength }))
     }
     // 验证字符最小长度
     if (rule.minlength && formValue.length < rule.minlength) {
-      return reject(
-        rule.message ??
-          t('m.form.minlength', {
-            label: fieldRule.label ?? '',
-            minlength: rule.minlength
-          })
-      )
+      return reject(rule.message ?? t('m.form.minlength', { label, minlength: rule.minlength }))
     }
     // 验证最小值
     if (rule.min || rule.min === 0) {
       if (typeof rule.min === 'number' ? Number(formValue) < (rule.min as number) : formValue < (rule.min as any)) {
-        return reject(rule.message ?? t('m.form.min', { label: fieldRule.label ?? '', min: rule.min }))
+        return reject(rule.message ?? t('m.form.min', { label, min: rule.min }))
       }
     }
     // 验证最大值
     if (rule.max || rule.max === 0) {
       if (typeof rule.max === 'number' ? Number(formValue) > (rule.max as number) : formValue > (rule.max as any)) {
-        return reject(rule.message ?? t('m.form.min', { label: fieldRule.label ?? '', max: rule.max }))
+        return reject(rule.message ?? t('m.form.max', { label, max: rule.max }))
       }
     }
     // 下拉选项验证
@@ -162,13 +149,7 @@ export async function ruleValid<T extends object>(
       if (item) {
         if (formData?.[fieldRule.prop]) formData[fieldRule.prop] = item.value as T[keyof T]
       } else {
-        return reject(
-          rule.message ??
-            t('m.form.valRestriction', {
-              label: fieldRule.label ?? '',
-              enums: itemList.value.map((i) => i.label)
-            })
-        )
+        return reject(rule.message ?? t('m.form.valRestriction', { label, enums: itemList.value.map((i) => i.label) }))
       }
     }
     // 自定义验证方法
