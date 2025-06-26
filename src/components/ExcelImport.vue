@@ -372,6 +372,8 @@ defineExpose({
 </script>
 <style scoped lang="scss">
 .excel-import-view {
+  white-space: nowrap;
+
   .tip-view {
     align-self: start;
     margin-bottom: 5px;
