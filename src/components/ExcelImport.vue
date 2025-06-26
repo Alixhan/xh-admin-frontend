@@ -262,6 +262,7 @@ function handleFile(e: Event) {
       tip.value.status = 'success'
       if (props.embedded) await subImport()
     } catch (e: any) {
+      console.error('excel handle error', e)
       tip.value.status = 'error'
       ElMessage.error(e.message ?? t('common.importsFailed'))
     } finally {
