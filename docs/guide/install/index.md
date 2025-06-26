@@ -7,8 +7,8 @@ const previewSrcList = ["/image/img_8.png"];
 ## 前端运行
 ::: warning 提示
 运行前，确认前端运行环境已经满足需要<br>
-`NodeJs 18.x +` <br>
-`pnpm 8.x +`
+`NodeJs 20.x +` <br>
+`pnpm 9.x +`
 
 推荐使用 ^link(nvm) 管理nodejs版本
 :::

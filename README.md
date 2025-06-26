@@ -53,8 +53,8 @@ gitee 码云代码仓库<br>
 
 ```bash
 # requirement
-node version 18+
-pnpm version 8+
+node version 20+
+pnpm version 9+
 
 # clone
 git clone https://github.com/Alixhan/xh-admin-frontend

@@ -6,8 +6,8 @@ const previewSrcList = ["/image/install/img.png"];
 ## 前端安装
 ::: warning 提示
 安装前，确保运行环境已经满足需要<br>
-`NodeJs 18.x +` <br>
-`Pnpm 8.x + `
+`NodeJs 20.x +` <br>
+`Pnpm 9.x + `
 
 推荐使用 ^link(nvm) 管理nodejs版本
 :::
