@@ -22,10 +22,13 @@ defineOptions({
   name: 'MIcon'
 })
 
-const props = withDefaults(defineProps<{
-  value?: string
-  wrap?: boolean //是否用el-icon组件包裹
-}>(), { wrap: true })
+const props = withDefaults(
+  defineProps<{
+    value?: string
+    wrap?: boolean //是否用el-icon组件包裹
+  }>(),
+  { wrap: true }
+)
 
 const iconType = ref()
 const src = ref()

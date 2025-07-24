@@ -33,7 +33,7 @@ export default function createAxios<R = any, Q = any>(opt?: RequestOption<R>): M
 
   // 重置loading
   function resetLoading() {
-    if(isRef(option.loadingRef)) option.loadingRef.value = false
+    if (isRef(option.loadingRef)) option.loadingRef.value = false
     loadingInstance?.close()
     //解除占用，防止内存泄漏
     delete option.loadingRef
@@ -87,14 +87,14 @@ export default function createAxios<R = any, Q = any>(opt?: RequestOption<R>): M
         confirmButtonText: option.confirmButtonText
       })
     }
-    if(isRef(option.loadingRef)) option.loadingRef.value = true
+    if (isRef(option.loadingRef)) option.loadingRef.value = true
     if (option.showLoading) {
       loadingInstance = ElLoading.service({
         body: true,
         fullscreen: true,
         lock: true,
         text: option.loadingText,
-        background: 'rgba(0, 0, 0, 0.7)',
+        background: 'rgba(0, 0, 0, 0.7)'
       })
     }
     const systemStore = useSystemStore()

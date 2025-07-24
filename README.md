@@ -37,6 +37,7 @@ gitee 码云代码仓库<br>
 - **代码生成器**: 通过代码生成器，保证项目总体代码风格统一并极大加快增删改查的开发效率。
 
 ## 内置功能模块
+
 - **菜单管理**
 - **用户组管理**
 - **用户管理**
@@ -91,17 +92,17 @@ pnpm test
 **按照Angular提交标准来**<br>
 各大IDE开发工具均可安装git提交规范插件，JetBrains: `Git Commit Message Helper`,Vscode: `git commit plugin`
 
-* `feat` - A new feature
-* `fix` - A bug fix
-* `docs` - Documentation only changes
-* `style` - Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)
-* `refactor` - A code change that neither fixes a bug nor adds a feature
-* `perf` - A code change that improves performance
-* `test` - Adding missing tests or correcting existing tests
-* `build` - Changes that affect the build system or external dependencies (example scopes: gulp, broccoli, npm)
-* `ci` - Changes to our Cl configuration files and scripts (example scopes: Travis, Circle, BrowserStack, SauceLabs
-* `chore` - Other changes that don't modify src or test files
-* `revert` - Reverts a previous commit
+- `feat` - A new feature
+- `fix` - A bug fix
+- `docs` - Documentation only changes
+- `style` - Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)
+- `refactor` - A code change that neither fixes a bug nor adds a feature
+- `perf` - A code change that improves performance
+- `test` - Adding missing tests or correcting existing tests
+- `build` - Changes that affect the build system or external dependencies (example scopes: gulp, broccoli, npm)
+- `ci` - Changes to our Cl configuration files and scripts (example scopes: Travis, Circle, BrowserStack, SauceLabs
+- `chore` - Other changes that don't modify src or test files
+- `revert` - Reverts a previous commit
 
 ## 💕 贡献者
 
@@ -116,6 +117,7 @@ pnpm test
 提交PR，提交issue，点个star，或者直接打赏我，哈哈哈~~~
 
 ## 交流群
+
 欢迎加入微信交流群
 
 扫码加我微信（备注：xhan），邀请您加入微信交流群

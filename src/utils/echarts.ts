@@ -45,15 +45,15 @@ echarts.use([
 ])
 
 export type EChartsOption = echarts.ComposeOption<
-    | TooltipComponentOption
-    | LegendComponentOption
-    | PieSeriesOption
-    | BarSeriesOption
-    | TitleComponentOption
-    | ToolboxComponentOption
-    | GridComponentOption
-    | LineSeriesOption
-    | GaugeSeriesOption
+  | TooltipComponentOption
+  | LegendComponentOption
+  | PieSeriesOption
+  | BarSeriesOption
+  | TitleComponentOption
+  | ToolboxComponentOption
+  | GridComponentOption
+  | LineSeriesOption
+  | GaugeSeriesOption
 >
 
 export function useEcharts(option: Ref<EChartsOption>, onInit?: (eChart: echarts.ECharts) => void) {
@@ -73,7 +73,7 @@ export function useEcharts(option: Ref<EChartsOption>, onInit?: (eChart: echarts
   }
 
   async function setOption(opt?: EChartsOption, notMerge?: any, lazyUpdate?: any) {
-    if(!echartsInstance) await initEcharts()
+    if (!echartsInstance) await initEcharts()
     ;(opt ?? option.value).backgroundColor ??= 'transparent'
     echartsInstance?.setOption(opt ?? option.value, notMerge, lazyUpdate)
   }
@@ -83,18 +83,18 @@ export function useEcharts(option: Ref<EChartsOption>, onInit?: (eChart: echarts
   const scope = effectScope()
   scope.run(() => {
     watch(
-        () => option.value,
-        (opt) => setOption(opt, true),
-        { deep: true }
+      () => option.value,
+      (opt) => setOption(opt, true),
+      { deep: true }
     )
 
     watch(
-        () => [width.value, height.value],
-        useDebounceFn(async () => {
-          if(!echartsInstance) await initEcharts()
-          if (initialized && width.value) echartsInstance?.resize()
-          else initialized = true
-        }, 40)
+      () => [width.value, height.value],
+      useDebounceFn(async () => {
+        if (!echartsInstance) await initEcharts()
+        if (initialized && width.value) echartsInstance?.resize()
+        else initialized = true
+      }, 40)
     )
 
     watch(() => [systemStore.layout.isDark], initEcharts)

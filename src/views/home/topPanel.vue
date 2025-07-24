@@ -13,7 +13,8 @@
         <el-link type="primary" @click="open('https://gitee.com/sun-xiaohan/xh-admin-frontend')">star</el-link>&nbsp;
         ❤️，给点支持鼓励🌹。代码仓库：
         <el-link type="primary" @click="open('https://gitee.com/sun-xiaohan/xh-admin-frontend')">gitee</el-link>&nbsp;
-        <el-link type="primary" @click="open('https://github.com/Alixhan/xh-admin-frontend')">github</el-link>&nbsp; <br />
+        <el-link type="primary" @click="open('https://github.com/Alixhan/xh-admin-frontend')">github</el-link>&nbsp;
+        <br />
         官网文档地址：
         <el-link type="primary" @click="open('http://www.xhansky.cn')">https://www.xhansky.cn</el-link>&nbsp;
       </el-text>

@@ -20,7 +20,7 @@
               type="text"
               clearable
               v-model="formData.username"
-              :placeholder="t('m.form.toInput', {label: $t('login.account') })"
+              :placeholder="t('m.form.toInput', { label: $t('login.account') })"
               prefix-icon="User"
             />
           </el-form-item>
@@ -28,17 +28,17 @@
             <el-input
               v-model="formData.password"
               type="password"
-              :placeholder="t('m.form.toInput', {label: $t('login.password') })"
+              :placeholder="t('m.form.toInput', { label: $t('login.password') })"
               show-password
               clearable
               prefix-icon="Unlock"
             />
           </el-form-item>
           <el-form-item prop="captchaCode">
-            <div style="display: inline-flex; width: 100%; align-items: center;">
+            <div style="display: inline-flex; width: 100%; align-items: center">
               <el-input
                 v-model="formData.captchaCode"
-                :placeholder="t('m.form.toInput', {label: $t('login.captcha') })"
+                :placeholder="t('m.form.toInput', { label: $t('login.captcha') })"
                 clearable
                 :prefix-icon="captchaIcon"
               >
@@ -106,9 +106,9 @@ const captchaState = ref('')
 const verificationUrl = ref()
 
 const rules = computed(() => ({
-  username: [{ required: true, message: t('m.form.toInput', {label: t('login.account') }) }],
-  password: [{ required: true, message: t('m.form.toInput', {label: t('login.password') }) }],
-  captchaCode: [{ required: true, message: t('m.form.toInput', {label: t('login.captcha') }) }]
+  username: [{ required: true, message: t('m.form.toInput', { label: t('login.account') }) }],
+  password: [{ required: true, message: t('m.form.toInput', { label: t('login.password') }) }],
+  captchaCode: [{ required: true, message: t('m.form.toInput', { label: t('login.captcha') }) }]
 }))
 
 const formRef = ref()
@@ -139,12 +139,14 @@ function submit() {
           successMsg: (res) => '登录成功！欢迎你，尊敬的' + res.data.user.name, // 成功的提示信息
           errorMsg: '登录失败' // 失败的提示信息
         }
-      ).then((res) => {
-        const data = res.data
-        systemStore.setLoginUserInfo(data)
-        const firstRoute = systemStore.getFirstRoute()
-        router.replace(firstRoute.fullPath)
-      }).catch(refresh)
+      )
+        .then((res) => {
+          const data = res.data
+          systemStore.setLoginUserInfo(data)
+          const firstRoute = systemStore.getFirstRoute()
+          router.replace(firstRoute.fullPath)
+        })
+        .catch(refresh)
     }
   })
 }

@@ -1,5 +1,5 @@
-import type {CommonFormColumn} from '@i/components/form'
-import type {TableColumn} from '@i/components/table'
+import type { CommonFormColumn } from '@i/components/form'
+import type { TableColumn } from '@i/components/table'
 
 /**
  * excel列类型定义

@@ -52,7 +52,7 @@
 <script setup lang="jsx">
 import { computed, reactive, ref } from 'vue'
 import { delMenuByIds, postSwitchMenuProp, queryMenuList } from '@/api/system/menu'
-import {generateTreeMenu, menuTypeList} from '@/views/system/menu/constant'
+import { generateTreeMenu, menuTypeList } from '@/views/system/menu/constant'
 import MenuForm from './menuForm.vue'
 import getDictDetails from '@/utils/dict'
 import { useI18n } from 'vue-i18n'

@@ -36,7 +36,6 @@ import 'vue-cropper/dist/index.css'
 import { computed, ref, useAttrs, watchEffect } from 'vue'
 import { useElementSize } from '@vueuse/core'
 
-
 defineOptions({
   name: 'MCropper'
 })

@@ -23,7 +23,7 @@
                     <CirclePlus />
                   </el-icon>
                 </div>
-                <template v-if="handleType !== 'detail'" >
+                <template v-if="handleType !== 'detail'">
                   <permission-row
                     v-for="(filter, index) in expression"
                     :key="index"

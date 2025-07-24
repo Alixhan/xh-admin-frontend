@@ -22,7 +22,12 @@
       :handle-type="handleType"
     >
       <template #left-action>
-        <el-button v-if="['add', 'edit'].includes(handleType ?? '') && designType === '1'" type="danger" icon="delete" @click="clear">
+        <el-button
+          v-if="['add', 'edit'].includes(handleType ?? '') && designType === '1'"
+          type="danger"
+          icon="delete"
+          @click="clear"
+        >
           {{ $t('common.clear') }}
         </el-button>
       </template>

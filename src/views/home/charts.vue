@@ -1,5 +1,10 @@
 <template>
-  <div v-for="(o, i) in echartsDomRefs" :key="i" :ref="(r) => ((o.domRef as any).value = r as any)" class="charts-item" />
+  <div
+    v-for="(o, i) in echartsDomRefs"
+    :key="i"
+    :ref="(r) => ((o.domRef as any).value = r as any)"
+    class="charts-item"
+  />
 </template>
 <script lang="ts" setup>
 import type { EChartsOption } from '@/utils'

@@ -1,14 +1,7 @@
 {
   "extends": "@vue/tsconfig/tsconfig.dom.json",
-  "include": [
-    "src/**/*",
-    "interface/**/*",
-    "types/**/*.d.ts"
-  ],
-  "exclude": [
-    "src/**/__tests__/*",
-    "node_modules/**/*.d.ts"
-  ],
+  "include": ["src/**/*", "interface/**/*", "types/**/*.d.ts"],
+  "exclude": ["src/**/__tests__/*", "node_modules/**/*.d.ts"],
   "compilerOptions": {
     "outDir": "dist",
     "declaration": false,
@@ -24,11 +17,9 @@
     "paths": {
       "@/*": ["src/*"],
       "@i/*": ["interface/*"],
-      "@d/*": ["docs/*"],
+      "@d/*": ["docs/*"]
     },
-    "types": [
-      "vite/client"
-    ],
+    "types": ["vite/client"],
     "target": "esnext",
     "useDefineForClassFields": true,
     "module": "esnext",

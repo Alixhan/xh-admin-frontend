@@ -1,37 +1,33 @@
+import { globalIgnores } from 'eslint/config'
 import pluginVue from 'eslint-plugin-vue'
-import vueTsEslintConfig from '@vue/eslint-config-typescript'
 import pluginVitest from '@vitest/eslint-plugin'
 import skipFormatting from '@vue/eslint-config-prettier/skip-formatting'
-import eslintConfigPrettier from 'eslint-config-prettier'
+import { defineConfigWithVueTs, vueTsConfigs } from '@vue/eslint-config-typescript'
 
-export default [
+export default defineConfigWithVueTs(
   {
     name: 'app/files-to-lint',
-    files: ['**/*.{ts,mts,tsx,vue}'],
+    files: ['**/*.{ts,mts,tsx,vue}']
   },
 
-  {
-    name: 'app/files-to-ignore',
-    ignores: ['**/dist/**', '**/dist-ssr/**', '**/coverage/**', '**/node_modules/**', '**/.idea/**', '**/cache/**'],
-  },
+  globalIgnores(['**/dist/**', '**/dist-ssr/**', '**/coverage/**', '**/node_modules/**', '**/.idea/**', '**/cache/**']),
 
-  ...pluginVue.configs['flat/essential'],
-  ...vueTsEslintConfig(),
-  eslintConfigPrettier,
+  pluginVue.configs['flat/essential'],
+  vueTsConfigs.recommended,
+
   {
     ...pluginVitest.configs.recommended,
-    files: ['src/**/__tests__/*'],
+    files: ['src/**/__tests__/*']
   },
   skipFormatting,
   {
     languageOptions: {
       parserOptions: {
         ecmaFeatures: {
-          jsx: true,
-        },
+          jsx: true
+        }
       },
-      globals: {
-      }
+      globals: {}
     },
     rules: {
       'vue/block-lang': 'off',
@@ -40,4 +36,4 @@ export default [
       quotes: ['error', 'single', { allowTemplateLiterals: true }]
     }
   }
-]
+)

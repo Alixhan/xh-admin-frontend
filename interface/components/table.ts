@@ -91,6 +91,7 @@ export const mTableProps = {
   pagination: {
     type: Object as PropType<TablePagination>
   },
+  //斑马线
   stripe: {
     type: Boolean,
     default: true

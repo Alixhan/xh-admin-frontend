@@ -64,7 +64,7 @@ function open() {
 // 关闭
 function close(type?: CloseType) {
   visible.value = false
-  if(type) emits('close', type)
+  if (type) emits('close', type)
 }
 
 defineExpose({

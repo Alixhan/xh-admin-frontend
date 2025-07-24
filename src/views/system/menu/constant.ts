@@ -18,7 +18,7 @@ export const handleTypeList = [
  * 转变为menu树形结构
  * @param list
  */
-export function generateTreeMenu(list: any []) {
+export function generateTreeMenu(list: any[]) {
   const obj = {}
   list.forEach((i) => {
     i.value = i.id

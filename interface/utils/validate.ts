@@ -68,7 +68,6 @@ export interface UnknownFieldRule<T extends object, K extends keyof T> {
   rules?: ValidRule<T, K> | ValidRule<T, K>[]
 }
 
-
 /**
  * 验证规则对象
  */
