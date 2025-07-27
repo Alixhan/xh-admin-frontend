@@ -1,0 +1,65 @@
+.action-view {
+  --action-item-height: 30px;
+  display: flex;
+  align-items: center;
+  height: var(--action-item-height);
+  border-radius: var(--el-border-radius-base);
+}
+
+.action-item {
+  min-width: 16px;
+  height: var(--action-item-height);
+  padding: 0 8px;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+.action-item:hover {
+  background-color: var(--el-color-primary-light-9);
+
+  :deep(svg) {
+    animation: bounce-in 0.5s linear forwards;
+  }
+}
+
+.action-item:first-child:hover {
+  border-radius: 5px 0 0 5px;
+}
+
+.action-item:last-child:hover {
+  border-radius: 0 5px 5px 0;
+}
+
+@keyframes bounce-in {
+  0%,
+  20%,
+  40%,
+  60%,
+  80%,
+  100% {
+    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+  }
+
+  0% {
+    opacity: 1;
+    transform: scale3d(0.3, 0.3, 0.3);
+  }
+  20% {
+    transform: scale3d(1.4, 1.4, 1.4);
+  }
+  40% {
+    opacity: 1;
+    transform: scale3d(0.7, 0.7, 0.7);
+  }
+  60% {
+    opacity: 1;
+    transform: scale3d(1.1, 1.1, 1.1);
+  }
+  80% {
+    transform: scale3d(0.87, 0.87, 0.87);
+  }
+  100% {
+    opacity: 1;
+    transform: scale3d(1, 1, 1);
+  }
+}

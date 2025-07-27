@@ -443,6 +443,13 @@ export const useSystemStore = defineStore('system', () => {
     globalThis.location.reload()
   }
 
+  // 菜单选中时
+  function onMenuSelect(menu: Menu) {
+    if (menu.handleType === 'outer') {
+      globalThis.open(menu.outerUrl)
+    } else router.push(menu.fullPath)
+  }
+
   return {
     layout,
     locale,
@@ -450,6 +457,7 @@ export const useSystemStore = defineStore('system', () => {
     user,
     treeMenus,
     menus,
+    menusObj,
     orgRoles,
     navTabs,
     activeMenuArr,
@@ -466,6 +474,7 @@ export const useSystemStore = defineStore('system', () => {
     refresh,
     setRefresh,
     setLocale,
-    loginStatus
+    loginStatus,
+    onMenuSelect
   }
 })

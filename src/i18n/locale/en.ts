@@ -32,7 +32,7 @@ export default {
     },
     topFilter: {
       query: 'Query',
-      search: 'Search',
+      search: '@:common.search',
       reset: 'Reset',
       expand: 'Expand',
       collapse: 'Collapse'
@@ -128,7 +128,16 @@ export default {
     loadingText: 'Operating',
     successMsg: 'Operate successfully',
     optFailed: 'Operation failure',
-    noMenus: 'The current role is not assigned menu, please login again!'
+    noMenus: 'The current role is not assigned menu, please login again!',
+    hide: 'Hide',
+    default: 'Default',
+    search: 'Search'
+  },
+  search: {
+    upDown: 'Up Down',
+    enter: 'Select',
+    esc: 'Exit',
+    empty: 'No Results'
   },
   layout: {
     switchLocaleError: 'Failed to switch language',

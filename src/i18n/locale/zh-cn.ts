@@ -36,7 +36,7 @@ export default {
     },
     topFilter: {
       query: '查询',
-      search: '搜索',
+      search: '@:common.search',
       reset: '重置',
       expand: '展开',
       collapse: '收起'
@@ -135,7 +135,14 @@ export default {
     optFailed: '操作失败',
     noMenus: '当前角色未分配菜单，请重新登录！',
     hide: '隐藏',
-    default: '默认'
+    default: '默认',
+    search: '搜索'
+  },
+  search: {
+    upDown: '上下',
+    enter: '选中',
+    esc: '关闭',
+    empty: '无结果',
   },
   layout: {
     switchLocaleError: '切换语言失败',

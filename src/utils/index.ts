@@ -49,3 +49,16 @@ export function useElComponentSizeCssVar() {
   onScopeDispose(() => scope.stop())
   return state!
 }
+
+/**
+ * 获取当前设备操作系统
+ */
+export function getOS() {
+  const userAgent = navigator.userAgent
+  if (/Windows/.test(userAgent)) return 'windows'
+  if (/Android/.test(userAgent)) return 'android'
+  if (/iPhone|iPad|iPod/.test(userAgent)) return 'ios'
+  if (/Mac OS X/.test(userAgent)) return 'macos'
+  if (/Linux/.test(userAgent)) return 'linux'
+  return 'unknow'
+}

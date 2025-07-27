@@ -1,13 +1,12 @@
 <script lang="jsx">
 import { defineComponent, shallowRef, watchEffect } from 'vue'
 import { useSystemStore } from '@/stores/system'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 
 export default defineComponent({
   name: 'DefaultMenu',
   setup() {
     const systemStore = useSystemStore()
-    const router = useRouter()
     const route = useRoute()
 
     const menus = shallowRef()
@@ -65,9 +64,7 @@ export default defineComponent({
         // 小屏设备收起菜单
         if (systemStore.layout.widthShrink) systemStore.layout.menuCollapse = true
         const menu = systemStore.menus.find((i) => i.fullPath === fullPath)
-        if (menu.handleType === 'outer') {
-          globalThis.open(menu.outerUrl)
-        } else router.push(menu.fullPath)
+        systemStore.onMenuSelect(menu)
       }
     }
 
