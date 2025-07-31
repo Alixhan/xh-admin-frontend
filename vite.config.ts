@@ -4,6 +4,7 @@ import vueJsx from '@vitejs/plugin-vue-jsx'
 import eslint from 'vite-plugin-eslint2'
 import { fileURLToPath, URL } from 'node:url'
 import autoprefixer from 'autoprefixer'
+import checker from 'vite-plugin-checker'
 
 export default defineConfig(({ mode }) => {
   // 开发环境时，将当前项目代码路径放入环境变量
@@ -26,7 +27,12 @@ export default defineConfig(({ mode }) => {
         }
       }),
       vueJsx(),
-      eslint()
+      eslint(),
+      checker({
+        vueTsc: {
+          buildMode: true
+        }
+      })
     ],
     resolve: {
       alias: {
