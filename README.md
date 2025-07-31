@@ -63,10 +63,10 @@ git clone https://github.com/Alixhan/xh-admin-frontend
 # enter the project directory
 cd xh-admin-frontend
 
-# install dependencies
+# 安装依赖
 pnpm i
 
-# start the service
+# 启动开发环境
 pnpm dev
 ```
 
@@ -74,12 +74,15 @@ pnpm dev
 
 ```bash
 # prod environment
-pnpm build:production
+pnpm build
 ```
 
 ## 🔧 代码检查
 
 ```bash
+# type check
+pnpm type-check
+
 # code formatting
 pnpm format
 
