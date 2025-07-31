@@ -87,11 +87,8 @@ const inputRef = ref()
 const searchBodyRef = ref()
 const currentIndex = ref(0)
 const loading = ref(false)
-
 const systemStore = useSystemStore()
-
 const menusObj = systemStore.menusObj
-
 const fullMenus = computed(() => {
   return systemStore.menus
     .filter((i) => i.type === 'menu')
@@ -105,7 +102,13 @@ const fullMenus = computed(() => {
     })
 })
 
-const matchMenus = ref([])
+interface SearchMenuLev {
+  id: number
+  icon: string
+  title: string
+}
+
+const matchMenus = ref<typeof fullMenus.value>([])
 
 const keys = useMagicKeys({
   passive: false,
@@ -182,17 +185,17 @@ function onSearch(txt: string) {
   loading.value = false
 }
 
-function getMenuInfo(menuId: number): string[] {
+function getMenuInfo(menuId?: number): SearchMenuLev[] {
   if (!menuId) return []
   const menu: Menu = menusObj[menuId]
   return [...getMenuInfo(menu.parentId), { id: menu.id, icon: menu.icon, title: menu.title }]
 }
 
-async function focusItem(i) {
+async function focusItem(i: number) {
   currentIndex.value = i
 }
 
-function toNavigate(i) {
+function toNavigate(i: number) {
   if (matchMenus.value.length) {
     visible.value = false
     systemStore.onMenuSelect(menusObj[matchMenus.value[i].id])
