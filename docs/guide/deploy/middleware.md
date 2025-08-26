@@ -78,6 +78,7 @@ root 4096 Nov  2 20:34 nginx
 ```sh
 $ docker compose up -d
 ```
+
 会自动下载所有的镜像文件，等待一段时间，咱们中间件的应用就部署好了：
 <el-image style="width: 100%;" :src="previewSrcList[0]" :preview-src-list="previewSrcList" fit="cover" :initial-index="
 0" alt=""/>
@@ -97,14 +98,14 @@ OK，咱们系统所需的中间件已经部署完成。
 
 ## 中间件访问
 
-| 中间件           | 端口号       | web管理地址                               | 用户名   | 初始密码         |
-|---------------|:----------|---------------------------------------|-------|--------------|
-| mysql8.0      | 3306      | 无                                     | root  | 1qaz@WSX#EDC |
-| redis         | 6379      | 无                                     | 无     | 无            |
-| minio         | 9000,9001 | `http://localhost:9001`               | root  | 1qaz@WSX#EDC |
-| xxl-job-admin | 8088      | `http://localhost:8088/xxl-job-admin` | admin | 123456       |
-| nacos         | 8848,9848 | `http://localhost:8848/nacos`         | nacos | nacos        |
-| jenkins       | 8080      | `http://localhost:8080`               | 后续生成  |              |
+| 中间件           | 端口号             | web管理地址                               | 用户名   | 初始密码         |
+|---------------|:----------------|---------------------------------------|-------|--------------|
+| mysql8.0      | 3306            | 无                                     | root  | 1qaz@WSX#EDC |
+| redis         | 6379            | 无                                     | 无     | 无            |
+| minio         | 9000,9001       | `http://localhost:9001`               | root  | 1qaz@WSX#EDC |
+| xxl-job-admin | 8088            | `http://localhost:8088/xxl-job-admin` | admin | 123456       |
+| nacos         | 8848,9848,18080 | `http://localhost:18080`              | nacos | nacos        |
+| jenkins       | 8080            | `http://localhost:8080`               | 后续生成  |              |
 
 nginx是反向代理服务器，后续会进行配置
 

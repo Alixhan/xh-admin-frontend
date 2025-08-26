@@ -39,7 +39,7 @@ const version = import.meta.env.VITE_VERSION
 - 升级：^(重要)danger ^link(vite) 升级至 `7.x` 版本
 - 升级：^(重要)danger ^link(Nacos) 升级至 `3.0.x`
 - 升级：^(重要)danger 中间件 ^link(Jenkins) 升级至 `jdk21-lts`
-- 升级：danger 中间件 ^link(xxl-job) 升级至 `3.1.0`
+- 升级：^(重要)danger 中间件 ^link(xxl-job) 升级至 `3.1.0`
 - 升级：前端相关依赖升级至最新版本
 - 升级：后端依赖升级，部分代码兼容性调整
 

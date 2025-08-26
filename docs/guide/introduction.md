@@ -9,7 +9,7 @@
 如果觉得不错的话，欢迎在 [Gitee](https://gitee.com/sun-xiaohan/xh-admin-frontend) 、
 [Github](https://github.com/Alixhan/xh-admin-frontend)
 上为项目点上 <span style="color: red;">Star、Watch、Fork</span> 鼓励一下作者！！
-::::
+:::
 
 
 
@@ -36,4 +36,3 @@
 ## 在线演示
 
 演示地址：   <http://demo.xhansky.cn>， 演示账号：`admin` 密码：`admin123`
-:::
