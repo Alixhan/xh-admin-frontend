@@ -132,7 +132,10 @@ const columns = computed(() => {
           comment: '继承通用类，可以获得通用字段，比如创建时间，主键等',
           type: 'select',
           labelKey: 'value',
-          itemList: [{ value: 'BaseEntity' }, { value: 'DataPermissionEntity' }],
+          itemList: [
+            { value: 'Base', label: 'Base' },
+            { value: 'BaseDataPermission', label: 'DataPermission' }
+          ],
           onChange(val: string) {
             if (val !== 'DataPermissionEntity') formData.value.isDataPermission = false
           }
