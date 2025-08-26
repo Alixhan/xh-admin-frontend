@@ -134,6 +134,7 @@ export default {
           if (sp >= 24) topBtnIndex = index
           else spans = sp
         }
+        i.$span = span
         // 允许用户按照自己的slotName定制
         if (column.slotName) return slots[column.slotName]?.(i)
         const param = {

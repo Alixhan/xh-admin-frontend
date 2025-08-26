@@ -548,7 +548,7 @@ export default defineComponent(
       }) satisfies VNode[]
     }
 
-    // 生成搜索框
+    // 生成简单搜索框
     function generateTopFilter() {
       if (props.isFilterTable && props.filterColumns) {
         return (
@@ -558,6 +558,7 @@ export default defineComponent(
             param={pageQuery.value.param!}
             loading={loadingRef.value}
             onSearch={fetchQuery}
+            v-slots={slots}
           />
         )
       }

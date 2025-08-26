@@ -7,6 +7,9 @@
         :style="!expand && `height: calc(${elComponentSizeCssVar} + 14px);`"
       >
         <m-form ref="topFilterFormRef" :columns="columns" :model="param" @keyup="keyup" label-position="right">
+          <template v-for="(_, name) in $slots" #[name]="scopedData">
+            <slot :name="name" v-bind="scopedData"></slot>
+          </template>
           <template #top-btn="hasMore">
             <div class="filter-btn">
               <el-button
