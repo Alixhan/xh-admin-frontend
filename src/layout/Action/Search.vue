@@ -305,6 +305,7 @@ function clear() {
       display: flex;
       align-items: center;
       gap: 4px;
+      white-space: nowrap;
 
       > .separator {
         margin-left: 5px;
