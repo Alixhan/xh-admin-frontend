@@ -1,8 +1,8 @@
 <template>
   <div class="demo-view">
     <m-form ref="formRef" :columns="columns" :model="formData">
-      <template #customs1>
-        <el-col :span="24">
+      <template #customs1="col">
+        <el-col :span="col.$span">
           <el-form-item prop="link" label="链接" :rules="[{ required: true }]">
             <el-input v-model="formData.link" clearable>
               <template #prepend>https://</template>
@@ -22,7 +22,7 @@ const formRef = ref()
 
 const columns = ref([
   { prop: 'nickName', label: '昵称', rules: [{ required: true }] },
-  { slotName: 'customs1' },
+  { slotName: 'customs1', cols: 2 },
   { prop: 'hobby', label: '爱好' }
 ])
 

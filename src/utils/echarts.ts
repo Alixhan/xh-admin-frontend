@@ -57,7 +57,6 @@ export type EChartsOption = echarts.ComposeOption<
 >
 
 export function useEcharts(option: Ref<EChartsOption>, onInit?: (eChart: echarts.ECharts) => void) {
-  option.value.backgroundColor ??= 'transparent'
   const domRef = ref<HTMLElement>()
   const { width, height } = useElementSize(domRef)
   let echartsInstance: echarts.ECharts
@@ -66,10 +65,10 @@ export function useEcharts(option: Ref<EChartsOption>, onInit?: (eChart: echarts
   async function initEcharts() {
     if (!domRef.value || !width.value) return
     echartsInstance?.dispose()
-    const theme = systemStore.layout.isDark ? 'dark' : 'light'
+    const theme = systemStore.layout.isDark ? 'dark' : 'default'
     echartsInstance = echarts.init(domRef.value, theme)
     onInit?.(echartsInstance)
-    setOption()
+    await setOption()
   }
 
   async function setOption(opt?: EChartsOption, notMerge?: any, lazyUpdate?: any) {
@@ -97,7 +96,13 @@ export function useEcharts(option: Ref<EChartsOption>, onInit?: (eChart: echarts
       }, 40)
     )
 
-    watch(() => [systemStore.layout.isDark], initEcharts)
+    //监听主题切换
+    watch(
+      () => systemStore.layout.isDark,
+      (isDark) => {
+        echartsInstance?.setTheme(isDark ? 'dark' : 'default')
+      }
+    )
   })
 
   onMounted(initEcharts)

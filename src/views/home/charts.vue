@@ -43,6 +43,8 @@ const optionArr: Ref<EChartsOption[]> = computed(() => [
   {
     title: {
       text: t('home.pie'),
+      top: 'top',
+      left: 'left',
       textStyle: {
         fontSize: 14
       }
@@ -86,6 +88,8 @@ const optionArr: Ref<EChartsOption[]> = computed(() => [
     color: color.value,
     title: {
       text: t('home.line'),
+      top: 'top',
+      left: 'left',
       textStyle: {
         fontSize: 14
       }
@@ -100,8 +104,9 @@ const optionArr: Ref<EChartsOption[]> = computed(() => [
       }
     },
     grid: {
-      left: '3%',
-      right: '4%',
+      top: '40px',
+      left: 0,
+      right: 0,
       bottom: '0',
       containLabel: true
     },
@@ -136,6 +141,8 @@ const optionArr: Ref<EChartsOption[]> = computed(() => [
     color: color.value,
     title: {
       text: t('home.bar'),
+      top: 'top',
+      left: 'left',
       textStyle: {
         fontSize: 14
       }
@@ -147,6 +154,7 @@ const optionArr: Ref<EChartsOption[]> = computed(() => [
       }
     },
     grid: {
+      top: '40px',
       left: '3%',
       right: '4%',
       bottom: '0',
@@ -179,6 +187,8 @@ const optionArr: Ref<EChartsOption[]> = computed(() => [
     color: color.value,
     title: {
       text: t('home.pressure'),
+      top: 'top',
+      left: 'left',
       textStyle: {
         fontSize: 14
       }
