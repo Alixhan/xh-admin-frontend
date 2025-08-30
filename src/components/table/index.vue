@@ -278,7 +278,7 @@ export default defineComponent(
             r.showOverflowTooltip ??= false
           }
 
-          if (r.prop) r.sortable ??= props.fetchData ? 'custom' : true // 默认后端排序
+          if (r.prop) r.sortable ??= props.sortable ? (props.fetchData ? 'custom' : true) : false // 默认排序
 
           // 没有设置宽度则根据label字数自动设定宽度，这样可以避免标题换行，影响美观
           if (!(r.width ?? r.minWidth) && r.label) {
