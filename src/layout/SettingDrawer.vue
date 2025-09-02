@@ -1,9 +1,5 @@
 <template>
-  <el-drawer
-    style="min-width: min(90vw, 400px); max-width: 380px"
-    v-model="systemStore.layout.settingVisible"
-    :title="$t('setting.layout')"
-  >
+  <el-drawer size="400px" v-model="systemStore.layout.settingVisible" :title="$t('setting.layout')">
     <el-form label-width="9em" label-position="left">
       <el-form-item :label="$t('setting.theme')" :span="24">
         <div class="theme-view">
@@ -62,7 +58,7 @@ const themeList = themeStore.themeList
 const tabStyles = ['square', 'mellow', 'lively']
 const sizes = ['small', 'default', 'large']
 
-function change(val) {
+function change(val: string) {
   themeStore.changeThemeId(val)
 }
 </script>

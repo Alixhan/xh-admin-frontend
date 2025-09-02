@@ -110,8 +110,8 @@ pre {
 
 .el-dialog {
   &:not(.is-fullscreen) {
-    min-width: min(350px, 95vw);
-    max-width: 95vw;
+    min-width: min(350px, calc(100vw - 20px));
+    max-width: calc(100vw - 20px);
   }
 
   &.is-fullscreen {
@@ -130,8 +130,8 @@ pre {
 }
 
 .el-drawer {
-  min-width: min(300px, 95vw);
-  max-width: 95vw;
+  min-width: min(300px, calc(100vw - 20px));
+  max-width: calc(100vw - 20px);
 
   .el-drawer__header {
     padding-bottom: 20px;
