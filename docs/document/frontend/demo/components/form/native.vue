@@ -38,8 +38,3 @@ const formData = ref({
   phoneNum: '18543245664'
 })
 </script>
-<style lang="scss" scoped>
-.demo-view {
-  text-align: end;
-}
-</style>

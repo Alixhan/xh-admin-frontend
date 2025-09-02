@@ -8,9 +8,13 @@ import {
   ElCheckboxButton,
   ElCheckboxGroup,
   ElColorPicker,
+  ElColorPickerPanel,
   ElDatePicker,
+  ElDatePickerPanel,
   ElInput,
   ElInputNumber,
+  ElInputTag,
+  ElMention,
   ElOption,
   ElRadio,
   ElRadioButton,
@@ -22,6 +26,7 @@ import {
   ElSwitch,
   ElTimePicker,
   ElTimeSelect,
+  ElTreeSelect,
   ElUpload
 } from 'element-plus'
 import SingleDatePicker from '@/components/form/SingleDatePicker.vue'
@@ -46,22 +51,27 @@ export function generateDynamicColumn<T extends object>(column: CommonFormColumn
   const param: CommonFormColumn<T> = {
     clearable: true,
     ariaLabel: column.label,
-    ...column
+    ...column,
+    ...column.$param
   }
-  if (!['switch', 'radio', 'checkbox'].includes(param.type ?? '')) {
+  delete param.$param
+  if (
+    !['switch', 'radio', 'checkbox', 'color-picker', 'color-picker-panel', 'date-picker-panel'].includes(
+      column.type ?? ''
+    )
+  ) {
     param.style = 'width: 100%;' + (param.style ?? '')
   }
   const slots = {
     ...column.slots
   }
-
   // 没有默认插槽，给select，radio-group，checkbox-group初始化子选项
   if (!slots.default) {
     // 选项的通用参数
     const itemParam = {
       ...param.itemParam
     }
-    if (param.type === 'select') {
+    if (column.type === 'select') {
       // 下拉框option数据， ref
       const itemArr = getItemListRef(param)
       // 构造select-option
@@ -69,7 +79,7 @@ export function generateDynamicColumn<T extends object>(column: CommonFormColumn
         return itemArr.value.map((i) => createVNode(ElOption, { ...itemParam, ...i }))
       }
     }
-    if (param.type === 'radio-group') {
+    if (column.type === 'radio-group') {
       // 默认加上子项的边框
       itemParam.border ??= true
       // 选项ref数据
@@ -82,7 +92,7 @@ export function generateDynamicColumn<T extends object>(column: CommonFormColumn
         })
       }
     }
-    if (param.type === 'checkbox-group') {
+    if (column.type === 'checkbox-group') {
       // 默认加上子项的边框
       itemParam.border ??= true
       // 选项ref数据
@@ -125,7 +135,7 @@ export function generateDynamicColumn<T extends object>(column: CommonFormColumn
   delete param.label
 
   // 日期区间需要单独处理
-  if (['daterange', 'datetimerange', 'monthrange'].includes(param.type ?? '')) {
+  if (['daterange', 'datetimerange', 'monthrange'].includes(column.type ?? '')) {
     if (!param.prop2) throw Error('prop2属性缺失')
     // 日期区间拆分独立选择
     if (param.single) {
@@ -256,7 +266,7 @@ export function generateFormRules<T extends object>(
   return rules.map((i) => {
     return {
       required: i.required,
-      validator: async (rule, value, callback) => {
+      validator: async (_, value, callback) => {
         const errMsg = await ruleValid(
           {
             label: column.label,
@@ -291,11 +301,11 @@ export function getRules<T extends object>(column: Pick<CommonFormColumn<T>, 'ru
 export function generateFormatter<T extends object>(tableColumParams: TableColumn<T>) {
   // itemList需要转化一下显示
   if (tableColumParams.itemList) {
-    tableColumParams.formatter ??= (row, column, cellValue) => {
+    tableColumParams.formatter ??= (...args) => {
       const itemList = (
         isRef(tableColumParams.itemList) ? tableColumParams.itemList.value : tableColumParams.itemList
       ) as CommonItemData[]
-      return itemList.find((i) => i.value === cellValue)?.label ?? cellValue
+      return itemList.find((i) => i.value === args[2])?.label ?? args[2]
     }
   }
 }
@@ -350,6 +360,11 @@ function getFormComponentByName(compName: string) {
   else if (compName === 'el-upload') component = ElUpload
   else if (compName === 'el-radio-group') component = ElRadioGroup
   else if (compName === 'el-checkbox-group') component = ElCheckboxGroup
+  else if (compName === 'el-tree-select') component = ElTreeSelect
+  else if (compName === 'el-color-picker-panel') component = ElColorPickerPanel
+  else if (compName === 'el-date-picker-panel') component = ElDatePickerPanel
+  else if (compName === 'el-input-tag') component = ElInputTag
+  else if (compName === 'el-mention') component = ElMention
   else if (compName === 'm-single-date-picker') component = SingleDatePicker
   else if (compName === 'm-icon-select') component = IconSelect
   else if (compName === 'm-upload') component = MUpload

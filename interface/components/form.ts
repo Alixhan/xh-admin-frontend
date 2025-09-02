@@ -51,7 +51,10 @@ export interface CommonFormColumn<T extends object> extends Partial<Omit<FormPro
   valueKey?: string | ((item: CommonItemData) => string | number)
   //绑定表单的属性
   single?: UploadSingle | boolean
-
+  //当column属性和表单组件属性名冲突时，可通过此属性给表单组件做覆盖配置
+  $param?: {
+    [prop: string]: any
+  }
   [prop: string]: any
 }
 

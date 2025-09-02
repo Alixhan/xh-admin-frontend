@@ -3,10 +3,13 @@
     <m-form ref="formRef" :columns="columns" :model="formData">
       <template #customs1="col">
         <el-col :span="col.$span">
-          <el-form-item prop="link" label="链接" :rules="[{ required: true }]">
+          <el-form-item prop="link" label="链接" :rules="col.formItemParams.rules">
             <el-input v-model="formData.link" clearable>
               <template #prepend>https://</template>
             </el-input>
+            <div>
+              插槽参数：{{ col }}
+            </div>
           </el-form-item>
         </el-col>
       </template>
