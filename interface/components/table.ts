@@ -95,6 +95,11 @@ export const mTableProps = {
   stripe: {
     type: Boolean,
     default: true
+  },
+  //列排序
+  sortable: {
+    type: Boolean,
+    default: true
   }
 }
 
@@ -154,6 +159,7 @@ export interface TableSortColumn {
   _id: string
   label: string
   hidden?: boolean
+  fixed?: 'left' | 'right'
   children?: TableSortColumn[]
 }
 

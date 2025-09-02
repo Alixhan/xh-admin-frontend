@@ -513,6 +513,7 @@ export default defineComponent(
           _id: column._id,
           label: column.label ?? '',
           hidden: column.hidden,
+          fixed: column.fixed,
           children: initSortColumn(column.children)
         }
       })
@@ -524,7 +525,8 @@ export default defineComponent(
         ?.filter((i) => !i.hidden)
         .map((sortCol) => {
           return {
-            ...tableColumnsParamsObj.value[sortCol._id]!,
+            ...tableColumnsParamsObj.value[sortCol._id],
+            fixed: sortCol.fixed,
             children: getSortColumnsParams(sortCol.children)
           }
         })

@@ -24,6 +24,22 @@
             {{ $t('common.restoreDefault') }}
           </el-link>
         </span>
+        <div v-else-if="!data._id.includes('-')" :class="`icon-view ${data.fixed}`">
+          <m-svg-icon
+            v-if="data.fixed === 'left'"
+            class="pin-icon left"
+            src="@/assets/icon/pin-fill.svg"
+            @click.stop="pin(data)"
+          />
+          <m-svg-icon v-else class="pin-icon left" src="@/assets/icon/pin-line.svg" @click.stop="pin(data, 'left')" />
+          <m-svg-icon
+            v-if="data.fixed === 'right'"
+            class="pin-icon right"
+            src="@/assets/icon/pin-fill.svg"
+            @click.stop="pin(data)"
+          />
+          <m-svg-icon v-else class="pin-icon right" src="@/assets/icon/pin-line.svg" @click.stop="pin(data, 'right')" />
+        </div>
       </template>
     </el-tree>
   </el-popover>
@@ -35,6 +51,7 @@ import { ref, watchEffect } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type Node from 'element-plus/es/components/tree/src/model/node'
 import type { TableSortColumn } from '@i/components/table'
+import MSvgIcon from '@/components/SvgIcon.vue'
 
 /**
  * 通用表格列排序
@@ -63,7 +80,9 @@ const defaultProps = {
   label: 'label',
   class: (data: TableSortColumn) => {
     if (data._id === 'root') {
-      return 'custom-tree-node'
+      return 'custom-tree-root'
+    } else {
+      return 'custom-tree-col'
     }
   }
 }
@@ -81,7 +100,7 @@ watchEffect(() => {
 })
 
 //只允许同级拖拽
-function allowDrop(draggingNode, dropNode, type) {
+function allowDrop(draggingNode: any, dropNode: any, type: any) {
   return ['prev', 'next'].includes(type) && draggingNode.parent === dropNode.parent
 }
 
@@ -90,20 +109,76 @@ function checkChange(node: Node & TableSortColumn, checked: boolean, halfChecked
     node.hidden = !(checked || halfChecked)
   }
 }
+
+//toggle pin
+function pin(data: TableSortColumn, fixed?: 'left' | 'right') {
+  data.fixed = fixed
+}
 </script>
 <style scoped lang="scss">
-:deep(.custom-tree-node) {
+:deep(.custom-tree-root) {
   > .el-tree-node__content {
     display: flex;
     align-items: center;
     border-bottom: var(--el-border);
     cursor: default;
-
     background-color: inherit !important;
+    position: relative;
   }
 
   > .el-tree-node__children {
     z-index: -1000;
+  }
+}
+:deep(.custom-tree-col) {
+  > .el-tree-node__content {
+    position: relative;
+    background-color: var(--el-popover-bg-color);
+
+    .icon-view {
+      cursor: default;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      right: 0;
+      display: none;
+      align-items: center;
+      box-sizing: content-box;
+      border-radius: 4px;
+      background-color: inherit;
+      padding-left: 5px;
+      gap: 3px;
+
+      .pin-icon {
+        cursor: pointer;
+        display: block;
+        width: 1.2em;
+
+        &.left {
+          transform: rotate(-90deg);
+        }
+      }
+
+      &.left {
+        display: flex;
+        > .left {
+          color: var(--el-color-primary);
+        }
+      }
+
+      &.right {
+        display: flex;
+        > .right {
+          color: var(--el-color-primary);
+        }
+      }
+    }
+
+    &:hover {
+      .icon-view {
+        display: flex;
+      }
+    }
   }
 }
 </style>
