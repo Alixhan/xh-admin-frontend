@@ -21,7 +21,7 @@ pipeline {
     //使用全局工具
     tools {
         //引用之前全局工具配置的NodeJs的name
-        nodejs 'nodejs22'
+        nodejs 'nodejs24'
     }
 
     //参数化构建
