@@ -835,10 +835,6 @@ export default defineComponent(
       :deep(.el-zoom-in-top-leave-active) {
         transition: none;
       }
-
-      :deep(.el-form-item__content) {
-        justify-content: center;
-      }
     }
   }
 
