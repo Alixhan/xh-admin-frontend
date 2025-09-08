@@ -74,9 +74,10 @@ components/form/comment
 components/form/native
 :::
 
-## $param 属性名冲突时的处理
+## $param 属性名冲突时的处理 ^(v1.6.0)primary
 
-有时候，表单列的属性定义可能和某些表单组件的属性名重合，导致无法单独定义表单组件的属性值，我们可以使用 `$param` 属性做单独配置， 通过 `$param` 配置表单组件属性时，优先级更高。
+有时候，表单列的属性定义可能和某些表单组件的属性名重合，导致无法单独定义表单组件的属性值，我们可以使用 `$param` 属性做单独配置，
+通过 `$param` 配置表单组件属性时，优先级更高。
 :::demo
 components/form/$param
 :::
@@ -110,24 +111,24 @@ components/form/$param
 
 仅列出本项目特有字段说明，对应表单组件的的属性文档，请查阅 [Element Plus](https://element-plus.org/zh-CN) 文档
 
-| 字段          | 字段描述                                                               | 类型                                                           |
-|-------------|--------------------------------------------------------------------|--------------------------------------------------------------|
-| label       | 标题名称                                                               | ^[string]                                                    |
-| type        | 表单类型，参考下方表单类型对照表                                                   | ^[string]                                                    |
-| hidden      | 隐藏此列                                                               | ^[boolean]                                                   |
-| prop        | 绑定表单的属性                                                            | ^[string]                                                    |
-| prop2       | 表单属性2 ，`'daterange'`, `'datetimerange'`, `'monthrange'` 可能会使用      | ^[string]                                                    |
-| rules       | 验证规则，参考 ^link(Validate 数据验证)                                       | ^[ValidRules]`ValidRule \| ValidRule []`                     |
-| render      | 自定义渲染，参数为默认渲染的vNode                                                | ^[Function]`(vNode: VNode) => VNode`                         |
-| comment     | 疑问备注                                                               | ^[string] \| ^[VNode]                                        |
-| required    | 显示必填星号                                                             | ^[boolean]                                                   |
-| slots       | 表单项插槽                                                              | ^[SlotsObj]`位于interface/components/index.ts，查看详细类型定义`        |
-| slotName    | 允许用户按照自己的slotName插槽定制                                              | ^[string]                                                    |
-| optionParam | 定制 `'radio-group'` 和 `'checkbox-group'` 的选项参数                      | ^[object]                                                    |
-| itemList    | type = `'select'`  \| `'radio-group'` \| `'checkbox-group'` 时的枚举选项 | ^[CommonItemList]`位于 interface/components/index.ts，查看详细类型定义` |
-| labelKey    | 枚举选项的 labelKey，默认为 `label`                                         | ^[string]                                                    |
-| valueKey    | 枚举选项的 valueKey，默认为 `value`                                         | ^[string]                                                    |
-| $param      | 当column属性和表单组件属性名冲突时，可通过此属性给表单组件做覆盖配置                              | ^[object]`{[prop: string]: any}`                             |
+| 字段                      | 字段描述                                                               | 类型                                                           |
+|-------------------------|--------------------------------------------------------------------|--------------------------------------------------------------|
+| label                   | 标题名称                                                               | ^[string]                                                    |
+| type                    | 表单类型，参考下方表单类型对照表                                                   | ^[string]                                                    |
+| hidden                  | 隐藏此列                                                               | ^[boolean]                                                   |
+| prop                    | 绑定表单的属性                                                            | ^[string]                                                    |
+| prop2                   | 表单属性2 ，`'daterange'`, `'datetimerange'`, `'monthrange'` 可能会使用      | ^[string]                                                    |
+| rules                   | 验证规则，参考 ^link(Validate 数据验证)                                       | ^[ValidRules]`ValidRule \| ValidRule []`                     |
+| render                  | 自定义渲染，参数为默认渲染的vNode                                                | ^[Function]`(vNode: VNode) => VNode`                         |
+| comment                 | 疑问备注                                                               | ^[string] \| ^[VNode]                                        |
+| required                | 显示必填星号                                                             | ^[boolean]                                                   |
+| slots                   | 表单项插槽                                                              | ^[SlotsObj]`位于interface/components/index.ts，查看详细类型定义`        |
+| slotName                | 允许用户按照自己的slotName插槽定制                                              | ^[string]                                                    |
+| optionParam             | 定制 `'radio-group'` 和 `'checkbox-group'` 的选项参数                      | ^[object]                                                    |
+| itemList                | type = `'select'`  \| `'radio-group'` \| `'checkbox-group'` 时的枚举选项 | ^[CommonItemList]`位于 interface/components/index.ts，查看详细类型定义` |
+| labelKey                | 枚举选项的 labelKey，默认为 `label`                                         | ^[string]                                                    |
+| valueKey                | 枚举选项的 valueKey，默认为 `value`                                         | ^[string]                                                    |
+| $param ^(v1.6.0)primary | 当column属性和表单组件属性名冲突时，可通过此属性给表单组件做覆盖配置                              | ^[object]`{[prop: string]: any}`                             |
 
 ## Form Type 对照表
 
@@ -153,11 +154,11 @@ components/form/$param
 | `'upload'`                                                                                                                         | ElUpload                                          |                               |
 | `'radio-group'`                                                                                                                    | ElRadioGroup                                      |                               |
 | `'checkbox-group'`                                                                                                                 | ElCheckboxGroup                                   |                               |
-| `'tree-select'`                                                                                                                    | ElTreeSelect                                      |                               |
-| `'color-picker-panel'`                                                                                                             | ElColorPickerPanel                                |                               |
-| `'date-picker-panel'`                                                                                                              | ElDatePickerPanel                                 |                               |
-| `'input-tag'`                                                                                                                      | ElInputTag                                        |                               |
-| `'mention'`                                                                                                                        | ElMention                                         |                               |
+| `'tree-select'`   ^(v1.6.0)primary                                                                                                 | ElTreeSelect                                      |                               |
+| `'color-picker-panel'`  ^(v1.6.0)primary                                                                                           | ElColorPickerPanel                                |                               |
+| `'date-picker-panel'`   ^(v1.6.0)primary                                                                                           | ElDatePickerPanel                                 |                               |
+| `'input-tag'`  ^(v1.6.0)primary                                                                                                    | ElInputTag                                        |                               |
+| `'mention'` ^(v1.6.0)primary                                                                                                       | ElMention                                         |                               |
 | `'icon-select'`                                                                                                                    | [MIconSelect](/document/frontend/components/icon) |                               |
 | `'upload-img'`  \| `'upload-file'`                                                                                                 | [MUpload](/document/frontend/components/upload)   |                               |
 | `'span'`\| `'div'`\| `'p'`\| `'a'`\| `'i'`                                                                                         | MNative                                           | 表单的值将作为这些原生标签的 innerHtml 插入展示 |

@@ -6,6 +6,36 @@ const version = import.meta.env.VITE_VERSION
 
 当前版本： ^({{version}})
 
+## v1.6.0 ^[(2025-09-08)]
+
+**新特性**
+
+- 新增：菜单搜索功能，现在可以按照菜单名称模糊搜索菜单。
+- 新增：^link(Form 表单) 组件新增 `$param`，当组件的属性名和列定义的属性名冲突时，使用 `$param` 属性解决冲突
+- 新增：^link(Form 表单) 组件新增支持 `el-tree-select`、`el-color-picker-panel`、`el-date-picker-panel`、`el-input-tag`、
+  `el-mention` 表单组件
+- 新增：^link(Table 表格) 组件添加属性 `sortable` 来控制所有列是否默认可排序
+- 新增：^link(Table 表格) 新增用户可动态设置列固定功能
+
+**优化**
+
+- 修复：代码生成器继承 `BaseEntity` 错误的问题
+- 修复：^link(Table 表格) 组件，`slotName` 无法自定义简单查询表单插槽的问题
+- 优化：后端去除默认的视频抽帧逻辑，移除 `opencv` 依赖，大部分用户用不上，并且会导致打包体积过大，增加部署负担
+- 优化：添加详细的后端 `BaseJdbcDao` 方法注释，更易于开发使用
+
+**升级** （保持依赖库的更新是生产的最佳实践）
+
+- 升级：^(重要)danger ^link(typescript) 升级至最新 `5.9.2` 版本
+- 升级：^(重要)danger ^link(EChart 图表) 升级至 `6.x` 版本
+- 升级：前端相关依赖升级至最新版本
+- 升级：后端依赖升级，^link(SpringBoot) 升级至 `3.5.5` 版本
+
+**文档**
+
+- 新增：后端手册：使用数据库、配置数据源、后端规范等
+- 修复：文档的部分错误信息
+
 ## v1.5.0 ^[(2025-06-26)]
 
 **新特性**
