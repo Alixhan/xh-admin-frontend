@@ -65,6 +65,8 @@ const links = {
   文件请求链接: '/document/frontend/utils/file-url',
   'ContextMenu 上下文菜单': '/document/frontend/utils/context-menu',
   'Swagger 文档': '/document/backend/swagger',
+  'BaseJdbcDao': '/document/backend/persistence#basejdbcdao',
+  '操作数据库': '/document/backend/persistence',
 }
 
 export default (md: MarkdownIt): void => {

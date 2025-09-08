@@ -3,12 +3,12 @@
 
 # 介绍
 官方文档地址 <https://www.xhansky.cn>
-::: tip
+::: tip 提示
 项目基于 Apache License 2.0 开源协议，<span style="color: red;">可免费商用</span>。
 
 如果觉得不错的话，欢迎在 [Gitee](https://gitee.com/sun-xiaohan/xh-admin-frontend) 、
 [Github](https://github.com/Alixhan/xh-admin-frontend)
-上为项目点上 <span style="color: red;">Star、Watch、Fork</span> 鼓励一下作者！！
+上为项目点上 <span style="color: red;">Star</span> 鼓励一下作者！！
 :::
 
 
@@ -35,4 +35,8 @@
 
 ## 在线演示
 
-演示地址：   <http://demo.xhansky.cn>， 演示账号：`admin` 密码：`admin123`
+演示地址：<http://demo.xhansky.cn>， 演示账号：`admin` 密码：`admin123`
+
+:::warning 提示
+为防止自由维护数据导致演示站混乱，异常，演示站已禁用新增，修改，删除等敏感权限，请下载源码运行后体验完整功能。
+:::
