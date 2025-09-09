@@ -67,6 +67,10 @@ export interface NavTab {
   componentName?: string
   // 图标
   icon?: string
+  // 路由处理类型
+  handleType: 'route' | 'iframe'
+  // 外链地址
+  outerUrl?: string
 }
 
 declare type LayoutSize = 'small' | 'default' | 'large'
@@ -283,7 +287,9 @@ export const useSystemStore = defineStore('system', () => {
         fullPath: guard.fullPath,
         componentName: guard.meta.componentName,
         cache: guard.meta.cache,
-        icon: guard.meta.icon
+        icon: guard.meta.icon,
+        handleType: guard.meta.handleType,
+        outerUrl: guard.meta.outerUrl
       })
     // 设置浏览器标题
     let tit = import.meta.env.VITE_TITLE
@@ -372,7 +378,7 @@ export const useSystemStore = defineStore('system', () => {
           .join('/')
         // 组件name
         const componentName = camelCase(fullPath)
-        const dynamicRoute = {
+        const dynamicRoute: any = {
           name,
           path,
           fullPath,
@@ -389,8 +395,14 @@ export const useSystemStore = defineStore('system', () => {
             cache: i.cache,
             component: i.component,
             icon: i.icon,
-            componentName
+            componentName,
+            handleType: i.handleType,
+            outerUrl: i.outerUrl
           }
+        }
+        // iframe 类型菜单需要缓存时，需将链接地址传入 props
+        if (i.handleType === 'iframe' && i.cache) {
+          dynamicRoute.props = { src: i.outerUrl }
         }
         i.componentName = componentName
         router.addRoute(layoutRouteName, dynamicRoute)

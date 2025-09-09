@@ -4,15 +4,19 @@
   </div>
 </template>
 <script setup>
-import { useSystemStore } from '@/stores/system'
 import { ref } from 'vue'
-import { useRoute } from 'vue-router'
+
 defineOptions({
   name: 'IframeView'
 })
-const systemStore = useSystemStore()
-const route = useRoute()
-const src = systemStore.menus.find((i) => i.fullPath === route.fullPath).outerUrl
+
+defineProps({
+  src: {
+    type: String,
+    required: true
+  }
+})
+
 const loading = ref(true)
 </script>
 <style lang="scss" scoped>
