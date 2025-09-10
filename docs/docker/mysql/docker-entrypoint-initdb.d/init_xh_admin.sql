@@ -391,6 +391,11 @@ INSERT INTO `sys_role_menu` VALUES (1186, 1, 14, '2024-05-14 15:24:09', NULL, 1,
 INSERT INTO `sys_role_menu` VALUES (1187, 1, 15, '2024-05-14 15:24:09', NULL, 1, NULL, 0);
 INSERT INTO `sys_role_menu` VALUES (1188, 1, 7, '2024-05-14 15:24:09', NULL, 1, NULL, 0);
 INSERT INTO `sys_role_menu` VALUES (1189, 1, 6, '2024-05-14 15:24:09', NULL, 1, NULL, 0);
+INSERT INTO `sys_role_menu` VALUES (1491, 1, 83, '2025-09-10 17:56:17', NULL, 1, NULL, b'0');
+INSERT INTO `sys_role_menu` VALUES (1492, 1, 85, '2025-09-10 17:56:17', NULL, 1, NULL, b'0');
+INSERT INTO `sys_role_menu` VALUES (1493, 1, 86, '2025-09-10 17:56:17', NULL, 1, NULL, b'0');
+INSERT INTO `sys_role_menu` VALUES (1494, 1, 87, '2025-09-10 17:56:17', NULL, 1, NULL, b'0');
+INSERT INTO `sys_role_menu` VALUES (1495, 1, 84, '2025-09-10 17:56:17', NULL, 1, NULL, b'0');
 
 -- ----------------------------
 -- Table structure for sys_user
