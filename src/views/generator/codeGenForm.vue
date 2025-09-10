@@ -170,10 +170,10 @@ const columns = computed(() => {
         },
         {
           prop: 'isDataPermission',
-          disabled: formData.value.extend !== 'DataPermissionEntity',
+          disabled: formData.value.extend !== 'BaseDataPermission',
           label: '启用数据权限',
           type: 'switch',
-          comment: '须继承DataPermissionEntity实体类后可选，选中后将自动创建数据实体，列表查询自动启用数据权限。'
+          comment: '须继承BaseDataPermission实体类后可选，选中后将自动创建数据实体，列表查询、获取明细，删除将自动启用数据权限'
         },
         { type: 'separator', label: '字段配置' },
         { slotName: 'design' }
