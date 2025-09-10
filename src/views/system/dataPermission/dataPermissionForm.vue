@@ -120,8 +120,7 @@ watchEffect(() => {
     {
       prop: 'expression',
       slotName: 'expression',
-      label: t('system.dataPermission.expression'),
-      rules: { required: true, trigger: 'change' }
+      label: t('system.dataPermission.expression')
     }
   ]
 })
@@ -129,11 +128,16 @@ watchEffect(() => {
 // 保存方法
 function save() {
   formRef.value.validate().then(() => {
-    postSaveDataPermission(formData.value, {
+    const option: RequestOption = {
       loadingRef: saveLoading,
       showSuccessMsg: true,
       successMsg: t('common.saveSuccess')
-    }).then(() => close('refresh'))
+    }
+    if (!formData.value.expression) {
+      option.showBeforeConfirm = true
+      option.confirmMsg = '权限表达式为空表示具有查看所有数据的权限，这会导致设置此数据权限的角色权限过大，可能会造成数据泄露，确定保存吗？'
+    }
+    postSaveDataPermission(formData.value, option).then(() => close('refresh'))
   })
 }
 

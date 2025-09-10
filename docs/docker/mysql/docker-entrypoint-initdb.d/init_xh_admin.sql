@@ -550,6 +550,7 @@ INSERT INTO `sys_data_permission` (`id`, `name`, `expression`, `json`, `create_t
 INSERT INTO `sys_data_permission` (`id`, `name`, `expression`, `json`, `create_time`, `update_time`, `create_by`, `update_by`, `deleted`) VALUES (3, '仅可见当前角色数据', '$DQJS', '[{\"prop\":\"$DQJS\",\"logic\":\"and\",\"condition\":\"positive\",\"value\":\"\"}]', '2024-08-18 23:00:00', '2024-08-21 21:44:49', 1, 1, 0);
 INSERT INTO `sys_data_permission` (`id`, `name`, `expression`, `json`, `create_time`, `update_time`, `create_by`, `update_by`, `deleted`) VALUES (4, '可查看本机构及下属机构数据', '$BJG or $BJGX', '[{\"prop\":\"$BJG\",\"logic\":\"and\",\"condition\":\"positive\",\"value\":\"\"},{\"prop\":\"$BJGX\",\"logic\":\"or\",\"condition\":\"positive\"}]', '2024-08-18 23:00:52', '2024-08-22 00:30:13', 1, 1, 0);
 INSERT INTO `sys_data_permission` (`id`, `name`, `expression`, `json`, `create_time`, `update_time`, `create_by`, `update_by`, `deleted`) VALUES (5, '可查看当前角色及下属角色的数据', '$DQJS or $DQJSX', '[{\"prop\":\"$DQJS\",\"logic\":\"and\",\"condition\":\"positive\"},{\"prop\":\"$DQJSX\",\"logic\":\"or\",\"condition\":\"positive\"}]', '2024-08-18 23:01:45', '2024-08-22 00:30:26', 1, 1, 0);
+INSERT INTO `sys_data_permission` (`id`, `name`, `expression`, `json`, `create_time`, `update_time`, `create_by`, `update_by`, `deleted`) VALUES (6, '可查看所有', '', '[]', '2025-05-28 15:26:58', '2025-09-10 18:25:17', 1, 1, b'0');
 
 DROP TABLE IF EXISTS `sys_role_data_permission`;
 create table sys_role_data_permission
