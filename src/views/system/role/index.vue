@@ -92,6 +92,7 @@ const columns = computed(() => [
     type: 'operation',
     fixed: 'right',
     align: 'center',
+    maxCount: 3,
     buttons: [
       {
         label: t('system.dataPermission.label'),

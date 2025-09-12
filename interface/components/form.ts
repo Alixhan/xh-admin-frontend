@@ -78,7 +78,7 @@ export const mFormProps = {
   colspan: {
     type: Number
   },
-  // 表单对象
+  // 表单数据对象
   model: {
     type: Object,
     required: true
@@ -88,15 +88,11 @@ export const mFormProps = {
     type: Array as PropType<CommonFormColumn<any>[]>,
     required: true
   },
-  labelWidth: {
-    type: [String, Number]
-  },
-  labelPosition: {
-    type: String as PropType<'top' | 'left' | 'right'>
-  },
+  // 验证错误时是否滚动到错误视图
   scrollToError: {
     default: true
   },
+  //错误滚动选项
   scrollIntoViewOptions: {
     default: { behavior: 'smooth', block: 'center', inline: 'center' }
   },

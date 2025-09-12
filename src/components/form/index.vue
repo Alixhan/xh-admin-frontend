@@ -1,5 +1,5 @@
 <script lang="tsx">
-import { createVNode, provide, ref, shallowRef, type SlotsType, watchEffect } from 'vue'
+import { createVNode, defineComponent, provide, ref, shallowRef, type SlotsType, watchEffect } from 'vue'
 import { generateDynamicColumn, generateFormRules, generatePlaceholder, vModelValue } from '@/components/mutils'
 import { useSystemStore } from '@/stores/system'
 import { useElementSize } from '@vueuse/core'
@@ -12,11 +12,11 @@ import type { SlotsObj } from '@i/components'
  * 通用表单组件
  * sxh 2023-3-24
  */
-export default {
+export default defineComponent({
   name: 'MForm',
   inheritAttrs: false,
-  props: { ...mFormProps },
-  emits: { ...mFormEmits },
+  props: mFormProps,
+  emits: mFormEmits,
   slots: Object as SlotsType<{
     default: void
     'top-btn': boolean
@@ -268,7 +268,7 @@ export default {
       return <el-form {...formParam} v-slots={formSlots} class={{ 'detail-form': props.handleType === 'detail' }} />
     }
   }
-}
+})
 </script>
 <style scoped lang="scss">
 .form-item-label {
