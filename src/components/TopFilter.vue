@@ -6,7 +6,14 @@
         @scroll="(e: any) => (e.target.scrollTop = 0)"
         :style="!expand && `height: calc(${elComponentSizeCssVar} + 14px);`"
       >
-        <m-form ref="topFilterFormRef" :columns="columns" :model="param" @keyup="keyup" label-position="right">
+        <m-form
+          ref="topFilterFormRef"
+          :columns="columns"
+          :model="param"
+          @keyup="keyup"
+          :col-size="colSize"
+          label-position="right"
+        >
           <template v-for="(_, name) in $slots" #[name]="scopedData">
             <slot :name="name" v-bind="scopedData"></slot>
           </template>
@@ -62,6 +69,10 @@ const props = defineProps({
   columns: {
     type: Array as PropType<CommonFormColumn<any>[]>,
     default: () => []
+  },
+  // form colSize 属性
+  colSize: {
+    type: [Number]
   },
   labelWidth: {
     type: String
