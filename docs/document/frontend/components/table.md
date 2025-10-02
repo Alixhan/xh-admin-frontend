@@ -182,11 +182,18 @@ components/table/editable2
 
 | 名称             | 详情             | 类型                               |
 |----------------|----------------|----------------------------------|
+| loadingRef     | 搜索按钮加载状态       | ^[Ref<boolean>]                  | 
 | fetchQuery     | 执行数据查询         | ^[Function]`() => Promise<void>` | 
 | validate       | 验证表格数据         | ^[Function]`() => Promise<void>` | 
 | tableRef       | ElTableRef     | ^[Ref<ElTable>]                  | 
 | formRef        | ElFormRef      | ^[Ref<ElForm>]                   | 
 | exportExcelRef | ExportExcelRef | ^[Ref<MExportExcel>]             | 
+
+### Table Event
+
+| 名称     | 详情                  | 类型                                          |
+|--------|---------------------|---------------------------------------------|
+| search | 无fetch-data时，点击搜索触发 | ^[Function]`(pageQuery: PageQuery) => void` | 
 
 ## CommonTableColumn 表格列
 

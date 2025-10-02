@@ -116,6 +116,7 @@ components/form/$param
 | label                   | 标题名称                                                               | ^[string]                                                    |
 | type                    | 表单类型，参考下方表单类型对照表                                                   | ^[string]                                                    |
 | hidden                  | 隐藏此列                                                               | ^[boolean]                                                   |
+| cols                    | 定义该项跨列数，可以是小数                                                      | ^[string]                                                    |
 | prop                    | 绑定表单的属性                                                            | ^[string]                                                    |
 | prop2                   | 表单属性2 ，`'daterange'`, `'datetimerange'`, `'monthrange'` 可能会使用      | ^[string]                                                    |
 | rules                   | 验证规则，参考 ^link(Validate 数据验证)                                       | ^[ValidRules]`ValidRule \| ValidRule []`                     |
@@ -128,6 +129,7 @@ components/form/$param
 | itemList                | type = `'select'`  \| `'radio-group'` \| `'checkbox-group'` 时的枚举选项 | ^[CommonItemList]`位于 interface/components/index.ts，查看详细类型定义` |
 | labelKey                | 枚举选项的 labelKey，默认为 `label`                                         | ^[string]                                                    |
 | valueKey                | 枚举选项的 valueKey，默认为 `value`                                         | ^[string]                                                    |
+| itemParam               | 给select，radio-group，checkbox-group子选项配置一些属性，比如设置border             | ^[object]`{[prop: string]: any}`                             |
 | $param ^(v1.6.0)primary | 当column属性和表单组件属性名冲突时，可通过此属性给表单组件做覆盖配置                              | ^[object]`{[prop: string]: any}`                             |
 
 ## Form Type 对照表
