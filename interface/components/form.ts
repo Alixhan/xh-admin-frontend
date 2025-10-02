@@ -39,6 +39,10 @@ export interface CommonFormColumn<T extends object> extends Partial<Omit<FormPro
   comment?: any
   //显示必填星号
   required?: boolean
+  //始终新开一行，位于新行第一列
+  newLine?: boolean
+  // 跨列数
+  cols?: number
   //表单项插槽
   slots?: SlotsObj
   //允许用户按照自己的slotName插槽定制
@@ -51,6 +55,10 @@ export interface CommonFormColumn<T extends object> extends Partial<Omit<FormPro
   valueKey?: string | ((item: CommonItemData) => string | number)
   //绑定表单的属性
   single?: UploadSingle | boolean
+  //给select，radio-group，checkbox-group子选项配置，比如border
+  itemParam?: {
+    [prop: string]: any
+  }
   //当column属性和表单组件属性名冲突时，可通过此属性给表单组件做覆盖配置
   $param?: {
     [prop: string]: any
@@ -87,6 +95,17 @@ export const mFormProps = {
   columns: {
     type: Array as PropType<CommonFormColumn<any>[]>,
     required: true
+  },
+  labelWidth: {
+    type: [String, Number]
+  },
+  labelPosition: {
+    type: String as PropType<'top' | 'left' | 'right'>
+  },
+  //组件会根据此宽度自动计算出每行的列数
+  colSize: {
+    type: [Number],
+    default: 300
   },
   // 验证错误时是否滚动到错误视图
   scrollToError: {

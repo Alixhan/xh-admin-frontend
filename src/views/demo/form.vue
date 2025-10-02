@@ -36,6 +36,7 @@ const columns = ref<CommonFormColumn<any>[]>([
     prop: 'select',
     label: 'select选择框',
     type: 'select',
+    newLine: true,
     itemList: [
       { value: '1', label: '选我发大财' },
       { value: '2', label: '选我心想事成' },

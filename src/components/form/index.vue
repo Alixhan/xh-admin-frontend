@@ -38,7 +38,7 @@ export default defineComponent({
     const formSize = ref(useElementSize(formRef))
     const cols = ref(0)
     watchEffect(() => {
-      let sizeWidth = 300
+      let sizeWidth = props.colSize
       if (props.labelPosition === 'top') sizeWidth -= 60
       if (systemStore.layout.size === 'small') sizeWidth -= 50
       cols.value = Number(Math.floor(formSize.value.width / sizeWidth)) || 1
@@ -117,15 +117,18 @@ export default defineComponent({
       let spans = 0
       const columnViews = formItemParams.value.map((i, index) => {
         // 隐藏的不显示
-        if (i.hidden) return null
+        if (i.hidden) return { newLine: i.columnParam?.newLine, view: null }
         if (i.columnParam.type === 'separator') {
           let content = i.columnParam.label && <div>{i.columnParam.label}</div>
           if (i.columnParam.render) content = i.columnParam.render()
-          return (
-            <el-col span={24} class="separator">
-              {content}
-            </el-col>
-          )
+          return {
+            newLine: i.columnParam?.newLine,
+            view: (
+              <el-col span={24} class="separator">
+                {content}
+              </el-col>
+            )
+          }
         }
         const column = i.columnParam
         const span = getColSpan(column)
@@ -136,7 +139,11 @@ export default defineComponent({
         }
         i.$span = span
         // 允许用户按照自己的slotName定制
-        if (column.slotName) return slots[column.slotName]?.(i)
+        if (column.slotName)
+          return {
+            newLine: i.columnParam?.newLine,
+            view: slots[column.slotName]?.(i)
+          }
         const param = {
           class: 'form-input',
           ...i.renderArgs?.param,
@@ -167,34 +174,55 @@ export default defineComponent({
             )
           }
         }
-        return (
-          <el-col span={span}>
-            <el-form-item {...i.formItemParams} v-slots={formItemSlots} />
-          </el-col>
-        )
+        return {
+          newLine: i.columnParam?.newLine,
+          view: (
+            <el-col span={span}>
+              <el-form-item {...i.formItemParams} v-slots={formItemSlots} />
+            </el-col>
+          )
+        }
       })
       if (slots['top-btn']) {
-        const btnView = (
-          <el-col span={spans < 24 ? 24 - spans : getColSpan({})}>
-            <el-form-item label-width="0">{slots['top-btn'](topBtnIndex !== -1)}</el-form-item>
-          </el-col>
-        )
+        const btnView = {
+          newLine: false,
+          view: (
+            <el-col span={spans < 24 ? 24 - spans : getColSpan({})}>
+              <el-form-item label-width="0">{slots['top-btn'](topBtnIndex !== -1)}</el-form-item>
+            </el-col>
+          )
+        }
         if (topBtnIndex === -1) {
           columnViews.push(btnView)
         } else {
           columnViews.splice(topBtnIndex, 0, btnView)
         }
       }
+      //newline的会新开一行
       return columnViews
+        .reduce((arr, c) => {
+          if(!c.view) return arr
+          const ars = arr[arr.length - 1]
+          if (c.newLine || !ars) {
+            arr.push([c.view])
+          } else {
+            ars.push(c.view)
+          }
+          return arr
+        }, [] as any)
+        .map((i) => <el-row>{i}</el-row>)
     }
 
     //生成骨架屏表单列
     function generateFormSkeletons() {
-      return formItemParams.value.map((i) => {
+      const columnViews = formItemParams.value.map((i) => {
         // 隐藏的不显示
-        if (i.hidden) return null
+        if (i.hidden) return {}
         if (i.columnParam.type === 'separator')
-          return <el-skeleton-item style={{ width: '100%', marginBottom: '1em' }} />
+          return {
+            newLine: i.columnParam?.newLine,
+            view: <el-skeleton-item style={{ width: '100%', marginBottom: '1em' }} />
+          }
         const column = i.columnParam
         const formItemSlots: SlotsObj = {
           default: () => {
@@ -228,12 +256,28 @@ export default defineComponent({
             return <el-skeleton-item {...skeletonParam} />
           }
         }
-        return (
-          <el-col span={getColSpan(column)}>
-            <el-form-item {...{ ...i.formItemParams, required: false }} v-slots={formItemSlots} />
-          </el-col>
-        )
+        return {
+          newLine: i.columnParam?.newLine,
+          view: (
+            <el-col span={getColSpan(column)}>
+              <el-form-item {...{ ...i.formItemParams, required: false }} v-slots={formItemSlots} />
+            </el-col>
+          )
+        }
       })
+      //newline的会新开一行
+      return columnViews
+        .reduce((arr, c) => {
+          if(!c.view) return arr
+          const ars = arr[arr.length - 1]
+          if (c.newLine || !ars) {
+            arr.push([c.view])
+          } else {
+            ars.push(c.view)
+          }
+          return arr
+        }, [] as any)
+        .map((i) => <el-row>{i}</el-row>)
     }
 
     return () => {
@@ -247,8 +291,8 @@ export default defineComponent({
       if (isDetail) {
         formParam.disabled = true
       }
-      // 小屏设备需要强制改变布局方式（竖屏）
-      if (!props.labelPosition && systemStore.layout.widthShrink && cols.value === 1) {
+      // 宽度不足需要强制改变布局方式（竖屏）
+      if (!props.labelPosition && formSize.value.width < 500) {
         formParam.labelPosition = 'top'
       }
       formParam.labelWidth ??= 'auto'
@@ -258,8 +302,8 @@ export default defineComponent({
         animated: true
       }
       const skeletonSlots = {
-        default: () => <el-row>{generateFormColumns()}</el-row>,
-        template: () => <el-row>{generateFormSkeletons()}</el-row>
+        default: () => generateFormColumns(),
+        template: () => generateFormSkeletons()
       }
       const formSlots = {
         ...slots,
