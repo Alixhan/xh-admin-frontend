@@ -64,6 +64,10 @@ export const mTableProps = {
   filterParam: {
     type: Object
   },
+  // 过滤表单的ColSize
+  filterColSize: {
+    type: [Number],
+  },
   // 表格列定义
   columns: {
     type: Array as PropType<CommonTableColumn<any>[]>,
@@ -96,10 +100,10 @@ export const mTableProps = {
     type: Boolean,
     default: true
   },
-  //列排序
+  //表格排序
   sortable: {
-    type: Boolean,
-    default: true
+    type: [Boolean, String as PropType<'custom'>],
+    default: 'custom'
   }
 }
 
@@ -271,12 +275,20 @@ export interface EditableTableColumn<T extends object> extends TableColumn<T>, I
 
 export interface OperationButton<T> {
   type?: 'default' | 'success' | 'warning' | 'info' | 'primary' | 'danger'
-  label: string
-  icon?: string | VNode | (() => VNode)
+  label: string | ((row: T) => string)
+  icon?: string | VNode | (() => VNode) | ((row: T) => string | VNode)
   auth?: string | string[]
   hidden?: boolean
   authLogic?: 'and' | 'or'
-  onClick?: (row: T, index: { $index: number; $fullIndex: number }) => void
+  onClick?: (
+    row: T,
+    index: {
+      // 当前页行索引
+      $index: number
+      // 合计行索引
+      $fullIndex: number
+    }
+  ) => void
   disabled?: ((row: T) => boolean) | boolean
 }
 

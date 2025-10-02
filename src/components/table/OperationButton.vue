@@ -74,8 +74,10 @@ function init() {
       return {
         type: 'primary',
         ...i,
-        onClick: () => i.onClick?.(props.row!, props.index!),
-        disabled: i.disabled instanceof Function ? i.disabled(props.row!) : i.disabled
+        label: i.label instanceof Function ? i.label(props.row!) : i.label,
+        icon: i.icon instanceof Function ? i.icon(props.row!) : i.icon,
+        disabled: i.disabled instanceof Function ? i.disabled(props.row!) : i.disabled,
+        onClick: () => i.onClick?.(props.row!, props.index!)
       }
     })
   if (props.auth) {
@@ -114,5 +116,9 @@ function getBind(item: OperationButton<T>) {
   .el-icon {
     margin-right: 5px;
   }
+}
+
+:deep(.disabled) {
+  opacity: 0.5;
 }
 </style>

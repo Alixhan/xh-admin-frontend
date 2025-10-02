@@ -60,8 +60,8 @@ export class Locales {
 }
 
 export const locales: Locales[] = [
-  new Locales('zh-cn', '简体中文', [10, 13, 15], merge(zhCn, elZhCn), Chinese),
-  new Locales('zh-tw', '繁體中文', [10, 13, 15], merge(zhTw, elZhTw), ChineseF),
+  new Locales('zh-cn', '简体中文', [10, 12, 15], merge(zhCn, elZhCn), Chinese),
+  new Locales('zh-tw', '繁體中文', [10, 12, 15], merge(zhTw, elZhTw), ChineseF),
   new Locales('en', 'English', [6, 7.2, 8.5], merge(en, elEn), English),
   new Locales('ja', '日本語', [10.3, 13, 15], merge(ja, elJa), Japanese)
 ]

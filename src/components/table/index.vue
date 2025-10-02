@@ -80,8 +80,17 @@ export default defineComponent(
     const pageData = computed(() => {
       if (!props.fetchData) {
         if (props.isPage) {
+          const arr = [...data.value]
+          // 内存分页排序
+          const { orderProp, orderDirection } = pageQuery.value
+          if (orderProp && orderDirection) {
+            arr.sort((a, b) => {
+              const r = a[orderProp] >= b[orderProp] ? 1 : -1
+              return orderDirection === 'asc' ? r : -r
+            })
+          }
           const start = pageQuery.value.pageSize! * (pageQuery.value.currentPage! - 1)
-          return data.value.slice(start, start + pageQuery.value.pageSize!)
+          return arr.slice(start, start + pageQuery.value.pageSize!)
         }
       }
       return data.value
@@ -136,6 +145,8 @@ export default defineComponent(
           pagination.value.total = resData.total
           selectionChange([])
         })
+      } else {
+        emit('search', pageQuery.value)
       }
     }
 
@@ -278,7 +289,7 @@ export default defineComponent(
             r.showOverflowTooltip ??= false
           }
 
-          if (r.prop) r.sortable ??= props.sortable ? (props.fetchData ? 'custom' : true) : false // 默认排序
+          if (r.prop) r.sortable ??= props.sortable // 默认排序
 
           // 没有设置宽度则根据label字数自动设定宽度，这样可以避免标题换行，影响美观
           if (!(r.width ?? r.minWidth) && r.label) {
@@ -309,13 +320,23 @@ export default defineComponent(
             if (buttons.length < i.buttons?.length) {
               buttons[buttons.length - 1] = { icon: 'el|more', label: t('common.more') }
             }
-            i.width ??= Math.max(
-              buttons.reduce(
-                (size, item) => size + (item.label?.length ?? 0) * charWidth + (item.icon ? 16 : 0),
-                16 + (buttons.length - 1) * 1.5 * charWidth
-              ) + 30,
-              charWidth * i.label!.length + 32
-            )
+
+            i.width ??=
+              24 + //两边边距
+              (buttons.length - 1) * 17 + //每个按钮的分割宽度
+              //按钮宽度计算
+              buttons.reduce((size, item) => {
+                let fontCount = 0
+                // 有图标算一个字符再加5间距
+                if (item.icon) {
+                  size += 5
+                  fontCount++
+                }
+                fontCount += item.label?.length ?? 0
+                return size + fontCount * charWidth
+              }, 0) +
+              5 // 预留额外5
+
             return i.buttons?.length
           }
           return true
@@ -461,6 +482,7 @@ export default defineComponent(
           prop,
           style: 'margin-bottom: 0;',
           inlineMessage: true,
+          class: `form-item-align-${column.align}`,
           rules: generateFormRules({ label: column.label, rules: editParam?.rules }, scope.row)
         }
         return (
@@ -556,6 +578,7 @@ export default defineComponent(
         return (
           <TopFilter
             class="top-filter"
+            colSize={props.filterColSize}
             columns={props.filterColumns}
             param={pageQuery.value.param!}
             loading={loadingRef.value}
@@ -713,6 +736,7 @@ export default defineComponent(
     }
 
     expose({
+      loadingRef,
       tableRef,
       formRef,
       exportExcelRef,
@@ -742,7 +766,7 @@ export default defineComponent(
       'left-action': void
       'right-action': void
     }>,
-    emits: ['update:data', 'selection-change', 'row-click']
+    emits: ['update:data', 'selection-change', 'row-click', 'search']
   }
 )
 </script>
@@ -826,6 +850,17 @@ export default defineComponent(
       .el-table-view {
         height: 100%;
         max-height: 100%;
+
+        :deep(.form-item-align-center) {
+          .el-form-item__content {
+            justify-content: center;
+          }
+        }
+        :deep(.form-item-align-right) {
+          .el-form-item__content {
+            justify-content: end;
+          }
+        }
       }
 
       :deep(.el-form-item__error--inline) {
