@@ -63,7 +63,7 @@ import type { CommonFormColumn } from '@i/components/form'
 import validate from '@/utils/validate'
 import { ElMessageBox, ElNotification } from 'element-plus'
 import { useI18n } from 'vue-i18n'
-import { toLowerUnderscore } from '@/utils'
+import { toLowerUnderscore, underscoreToCamelCase } from '@/utils'
 
 defineOptions({
   name: 'DesignColumn'
@@ -255,7 +255,10 @@ function getColumns(column?: DesignTableColumn): CommonFormColumn<DesignTableCol
       label: '字段名',
       hidden: isVirtual,
       disabled: props.designType === '2',
-      rules: { pattern: /^[a-z][a-z0-9]*(_[a-z0-9]+)*$/ }
+      rules: { pattern: /^[a-z][a-z0-9]*(_[a-z0-9]+)*$/ },
+      onChange: (val: string) => {
+        if (!column.prop) column.prop = underscoreToCamelCase(val)
+      }
     },
     {
       prop: 'colType',
