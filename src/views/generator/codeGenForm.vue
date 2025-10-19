@@ -62,7 +62,7 @@ const formData = ref({
   service: '',
   module: '',
   author: '',
-  extend: 'BaseEntity',
+  extend: 'Base',
   frontendPath: '',
   backendPath: '',
   isCreateMenu: false,
