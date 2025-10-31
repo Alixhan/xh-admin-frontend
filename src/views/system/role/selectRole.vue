@@ -13,6 +13,7 @@
       :selection="selection"
       :selection-limit="selectionLimit"
       @selection-change="(rows) => (selectRows = rows)"
+      persist-layout-key="selectRole"
     >
       <template #left-action>
         <el-button

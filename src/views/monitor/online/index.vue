@@ -10,6 +10,7 @@
       :fetch-data="queryOnlineUser"
       v-model:data="data"
       selection="multiple"
+      persist-layout-key="monitor:online:list"
     />
   </div>
 </template>

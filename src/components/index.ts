@@ -9,6 +9,7 @@ import MComment from './Comment.vue'
 import MUpload from './form/Upload.vue'
 import MOperationButton from './table/OperationButton.vue'
 import MExcelImport from './ExcelImport.vue'
+import MTool from './Tool.vue'
 import type { App } from 'vue'
 import ShowContextMenu from '@/utils/context-menu'
 
@@ -24,6 +25,7 @@ export default function (app: App<Element>) {
   app.component('MUpload', MUpload)
   app.component('MOperationButton', MOperationButton)
   app.component('MExcelImport', MExcelImport)
+  app.component('MTool', MTool)
 
   ShowContextMenu.install(app)
 }

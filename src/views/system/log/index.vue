@@ -9,11 +9,12 @@
       :filter-columns="topFilterColumns"
       :columns="columns"
       :fetch-data="queryLogList"
-      border
+      :border="true"
       v-model:data="data"
       selection="multiple"
       @selection-change="(rows) => (selectRows = rows)"
       is-complex-filter
+      persist-layout-key="system:log:index"
     >
       <template #right-action>
         <el-button

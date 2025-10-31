@@ -20,6 +20,7 @@
       v-model:data="tableColumns"
       row-key="prop"
       :handle-type="handleType"
+      persist-layout-key="generator:design:column"
     >
       <template #left-action>
         <el-button

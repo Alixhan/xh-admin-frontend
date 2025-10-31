@@ -34,8 +34,8 @@ export const mTableProps = {
   exportFileName: {
     type: String
   },
-  // 是否表格列排序
-  isSortColumn: {
+  // 显示表格列设置
+  showSetting: {
     type: Boolean,
     default: true
   },
@@ -66,7 +66,7 @@ export const mTableProps = {
   },
   // 过滤表单的ColSize
   filterColSize: {
-    type: [Number],
+    type: [Number]
   },
   // 表格列定义
   columns: {
@@ -104,6 +104,14 @@ export const mTableProps = {
   sortable: {
     type: [Boolean, String as PropType<'custom'>],
     default: 'custom'
+  },
+  /**
+   * 持久化表格布局，需要提供一个全局唯一的key
+   * 开启后，用户可选择保存布局，包括列显隐，列宽，列顺序，列固定等信息
+   * 需保证项目中不同表格的key唯一，否则可能会导致意料之外的错误
+   */
+  persistLayoutKey: {
+    type: String
   }
 }
 
@@ -123,10 +131,11 @@ export interface TableColumn<T extends object> extends Partial<Omit<TableColumnC
   single?: string
   type?: string
   _id?: string
+  _parentId?: string
   //标题名称
   label?: string
   //疑问备注框
-  comment?: VNode
+  comment?: VNode | string
   //显示必填星号
   required?: boolean
   // 此列不导出到excel
@@ -161,9 +170,11 @@ export interface TableColumn<T extends object> extends Partial<Omit<TableColumnC
 
 export interface TableSortColumn {
   _id: string
+  _parentId: string
   label: string
   hidden?: boolean
   fixed?: 'left' | 'right'
+  width?: number
   children?: TableSortColumn[]
 }
 
@@ -334,4 +345,13 @@ export interface PreviewType extends Omit<FilterRow, 'children'> {
   enabled: boolean
   str: string
   children?: PreviewType[]
+}
+
+export interface PersistTableSetting {
+  // 是否持久化
+  persist: boolean
+  // 是否显示边框
+  border?: boolean
+  // 持久化列配置
+  columns: TableSortColumn[]
 }

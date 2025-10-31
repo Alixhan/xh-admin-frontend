@@ -13,6 +13,7 @@
       v-model:data="data"
       selection="multiple"
       @selection-change="(rows) => (selectRows = rows)"
+      persist-layout-key="system:dataPermission:index"
     >
       <template #left-action></template>
       <template #right-action>

@@ -13,6 +13,7 @@
       :selection="selection"
       :selection-limit="selectionLimit"
       @selection-change="(rows) => (selectRows = rows)"
+      persist-layout-key="selectSysFile"
     >
       <template #left-action>
         <el-button

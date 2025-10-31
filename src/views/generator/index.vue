@@ -13,6 +13,7 @@
       selection="multiple"
       @selection-change="(rows) => (selectRows = rows)"
       v-model:data="data"
+      persist-layout-key="generator:index"
     >
       <template #right-action>
         <el-button v-auth="'system:user:add'" type="primary" icon="plus" @click="openForm('add', null)">

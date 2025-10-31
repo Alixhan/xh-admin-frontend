@@ -13,6 +13,7 @@
       selection="multiple"
       @selection-change="(rows) => (selectRows = rows)"
       v-model:data="data"
+      persist-layout-key="system:user:index"
     >
       <template #right-action>
         <el-button v-auth="'system:user:import'" type="primary" icon="upload" @click="userImportRef.open()">

@@ -14,6 +14,7 @@
       @selection-change="(rows) => (selectRows = rows)"
       v-model:data="data"
       :cell-style="cellStyle"
+      persist-layout-key="system:file:index"
     >
       <template #right-action>
         <el-button

@@ -25,7 +25,7 @@ import TopFilter from '@/components/TopFilter.vue'
 import QueryFilter from '@/components/table/queryFilter/index.vue'
 import ExportExcel from './ExportExcel.vue'
 import MOperationButton from './OperationButton.vue'
-import TableColumnSort from './TableColumnSort.vue'
+import TableColumnSetting from './TableColumnSetting.vue'
 import { useSystemStore } from '@/stores/system'
 import { ElForm } from 'element-plus'
 import { auth } from '@/directive'
@@ -39,6 +39,7 @@ import type {
   CI,
   CommonTableColumn,
   MTableProps,
+  PersistTableSetting,
   TableColumn,
   TablePagination,
   TableSortColumn
@@ -47,6 +48,9 @@ import { mTableProps } from '@i/components/table'
 import { type ContextMenuItem, showContextMenu } from '@/utils/context-menu'
 import type { UnknownFieldRule } from '@i/utils/validate'
 import { usePreview } from '@/components/table/queryFilter/queryFilter'
+import { useLocalStorage } from '@vueuse/core'
+import { findTreeNodeById, sortTreeByReference } from '@/utils/tree.ts'
+import MIcon from '@/components/Icon.vue'
 
 /**
  * 通用表格组件
@@ -156,6 +160,7 @@ export default defineComponent(
     const formRef = ref()
     const tableRef = ref()
     const exportExcelRef = ref()
+    const TableColumnSettingRef = ref()
 
     // 表格列参数
     const tableColumnsParams: Ref<CommonTableColumn<T>[]> = shallowRef([])
@@ -167,6 +172,16 @@ export default defineComponent(
     const sortColumns: Ref<TableSortColumn[]> = ref([])
 
     const sortColumnsParams = computed(() => getSortColumnsParams(sortColumns.value))
+
+    const persistSetting = props.persistLayoutKey
+      ? useLocalStorage<PersistTableSetting>(`persist-table:${props.persistLayoutKey}`, null, {
+          deep: true,
+          serializer: {
+            read: (v) => JSON.parse(v),
+            write: (v) => JSON.stringify(v)
+          }
+        })
+      : undefined
 
     //叶子节点列
     const leafColumns: Ref<CommonTableColumn<T>[]> = ref([])
@@ -222,18 +237,61 @@ export default defineComponent(
       fetchQuery()
     }
 
+    //拖动列宽
+    function onHeaderDragend(newWidth: number, _: number, column: any) {
+      const sortCol = findTreeNodeById(sortColumns.value, column.columnKey, '_id')!
+      sortCol.width = newWidth
+    }
+
     //列表头右击
     function onHeaderContextmenu(column: any, e: PointerEvent) {
-      if (column.property) {
+      if (column.columnKey) {
         e.preventDefault()
-        const menus = [
-          { id: 2, prop: column.property, label: t('m.table.ascending'), icon: 'ArrowUp' },
-          { id: 3, prop: column.property, label: t('m.table.descending'), icon: 'ArrowDown' }
-          // { id: 4, prop: column.property, label: t('common.hide'), icon: 'Hide' }
-        ]
-        if (props.isComplexFilter && props.fetchData) {
-          menus.unshift({ id: 1, prop: column.property, label: t('m.table.complexFilter'), icon: 'Filter' })
+        const menus: any[] = []
+        if (column.property) {
+          if (props.isComplexFilter && props.fetchData) {
+            menus.unshift({ id: 1, columnKey: column.columnKey, label: t('m.table.complexFilter'), icon: 'Filter' })
+          }
+          menus.push(
+            ...[
+              { id: 2, columnKey: column.columnKey, label: t('m.table.ascending'), icon: 'ArrowUp' },
+              { id: 3, columnKey: column.columnKey, label: t('m.table.descending'), icon: 'ArrowDown' }
+            ]
+          )
         }
+        const sortCol = findTreeNodeById(sortColumns.value, column.columnKey, '_id')
+        // 仅一级表头可固定
+        if (!sortCol?._parentId) {
+          if ((sortCol?.fixed ?? 'right') === 'right') {
+            menus.push({
+              id: 6,
+              columnKey: column.columnKey,
+              label: t('m.table.fixLeft'),
+              icon: <MIcon value="local|/src/assets/icon/pin-fill.svg" style="transform: rotate(-90deg);" />
+            })
+          }
+
+          if ((sortCol?.fixed ?? 'left') === 'left') {
+            menus.push({
+              id: 7,
+              columnKey: column.columnKey,
+              label: t('m.table.fixRight'),
+              icon: <MIcon value="local|/src/assets/icon/pin-fill.svg" />
+            })
+          }
+
+          if (sortCol?.fixed) {
+            menus.push({
+              id: 5,
+              columnKey: column.columnKey,
+              label: t('m.table.unfix'),
+              icon: <MIcon value="local|/src/assets/icon/pin-line.svg" style="transform: rotate(-45deg);" />
+            })
+          }
+        }
+
+        menus.push({ id: 4, columnKey: column.columnKey, label: t('common.hide'), icon: 'Hide' })
+
         showContextMenu({
           clientX: e.clientX,
           clientY: e.clientY,
@@ -244,19 +302,30 @@ export default defineComponent(
     }
 
     function clickMenu(menu: ContextMenuItem) {
+      const column = tableColumnsParamsObj.value[menu.columnKey]!
+      const sortCol = findTreeNodeById(sortColumns.value, menu.columnKey, '_id')!
       if (menu.id === 1) {
-        queryFilterRef.value.addRow(menu.prop)
+        queryFilterRef.value.addRow(column.prop)
       }
       if (menu.id === 2) {
-        tableRef.value.sort(menu.prop, 'ascending')
+        tableRef.value.sort(column.prop, 'ascending')
       }
       if (menu.id === 3) {
-        tableRef.value.sort(menu.prop, 'descending')
+        tableRef.value.sort(column.prop, 'descending')
       }
-      // if (menu.id === 4) {
-      //   sortColumns.value.find(i => )
-      //   tableRef.value.sort(menu.prop, 'descending')
-      // }
+      if (menu.id === 4) {
+        TableColumnSettingRef.value.setChecked(sortCol._id, false)
+        sortCol.hidden = true
+      }
+      if (menu.id === 5) {
+        sortCol.fixed = undefined
+      }
+      if (menu.id === 6) {
+        sortCol.fixed = 'left'
+      }
+      if (menu.id === 7) {
+        sortCol.fixed = 'right'
+      }
     }
 
     //调用初始化表格列的参数
@@ -276,13 +345,17 @@ export default defineComponent(
     }
 
     //初始化表格列的参数
-    function initTableColumnParam(cols: TableColumn<T>[], parentId = '') {
+    function initTableColumnParam(cols: TableColumn<T>[], parentId?: string) {
       const charWidth = getCurrentLocales().getCharWidth()
       return cols
         .map((column, i) => {
           // el-table序号列，自动添加标题，标题居中
           const r = { ...column }
-          r._id = parentId + i
+          r._parentId = parentId
+          r._id =
+            column.columnKey ??
+            parentId ??
+            '' + i + `|${column.type ?? ''}_${column.prop ?? ''}_${column.slotName ?? ''}`
           if (r.type === 'index') {
             r.label ??= t('m.table.index')
             r.width ??= 80
@@ -344,7 +417,7 @@ export default defineComponent(
         .map((column) => {
           // 递归生成多层级table
           if (column.children?.length) {
-            column.children = initTableColumnParam(column.children, column._id + '-')
+            column.children = initTableColumnParam(column.children, column._id + '|')
           }
 
           // column属性
@@ -494,8 +567,29 @@ export default defineComponent(
     }
 
     //调用初始化表格筛选排序列数组
-    function initSortColumnFun() {
+    function initSortColumnFun(restoreDefault?: boolean) {
       sortColumns.value = initSortColumn(tableColumnsParams.value)
+      if (restoreDefault) {
+        if (persistSetting?.value?.persist) {
+          persistSetting.value.columns = sortColumns.value
+        }
+        return
+      }
+
+      if (persistSetting) {
+        // 尝试从缓存还原表格列设置，重排序
+        if (persistSetting.value?.persist) {
+          sortColumns.value = sortTreeByReference(sortColumns.value, persistSetting.value.columns, '_id')
+          persistSetting.value.columns = sortColumns.value
+          // restoreTableSetting()
+        } else {
+          persistSetting.value = {
+            persist: true,
+            border: props.border,
+            columns: sortColumns.value
+          }
+        }
+      }
     }
 
     // 验证表格数据
@@ -533,9 +627,11 @@ export default defineComponent(
       return cols.map((column) => {
         return {
           _id: column._id,
+          _parentId: column._parentId,
           label: column.label ?? '',
           hidden: column.hidden,
           fixed: column.fixed,
+          width: column.width,
           children: initSortColumn(column.children)
         }
       })
@@ -549,6 +645,8 @@ export default defineComponent(
           return {
             ...tableColumnsParamsObj.value[sortCol._id],
             fixed: sortCol.fixed,
+            width: sortCol.width,
+            hidden: sortCol.hidden,
             children: getSortColumnsParams(sortCol.children)
           }
         })
@@ -564,7 +662,8 @@ export default defineComponent(
           column.slots!.default = () => generateTableColumn(column.children!)
         }
         const param = {
-          ...column
+          ...column,
+          columnKey: column._id
         }
         delete param.slots
         delete param.children
@@ -621,13 +720,13 @@ export default defineComponent(
     // 生成table
     function generateTableView() {
       const tableParam = {
-        onSortChange,
         ...attrs,
         ...props,
         ref: tableRef,
         data: pageData.value,
         onRowClick: rowClick,
-        onSelectionChange: selectionChange
+        onSelectionChange: selectionChange,
+        border: persistSetting?.value?.border ?? props.border
       }
       // 删除无效属性
       const invalidProps = [
@@ -671,11 +770,21 @@ export default defineComponent(
                 {props.isComplexFilter && props.fetchData && (
                   <QueryFilter ref={queryFilterRef} v-model={pageQuery.value.filters} onSearch={fetchQuery} />
                 )}
-                {props.isSortColumn && (
-                  <TableColumnSort
+                {props.showSetting && (
+                  <TableColumnSetting
+                    ref={TableColumnSettingRef}
+                    border={persistSetting?.value?.border}
+                    persist={persistSetting?.value?.persist}
+                    onUpdate:persist={(v) => {
+                      persistSetting!.value!.persist = v
+                    }}
+                    onUpdate:border={(v) => {
+                      persistSetting!.value!.border = v
+                    }}
+                    persistLayoutKey={props.persistLayoutKey}
                     class="action-btn"
                     columns={sortColumns.value}
-                    onRestoreDefault={initSortColumnFun}
+                    onRestoreDefault={() => initSortColumnFun(true)}
                   />
                 )}
               </div>
@@ -695,6 +804,8 @@ export default defineComponent(
                 default: () => [...generateTableColumn(sortColumnsParams.value), slots.default?.()]
               }}
               onHeaderContextmenu={onHeaderContextmenu}
+              onSortChange={onSortChange}
+              onHeaderDragend={onHeaderDragend}
               // v-loading={loadingRef.value} 发现此处加入loading会导致内存泄漏。。。。
               class={{ 'el-table-view': true, 'radio-selection': props.selection === 'single' }}
             />

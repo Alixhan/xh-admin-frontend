@@ -7,7 +7,7 @@ export default {
       total: '總數',
       selected: '已選中',
       export: '導出',
-      colSort: '列排序',
+      colSetting: '列设置',
       operation: '操作',
       allCol: '全部列',
       fileName: '錶格數據',

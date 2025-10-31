@@ -14,6 +14,7 @@
       v-model:data="data"
       selection="multiple"
       @selection-change="(rows) => (selectRows = rows)"
+      persist-layout-key="system:menu:index"
     >
       <template #left-action>
         <el-button type="success" @click="toggleExpand">

@@ -28,6 +28,7 @@
       selection="multiple"
       @selection-change="(rows) => (selectRows = rows)"
       is-complex-filter
+      persist-layout-key="system:dict:index"
     >
       <template #right-action>
         <el-button v-auth="'system:dict:add'" type="primary" icon="plus" @click="openForm('add')"

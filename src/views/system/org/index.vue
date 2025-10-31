@@ -28,6 +28,7 @@
       v-model:data="data"
       selection="multiple"
       @selection-change="(rows) => (selectRows = rows)"
+      persist-layout-key="system:org:index"
     >
       <template #right-action>
         <el-button v-auth="'system:org:add'" type="primary" icon="plus" @click="openForm('add')"

@@ -154,7 +154,7 @@ function delUser(index) {
 
 const visible1 = ref(false)
 
-// 选择了机构
+// 选择了用户
 function selectedUser(rows) {
   const addUser = rows
     .filter((i) => !formData.value.memberData.some((j) => j.sysUserId === i.id))

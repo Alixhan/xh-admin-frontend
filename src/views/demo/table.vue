@@ -2,7 +2,15 @@
   <div class="root">
     <el-button @click="add">添加</el-button>
     <el-input v-model="num" />
-    <m-table class="fff" selection="single" :columns="columns" :data="data" layout="auto" />
+    <m-table
+      class="fff"
+      selection="single"
+      :columns="columns"
+      :data="data"
+      border
+      layout="auto"
+      persist-layout-key="demo:table"
+    />
   </div>
 </template>
 <script setup lang="ts">
@@ -15,6 +23,8 @@ defineOptions({
 const columns = ref<CommonTableColumn<any>[]>([
   { type: 'index' },
   { type: 'operation', fixed: 'right', buttons: [{ label: '添加' }] },
+  { label: '字段1', prop: 'fd', columnKey: 'hahaha' },
+  { label: '字段1', prop: 'fd' },
   { label: '字段1', prop: 'fd' },
   { label: '字段1', prop: 'fd' },
   { label: '字段1', prop: 'fd' },
@@ -30,7 +40,7 @@ const columns = ref<CommonTableColumn<any>[]>([
     ]
   },
   {
-    label: '字段2',
+    label: '字段21',
     prop: 'fd2',
     prop2: 'fd22',
     type: 'daterange',

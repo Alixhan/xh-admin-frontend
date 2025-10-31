@@ -1,8 +1,14 @@
 <template>
   <el-popover trigger="click" :hideAfter="0" popper-style="min-width: 100px; width: auto;">
     <template #reference>
-      <el-button type="primary" text icon="operation" class="action-btn">{{ $t('m.table.colSort') }}</el-button>
+      <el-button type="primary" text icon="operation" class="action-btn">{{ $t('m.table.colSetting') }}</el-button>
     </template>
+    <div class="action-view" v-if="persistLayoutKey">
+      <el-checkbox :label="$t('m.table.persist')" v-model="persist" />
+      <m-tool :label="$t('m.table.border')" placement="top" v-model="border">
+        <m-svg-icon class="icon" src="@/assets/icon/border.svg" inherited />
+      </m-tool>
+    </div>
     <el-tree
       class="column-sort"
       ref="treeRef"
@@ -12,33 +18,37 @@
       show-checkbox
       default-expand-all
       draggable
-      :default-checked-keys="['root']"
+      :default-checked-keys="defaultCheckedKeys"
       :expand-on-click-node="false"
       :allow-drop="allowDrop"
       @check-change="checkChange"
     >
       <template #default="{ node, data }">
         <span>{{ node.label }}</span>
-        <span v-if="data._id === 'root'" style="flex-grow: 1; text-align: right; padding-left: 10px">
-          <el-link @click="emits('restoreDefault')" underline="never" type="primary">
-            {{ $t('common.restoreDefault') }}
-          </el-link>
-        </span>
-        <div v-else-if="!data._id.includes('-')" :class="`icon-view ${data.fixed}`">
+        <el-link
+          v-if="data._id === 'root'"
+          style="flex-grow: 1; padding-left: 10px"
+          @click="emits('restoreDefault')"
+          underline="never"
+          type="primary"
+        >
+          {{ $t('common.restoreDefault') }}
+        </el-link>
+        <div v-else-if="!data._parentId" :class="`icon-view ${data.fixed}`">
           <m-svg-icon
             v-if="data.fixed === 'left'"
-            class="pin-icon left"
+            class="icon left"
             src="@/assets/icon/pin-fill.svg"
             @click.stop="pin(data)"
           />
-          <m-svg-icon v-else class="pin-icon left" src="@/assets/icon/pin-line.svg" @click.stop="pin(data, 'left')" />
+          <m-svg-icon v-else class="icon left" src="@/assets/icon/pin-line.svg" @click.stop="pin(data, 'left')" />
           <m-svg-icon
             v-if="data.fixed === 'right'"
-            class="pin-icon right"
+            class="icon right"
             src="@/assets/icon/pin-fill.svg"
             @click.stop="pin(data)"
           />
-          <m-svg-icon v-else class="pin-icon right" src="@/assets/icon/pin-line.svg" @click.stop="pin(data, 'right')" />
+          <m-svg-icon v-else class="icon right" src="@/assets/icon/pin-line.svg" @click.stop="pin(data, 'right')" />
         </div>
       </template>
     </el-tree>
@@ -46,15 +56,15 @@
 </template>
 
 <script setup lang="ts">
-import type { PropType } from 'vue'
-import { ref, watchEffect } from 'vue'
+import { computed, type PropType, ref, watchEffect } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type Node from 'element-plus/es/components/tree/src/model/node'
 import type { TableSortColumn } from '@i/components/table'
 import MSvgIcon from '@/components/SvgIcon.vue'
+import MTool from '@/components/Tool.vue'
 
 /**
- * 通用表格列排序
+ * 通用表格列设置
  * sxh
  * 2023-3-24
  */
@@ -67,11 +77,19 @@ const emits = defineEmits<{
 }>()
 
 const props = defineProps({
+  // 表格持久化布局ID
+  persistLayoutKey: String,
   columns: {
     type: Array as PropType<TableSortColumn[]>,
     required: true
   }
 })
+
+const defaultCheckedKeys = computed(() => props.columns.filter((i) => !i.hidden).map((i) => i._id))
+
+const persist = defineModel<boolean>('persist', { default: false })
+
+const border = defineModel<boolean>('border', { default: true })
 
 const treeRef = ref()
 
@@ -87,7 +105,7 @@ const defaultProps = {
   }
 }
 
-const treeData = ref<TableSortColumn[]>([])
+const treeData = ref<any[]>([])
 
 watchEffect(() => {
   treeData.value = [
@@ -107,6 +125,9 @@ function allowDrop(draggingNode: any, dropNode: any, type: any) {
 function checkChange(node: Node & TableSortColumn, checked: boolean, halfChecked: boolean) {
   if (node._id !== 'root') {
     node.hidden = !(checked || halfChecked)
+  } else {
+    if (halfChecked) return
+    props.columns?.forEach((i) => (i.hidden = !(checked || halfChecked)))
   }
 }
 
@@ -114,6 +135,12 @@ function checkChange(node: Node & TableSortColumn, checked: boolean, halfChecked
 function pin(data: TableSortColumn, fixed?: 'left' | 'right') {
   data.fixed = fixed
 }
+
+defineExpose({
+  setChecked(key: string, checked: boolean) {
+    treeRef.value!.setChecked(key, checked)
+  }
+})
 </script>
 <style scoped lang="scss">
 :deep(.custom-tree-root) {
@@ -133,7 +160,6 @@ function pin(data: TableSortColumn, fixed?: 'left' | 'right') {
 :deep(.custom-tree-col) {
   > .el-tree-node__content {
     position: relative;
-    background-color: var(--el-popover-bg-color);
 
     .icon-view {
       cursor: default;
@@ -148,16 +174,6 @@ function pin(data: TableSortColumn, fixed?: 'left' | 'right') {
       background-color: inherit;
       padding-left: 5px;
       gap: 3px;
-
-      .pin-icon {
-        cursor: pointer;
-        display: block;
-        width: 1.2em;
-
-        &.left {
-          transform: rotate(-90deg);
-        }
-      }
 
       &.left {
         display: flex;
@@ -180,5 +196,21 @@ function pin(data: TableSortColumn, fixed?: 'left' | 'right') {
       }
     }
   }
+}
+
+.icon {
+  cursor: pointer;
+  display: block;
+  width: 1.2em;
+  &.left {
+    transform: rotate(-90deg);
+  }
+}
+
+.action-view {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 5px;
 }
 </style>

@@ -6,7 +6,7 @@ export default {
       total: 'トータル',
       selected: '選択しました',
       export: '導出',
-      colSort: '並べ替え',
+      colSetting: '並べ替え',
       operation: 'オペレーション',
       allCol: '全ての',
       fileName: '表データ',
