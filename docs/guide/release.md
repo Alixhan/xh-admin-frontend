@@ -28,7 +28,7 @@ const version = import.meta.env.VITE_VERSION
 - 修复：代码生成 `BaseEntity` 错误
 - 修复：系统菜单禁用失效的问题
 - 修复：后端无权限异常返回 `status` 丢失的问题
-- 修复：后端 `MysqlExecutor` 插入无法将自增id会写实体的bug，暂时只支持integer类型回写
+- 修复：后端 `MysqlExecutor` 插入无法将自增id回写实体的bug，暂时只支持 `Integer` 类型回写
 - 修复：后端请求体响应体太长导致日志无法保存的问题，现在最多能保存1000长度的请求体响应体内容
 
 **升级**

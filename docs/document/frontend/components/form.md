@@ -86,14 +86,15 @@ components/form/$param
 
 ### Form 属性
 
-| 属性名        | 描述                                              | 类型                                      | 默认值     |
-|------------|-------------------------------------------------|-----------------------------------------|---------|
-| handleType | 表单处理类型                                          | `add` \| `edit` \| `detail` \| `string` | `'add'` |
-| colspan    | el-col默认跨度                                      | ^[number]                               | —       |
-| model      | 表单数据对象                                          | ^[object]                               | 必填      |
-| columns    | 表单项定义 [CommonFormColumn](#commonformcolumn-表单项) | ^[Array]`CommonFormColumn []`           | —       |
-| labelWidth | 表单标题宽度                                          | ^[string] \| ^[number]                  | —       |
-| loading    | 加载状态，为true时展示骨架屏                                | ^[boolean]                              | —       |
+| 属性名                      | 描述                                              | 类型                                      | 默认值     |
+|--------------------------|-------------------------------------------------|-----------------------------------------|---------|
+| handleType               | 表单处理类型                                          | `add` \| `edit` \| `detail` \| `string` | `'add'` |
+| colspan                  | el-col默认跨度                                      | ^[number]                               | —       |
+| model                    | 表单数据对象                                          | ^[object]                               | 必填      |
+| columns                  | 表单项定义 [CommonFormColumn](#commonformcolumn-表单项) | ^[Array]`CommonFormColumn []`           | —       |
+| labelWidth               | 表单标题宽度                                          | ^[string] \| ^[number]                  | —       |
+| loading                  | 加载状态，为true时展示骨架屏                                | ^[boolean]                              | —       |
+| colSize ^(v1.7.0)primary | 指定单个表单项的最大宽度，用于动态计算一行可容纳表单项的数量                  | ^[number]                               | 300     |
 
 ### Form Slots
 
@@ -109,28 +110,29 @@ components/form/$param
 
 ## CommonFormColumn 表单项
 
-仅列出本项目特有字段说明，对应表单组件的的属性文档，请查阅 [Element Plus](https://element-plus.org/zh-CN) 文档
+仅列出本项目特有字段说明，对应表单组件的的属性说明，请查阅 [Element Plus](https://element-plus.org/zh-CN) 文档
 
-| 字段                      | 字段描述                                                               | 类型                                                           |
-|-------------------------|--------------------------------------------------------------------|--------------------------------------------------------------|
-| label                   | 标题名称                                                               | ^[string]                                                    |
-| type                    | 表单类型，参考下方表单类型对照表                                                   | ^[string]                                                    |
-| hidden                  | 隐藏此列                                                               | ^[boolean]                                                   |
-| cols                    | 定义该项跨列数，可以是小数                                                      | ^[string]                                                    |
-| prop                    | 绑定表单的属性                                                            | ^[string]                                                    |
-| prop2                   | 表单属性2 ，`'daterange'`, `'datetimerange'`, `'monthrange'` 可能会使用      | ^[string]                                                    |
-| rules                   | 验证规则，参考 ^link(Validate 数据验证)                                       | ^[ValidRules]`ValidRule \| ValidRule []`                     |
-| render                  | 自定义渲染，参数为默认渲染的vNode                                                | ^[Function]`(vNode: VNode) => VNode`                         |
-| comment                 | 疑问备注                                                               | ^[string] \| ^[VNode]                                        |
-| required                | 显示必填星号                                                             | ^[boolean]                                                   |
-| slots                   | 表单项插槽                                                              | ^[SlotsObj]`位于interface/components/index.ts，查看详细类型定义`        |
-| slotName                | 允许用户按照自己的slotName插槽定制                                              | ^[string]                                                    |
-| optionParam             | 定制 `'radio-group'` 和 `'checkbox-group'` 的选项参数                      | ^[object]                                                    |
-| itemList                | type = `'select'`  \| `'radio-group'` \| `'checkbox-group'` 时的枚举选项 | ^[CommonItemList]`位于 interface/components/index.ts，查看详细类型定义` |
-| labelKey                | 枚举选项的 labelKey，默认为 `label`                                         | ^[string]                                                    |
-| valueKey                | 枚举选项的 valueKey，默认为 `value`                                         | ^[string]                                                    |
-| itemParam               | 给select，radio-group，checkbox-group子选项配置一些属性，比如设置border             | ^[object]`{[prop: string]: any}`                             |
-| $param ^(v1.6.0)primary | 当column属性和表单组件属性名冲突时，可通过此属性给表单组件做覆盖配置                              | ^[object]`{[prop: string]: any}`                             |
+| 字段                       | 字段描述                                                               | 类型                                                           |
+|--------------------------|--------------------------------------------------------------------|--------------------------------------------------------------|
+| label                    | 标题名称                                                               | ^[string]                                                    |
+| type                     | 表单类型，参考下方表单类型对照表                                                   | ^[string]                                                    |
+| hidden                   | 隐藏此列                                                               | ^[boolean]                                                   |
+| cols                     | 定义该项跨列数，可以是小数                                                      | ^[string]                                                    |
+| prop                     | 绑定表单的属性                                                            | ^[string]                                                    |
+| prop2                    | 表单属性2 ，`'daterange'`, `'datetimerange'`, `'monthrange'` 可能会使用      | ^[string]                                                    |
+| rules                    | 验证规则，参考 ^link(Validate 数据验证)                                       | ^[ValidRules]`ValidRule \| ValidRule []`                     |
+| render                   | 自定义渲染，参数为默认渲染的vNode                                                | ^[Function]`(vNode: VNode) => VNode`                         |
+| comment                  | 疑问备注                                                               | ^[string] \| ^[VNode]                                        |
+| required                 | 显示必填星号                                                             | ^[boolean]                                                   |
+| slots                    | 表单项插槽                                                              | ^[SlotsObj]`位于interface/components/index.ts，查看详细类型定义`        |
+| slotName                 | 允许用户按照自己的slotName插槽定制                                              | ^[string]                                                    |
+| optionParam              | 定制 `'radio-group'` 和 `'checkbox-group'` 的选项参数                      | ^[object]                                                    |
+| itemList                 | type = `'select'`  \| `'radio-group'` \| `'checkbox-group'` 时的枚举选项 | ^[CommonItemList]`位于 interface/components/index.ts，查看详细类型定义` |
+| labelKey                 | 枚举选项的 labelKey，默认为 `label`                                         | ^[string]                                                    |
+| valueKey                 | 枚举选项的 valueKey，默认为 `value`                                         | ^[string]                                                    |
+| itemParam                | 给select，radio-group，checkbox-group子选项配置一些属性，比如设置border             | ^[object]`{[prop: string]: any}`                             |
+| $param ^(v1.6.0)primary  | 当column属性和表单组件属性名冲突时，可通过此属性给表单组件做覆盖配置                              | ^[object]`{[prop: string]: any}`                             |
+| newLine ^(v1.7.0)primary | 始终新开一行，位于新行第一列                                                     | ^[boolean]                                                   |
 
 ## Form Type 对照表
 
