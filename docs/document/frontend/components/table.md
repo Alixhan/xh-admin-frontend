@@ -71,7 +71,7 @@ components/table/slot-name
 components/table/comment
 :::
 
-## left-action 和 right-action 插槽
+## left-action , right-action, float-action 插槽
 
 :::demo
 components/table/action-slot
@@ -178,6 +178,7 @@ components/table/editable2
 |----------------|-------|----|
 | `left-action`  | 左侧操作栏 | —  |
 | `right-action` | 右侧操作栏 | —  |
+| `float-action` | 悬浮操作栏 | —  |
 
 ### Table Exposes
 

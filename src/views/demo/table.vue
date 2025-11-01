@@ -4,13 +4,18 @@
     <el-input v-model="num" />
     <m-table
       class="fff"
-      selection="single"
+      selection="multiple"
       :columns="columns"
       :data="data"
-      border
       layout="auto"
       persist-layout-key="demo:table"
-    />
+      @selection-change="(rows) => (selectRows = rows)"
+    >
+      <template #float-action v-if="selectRows.length">
+        <el-button @click="add" type="danger" icon="upload"></el-button>
+        <el-button @click="add" type="primary" icon="plus"></el-button>
+      </template>
+    </m-table>
   </div>
 </template>
 <script setup lang="ts">
@@ -54,8 +59,9 @@ const columns = ref<CommonTableColumn<any>[]>([
 ])
 
 const data = ref([{ fd: '房东', fd2: '2023-11-08', fd22: '2023-11-09' }])
-const num = ref(1)
+const num = ref(10)
 const num2 = ref(30)
+const selectRows = ref([])
 
 function add() {
   for (let i = 0; i < num.value; i++) {
@@ -66,6 +72,8 @@ function add() {
     data.value.push({ fd: '房东' + data.value.length, fd2: '2023-11-08', fd22: '2023-11-09', ...obj })
   }
 }
+
+add()
 </script>
 <style lang="scss" scoped>
 .root {

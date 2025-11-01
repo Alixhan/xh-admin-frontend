@@ -809,6 +809,7 @@ export default defineComponent(
               // v-loading={loadingRef.value} 发现此处加入loading会导致内存泄漏。。。。
               class={{ 'el-table-view': true, 'radio-selection': props.selection === 'single' }}
             />
+            {generateFloatActionView()}
           </el-form>
           {generatePaginationView()}
         </div>
@@ -846,6 +847,19 @@ export default defineComponent(
       }
     }
 
+    /**
+     * 生成悬浮操作栏
+     */
+    function generateFloatActionView() {
+      if (slots['float-action']) {
+        return (
+          <div class="float-action-view">
+            <div>{slots['float-action']()}</div>
+          </div>
+        )
+      }
+    }
+
     expose({
       loadingRef,
       tableRef,
@@ -876,6 +890,7 @@ export default defineComponent(
       default: void
       'left-action': void
       'right-action': void
+      'float-action': void
     }>,
     emits: ['update:data', 'selection-change', 'row-click', 'search']
   }
@@ -955,6 +970,7 @@ export default defineComponent(
     }
 
     .table-form {
+      position: relative;
       flex-grow: 1;
       height: 0;
 
@@ -980,6 +996,24 @@ export default defineComponent(
 
       :deep(.el-zoom-in-top-leave-active) {
         transition: none;
+      }
+
+      .float-action-view {
+        position: absolute;
+        z-index: 999;
+        bottom: 20px;
+        width: 100%;
+        pointer-events: none;
+        text-align: center;
+
+        > div {
+          display: inline-block;
+          pointer-events: auto;
+          background-color: var(--el-bg-color);
+          box-shadow: var(--el-box-shadow);
+          padding: 10px 15px;
+          border-radius: 5px;
+        }
       }
     }
   }
