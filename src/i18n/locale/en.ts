@@ -325,6 +325,7 @@ export default {
   },
   monitor: {
     online: {
+      deviceType: 'Device Type',
       userCode: 'User Code',
       userName: 'User Name',
       loginTime: 'Login Time',

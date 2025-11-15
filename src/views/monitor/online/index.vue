@@ -43,6 +43,7 @@ const topFilterColumns = computed(() => [
 const columns = computed(() => [
   { type: 'index', width: 90 },
   { prop: 'token', label: 'Token' },
+  { prop: 'deviceType', label: t('monitor.online.deviceType') },
   { prop: 'userCode', label: t('monitor.online.userCode') },
   { prop: 'userName', label: t('monitor.online.userName') },
   { prop: 'loginTime', label: t('monitor.online.loginTime'), type: 'datetime', minWidth: 150 },

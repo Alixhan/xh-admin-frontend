@@ -331,6 +331,7 @@ export default {
   },
   monitor: {
     online: {
+      deviceType: '设备类型',
       userCode: '登录账户',
       userName: '登录账户名称',
       loginTime: '登录时间',

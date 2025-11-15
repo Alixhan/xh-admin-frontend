@@ -276,6 +276,7 @@ export default {
   },
   monitor: {
     online: {
+      deviceType: '设备类型',
       userCode: '登入賬戶',
       userName: '登入賬戶名稱',
       loginTime: '登入時間',
