@@ -11,9 +11,12 @@
     <template #reference>
       <el-input
         :ref="inputRef"
-        :model-value="modelValue"
-        @update:model-value="onModelValue"
-        v-bind="{ ...$attrs, ...$props }"
+        v-bind="{
+          ...$attrs,
+          ...$props,
+          modelValue: modelValue,
+          'onUpdate:modelValue': onModelValue
+        }"
         @focus="(isFocus = true) && (visible = true)"
         @blur="inputBlur"
       >

@@ -5,7 +5,7 @@
         <IframeView
           v-if="!systemStore.refresh || route.fullPath !== i.fullPath"
           v-show="route.fullPath === i.fullPath"
-          :src="i.outerUrl"
+          :src="i.outerUrl!"
         />
       </template>
       <router-view v-slot="{ Component, route }">
