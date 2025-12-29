@@ -23,6 +23,7 @@ export const useThemeStore = defineStore('theme', () => {
   const defaultTheme: Theme = {
     '--el-color-white': { light: '#ffffff', dark: '#ececec' },
     '--el-color-black': { light: '#02191c', dark: '#1c1c1c' },
+    '--el-fill-color-blank': { light: '#ffffff', dark: '#222222' },
 
     '--el-bg-color-page': { light: '#f5f5f5', dark: '#2b2b2b' },
     '--el-bg-color': { light: '#ffffff', dark: '#232323' },

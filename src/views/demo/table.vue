@@ -1,20 +1,15 @@
 <template>
   <div class="root">
-    <el-button @click="add">添加</el-button>
     <el-input v-model="num" />
+    {{ data }}
     <m-table
       class="fff"
       selection="multiple"
       :columns="columns"
       :data="data"
       layout="auto"
-      persist-layout-key="demo:table"
       @selection-change="(rows) => (selectRows = rows)"
     >
-      <template #float-action v-if="selectRows.length">
-        <el-button @click="add" type="danger" icon="upload"></el-button>
-        <el-button @click="add" type="primary" icon="plus"></el-button>
-      </template>
     </m-table>
   </div>
 </template>
@@ -28,20 +23,28 @@ defineOptions({
 const columns = ref<CommonTableColumn<any>[]>([
   { type: 'index' },
   { type: 'operation', fixed: 'right', buttons: [{ label: '添加' }] },
-  { label: '字段1', prop: 'fd', columnKey: 'hahaha' },
-  { label: '字段1', prop: 'fd' },
-  { label: '字段1', prop: 'fd' },
-  { label: '字段1', prop: 'fd' },
-  { label: '字段1', prop: 'fd' },
-  { label: '字段1', prop: 'fd' },
-  { label: '字段1', prop: 'fd' },
-  { label: '字段1', prop: 'fd' },
-  { label: '字段1', prop: 'fd' },
+  { label: '字段1', prop: 'fd', editable: true },
   {
     label: '字段3',
+    prop: 'sf',
     children: [
-      { label: '字段ss', prop: 'fd223' },
-      { label: '字段fs1', prop: 'fd2211收拾收拾懂法守法2' }
+      { label: 'aaaa', prop: 'task.a', editable: true },
+      {
+        label: '级联属性',
+        prop: 'task.b',
+        editable: true,
+        // type: 'select',
+        itemList: [
+          { value: '123', label: '123migncheng' },
+          { value: 'fff', label: '123migncheng' }
+        ]
+      },
+      { label: 'ccc', prop: 'task.c', editable: true, editParam: { type: 'switch' } },
+      { label: '字段ss123', prop: 'p2', editable: true },
+      { label: '字段ss123', prop: 'p2', editable: true },
+      { label: '字段ss123', prop: 'p2', editable: true },
+      { label: '字段ss123', prop: 'p2', editable: true },
+      { label: '字段ss123', prop: 'p2', editable: true }
     ]
   },
   {
@@ -58,22 +61,19 @@ const columns = ref<CommonTableColumn<any>[]>([
   }
 ])
 
-const data = ref([{ fd: '房东', fd2: '2023-11-08', fd22: '2023-11-09' }])
-const num = ref(10)
-const num2 = ref(30)
-const selectRows = ref([])
-
-function add() {
-  for (let i = 0; i < num.value; i++) {
-    const obj = {}
-    for (let j = 0; j < num2.value; j++) {
-      obj['prop' + j] = `字段${i} -- ${j}`
+const data = ref([
+  {
+    fd: '房东',
+    fd2: '2023-11-08',
+    fd22: '2023-11-09',
+    task: {
+      a: 'sff',
+      b: '123'
     }
-    data.value.push({ fd: '房东' + data.value.length, fd2: '2023-11-08', fd22: '2023-11-09', ...obj })
   }
-}
-
-add()
+])
+const num = ref(10)
+const selectRows = ref([])
 </script>
 <style lang="scss" scoped>
 .root {

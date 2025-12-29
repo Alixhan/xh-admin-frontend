@@ -81,6 +81,7 @@ import validate from '@/utils/validate'
 import type { TableColumn } from '@i/components/table'
 import type { ExcelError, ExcelImportInitData, ExcelImportProps } from '@i/components/excelImport'
 import { useI18n } from 'vue-i18n'
+import { set } from 'lodash-es'
 
 defineOptions({
   name: 'MExcelImport'
@@ -253,7 +254,7 @@ function handleFile(e: Event) {
             } else {
               cellValue = cell.text.trim()
             }
-            rowData[c.prop!] = cellValue
+            set(rowData,c.prop, cellValue)
           })
           datas.push(rowData)
         }

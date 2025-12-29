@@ -467,7 +467,8 @@ const columns = ref<CommonFormColumn<any>[]>([
         value: 'btea'
       }
     ]
-  }
+  },
+  { prop: 'p16', label: 'Icon Select图标选择', type: 'icon-select' }
 ])
 
 async function submit() {

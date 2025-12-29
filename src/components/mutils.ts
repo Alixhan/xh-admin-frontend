@@ -38,6 +38,7 @@ import type { CommonItemData, CommonModelParam, ItemListColumn } from '@i/compon
 import type { CommonFormColumn } from '@i/components/form'
 import type { CommonTableColumn, TableColumn } from '@i/components/table'
 import type { ValidRule } from '@i/utils/validate'
+import { get, set } from 'lodash-es'
 
 const { t } = i18n.global
 
@@ -80,6 +81,7 @@ export function generateDynamicColumn<T extends object>(column: CommonFormColumn
       }
     }
     if (column.type === 'radio-group') {
+      param.type = 'radio'
       // 默认加上子项的边框
       itemParam.border ??= true
       // 选项ref数据
@@ -93,6 +95,7 @@ export function generateDynamicColumn<T extends object>(column: CommonFormColumn
       }
     }
     if (column.type === 'checkbox-group') {
+      param.type = 'checkbox'
       // 默认加上子项的边框
       itemParam.border ??= true
       // 选项ref数据
@@ -163,35 +166,35 @@ export function vModelValue<T extends object = any>(
       if (!param.prop2) throw Error('prop2属性缺失')
       // 日期区间拆分独立选择
       if (param.single) {
-        returnParam.start = form[param.prop]
-        returnParam.end = form[param.prop2]
+        returnParam.start = get(form, param.prop)
+        returnParam.end = get(form, param.prop2)
         returnParam['onUpdate:start'] = (val) => {
-          form[param.prop] = val
+          set(form, param.prop, val)
         }
         returnParam['onUpdate:end'] = (val) => {
-          form[param.prop2] = val
+          set(form, param.prop2, val)
         }
       } else {
-        if (form[param.prop] && form[param.prop2]) {
-          returnParam.modelValue = [form[param.prop], form[param.prop2]]
+        if (get(form, param.prop) && get(form, param.prop2)) {
+          returnParam.modelValue = [get(form, param.prop), get(form, param.prop2)]
         } else {
           returnParam.modelValue = null
         }
         returnParam['onUpdate:modelValue'] = (val) => {
           if (val) {
             const [value, value2] = val
-            form[param.prop] = value
-            form[param.prop2] = value2
+            set(form, param.prop, value)
+            set(form, param.prop2, value2)
           } else {
-            form[param.prop] = null
-            form[param.prop2] = null
+            set(form, param.prop, null)
+            set(form, param.prop2, null)
           }
         }
       }
     } else {
-      returnParam.modelValue = form[param.prop]
+      returnParam.modelValue = get(form, param.prop)
       returnParam['onUpdate:modelValue'] = (val) => {
-        form[param.prop] = val
+        set(form, param.prop, val)
       }
     }
     return returnParam

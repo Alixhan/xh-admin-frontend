@@ -5,6 +5,7 @@ import { generateFormatter, getRules } from '@/components/mutils'
 import { toRaw } from 'vue'
 import type { CommonExcelColumn, CommonExcelData, ExcelJsWorksheetColumn, ExcelTreeNode } from '@i/utils/excel'
 import i18n from '@/i18n'
+import { get } from 'lodash-es'
 
 const { t } = i18n.global
 
@@ -188,7 +189,7 @@ export class ExcelTree<T extends CommonExcelData<T>> implements ExcelTreeNode<T>
         if (item?.children?.length) arr.unshift(...item.children)
         rows.push(
           this.leafNodes.map((j, index) => {
-            let val = item[j.prop!]
+            let val = get(item, j.prop!) as any
             if (j.formatter) {
               val = j.formatter(item, j as any, val, index)
             }

@@ -15,6 +15,7 @@ import type {
 import type { CommonItemData } from '@i/components'
 import i18n from '@/i18n'
 import dayjs from 'dayjs'
+import { get, set } from 'lodash-es'
 
 const { t } = i18n.global
 
@@ -46,7 +47,7 @@ export default async function validate<T extends object>(
   const formPromiseArr = Object.values(fieldRules)
     .filter((i) => i.prop && i.rules)
     .map((i) => i as FieldRule<T, keyof T>)
-    .map((i) => fieldValid(i, formData[i.prop], formData))
+    .map((i) => fieldValid(i, get(formData, i.prop), formData))
   return Promise.all(formPromiseArr).then((res) => {
     const errFields = res.filter((i) => !i.result)
     return {
@@ -147,7 +148,7 @@ export async function ruleValid<T extends object>(
       })
       const item = itemList.value.find((i) => i.label === formValue)
       if (item) {
-        if (formData?.[fieldRule.prop]) formData[fieldRule.prop] = item.value as T[keyof T]
+        if (formData && get(formData, fieldRule.prop)) set(formData, fieldRule.prop, item.value)
       } else {
         return reject(rule.message ?? t('m.form.valRestriction', { label, enums: itemList.value.map((i) => i.label) }))
       }
