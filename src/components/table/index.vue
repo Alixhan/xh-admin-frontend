@@ -354,8 +354,7 @@ export default defineComponent(
           r._parentId = parentId
           r._id =
             column.columnKey ??
-            parentId ??
-            '' + i + `|${column.type ?? ''}_${column.prop ?? ''}_${column.slotName ?? ''}`
+            (parentId ? parentId + ':' : '') + i + `|${column.type ?? ''}_${column.prop ?? ''}_${column.slotName ?? ''}`
           if (r.type === 'index') {
             r.label ??= t('m.table.index')
             r.width ??= 80
