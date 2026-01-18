@@ -64,7 +64,8 @@ const formData = ref({
   allowRepeat: true,
   autoRenewal: false,
   enabled: true,
-  password: ''
+  password: '',
+  status: 1
 })
 
 const jobData = ref([])
@@ -127,6 +128,7 @@ watchEffect(() => {
       itemList: statusList,
       comment: '锁定的用户账号将无法登录。'
     },
+    { prop: 'lockMsg', label: t('system.user.lockMsg'), hidden: formData.value.status !== 2 },
     { type: 'separator', label: t('system.user.job'), hidden: props.handleType !== 'detail' },
     { slotName: 'job', hidden: props.handleType !== 'detail' },
     { type: 'separator', label: t('system.user.inGroup'), hidden: props.handleType !== 'detail' },

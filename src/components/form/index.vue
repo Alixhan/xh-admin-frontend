@@ -201,7 +201,7 @@ export default defineComponent({
       //newline的会新开一行
       return columnViews
         .reduce((arr, c) => {
-          if(!c.view) return arr
+          if (!c.view) return arr
           const ars = arr[arr.length - 1]
           if (c.newLine || !ars) {
             arr.push([c.view])
@@ -268,7 +268,7 @@ export default defineComponent({
       //newline的会新开一行
       return columnViews
         .reduce((arr, c) => {
-          if(!c.view) return arr
+          if (!c.view) return arr
           const ars = arr[arr.length - 1]
           if (c.newLine || !ars) {
             arr.push([c.view])
@@ -302,8 +302,8 @@ export default defineComponent({
         animated: true
       }
       const skeletonSlots = {
-        default: () => generateFormColumns(),
-        template: () => generateFormSkeletons()
+        default: generateFormColumns,
+        template: generateFormSkeletons
       }
       const formSlots = {
         ...slots,
