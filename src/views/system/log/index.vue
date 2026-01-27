@@ -136,6 +136,7 @@ const columns = computed(() => [
     }
   },
   { prop: 'name', label: '操作用户' },
+  { prop: 'deviceType', label: '设备类型' },
   { prop: 'localeLabel', label: '使用语言' },
   { prop: 'orgName', label: '使用机构' },
   { prop: 'roleName', label: '使用角色' },
