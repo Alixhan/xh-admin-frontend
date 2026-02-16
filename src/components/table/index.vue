@@ -51,6 +51,7 @@ import { usePreview } from '@/components/table/queryFilter/queryFilter'
 import { useLocalStorage } from '@vueuse/core'
 import { findTreeNodeById, sortTreeByReference } from '@/utils/tree.ts'
 import MIcon from '@/components/Icon.vue'
+import { sortData, type SortOrder } from '@/utils/table-sort.ts'
 
 /**
  * 通用表格组件
@@ -80,18 +81,18 @@ export default defineComponent(
       () => (data.value = props.data ?? [])
     )
 
+    // 当前的排序列_id
+    const sortColumn = ref<{ columnKey: string; order: SortOrder } | undefined>()
+
     // 当前分页数据
     const pageData = computed(() => {
       if (!props.fetchData) {
         if (props.isPage) {
           const arr = [...data.value]
           // 内存分页排序
-          const { orderProp, orderDirection } = pageQuery.value
-          if (orderProp && orderDirection) {
-            arr.sort((a, b) => {
-              const r = a[orderProp] >= b[orderProp] ? 1 : -1
-              return orderDirection === 'asc' ? r : -r
-            })
+          if (sortColumn.value?.order && sortColumn.value?.columnKey) {
+            const column = tableColumnsParamsObj.value[sortColumn.value!.columnKey]!
+            sortData(arr, column, sortColumn.value.order)
           }
           const start = pageQuery.value.pageSize! * (pageQuery.value.currentPage! - 1)
           return arr.slice(start, start + pageQuery.value.pageSize!)
@@ -166,7 +167,7 @@ export default defineComponent(
     const tableColumnsParams: Ref<CommonTableColumn<T>[]> = shallowRef([])
 
     // 表格列参数_id寻址
-    const tableColumnsParamsObj: Ref<{ [field: string]: CommonTableColumn<T> }> = shallowRef({})
+    const tableColumnsParamsObj: Ref<{ [_id: string]: CommonTableColumn<T> }> = shallowRef({})
 
     //排序筛选列定义
     const sortColumns: Ref<TableSortColumn[]> = ref([])
@@ -230,8 +231,10 @@ export default defineComponent(
     }
 
     //后端排序
-    function onSortChange({ prop, order }) {
-      pageQuery.value.orderProp = leafColumns.value.find((i) => i.prop === prop)?.alias ?? prop
+    function onSortChange({ column: { columnKey }, order }) {
+      sortColumn.value = { columnKey, order }
+      const column = tableColumnsParamsObj.value[columnKey]
+      pageQuery.value.orderProp = column?.alias ?? column?.prop
       const orderDirectionMap = { ascending: 'asc', descending: 'desc' }
       pageQuery.value.orderDirection = orderDirectionMap[order]
       fetchQuery()
@@ -580,7 +583,6 @@ export default defineComponent(
         if (persistSetting.value?.persist) {
           sortColumns.value = sortTreeByReference(sortColumns.value, persistSetting.value.columns, '_id')
           persistSetting.value.columns = sortColumns.value
-          // restoreTableSetting()
         } else {
           persistSetting.value = {
             persist: true,
