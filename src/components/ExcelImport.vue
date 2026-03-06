@@ -254,7 +254,7 @@ function handleFile(e: Event) {
             } else {
               cellValue = cell.text.trim()
             }
-            set(rowData,c.prop, cellValue)
+            set(rowData, c.prop, cellValue)
           })
           datas.push(rowData)
         }
@@ -285,7 +285,7 @@ async function validData() {
     const row = dataArr.shift()
     rowPromiseArr.push(await validate(row!, excelTree.leafNodes))
   }
-  return Promise.all(rowPromiseArr).then((result: Array<ValidResult<T>>) => {
+  await Promise.all(rowPromiseArr).then((result: Array<ValidResult<T>>) => {
     errorData.value = []
     result.forEach((i, rowIndex) => {
       if (i.error) {
@@ -302,6 +302,7 @@ async function validData() {
       return Promise.reject(errorData.value)
     }
   })
+  return data
 }
 
 async function subImport() {
@@ -314,11 +315,11 @@ async function subImport() {
 
   try {
     // 前端验证
-    await validData()
+    const data = await validData()
 
     // 后端验证
     tip.value.step = '4'
-    let res = props.onComplete(importData.value)
+    let res = props.onComplete(data)
     if (res instanceof Promise) res = await res
     if (res) {
       tip.value.status = 'error'

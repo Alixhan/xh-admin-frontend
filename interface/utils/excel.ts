@@ -5,8 +5,7 @@ import type { TableColumn } from '@i/components/table'
  * excel列类型定义
  */
 export interface CommonExcelColumn<T extends object>
-  extends Omit<CommonFormColumn<T>, 'type'>,
-    Pick<TableColumn<T>, 'formatter' | 'index' | 'type'> {
+  extends Omit<CommonFormColumn<T>, 'type'>, Pick<TableColumn<T>, 'formatter' | 'index' | 'type' | 'itemList'> {
   //列名称
   label?: string
   // 此列不导出到excel
