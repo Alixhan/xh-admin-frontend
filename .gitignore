@@ -33,3 +33,4 @@ dist-ssr
 /docs/.vitepress/dist/
 /docs/.vitepress/.temp
 /.eslintcache
+gitlog.ts

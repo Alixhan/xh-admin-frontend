@@ -41,7 +41,7 @@ services:
       MINIO_ROOT_PASSWORD: ${MINIO_PASSWORD}
     restart: always
   jenkins:
-    image: jenkins/jenkins:lts-jdk21
+    image: jenkins/jenkins:lts-jdk25
     container_name: jenkins
     # 用root用户启动，因为jenkins需要调用宿主机的 docker 会有权限问题，怕麻烦直接root省事，但要注意网络安全
     user: root

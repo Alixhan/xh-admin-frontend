@@ -10,12 +10,14 @@
 ，参考此代码配置可以配置任意多的数据源。
 
 ```java
-package com.xh.common.jdbc.configuration;
+package com.xh.common.core.configuration;
 
+import com.xh.common.core.dao.BaseJdbcDao;
+import com.xh.common.core.dao.BaseJdbcDaoImpl;
 import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.jdbc.autoconfigure.DataSourceProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -25,6 +27,10 @@ import javax.sql.DataSource;
 
 /**
  * 数据源配置
+ * 该配置当前作为共用模块引入，这样所有引入该模块的微服务数据源均配置一致
+ * 如果需要给各个微服务配置不同数据源，将此配置在common-core模块删除，并单独在具体服务中配置
+ * 参考文档 <a href="https://docs.spring.io/spring-boot/docs/3.0.5/reference/htmlsingle/#howto.data-access.configure-custom-datasource">...</a>
+ * sunxh 2023/4/17
  */
 @Configuration(proxyBeanMethods = false)
 public class DataSourceConfiguration {
@@ -49,12 +55,21 @@ public class DataSourceConfiguration {
     }
 
     /**
-     * 第一数据源JdbcTemplate
+     * 第一数据源 JdbcTemplate
      */
     @Primary
     @Bean("firstJdbcTemplate")
     public JdbcTemplate firstJdbcTemplate(@Qualifier("firstDataSource") DataSource dataSource) {
         return new JdbcTemplate(dataSource);
+    }
+
+    /**
+     * 第一数据源 BaseJdbcDao
+     */
+    @Primary
+    @Bean("firstBaseJdbcDao")
+    public BaseJdbcDao firstBaseJdbcDao(@Qualifier("firstJdbcTemplate") JdbcTemplate jdbcTemplate) {
+        return new BaseJdbcDaoImpl(jdbcTemplate);
     }
 
     /**
@@ -76,11 +91,19 @@ public class DataSourceConfiguration {
     }
 
     /**
-     * 第二数据源JdbcTemplate
+     * 第二数据源 JdbcTemplate
      */
     @Bean("secondJdbcTemplate")
     public JdbcTemplate secondJdbcTemplate(@Qualifier("secondDataSource") DataSource dataSource) {
         return new JdbcTemplate(dataSource);
+    }
+
+    /**
+     * 第二数据源 BaseJdbcDao
+     */
+    @Bean("secondBaseJdbcDao")
+    public BaseJdbcDao secondBaseJdbcDao(@Qualifier("secondJdbcTemplate") JdbcTemplate jdbcTemplate) {
+        return new BaseJdbcDaoImpl(jdbcTemplate);
     }
 }
 ```

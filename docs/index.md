@@ -20,7 +20,7 @@ hero:
 features:
   - icon: 💡
     title: 最新技术栈
-    details: 前端：vue3，vite，ts，tsx，pinia，element-plus组件库；后端：springboot3，springcloud，springcloudalibaba微服务架构
+    details: 前端：vue3，vite，ts，tsx，pinia，element-plus组件库；后端：springboot4，springcloud，springcloudalibaba微服务架构
   - icon: ⚡️
     title: 真·响应式布局
     details: 响应式布局设计让你部署一个网站，多端访问，电脑，移动端，pad端，均已适配

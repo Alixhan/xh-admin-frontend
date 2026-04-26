@@ -14,8 +14,8 @@ pipeline {
 
     //使用全局工具
     tools {
-        // jenkins已内置jdk21环境
-//        jdk 'jdk21'
+        // jenkins已内置jdk25环境
+//        jdk 'jdk25'
         //需要maven环境打包，之前全局配置的Maven Name
         maven 'maven3.9.5'
     }

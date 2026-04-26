@@ -17,7 +17,7 @@
 
 **后端技术栈：**
 [Java21](https://docs.oracle.com/en/java/javase/21/books.html)、
-[Springboot3](https://spring.io/projects/spring-boot)、
+[Springboot4](https://spring.io/projects/spring-boot)、
 [Spring-cloud](https://spring.io/projects/spring-cloud)、
 [Spring-cloud-alibaba](https://spring.io/projects/spring-cloud-alibaba)、
 [SaToken](https://sa-token.cc/)

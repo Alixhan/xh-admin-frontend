@@ -8,7 +8,7 @@
 
 XHan Admin（晓寒开源管理系统）是一个开源免费（前后端分离）中后台管理系统基础解决方案, 无专业版收费，所有功能毫无保留的贡献给开源社区。
 前端技术栈： Vue3, TypeScript, Element Plus, Vite, Pinia等
-后端技术栈： jdk21, springboot3, spring-cloud, spring-cloud-alibaba, SaToken等
+后端技术栈： jdk25, springboot4, spring-cloud, spring-cloud-alibaba, SaToken等
 
 前端代码库: [xh-admin-frontend](https://github.com/Alixhan/xh-admin-frontend)<br>
 后端代码库: [xh-admin-backend](https://github.com/Alixhan/xh-admin-backend)

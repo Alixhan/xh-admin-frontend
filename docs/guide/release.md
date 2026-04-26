@@ -6,6 +6,45 @@ const version = import.meta.env.VITE_VERSION
 
 当前版本： ^({{version}})
 
+## v1.8.0 ^[(2026-04-26)]
+
+**新特性**
+
+- 新增：添加级联属性支持，包含 ^link(Form 表单)、^link(Table 表格)、^link(ExcelImport 导入)、`ExcelExport`、
+  ^link(Validate 数据验证) 等组件和工具类
+- 新增：^link(Table 表格) 组件添加悬浮操作栏
+- 新增：^link(Table 表格) 组件内存分页的 `Column` 新增对 `sort-method` 和 `sort-by` 的支持
+- 新增：系统日志及在线用户信息现已支持显示用户的登录设备类型
+- 新增：后端 `BaseJdbcDao` 的 `update` 方法添加列选取器参数，支持仅选取部分列进行更新，且更新操作现在会返回数据库实际执行的更新行数
+
+**优化**
+
+- 调整：^(不兼容调整)danger `BaseJdbcDao` 重构，不再支持单个实例操作多数据源数据。相关的指定数据源操作方法均已删除，现创建实例时需明确传入数据源；如需操作多数据源，请创建多个
+  `BaseJdbcDao` 实例
+- 优化：删除后端的 `common-jdbc` 模块，并将其核心功能并入 `common-core` 模块
+- 优化：代码生成器增强，如果生成字段为日期时间类型，简易查询中将自动生成独立的日期时间范围查询组件
+- 优化：代码生成器现在会自动为 ^link(Table 表格) 组件生成 `persist-layout-key` 属性，默认开启表格列布局保持功能
+- 优化：用户登录时，如果账户被锁定且原因为空，系统将给出默认的锁定原因提示
+- 优化：后端 `EntityColumnStaff` 提取至独立文件，并优化了底层实现细节
+- 优化：优化部分前端代码逻辑
+- 修复：修复 ^link(Table 表格) 组件在多级表头场景下数据列显示错乱的问题
+- 修复：修复 ^link(ExcelImport 导入) 组件在 `on-complete` 回调中，数据字典类型数据没有被正确转化的问题
+- 修复：修复代码生成器生成的 `DTO` 实体中，`title` 字段错误被设置为 `columnName` 的问题
+- 修复：修复 `checkDataPermissionByIds` 代码生成器的错误问题
+- 修复：修复后端系统日志中，请求体和响应体内容丢失无法保存的问题
+
+**升级**
+
+- 升级：^(重要)danger 前端 ^link(vite) 升级至 `8.0` 版本，全面拥抱 `Oxc` 生态；^link(typescript) 升级至 `6.0` 版本
+- 升级：^(重要)danger 后端核心依赖大版本升级：^link(SpringBoot) 升级至 `4.0`，`JDK` 升级至 `25`，`Jackson` 升级至 `3`
+  ；全面替换部分过时API，同时IP解析现已完整支持 `IPv6`
+- 升级：前端相关依赖升级至最新版本，并修复了部分 `ts` 告警信息
+
+**文档**
+
+- 更新：更新数据库初始化 SQL 语句
+- 修复：修复文档中的部分错误描述，并补充了缺失的组件属性说明文档
+
 ## v1.7.0 ^[(2025-11-01)]
 
 **新特性**
@@ -102,7 +141,7 @@ const version = import.meta.env.VITE_VERSION
 
 - 升级：^(重要)danger ^link(vite) 升级至 `7.x` 版本
 - 升级：^(重要)danger ^link(Nacos) 升级至 `3.0.x`
-- 升级：^(重要)danger 中间件 ^link(Jenkins) 升级至 `jdk21-lts`
+- 升级：^(重要)danger 中间件 ^link(Jenkins) 升级至 `jdk25-lts`
 - 升级：^(重要)danger 中间件 ^link(xxl-job) 升级至 `3.1.0`
 - 升级：前端相关依赖升级至最新版本
 - 升级：后端依赖升级，部分代码兼容性调整

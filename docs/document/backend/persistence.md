@@ -320,7 +320,6 @@ package com.xh.system.service;
 
 import com.xh.common.core.dao.BaseJdbcDao;
 import jakarta.annotation.Resource;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -331,9 +330,6 @@ public class TestService {
 
     @Resource
     protected BaseJdbcDao baseJdbcDao;
-
-    @Resource(name = "secondJdbcTemplate")
-    protected JdbcTemplate secondJdbcTemplate;
 
     @Transactional
     public void createUser() {
@@ -352,23 +348,6 @@ public class TestService {
         baseJdbcDao.insert(user1s);
         //打印批量插入生成的自增ID
         Arrays.stream(user1s).map(UserEntity::getId).forEach(System.out::println);
-
-
-        UserEntity user2 = new UserEntity("晓寒");
-        //执行插入，指定数据源
-        baseJdbcDao.insert(secondJdbcTemplate, user2);
-        //打印生成的字自增ID
-        System.out.printf(user2.getId().toString());
-
-        UserEntity[] user2s = {
-                new UserEntity("晓寒"),
-                new UserEntity("张三"),
-                new UserEntity("李四"),
-        };
-        //批量插入指定数据源
-        baseJdbcDao.insert(secondJdbcTemplate, user2s);
-        //打印批量插入生成的自增ID
-        Arrays.stream(user2s).map(UserEntity::getId).forEach(System.out::println);
     }
 }
 ```
@@ -388,7 +367,6 @@ package com.xh.system.service;
 
 import com.xh.common.core.dao.BaseJdbcDao;
 import jakarta.annotation.Resource;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -398,9 +376,6 @@ public class TestService {
     @Resource
     protected BaseJdbcDao baseJdbcDao;
 
-    @Resource(name = "secondJdbcTemplate")
-    protected JdbcTemplate secondJdbcTemplate;
-
     @Transactional
     public void updateUser() {
         //假设数据库有一条 ID 为 1 的数据
@@ -409,9 +384,6 @@ public class TestService {
         user.setName("xh");
         //执行更新
         baseJdbcDao.update(user);
-
-        //指定数据源更新
-        baseJdbcDao.update(secondJdbcTemplate, user);
     }
 }
 ```
@@ -423,7 +395,6 @@ package com.xh.system.service;
 
 import com.xh.common.core.dao.BaseJdbcDao;
 import jakarta.annotation.Resource;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -432,17 +403,11 @@ public class TestService {
     @Resource
     protected BaseJdbcDao baseJdbcDao;
 
-    @Resource(name = "secondJdbcTemplate")
-    protected JdbcTemplate secondJdbcTemplate;
-
     public void findUser() {
         //假设数据库有一条 ID 为 1 的数据
 
         //通过主键获取User
         UserEntity user = baseJdbcDao.findById(UserEntity.class, 1);
-
-        //通过主键获取User，指定数据源
-        UserEntity user2 = baseJdbcDao.findById(UserEntity.class, secondJdbcTemplate, 1);
     }
 }
 ```
@@ -454,7 +419,6 @@ package com.xh.system.service;
 
 import com.xh.common.core.dao.BaseJdbcDao;
 import jakarta.annotation.Resource;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -464,18 +428,12 @@ public class TestService {
     @Resource
     protected BaseJdbcDao baseJdbcDao;
 
-    @Resource(name = "secondJdbcTemplate")
-    protected JdbcTemplate secondJdbcTemplate;
-
     @Transactional
     public void deleteUser() {
         //假设数据库有一条 ID 为 1 的数据
 
         //通过主键删除User
         baseJdbcDao.deleteById(UserEntity.class, 1);
-
-        //通过主键删除User，指定数据源
-        baseJdbcDao.deleteById(UserEntity.class, secondJdbcTemplate, 1);
     }
 }
 ```
@@ -491,7 +449,6 @@ package com.xh.system.service;
 
 import com.xh.common.core.dao.BaseJdbcDao;
 import jakarta.annotation.Resource;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -501,9 +458,6 @@ public class TestService {
     @Resource
     protected BaseJdbcDao baseJdbcDao;
 
-    @Resource(name = "secondJdbcTemplate")
-    protected JdbcTemplate secondJdbcTemplate;
-
     @Transactional
     public void findUser() {
         //假设数据库有一条 ID 为 1 的数据
@@ -512,9 +466,6 @@ public class TestService {
 
         //通过sql语句获取记录，如查询到多行则会返回第一行数据
         UserEntity user = baseJdbcDao.findBySql(UserEntity.class, sql, 1);
-
-        //通过sql语句获取记录，指定数据源，如查询到多行则会返回第一行数据
-        UserEntity user2 = baseJdbcDao.findBySql(UserEntity.class, sql, secondJdbcTemplate, 1);
     }
 }
 ```
@@ -526,7 +477,6 @@ package com.xh.system.service;
 
 import com.xh.common.core.dao.BaseJdbcDao;
 import jakarta.annotation.Resource;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -539,9 +489,6 @@ public class TestService {
     @Resource
     protected BaseJdbcDao baseJdbcDao;
 
-    @Resource(name = "secondJdbcTemplate")
-    protected JdbcTemplate secondJdbcTemplate;
-
     @Transactional
     public void findList() {
         //假设数据库有一条 ID 为 1 的数据
@@ -553,9 +500,6 @@ public class TestService {
 
         //也可传 Map返回 Map 类型数据
         List<Map> users2 = baseJdbcDao.findList(Map.class, sql);
-
-        //通过sql语句获取多行记录，指定数据源
-        List<UserEntity> users3 = baseJdbcDao.findList(UserEntity.class, sql, secondJdbcTemplate);
     }
 }
 ```
@@ -573,7 +517,6 @@ import com.xh.common.core.dao.BaseJdbcDao;
 import com.xh.common.core.web.PageQuery;
 import com.xh.common.core.web.PageResult;
 import jakarta.annotation.Resource;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -585,9 +528,6 @@ public class TestService {
 
     @Resource
     protected BaseJdbcDao baseJdbcDao;
-
-    @Resource(name = "secondJdbcTemplate")
-    protected JdbcTemplate secondJdbcTemplate;
 
     @Transactional
     public void queryUser() {
@@ -615,13 +555,6 @@ public class TestService {
         System.out.printf(result2.getTotal().toString());
         //当前页数据
         List<UserEntity> list2 = result2.getList();
-
-        //指定数据源分页查询
-        PageResult<UserEntity> result3 = baseJdbcDao.query(UserEntity.class, pageQuery, secondJdbcTemplate);
-        //打印总条数
-        System.out.printf(result3.getTotal().toString());
-        //当前页数据
-        List<UserEntity> list3 = result3.getList();
     }
 }
 ```
