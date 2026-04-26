@@ -58,7 +58,7 @@ export const mTableProps = {
   },
   // 过滤column
   filterColumns: {
-    type: Array as PropType<CommonFormColumn<any>[]>
+    type: Array as PropType<Array<Omit<CommonFormColumn<any>, 'type'> & { type?: string }>>
   },
   // 过滤param
   filterParam: {
@@ -102,7 +102,7 @@ export const mTableProps = {
   },
   //表格排序
   sortable: {
-    type: [Boolean, String as PropType<'custom'>],
+    type: [Boolean, String] as PropType<boolean | 'custom'>,
     default: 'custom'
   },
   /**
@@ -118,8 +118,18 @@ export const mTableProps = {
 /**
  * T为表格行的数据类型，F为简单查询条件对象类型
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export type MTableProps<T, F> = ExtractPropTypes<typeof mTableProps>
+export type MTableProps<T extends object, F extends object> = Partial<Omit<
+  ExtractPropTypes<typeof mTableProps>,
+  'data' | 'columns' | 'filterParam' | 'sortable'
+>> & {
+  data?: T[]
+  columns: CommonTableColumn<T>[]
+  filterParam?: F
+  sortable?: boolean | 'custom'
+  border?: boolean
+  height?: string | number
+  style?: import('vue').CSSProperties | string
+}
 
 // 表格列定义
 export interface TableColumn<T extends object> extends Partial<Omit<TableColumnCtx<T>, 'children'>> {
@@ -220,7 +230,7 @@ export type CommonTableColumn<T extends object> =
   | SlotsTableColumn<T>
   | EditableTableColumn<T>
   | SelectionTableColumn<T>
-
+  | TableColumn<T>
 /**
  * 文本列
  */

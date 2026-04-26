@@ -1,0 +1,17 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  // 一行最多 120 个字符
+  "printWidth": 120,
+  "tabWidth": 2,
+  // 不使用分号
+  "semi": false,
+  // 使用单引号
+  "singleQuote": true,
+  // 对象最后不加逗号
+  "trailingComma": "none",
+  "bracketSpacing": true,
+  "arrowParens": "always",
+  "vueIndentScriptAndStyle": false,
+  "htmlWhitespaceSensitivity": "css",
+  "endOfLine": "lf"
+}

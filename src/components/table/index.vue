@@ -61,17 +61,17 @@ export default defineComponent(
   <T extends object, F extends object>(props: MTableProps<T, F>, { attrs, emit, slots, expose }) => {
     const { t } = useI18n()
     const systemStore = useSystemStore()
-    const pageQuery: Ref<PageQuery<F>> = ref({
+    const pageQuery = ref<PageQuery<F>>({
       isExport: false,
       isPage: toRef(props, 'isPage').value ?? false, // 是否分页
       currentPage: 1, // 页码
       pageSize: 20, // 分页大小
-      param: toRef(props, 'filterParam').value ?? {}, // 查询参数
+      param: (toRef(props, 'filterParam').value ?? {}) as F, // 查询参数
       filters: [] // 高级查询
-    })
+    }) as Ref<PageQuery<F>>
     watch(
       () => props.filterParam,
-      (val) => (pageQuery.value.param = val ?? {})
+      (val) => (pageQuery.value.param = (val ?? {}) as F)
     )
 
     // 表格数据
@@ -176,12 +176,12 @@ export default defineComponent(
 
     const persistSetting = props.persistLayoutKey
       ? useLocalStorage<PersistTableSetting>(`persist-table:${props.persistLayoutKey}`, null, {
-          deep: true,
-          serializer: {
-            read: (v) => JSON.parse(v),
-            write: (v) => JSON.stringify(v)
-          }
-        })
+        deep: true,
+        serializer: {
+          read: (v) => JSON.parse(v),
+          write: (v) => JSON.stringify(v)
+        }
+      })
       : undefined
 
     //叶子节点列
@@ -256,10 +256,8 @@ export default defineComponent(
             menus.unshift({ id: 1, columnKey: column.columnKey, label: t('m.table.complexFilter'), icon: 'Filter' })
           }
           menus.push(
-            ...[
-              { id: 2, columnKey: column.columnKey, label: t('m.table.ascending'), icon: 'ArrowUp' },
-              { id: 3, columnKey: column.columnKey, label: t('m.table.descending'), icon: 'ArrowDown' }
-            ]
+            { id: 2, columnKey: column.columnKey, label: t('m.table.ascending'), icon: 'ArrowUp' },
+            { id: 3, columnKey: column.columnKey, label: t('m.table.descending'), icon: 'ArrowDown' }
           )
         }
         const sortCol = findTreeNodeById(sortColumns.value, column.columnKey, '_id')
@@ -364,7 +362,7 @@ export default defineComponent(
             r.showOverflowTooltip ??= false
           }
 
-          if (r.prop) r.sortable ??= props.sortable // 默认排序
+          if (r.prop) r.sortable = r.sortable ?? (props.sortable as boolean | 'custom' | undefined) // 默认排序
 
           // 没有设置宽度则根据label字数自动设定宽度，这样可以避免标题换行，影响美观
           if (!(r.width ?? r.minWidth) && r.label) {
@@ -679,7 +677,7 @@ export default defineComponent(
           <TopFilter
             class="top-filter"
             colSize={props.filterColSize}
-            columns={props.filterColumns}
+            columns={props.filterColumns as CommonFormColumn[]}
             param={pageQuery.value.param!}
             loading={loadingRef.value}
             onSearch={fetchQuery}
@@ -773,19 +771,21 @@ export default defineComponent(
                 )}
                 {props.showSetting && (
                   <TableColumnSetting
-                    ref={TableColumnSettingRef}
-                    border={persistSetting?.value?.border}
-                    persist={persistSetting?.value?.persist}
-                    onUpdate:persist={(v) => {
-                      persistSetting!.value!.persist = v
+                    {...{
+                      ref: TableColumnSettingRef,
+                      border: persistSetting?.value?.border,
+                      persist: persistSetting?.value?.persist,
+                      'onUpdate:persist': (v) => {
+                        persistSetting!.value.persist = v
+                      },
+                      'onUpdate:border': (v) => {
+                        persistSetting!.value.border = v
+                      },
+                      persistLayoutKey: props.persistLayoutKey,
+                      class: 'action-btn',
+                      columns: sortColumns.value,
+                      onRestoreDefault: () => initSortColumnFun(true)
                     }}
-                    onUpdate:border={(v) => {
-                      persistSetting!.value!.border = v
-                    }}
-                    persistLayoutKey={props.persistLayoutKey}
-                    class="action-btn"
-                    columns={sortColumns.value}
-                    onRestoreDefault={() => initSortColumnFun(true)}
                   />
                 )}
               </div>
@@ -874,7 +874,7 @@ export default defineComponent(
       let layout = props.layout ?? 'default'
       if (systemStore.layout.heightShrink) layout = 'auto'
       return (
-        <div style={props.style} class={`layout-${layout}`}>
+        <div style={props.style as string} class={`layout-${layout}`}>
           <div class={`m-table ${props.height ? 'custom-height' : ''}`}>
             {generateTopFilter()}
             {generateTableView()}
@@ -886,7 +886,7 @@ export default defineComponent(
   {
     name: 'MTable',
     inheritAttrs: true,
-    props: { ...mTableProps },
+    props: mTableProps as unknown as import('vue').ComponentObjectPropsOptions<MTableProps<any, any>>,
     slots: Object as SlotsType<{
       default: void
       'left-action': void

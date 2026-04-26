@@ -112,7 +112,7 @@ watchEffect(() => {
 const tableRef = ref()
 const entityData = ref([])
 const permissionData = ref([])
-const tableColumns = [
+const tableColumns: CommonTableColumn[] = [
   {
     width: 100,
     showOverflowTooltip: false,

@@ -12,12 +12,11 @@
     "jsx": "preserve",
     "jsxImportSource": "vue",
     "composite": false,
-    "moduleResolution": "Node",
-    "baseUrl": ".",
+    "moduleResolution": "Bundler",
     "paths": {
-      "@/*": ["src/*"],
-      "@i/*": ["interface/*"],
-      "@d/*": ["docs/*"]
+      "@/*": ["./src/*"],
+      "@i/*": ["./interface/*"],
+      "@d/*": ["./docs/*"]
     },
     "types": ["vite/client"],
     "target": "esnext",

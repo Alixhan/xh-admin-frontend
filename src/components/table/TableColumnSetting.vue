@@ -82,7 +82,7 @@ const props = defineProps({
   columns: {
     type: Array as PropType<TableSortColumn[]>,
     required: true
-  }
+  },
 })
 
 const defaultCheckedKeys = computed(() => props.columns.filter((i) => !i.hidden).map((i) => i._id))

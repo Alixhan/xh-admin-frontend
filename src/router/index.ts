@@ -1,9 +1,9 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
 import type { RouteLocationNormalized } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 import { loading } from '@/utils/loading'
 import NProgress from 'nprogress'
-import { useSystemStore } from '@/stores/system'
 import type { NavTab } from '@/stores/system'
+import { useSystemStore } from '@/stores/system'
 import Layout from '@/layout/index.vue'
 // 静态路由
 export const staticRouters = [
@@ -54,13 +54,11 @@ const router = createRouter({
   routes: staticRouters
 })
 
-router.beforeEach(async (to, from, next) => {
+router.beforeEach(async (to) => {
   NProgress.configure({ speed: 500, showSpinner: false })
   NProgress.start()
   const systemStore = useSystemStore()
-  const path = await systemStore.beforeEach(to)
-  if (path) next(path)
-  else next()
+  return await systemStore.beforeEach(to)
 })
 
 router.afterEach((to) => {
